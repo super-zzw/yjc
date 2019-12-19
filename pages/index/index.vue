@@ -256,8 +256,34 @@
 
 		onLoad() {
 			this.loadData();
+			uni.showLoading({
+			    title: '加载中'
+			});
+			let req1 = {
+				apiName:"test1",
+				data:{type:1}
+			};
+			let req2 = {
+				apiName:"test1",
+				data:{type:2}
+			}
+			let resAll = this.$httpAll([req1,req2])
+			// this.$http({
+			// 	apiName:"test1",
+			// 	data:{type:1}
+			// }).then(res => {
+			// 	console.log(111,res)
+			// }).catch(err => {
+			// 	//err请求失败的信息
+			// })
+			uni.hideLoading()
 		},
 		methods: {
+			
+			
+			
+			
+			
 			/**
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合

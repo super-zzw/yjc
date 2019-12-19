@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import store from './store'
 import App from './App'
+import {http,httpAll} from './utils/request.js'
 
 import Json from './Json' //测试用数据
 /**
@@ -42,8 +43,10 @@ const prePage = ()=>{
 
 
 Vue.config.productionTip = false
-Vue.prototype.$fire = new Vue();
+// Vue.prototype.$fire = new Vue();  //未找到使用的地方
 Vue.prototype.$store = store;
+Vue.prototype.$http = http;
+Vue.prototype.$httpAll = httpAll;
 Vue.prototype.$api = {msg, json, prePage};
 
 App.mpType = 'app'

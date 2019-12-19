@@ -5,7 +5,7 @@
 	import {
 		mapMutations
 	} from 'vuex';
-	import utils from 'utils/index.js'
+	import utils from 'utils/method.js'
 	export default {
 		methods: {
 			...mapMutations(['login'])
