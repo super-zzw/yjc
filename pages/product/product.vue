@@ -121,6 +121,7 @@
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
+				<image src="../../static/deleteIcon.png" class="deletedIcon"  @click="toggleSpec"></image>
 				<view class="a-t">
 					<image :src="stockInfo.pic"></image>
 					<view class="right">
@@ -891,6 +892,13 @@
 			min-height: 40vh;
 			border-radius: 10rpx 10rpx 0 0;
 			background-color: #fff;
+			.deletedIcon{
+				position: absolute;
+				right: 30rpx;
+				top: 30rpx;
+				width: 40rpx;
+				height: 40rpx; 
+			}
 			.btn{
 				height: 66rpx;
 				line-height: 66rpx;
