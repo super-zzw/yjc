@@ -39,7 +39,7 @@
 					<text class="title clamp">{{item.title}}</text>
 					<view class="price-box">
 						<text class="price">{{item.minPrice}}</text>
-						<text>已售 {{item.sale}}</text>
+						<text>已售 {{item.totalSale}}</text>
 					</view>
 				</view>
 				<view v-if="goodsList.length > 0 && noMore" class="no_more">

@@ -139,6 +139,7 @@
 					overflow: hidden;
 					background: #C0C4CC;
 					margin: 20rpx;
+					
 				}
 				.s-info{
 					margin-top: 20rpx;

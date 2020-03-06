@@ -274,7 +274,7 @@
 					this.views = res.data.product.views
 					this.giftPoint = res.data.product.giftPoint
 					this.desc = res.data.product.descriptionHtml.replace(/\<img/gi, '<img class="cont_img2" ');
-					this.exchangePoints = res.data.product.exchangePoints
+					this.exchangePoints = res.data.product.minPoints
 					this.collectionFlag = res.data.collectionFlag
 					this.collectionId = res.data.collectionId
 					//处理评论
