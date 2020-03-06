@@ -72,6 +72,8 @@ export default{
 	createCartOrder:"/oms/order/cart/add",  //购物车直接创建订单
 	wxPay:"/pay/wx/unifiedOrder",  //微信支付
 	aliPay:"/pay/al/createOrder",  //支付宝支付
+	payAfter:"/pay/pay/deliveryOrder",  //货到付款下单
+	payType:"/pay/getPayList",  //获取支付方式
 	
 	addrList:"/ums/get/receiveAddress",  //获取用户地址列表
 	addAddr:"/ums/add/receiveAddress",  //用户新增收货地址

@@ -18,7 +18,7 @@
 					</radio>
 				</label>
 			</view>
-			<!-- <view class="type-item b-b" @click="changePayType(2)">
+			<view class="type-item b-b" @click="changePayType(2)">
 				<text class="icon iconfont iconzhifubao"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
@@ -27,7 +27,7 @@
 					<radio value="" color="#F23D3D" :checked='payType == 2' />
 					</radio>
 				</label>
-			</view> -->
+			</view>
 		</view>
 		
 		<text class="mix-btn" @click="confirm">确认支付</text>
@@ -44,7 +44,8 @@ import {
 				money:0,
 				orderId:"",
 				payType: 1,
-				orderInfo: {}
+				orderInfo: {},
+				payTypes:[]
 			};
 		},
 		computed: {
@@ -53,10 +54,21 @@ import {
 		onLoad(opt) {
 			this.money = opt.money
 			this.orderId = opt.orderid
+			this.getPayType()
 		},
 
 		methods: {
 			...mapMutations(['setSelectAddr']),
+			//获取支付方式
+			async getPayType(){
+				await this.$http({
+					apiName:"payType"
+				}).then(res => {
+					this.payTypes = res.data
+				}).catch(e => {
+					
+				})
+			},
 			//选择支付方式
 			changePayType(type) {
 				this.payType = type;
@@ -82,7 +94,7 @@ import {
 					let obj = {
 						appid: res.data.appid,
 						noncestr: res.data.noncestr,
-						package: 'Sign=WXPay', // 固定值，以微信支付文档为主
+						package: res.data.package, // 固定值，以微信支付文档为主
 						partnerid: res.data.partnerid,
 						prepayid: res.data.prepayid,
 						timestamp: res.data.timestamp,

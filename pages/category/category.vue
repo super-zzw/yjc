@@ -112,15 +112,17 @@ import utils from '@/utils/method.js'
 					apiName:"getCategory"
 				}).then(res => {
 					res.data.forEach(item=>{
-						this.flist.push({
-							id:item.id,
-							name:item.name
-						});
-						this.categoryList.push({
-							id:item.id,
-							name:item.name
-						});
-						this.tlist.push(...item.children)
+						if(item.children){
+							this.flist.push({
+								id:item.id,
+								name:item.name
+							});
+							this.categoryList.push({
+								id:item.id,
+								name:item.name
+							});
+							this.tlist.push(...item.children)
+						}
 					}) 
 					// this.categoryList = res.data
 					this.currentId = res.data[0].id
