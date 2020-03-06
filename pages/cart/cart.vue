@@ -70,7 +70,7 @@
 									:index="index"
 									@eventChange="numberChange"
 								></uni-number-box>
-								<text class="price nm-font">¥{{item.minPrice}}</text>
+								<text class="price nm-font">¥{{item.promotionPrice}}</text>
 							</view>
 						</view>
 						<text class="del-btn iconfont iconclose-hei" @click="deleteCartItem(index,item.id)"></text>
@@ -181,6 +181,7 @@
 					return item;
 				});
 				this.cartList = cartList;
+				console.log(this.cartList);
 				this.calcTotal();  //计算总价
 			},
 			//获取推荐商品
@@ -305,7 +306,7 @@
 				// let checked = true;
 				list.forEach(item=>{
 					if(item.checkedFlag == true){
-						total += item.minPrice * item.number;
+						total += item.promotionPrice * item.number;
 					}
 				})
 				this.total = Number(total.toFixed(2));
