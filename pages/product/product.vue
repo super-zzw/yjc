@@ -206,6 +206,7 @@
 				picUrl:"",
 				collectionFlag:false,
 				cartNms:0,  //购物车中的数量
+				obj:{},// 要提交的规则
 			};
 		},
 		async onLoad(options){
@@ -230,13 +231,12 @@
 				}).catch(_ => {})
 			},
 			getPriceInfo(){
-				let obj = {};
 				this.specSelected.forEach((item,index) => {
-					obj[item.key] = item.value
+					this.obj[item.key] = item.value
 				})
 				let data = {
 					productId: this.productId,
-					skuJson: JSON.stringify(obj)
+					skuJson: JSON.stringify(this.obj)
 				}
 				this.$http({
 					apiName: "getSkuStock",
@@ -244,6 +244,8 @@
 					type:"post"
 				}).then(res=>{
 					this.stockInfo = res.data[0];
+				}).catch(err=>{
+					console.log(err);
 				})
 			},
 			moredComment(){
@@ -317,6 +319,7 @@
 						}
 					}
 				})
+				console.log("我准备执行了")
 				this.getPriceInfo();
 			},
 			//规格弹窗开关
@@ -417,10 +420,10 @@
 						apiName:"addCart",
 						type:"POST",
 						data:{
-							productId:this.productId,
-							checked:1,
-							num:this.number,
-							specJson:JSON.stringify(this.specSelected)
+							productId :this.productId,
+							checked :1,
+							num :this.number,
+							skuJson : JSON.stringify(this.obj)
 						}
 					}).then(res => {
 						uni.showToast({
