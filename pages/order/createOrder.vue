@@ -171,7 +171,11 @@
 				}).catch(_ => {})
 			},
 			async submit(){
-				var that = this
+				var that = this;
+				var _skuJson = {};
+				this.order.specSelected.map(item => {
+					_skuJson[item.key] = item.value
+				})
 				await this.$http({
 					apiName:"createOrder",
 					type:"POST",
@@ -180,7 +184,7 @@
 						num:this.order.number,
 						productId:this.order.productId,
 						sourceType:'1',
-						specJson:JSON.stringify(this.order.specSelected),
+						skuJson:JSON.stringify(_skuJson),
 						remark:this.desc
 					}
 				}).then(res => {
