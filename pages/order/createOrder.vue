@@ -163,7 +163,7 @@
 					this.orderList = res.data
 					this.orderList.map(item => {
 						if(item.checkedFlag){
-							that.total = that.total + Number((Number(Number(item.minPrice * item.number).toFixed(2))).toFixed(2))
+							that.total = that.total + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
 							// that.total = (that.total + Number(Number(item.promotionPrice * item.number).toFixed(2)))
 							// console.log(that.total)
 						}
