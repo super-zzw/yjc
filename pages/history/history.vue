@@ -14,7 +14,7 @@
 					<view class="s-info-boo">
 						<view class="s-info2 nm-font" v-if="item.productType == 0">
 							<text class="iconfont iconrenminbi"></text> 
-							{{item.promotionPrice}}
+							{{item.minPrice}}
 						</view>
 						<view class="s-info2 nm-font" v-else>
 							积分

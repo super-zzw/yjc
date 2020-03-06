@@ -70,7 +70,7 @@
 									规格：<text v-for="(aitem,aindex) in JSON.parse(goodsItem.specifications)" :key="aindex">{{aitem.value}}</text>
 									；<text>数量：{{goodsItem.productQuantity}}</text>
 								</text>
-								<text class="price">{{goodsItem.promotionPrice}}</text>
+								<text class="price">{{goodsItem.minPrice}}</text>
 							</view>
 						</view>
 						<view class="good-box-sn">

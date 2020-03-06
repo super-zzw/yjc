@@ -13,7 +13,7 @@
 					<text class="title clamp">{{item.title}}</text>
 					<view class="price-box">
 						<text class="nm-font" v-if="isCore">积分：{{item.exchangePoints}}</text>
-						<text class="price nm-font" v-else>{{item.promotionPrice}}</text>
+						<text class="price nm-font" v-else>{{item.minPrice}}</text>
 						<text v-if="isCore">已兑换 {{item.sale}}</text>
 						<text v-else>已售 {{item.sale}}</text>
 					</view>

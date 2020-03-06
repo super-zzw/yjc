@@ -89,7 +89,7 @@
 					>
 						<image class="floor-item-img" :src="item.picUrl"></image>
 						<text class="title clamp">{{item.title}}</text>
-						<text class="price nm-font">￥{{item.promotionPrice}}</text>
+						<text class="price nm-font">￥{{item.minPrice}}</text>
 					</view>
 				</view>
 			</scroll-view>
@@ -116,7 +116,7 @@
 					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-fon">￥{{item.promotionPrice}}</text>
+				<text class="price nm-fon">￥{{item.minPrice}}</text>
 			</view>
 		</view>
 		<!-- 促销专区 -->
@@ -139,7 +139,7 @@
 					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-fon">￥{{item.promotionPrice}}</text>
+				<text class="price nm-fon">￥{{item.minPrice}}</text>
 			</view>
 		</view>
 		

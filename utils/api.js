@@ -17,6 +17,7 @@ export default{
 	getMoreModule:"/sms/get/more/product/list",  //首页更多内容模块,1=促销 2=新品 3=精选 4=为你推荐
 	
 	goodDetail:"/pms/get/productInfo",  //查看商品详情
+	getSkuStock: "/pms/get/skuStock", // 获取价格
 	saveGood:"/pms/add/productCollect",  //收藏商品
 	unSaveGood:"/ums/delete/productCoolect",  //取消收藏
 	addCart:"/oms/add/cart",  //添加到购物车

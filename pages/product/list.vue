@@ -38,7 +38,7 @@
 					</view>
 					<text class="title clamp">{{item.title}}</text>
 					<view class="price-box">
-						<text class="price">{{item.promotionPrice}}</text>
+						<text class="price">{{item.minPrice}}</text>
 						<text>已售 {{item.sale}}</text>
 					</view>
 				</view>

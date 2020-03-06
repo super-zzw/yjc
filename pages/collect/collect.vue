@@ -14,7 +14,7 @@
 						<view class="s-info1">{{item.title}}</view>
 						<view class="s-info2 nm-font">
 							<text class="iconfont iconrenminbi"></text> 
-							{{item.promotionPrice}}
+							{{item.minPrice}}
 							</view>
 					</view>
 				</view>
