@@ -21,8 +21,8 @@
 			</view>
 			<view class="price-box" v-else>
 				<text class="price-tip">¥</text>
-				<text class="price nm-font">{{minPrice}}</text>
-				<text class="m-price nm-font" v-if="minPrice < originalPrice">{{originalPrice}}</text>
+				<text class="price nm-font">{{stockInfo.promotionPrice}}</text>
+				<text class="m-price nm-font" v-if="stockInfo.promotionPrice < stockInfo.originalPrice">{{stockInfo.originalPrice}}</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{sale}}</text>
@@ -34,7 +34,7 @@
 		<!--  分享 -->
 		<view class="share-section" v-if="!(isScore == 'true')">
 			<text class="iconfont iconjifen"></text>
-			<text class="tit">该商品购买成功可得{{giftPoint}}积分</text>
+			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint}}积分</text>
 			
 		</view>
 		
@@ -122,10 +122,10 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
+					<image :src="stockInfo.pic"></image>
 					<view class="right">
-						<text class="price">¥{{sale}}</text>
-						<text class="stock">库存：{{stock}}件</text>
+						<text class="price">¥{{stockInfo.promotionPrice}}</text>
+						<text class="stock">库存：{{stockInfo.stock}}件</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -182,6 +182,7 @@
 			return {
 				exchangePoints:0,
 				isScore:false,  //是否为积分兑换
+				stockInfo:{},// 规格界面详情
 				productId:"",  //商品id
 				imgList: [],  //轮播图列表
 				title:"",
@@ -234,13 +235,14 @@
 				})
 				let data = {
 					productId: this.productId,
-					skuJson: obj
+					skuJson: JSON.stringify(obj)
 				}
 				this.$http({
 					apiName: "getSkuStock",
-					data:data
+					data:data,
+					type:"post"
 				}).then(res=>{
-					console.log(res);
+					this.stockInfo = res.data[0];
 				})
 			},
 			moredComment(){
