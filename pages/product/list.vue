@@ -1,86 +1,100 @@
 <template>
 	<view class="content">
-		<view class="navbar" :style="{position:headerPosition,top:headerTop}">
-			<view class="nav-item" :class="{current: filterIndex === 0}" @click="tabClick(0)">
-				综合排序
-			</view>
-			<view class="nav-item" :class="{current: filterIndex === 1}" @click="tabClick(1)">
-				销量优先
-			</view>
-			<view class="nav-item" :class="{current: filterIndex === 2}" @click="tabClick(2)">
-				<text>价格</text>
-				<view class="p-box">
-					<text :class="{active: priceOrder === 1 && filterIndex === 2}" class="yticon icon-shang"></text>
-					<text :class="{active: priceOrder === 2 && filterIndex === 2}" class="yticon icon-shang xia"></text>
+		<view class="contentBox" v-if="(searchVal || categoryId != '') && goodsList.length > 0">
+			<view class="navbar" :style="{position:headerPosition,top:headerTop}">
+				<view class="nav-item" :class="{current: sort === 0}" @click="tabClick(0)">
+					综合排序
 				</view>
-			</view>
-			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
-		</view>
-		<view class="goods-list">
-			<view 
-				v-for="(item, index) in goodsList" :key="index"
-				class="goods-item"
-				@click="navToDetailPage(item)"
-			>
-				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
-				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<view class="price-box">
-					<text class="price">{{item.price}}</text>
-					<text>已售 {{item.sales}}</text>
-				</view>
-			</view>
-		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
-		
-		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
-			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
-				<scroll-view scroll-y class="cate-list">
-					<view v-for="item in cateList" :key="item.id">
-						<view class="cate-item b-b two">{{item.name}}</view>
-						<view 
-							v-for="tItem in item.child" :key="tItem.id" 
-							class="cate-item b-b" 
-							:class="{active: tItem.id==cateId}"
-							@click="changeCate(tItem)">
-							{{tItem.name}}
-						</view>
+				<view class="nav-item" :class="{current: sort === 1 || sort === 2}" @click="tabClick([1,2])">
+					<text>时间</text>
+					<view class="p-box">
+						<text :class="{active: sort === 1}" class="iconfont iconshang2"></text>
+						<text :class="{active: sort === 2}" class="iconfont iconshang2 xia"></text>
 					</view>
-				</scroll-view>
+				</view>
+				<view class="nav-item" :class="{current: sort === 3 || sort === 4}" @click="tabClick([3,4])">
+					<text>销量</text>
+					<view class="p-box">
+						<text :class="{active: sort === 3}" class="iconfont iconshang2"></text>
+						<text :class="{active: sort === 4}" class="iconfont iconshang2 xia"></text>
+					</view>
+				</view>
+				<view class="nav-item" :class="{current: sort === 5 || sort === 6}" @click="tabClick([5,6])">
+					<text>价格</text>
+					<view class="p-box">
+						<text :class="{active: sort === 5}" class="iconfont iconshang2"></text>
+						<text :class="{active: sort === 6}" class="iconfont iconshang2 xia"></text>
+					</view>
+				</view>
+			</view>
+			<view class="goods-list">
+				<view 
+					v-for="(item, index) in goodsList" :key="index"
+					class="goods-item"
+					@click="navToDetailPage(item.id)"
+				>
+					<view class="image-wrapper">
+						<image :src="item.picUrl" mode="aspectFill"></image>
+					</view>
+					<text class="title clamp">{{item.title}}</text>
+					<view class="price-box">
+						<text class="price">{{item.promotionPrice}}</text>
+						<text>已售 {{item.sale}}</text>
+					</view>
+				</view>
+				<view v-if="goodsList.length > 0 && noMore" class="no_more">
+					<text class="no_more_side"></text>
+					<text class="no_more_text">没有更多数据了</text>
+					<text class="no_more_side"></text>
+				</view>
 			</view>
 		</view>
-		
+		<view class="re-wrap" v-if="!searchVal && !categoryId">
+			<view class="re-his" v-if="history.length > 0">
+				<view class="re-histop">
+					<view class="re-his-text">历史记录</view>
+					<image @tap="clearHis" src="../../static/laji.png" mode="widthFix" class="re-his-img"></image>
+				</view>
+				<view class="re-his-list">
+					<text class="rehl-item" v-for="item in history" :key="item" @tap="kewSearch(item)">{{item}}</text>
+				</view>
+			</view>
+			<view class="re-his">
+				<view class="re-histop">
+					<view class="re-his-text">热门搜索</view>
+				</view>
+				<view class="re-his-list">
+					<text class="rehl-item" v-for="(item,index) in keyWords" :key="index" @tap="kewSearch(item)">{{item}}</text>
+				</view>
+			</view>
+		</view>
+		<view class="empty" v-if="(searchVal || categoryId) && goodsList.length == 0">
+			<image src="../../static/empty.png" mode="widthFix" class="empty-img"></image>
+			<view class="empty-text">暂无此类商品，换个关键词试试</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	export default {
-		components: {
-			uniLoadMore	
-		},
 		data() {
 			return {
-				cateMaskState: 0, //分类面板展开状态
+				priceOrder: 0, //1 价格从低到高 2价格从高到低
+				salesOrder:0,  //1销量从低到高 2销量从高到低
+				timeOrder:0,  //1时间上架最晚 2时间上架最早
+				searchVal:"",  //搜索词
+				page:1,
+				size:8,
+				sort:0,  //0=按相关度；1=按时间从近到远  2=按时间从远到近；3=按销量高到低 4=按销量高到低；5=价格从低到高；6=价格从高到低
+				dataLoading:false,  //是否是在加载数据
+				noMore:false,
+				goodsList: [],
 				headerPosition:"fixed",
 				headerTop:"0px",
-				loadingType: 'more', //加载更多状态
-				filterIndex: 0, 
-				cateId: 0, //已选三级分类id
-				priceOrder: 0, //1 价格从低到高 2价格从高到低
-				cateList: [],
-				goodsList: []
+				keyWords:[],  //热门关键字
+				history:[],  //历史记录
+				categoryId:"",
 			};
-		},
-		
-		onLoad(options){
-			// #ifdef H5
-			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
-			// #endif
-			this.cateId = options.tid;
-			this.loadCateList(options.fid,options.sid);
-			this.loadData();
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -91,138 +105,237 @@
 			}
 		},
 		//下拉刷新
-		onPullDownRefresh(){
-			this.loadData('refresh');
+		async onPullDownRefresh(){
+			this.goodsList = [];
+			this.page = 1;
+			this.sort = 0;
+			await this.judgeSearch()
+			uni.stopPullDownRefresh();
+			uni.showToast({
+				title: '刷新成功'
+			})
 		},
 		//加载更多
 		onReachBottom(){
-			this.loadData();
+			if(this.noMore){
+				return
+			}
+			this.page ++;
+			this.judgeSearch()
+		},
+		//点击键盘搜索
+		onNavigationBarSearchInputConfirmed(e){
+			if(!e.text.trim()){
+				uni.showToast({
+					title:"请输入商品名称",
+					icon:"none"
+				})
+				return
+			}
+			this.goodsList = []
+			this.searchVal = e.text
+			this.search()
+			let _index = this.history.indexOf(this.searchVal)
+			if(_index >= 0){
+				this.history.splice(_index,1)
+			}else{
+				if(this.history.length >= 20){
+					this.history.pop()
+				}
+			}
+			
+			this.history.push(this.searchVal)
+			uni.setStorageSync("yzhsearch_words",this.history)
+		},
+		onLoad(opt){
+			// #ifdef H5
+			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
+			// #endif
+			this.history = uni.getStorageSync("yzhsearch_words") || []
+			if(opt.categoryid){
+				this.categoryId = opt.categoryid
+				this.getCateList()
+			}else{
+				this.initData()
+			}
 		},
 		methods: {
-			//加载分类
-			async loadCateList(fid, sid){
-				let list = await this.$api.json('cateList');
-				let cateList = list.filter(item=>item.pid == fid);
-				
-				cateList.forEach(item=>{
-					let tempList = list.filter(val=>val.pid == item.id);
-					item.child = tempList;
-				})
-				this.cateList = cateList;
-			},
-			//加载商品 ，带下拉刷新和上滑加载
-			async loadData(type='add', loading) {
-				//没有更多直接返回
-				if(type === 'add'){
-					if(this.loadingType === 'nomore'){
-						return;
-					}
-					this.loadingType = 'loading';
-				}else{
-					this.loadingType = 'more'
-				}
-				
-				let goodsList = await this.$api.json('goodsList');
-				if(type === 'refresh'){
-					this.goodsList = [];
-				}
-				//筛选，测试数据直接前端筛选了
-				if(this.filterIndex === 1){
-					goodsList.sort((a,b)=>b.sales - a.sales)
-				}
-				if(this.filterIndex === 2){
-					goodsList.sort((a,b)=>{
-						if(this.priceOrder == 1){
-							return a.price - b.price;
-						}
-						return b.price - a.price;
-					})
-				}
-				
-				this.goodsList = this.goodsList.concat(goodsList);
-				
-				//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-				this.loadingType  = this.goodsList.length > 20 ? 'nomore' : 'more';
-				if(type === 'refresh'){
-					if(loading == 1){
-						uni.hideLoading()
-					}else{
-						uni.stopPullDownRefresh();
-					}
-				}
-			},
-			//筛选点击
-			tabClick(index){
-				if(this.filterIndex === index && index !== 2){
-					return;
-				}
-				this.filterIndex = index;
-				if(index === 2){
-					this.priceOrder = this.priceOrder === 1 ? 2: 1;
-				}else{
-					this.priceOrder = 0;
-				}
-				uni.pageScrollTo({
-					duration: 300,
-					scrollTop: 0
-				})
-				this.loadData('refresh', 1);
-				uni.showLoading({
-					title: '正在加载'
-				})
-			},
-			//显示分类面板
-			toggleCateMask(type){
-				let timer = type === 'show' ? 10 : 300;
-				let	state = type === 'show' ? 1 : 0;
-				this.cateMaskState = 2;
-				setTimeout(()=>{
-					this.cateMaskState = state;
-				}, timer)
-			},
-			//分类点击
-			changeCate(item){
-				this.cateId = item.id;
-				this.toggleCateMask();
-				uni.pageScrollTo({
-					duration: 300,
-					scrollTop: 0
-				})
-				this.loadData('refresh', 1);
-				uni.showLoading({
-					title: '正在加载'
-				})
-			},
-			//详情
-			navToDetailPage(item){
-				//测试数据没有写id，用title代替
-				let id = item.title;
+			navToDetailPage(id){
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
 			},
-			stopPrevent(){}
+			initData(){
+				uni.showLoading({ title: '加载中' });
+				this.getKeyWords()
+				uni.hideLoading()
+			},
+			//根据分类id查询列表
+			async getCateList(){
+				await this.$http({
+					apiName:"getCateList",
+					data:{
+						categoryId:this.categoryId,
+						page:this.page,
+						size:this.size,
+						sort:this.sort
+					}
+				}).then(res => {
+					this.noMore = res.data.last
+					this.goodsList = this.goodsList.concat(res.data.content)
+				}).catch(_ => {})
+			},
+			async search(){
+				this.categoryId = ""
+				await this.$http({
+					apiName:"search",
+					data:{
+						keyword:this.searchVal,
+						page:this.page,
+						size:this.size,
+						sort:this.sort
+					},
+					type:"POST"
+				}).then(res => {
+					this.noMore = res.data.last
+					this.goodsList = this.goodsList.concat(res.data.content)
+				}).catch(_ => {})
+			},
+			//点击关键字搜索
+			kewSearch(word){
+				this.searchVal = word
+				//将搜索关键字赋值到搜索框，只有app有效
+				// #ifdef APP-PLUS
+				let webView = this.$mp.page.$getAppWebview();
+				webView.setTitleNViewSearchInputText(this.searchVal);
+				// #endif
+				this.goodsList = [];
+				this.page = 1;
+				this.sort = 0;
+				this.search()
+			},
+			//获取热门搜索关键字
+			async getKeyWords(){
+				await this.$http({
+					apiName:"keyWords",
+					type:"POST"
+				}).then(res => {
+					res.data.map(item => {
+						this.keyWords.push(item.keyword)
+					})
+				}).catch(_ => {})
+			},
+			//筛选点击
+			tabClick(sortBy){
+				if(sortBy === 0){
+					//点击综合排序
+					if(this.sort === 0){
+						return
+					}else{
+						this.sort = 0
+					}
+				}else{
+					let _index = sortBy.indexOf(this.sort)
+					if(_index < 0){
+						this.sort = sortBy[0]
+					}else{
+						this.sort = _index == 0 ? sortBy[1] : sortBy[0]
+					}
+				}
+				uni.pageScrollTo({
+					duration: 300,
+					scrollTop: 0
+				})
+				this.goodsList = [];
+				this.page = 1;
+				this.judgeSearch()
+			},
+			clearHis(){
+				this.history = []
+				uni.removeStorageSync('yzhsearch_words');
+			},
+			//判断分类搜索还是关键字搜索
+			judgeSearch(){
+				if(this.searchVal){
+					this.search()
+				}else{
+					this.getCateList()
+				}
+			}
 		},
 	}
 </script>
 
-<style lang="scss">
-	page, .content{
-		background: $page-color-base;
+<style lang="scss" scoped>
+	page, .content,.contentBox{
+		background: #f8f8f8;
+		min-height: 100vh;
+	}
+	.iconshang2{
+		height: 26rpx;
 	}
 	.content{
-		padding-top: 96upx;
+		padding-top: 96rpx;
 	}
-
+	.empty{
+		text-align: center;
+		.empty-img{
+			width: 200rpx;
+			height: auto;
+			margin-top: 330rpx;
+		}
+		.empty-text{
+			margin-top: 38rpx;
+			color: #C0C4CC;
+			font-size: 28rpx;
+		}
+	}
+	.re-wrap{
+		margin-top: -96rpx;
+		.re-his{
+			background-color: #fff;
+			padding: 20rpx 32rpx;
+			padding-bottom: 0;
+			margin-bottom: 20rpx;
+			.re-histop{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 16rpx;
+				.re-his-text{
+					color: #606266;
+					font-size: 30rpx;
+				}
+				.re-his-img{
+					width: 40rpx;
+					height: auto;
+				}
+			}
+			.re-his-list{
+				.rehl-item{
+					display: inline-block;
+					margin-bottom: 20rpx;
+					background-color: #F0F1F3;
+					line-height: 46rpx;
+					border-radius: 24rpx;
+					padding-left: 22rpx;
+					padding-right: 22rpx;
+					margin-right: 20rpx;
+					color: #909399;
+					font-size: 24rpx;
+				}
+			}
+		}
+	}
 	.navbar{
 		position: fixed;
 		left: 0;
 		top: var(--window-top);
 		display: flex;
 		width: 100%;
-		height: 80upx;
+		height: 80rpx;
 		background: #fff;
-		box-shadow: 0 2upx 10upx rgba(0,0,0,.06);
+		box-shadow: 0 2rpx 10rpx rgba(0,0,0,.06);
 		z-index: 10;
 		.nav-item{
 			flex: 1;
@@ -230,7 +343,7 @@
 			justify-content: center;
 			align-items: center;
 			height: 100%;
-			font-size: 30upx;
+			font-size: 30rpx;
 			color: $font-color-dark;
 			position: relative;
 			&.current{
@@ -241,24 +354,24 @@
 					left: 50%;
 					bottom: 0;
 					transform: translateX(-50%);
-					width: 120upx;
+					width: 120rpx;
 					height: 0;
-					border-bottom: 4upx solid $base-color;
+					border-bottom: 4rpx solid $base-color;
 				}
 			}
 		}
 		.p-box{
 			display: flex;
 			flex-direction: column;
-			.yticon{
+			.iconfont{
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 30upx;
-				height: 14upx;
+				width: 30rpx;
+				height: 14rpx;
 				line-height: 1;
-				margin-left: 4upx;
-				font-size: 26upx;
+				margin-left: 4rpx;
+				font-size: 26rpx;
 				color: #888;
 				&.active{
 					color: $base-color;
@@ -266,6 +379,7 @@
 			}
 			.xia{
 				transform: scaleY(-1);
+				margin-left: 5rpx;
 			}
 		}
 		.cate-item{
@@ -273,9 +387,9 @@
 			justify-content: center;
 			align-items: center;
 			height: 100%;
-			width: 80upx;
+			width: 80rpx;
 			position: relative;
-			font-size: 44upx;
+			font-size: 44rpx;
 			&:after{
 				content: '';
 				position: absolute;
@@ -284,7 +398,7 @@
 				transform: translateY(-50%);
 				border-left: 1px solid #ddd;
 				width: 0;
-				height: 36upx;
+				height: 36rpx;
 			}
 		}
 	}
@@ -301,7 +415,7 @@
 		transition: .3s;
 		
 		.cate-content{
-			width: 630upx;
+			width: 630rpx;
 			height: 100%;
 			background: #fff;
 			float:right;
@@ -326,16 +440,16 @@
 		.cate-item{
 			display: flex;
 			align-items: center;
-			height: 90upx;
-			padding-left: 30upx;
- 			font-size: 28upx;
+			height: 90rpx;
+			padding-left: 30rpx;
+ 			font-size: 28rpx;
 			color: #555;
 			position: relative;
 		}
 		.two{
-			height: 64upx;
+			height: 64rpx;
 			color: #303133;
-			font-size: 30upx;
+			font-size: 30rpx;
 			background: #f8f8f8;
 		}
 		.active{
@@ -347,20 +461,20 @@
 	.goods-list{
 		display:flex;
 		flex-wrap:wrap;
-		padding: 0 30upx;
-		background: #fff;
+		padding: 0 30rpx;
+		// background: #F9FAFB;
 		.goods-item{
 			display:flex;
 			flex-direction: column;
 			width: 48%;
-			padding-bottom: 40upx;
+			padding-bottom: 40rpx;
 			&:nth-child(2n+1){
 				margin-right: 4%;
 			}
 		}
 		.image-wrapper{
 			width: 100%;
-			height: 330upx;
+			height: 330rpx;
 			border-radius: 3px;
 			overflow: hidden;
 			image{
@@ -372,14 +486,14 @@
 		.title{
 			font-size: $font-lg;
 			color: $font-color-dark;
-			line-height: 80upx;
+			line-height: 80rpx;
 		}
 		.price-box{
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding-right: 10upx;
-			font-size: 24upx;
+			padding-right: 10rpx;
+			font-size: 24rpx;
 			color: $font-color-light;
 		}
 		.price{
@@ -388,7 +502,7 @@
 			line-height: 1;
 			&:before{
 				content: '￥';
-				font-size: 26upx;
+				font-size: 26rpx;
 			}
 		}
 	}

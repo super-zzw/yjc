@@ -3,21 +3,20 @@
 		<view class="uni-numbox-minus" 
 			@click="_calcValue('subtract')"
 		>
-			<text class="yticon icon--jianhao" :class="minDisabled?'uni-numbox-disabled': ''" ></text>
+			<text class="iconfont iconjian" :class="minDisabled?'uni-numbox-disabled': ''" ></text>
 		</view>
 		<input 
 			class="uni-numbox-value" 
 			type="number" 
 			:disabled="disabled"
 			:value="inputValue" 
-			
 			@blur="_onBlur"
 		>
 		<view 
 			class="uni-numbox-plus" 
 			@click="_calcValue('add')"
 		>
-			<text class="yticon icon-jia2" :class="maxDisabled?'uni-numbox-disabled': ''" ></text>
+			<text class="iconfont iconjia" :class="maxDisabled?'uni-numbox-disabled': ''" ></text>
 		</view>
 	</view>
 </template>
@@ -35,11 +34,11 @@
 			},
 			index: {
 				type: Number,
-				default: 0
+				default: 1
 			},
 			value: {
 				type: Number,
-				default: 0
+				default: 1
 			},
 			min: {
 				type: Number,
@@ -56,6 +55,10 @@
 			disabled: {
 				type: Boolean,
 				default: false
+			},
+			cartId:{
+				type:String,
+				default:""
 			}
 		},
 		data() {
@@ -68,6 +71,7 @@
 		created(){
 			this.maxDisabled = this.isMax;
 			this.minDisabled = this.isMin;
+			console.log(this.cartId)
 		},
 		computed: {
 
@@ -76,7 +80,8 @@
 			inputValue(number) {
 				const data = {
 					number: number,
-					index: this.index
+					index: this.index,
+					cartId:this.cartId
 				}
 				this.$emit('eventChange', data);
 			}
@@ -142,58 +147,56 @@
 		}
 	}
 </script>
-<style>
+<style lang="scss">
 	.uni-numbox {
 		position:absolute;
-		left: 30upx;
+		left: 30rpx;
 		bottom: 0;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
-		width:230upx;
-		height: 70upx;
+		width:230rpx;
+		height: 70rpx;
 		background:#f5f5f5;
 	}
 
 	.uni-numbox-minus,
 	.uni-numbox-plus {
 		margin: 0;
-		background-color: #f5f5f5;
-		width: 70upx;
+		background-color: #ffff;
+		width: 70rpx;
 		height: 100%;
-		line-height: 70upx;
+		line-height: 70rpx;
 		text-align: center;
 		position: relative;
+		border-radius: 0!important;
 	}
-	.uni-numbox-minus .yticon,
-	.uni-numbox-plus .yticon{
-		font-size: 36upx;
+	
+	.uni-numbox-minus .iconfont,
+	.uni-numbox-plus .iconfont{
+		font-size: 36rpx;
 		color: #555;
 	}
 
 	.uni-numbox-minus {
 		border-right: none;
-		border-top-left-radius: 6upx;
-		border-bottom-left-radius: 6upx;
 	}
 
 	.uni-numbox-plus {
 		border-left: none;
-		border-top-right-radius: 6upx;
-		border-bottom-right-radius: 6upx;
 	}
 
 	.uni-numbox-value {
 		position: relative;
-		background-color: #f5f5f5;
-		width: 90upx;
-		height: 50upx;
+		background-color: #fff;
+		width: 90rpx;
+		height: 50rpx;
 		text-align: center;
 		padding: 0;
-		font-size: 30upx;
+		font-size: 30rpx;
 	}
 
-	.uni-numbox-disabled.yticon {
+	.uni-numbox-disabled.iconfont {
 		color: #d6d6d6;
 	}
 </style>

@@ -1,85 +1,80 @@
 <template>
 	<view>
 		<!-- 地址 -->
-		<navigator url="/pages/address/address?source=1" class="address-section">
-			<view class="order-content">
-				<text class="yticon icon-shouhuodizhi"></text>
+		<view @tap="fetchAddr"  class="address-section">
+			<view class="order-content order-content2" v-if="!selectAddr">
+				<text class="iconfont icondizhi"></text>
 				<view class="cen">
 					<view class="top">
-						<text class="name">{{addressData.name}}</text>
-						<text class="mobile">{{addressData.mobile}}</text>
+						<text class="name">{{addrText}}</text>
+						<text class="mobile"></text>
 					</view>
-					<text class="address">{{addressData.address}} {{addressData.area}}</text>
+					<text class="address"></text>
 				</view>
-				<text class="yticon icon-you"></text>
+				<text class="iconfont iconright"></text>
+			</view>
+			<view class="order-content" v-else>
+				<text class="iconfont icondizhi"></text>
+				<view class="cen">
+					<view class="top">
+						<text class="name">{{selectAddr.name}}</text>
+						<text class="mobile">{{selectAddr.phoneNumber}}</text>
+					</view>
+					<text class="address">{{selectAddr.province}}{{selectAddr.city}}{{selectAddr.region}}{{selectAddr.detailAddress}}</text>
+				</view>
+				<text class="iconfont iconright"></text>
 			</view>
 
 			<image class="a-bg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAu4AAAAFCAYAAAAaAWmiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6Rjk3RjkzMjM2NzMxMTFFOUI4RkU4OEZGMDcxQzgzOEYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6Rjk3RjkzMjQ2NzMxMTFFOUI4RkU4OEZGMDcxQzgzOEYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGOTdGOTMyMTY3MzExMUU5QjhGRTg4RkYwNzFDODM4RiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGOTdGOTMyMjY3MzExMUU5QjhGRTg4RkYwNzFDODM4RiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrEOZlQAAAiuSURBVHjazJp7bFvV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"></image>
-		</navigator>
-
-		<view class="goods-section">
-			<view class="g-header b-b">
-				<image class="logo" src="http://duoduo.qibukj.cn/./Upload/Images/20190321/201903211727515.png"></image>
-				<text class="name">西城小店铺</text>
+		</view>
+		
+		<view class="goods-section" v-if="cart == 1">
+			<view class="g-item" v-for="(item,index) in orderList" :key="index" v-if="item.checkedFlag">
+				<image :src="item.picUrl"></image>
+				<view class="right">
+					<text class="title clamp">{{item.title}}</text>
+					<text class="spec">
+						<text class="spec-text" v-for="(aitem,aindex) in JSON.parse(item.specifications)" :key="aindex">{{aitem.value}}</text>
+					</text>
+					<view class="price-box">
+						<text class="price nm-font">￥{{item.promotionPrice}}</text>
+						<text class="number">x {{item.number}}</text>
+					</view>
+				</view>
 			</view>
+		</view>
+		<view class="goods-section" v-else>
 			<!-- 商品列表 -->
+			
 			<view class="g-item">
-				<image src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=756705744,3505936868&fm=11&gp=0.jpg"></image>
+				<image :src="order.picUrl"></image>
 				<view class="right">
-					<text class="title clamp">古黛妃 短袖t恤女夏装2019新款</text>
-					<text class="spec">春装款 L</text>
+					<text class="title clamp">{{order.title}}</text>
+					<text class="spec">
+						<text class="spec-text" v-for="(item,index) in order.specSelected" :key="index">{{item.value}}</text>
+					</text>
 					<view class="price-box">
-						<text class="price">￥17.8</text>
-						<text class="number">x 1</text>
-					</view>
-				</view>
-			</view>
-			<view class="g-item">
-				<image src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1620020012,789258862&fm=26&gp=0.jpg"></image>
-				<view class="right">
-					<text class="title clamp">韩版于是洞洞拖鞋 夏季浴室防滑简约居家【新人专享，限选意见】</text>
-					<text class="spec">春装款 L</text>
-					<view class="price-box">
-						<text class="price">￥17.8</text>
-						<text class="number">x 1</text>
+						<text class="price">￥{{order.price}}</text>
+						<text class="number">x {{order.number}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
-
-		<!-- 优惠明细 -->
-		<view class="yt-list">
-			<view class="yt-list-cell b-b" @click="toggleMask('show')">
-				<view class="cell-icon">
-					券
-				</view>
-				<text class="cell-tit clamp">优惠券</text>
-				<text class="cell-tip active">
-					选择优惠券
-				</text>
-				<text class="cell-more wanjia wanjia-gengduo-d"></text>
-			</view>
-			<view class="yt-list-cell b-b">
-				<view class="cell-icon hb">
-					减
-				</view>
-				<text class="cell-tit clamp">商家促销</text>
-				<text class="cell-tip disabled">暂无可用优惠</text>
-			</view>
-		</view>
+		
 		<!-- 金额明细 -->
 		<view class="yt-list">
-			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">商品金额</text>
-				<text class="cell-tip">￥179.88</text>
+			<view class="yt-list-cell b-b" v-if="isScore">
+				<text class="cell-tit clamp">消耗积分</text>
+				<text class="cell-tip">{{totalScore}}</text>
 			</view>
-			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">优惠金额</text>
-				<text class="cell-tip red">-￥35</text>
+			<view class="yt-list-cell b-b" v-else>
+				<text class="cell-tit clamp">商品金额</text>
+				<text class="cell-tip">￥{{total}}</text>
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip">免运费</text>
+				<text class="cell-tip" v-if="isScore">积分兑换免运费</text>
+				<text class="cell-tip" v-else>{{fee}}</text>
 			</view>
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">备注</text>
@@ -92,95 +87,206 @@
 			<view class="price-content">
 				<text>实付款</text>
 				<text class="price-tip">￥</text>
-				<text class="price">475</text>
+				<text class="price">{{total2}}</text>
 			</view>
-			<text class="submit" @click="submit">提交订单</text>
-		</view>
-		
-		<!-- 优惠券面板 -->
-		<view class="mask" :class="maskState===0 ? 'none' : maskState===1 ? 'show' : ''" @click="toggleMask">
-			<view class="mask-content" @click.stop.prevent="stopPrevent">
-				<!-- 优惠券页面，仿mt -->
-				<view class="coupon-item" v-for="(item,index) in couponList" :key="index">
-					<view class="con">
-						<view class="left">
-							<text class="title">{{item.title}}</text>
-							<text class="time">有效期至2019-06-30</text>
-						</view>
-						<view class="right">
-							<text class="price">{{item.price}}</text>
-							<text>满30可用</text>
-						</view>
-						
-						<view class="circle l"></view>
-						<view class="circle r"></view>
-					</view>
-					<text class="tips">限新用户使用</text>
-				</view>
-			</view>
+			<text class="submit" @click="scoreEx" v-if="isScore">立即兑换</text>
+			<text class="submit" @click="submit2" v-else-if="cart == 1">提交订单</text>
+			<text class="submit" @click="submit" v-else>提交订单</text>
 		</view>
 
 	</view>
 </template>
 
 <script>
+	import {
+	   mapState,
+	   mapMutations
+    } from 'vuex';
 	export default {
 		data() {
 			return {
-				maskState: 0, //优惠券面板显示状态
+				total:0,
+				totalScore:0,
 				desc: '', //备注
-				payType: 1, //1微信 2支付宝
-				couponList: [
-					{
-						title: '新用户专享优惠券',
-						price: 5,
-					},
-					{
-						title: '庆五一发一波优惠券',
-						price: 10,
-					},
-					{
-						title: '优惠券优惠券优惠券优惠券',
-						price: 15,
-					}
-				],
-				addressData: {
-					name: '许小星',
-					mobile: '13853989563',
-					addressName: '金九大道',
-					address: '山东省济南市历城区',
-					area: '149号',
-					default: false,
+				isScore:"",
+				fee:"0",
+				cart:"",
+				orderList:[],
+				addrText:"地址加载中...",  //
+				total2:"加载中..."
+			}
+		},
+		async onLoad(opt){
+			if(!this.selectAddr){
+				await this.getAddr()
+			}
+			if(opt.cart == 1){
+				this.cart = opt.cart
+				await this.getCart()
+				await this.getCartYf()
+			}else{
+				this.total = Number(this.order.price * this.order.number).toFixed(2)
+				console.log(this.order)
+				await this.getYf()
+				if(opt.score == 'true'){
+					this.isScore = true
+					this.totalScore = this.order.exchangePoints
 				}
 			}
 		},
-		onLoad(option){
-			//商品数据
-			//let data = JSON.parse(option.data);
-			//console.log(data);
+		// async onShow(){
+		// 	if(!this.selectAddr){
+		// 		await this.getAddr()
+		// 	}
+		// },
+		computed:{
+			...mapState(['order','selectAddr'])
 		},
 		methods: {
-			//显示优惠券面板
-			toggleMask(type){
-				let timer = type === 'show' ? 10 : 300;
-				let	state = type === 'show' ? 1 : 0;
-				this.maskState = 2;
-				setTimeout(()=>{
-					this.maskState = state;
-				}, timer)
+			...mapMutations(['setSelectAddr']),
+			fetchAddr(){
+				if(this.cart == 1){
+					uni.navigateTo({
+						url:`/pages/address/address?score=${this.isScore}&source=3`
+					})
+				}else{
+					uni.navigateTo({
+						url:`/pages/address/address?score=${this.isScore}&source=1`
+					})
+				}
 			},
-			numberChange(data) {
-				this.number = data.number;
+			async getCart(){
+				let that = this
+				await this.$http({
+					apiName:"getCartList"
+				}).then(res => {
+					this.orderList = res.data
+					this.orderList.map(item => {
+						if(item.checkedFlag){
+							that.total = that.total + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
+							// that.total = (that.total + Number(Number(item.promotionPrice * item.number).toFixed(2)))
+							// console.log(that.total)
+						}
+					})
+				}).catch(_ => {})
 			},
-			changePayType(type){
-				this.payType = type;
+			async submit(){
+				var that = this
+				await this.$http({
+					apiName:"createOrder",
+					type:"POST",
+					data:{
+						addressId:this.selectAddr.id,
+						num:this.order.number,
+						productId:this.order.productId,
+						sourceType:'1',
+						specJson:JSON.stringify(this.order.specSelected),
+						remark:this.desc
+					}
+				}).then(res => {
+					if(that.isScore){
+						uni.navigateTo({
+							url:"/pages/money/paySuccess?isDh=1"
+						})
+					}else{
+						uni.redirectTo({
+							url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}`
+						})
+					}
+				}).catch(_ => {})
+				
 			},
-			submit(){
-				uni.redirectTo({
-					url: '/pages/money/pay'
-				})
+			async submit2(){
+				var that = this
+				await this.$http({
+					apiName:"createCartOrder",
+					type:"POST",
+					data:{
+						addressId:this.selectAddr.id,
+						sourceType:'1',
+					}
+				}).then(res => {
+					uni.redirectTo({
+						url: `/pages/money/pay?money=${this.total2}&orderid=${res.data.order.id}`
+					})
+				}).catch(_ => {})
+				
+			},
+			scoreEx(){
+				var that = this
+				uni.showModal({
+				    title: '提示',
+				    content: '确定兑换积分兑换该商品？',
+				    success: function (res) {
+				        if (res.confirm) {
+				           that.submit()
+				        }
+				    }
+				});
+			},
+			//获取默认地址
+			async getAddr(){
+				await this.$http({
+					apiName:"addrList",
+					data:{
+						page:1,
+						size:1
+					}
+				}).then(res => {
+					this.setSelectAddr(res.data.list[0])
+					if(res.data.list.length == 0){
+						this.addrText = "暂无可用地址请点击添加"
+					}
+				}).catch(_ => {})
+			},
+			async getYf(){
+				if(this.selectAddr){
+					await this.$http({
+						apiName:"getYunfei",
+						type:"POST",
+						data:{
+							productId:this.order.productId,
+							province:this.selectAddr.province
+						}
+					}).then(res => {
+						this.fee = res.data.fee
+						this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
+					}).catch(_ =>{})
+				}
+			},
+			async getCartYf(){
+				if(this.selectAddr){
+					await this.$http({
+						apiName:"cartYunfei",
+						type:"POST",
+						data:{
+							province:this.selectAddr.province
+						}
+					}).then(res => {
+						this.fee = res.data
+						this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
+					}).catch(_ =>{})
+				}
 			},
 			stopPrevent(){}
+		},
+		onBackPress(e){
+			if(this.cart == 1){
+				uni.switchTab({
+					url:'/pages/cart/cart'
+				})
+				return true
+			}else if(this.isScore){
+				uni.redirectTo({
+					url:"/pages/product/product?id=" + this.order.productId + "&score=true"
+				})
+				return true
+			}else{
+				uni.redirectTo({
+					url:"/pages/product/product?id=" + this.order.productId
+				})
+				return true
+			}
 		}
 	}
 </script>
@@ -188,11 +294,11 @@
 <style lang="scss">
 	page {
 		background: $page-color-base;
-		padding-bottom: 100upx;
+		padding-bottom: 100rpx;
 	}
 
 	.address-section {
-		padding: 30upx 0;
+		padding: 30rpx 0;
 		background: #fff;
 		position: relative;
 
@@ -201,39 +307,39 @@
 			align-items: center;
 		}
 
-		.icon-shouhuodizhi {
+		.icondizhi {
 			flex-shrink: 0;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 90upx;
+			width: 90rpx;
 			color: #888;
-			font-size: 44upx;
+			font-size: 44rpx;
 		}
 
 		.cen {
 			display: flex;
 			flex-direction: column;
 			flex: 1;
-			font-size: 28upx;
+			font-size: 28rpx;
 			color: $font-color-dark;
 		}
 
 		.name {
-			font-size: 34upx;
-			margin-right: 24upx;
+			font-size: 34rpx;
+			margin-right: 24rpx;
 		}
 
 		.address {
-			margin-top: 16upx;
-			margin-right: 20upx;
+			margin-top: 16rpx;
+			margin-right: 20rpx;
 			color: $font-color-light;
 		}
 
-		.icon-you {
-			font-size: 32upx;
+		.iconright {
+			font-size: 32rpx;
 			color: $font-color-light;
-			margin-right: 30upx;
+			margin-right: 30rpx;
 		}
 
 		.a-bg {
@@ -242,78 +348,82 @@
 			bottom: 0;
 			display: block;
 			width: 100%;
-			height: 5upx;
+			height: 5rpx;
 		}
 	}
 
 	.goods-section {
-		margin-top: 16upx;
+		margin-top: 16rpx;
 		background: #fff;
 		padding-bottom: 1px;
 
 		.g-header {
 			display: flex;
 			align-items: center;
-			height: 84upx;
-			padding: 0 30upx;
+			height: 84rpx;
+			padding: 0 30rpx;
 			position: relative;
 		}
 
 		.logo {
 			display: block;
-			width: 50upx;
-			height: 50upx;
+			width: 50rpx;
+			height: 50rpx;
 			border-radius: 100px;
 		}
 
 		.name {
-			font-size: 30upx;
+			font-size: 30rpx;
 			color: $font-color-base;
-			margin-left: 24upx;
+			margin-left: 24rpx;
 		}
 
 		.g-item {
+			padding-top: 20rpx;
 			display: flex;
-			margin: 20upx 30upx;
+			margin: 20rpx 30rpx;
 
 			image {
 				flex-shrink: 0;
 				display: block;
-				width: 140upx;
-				height: 140upx;
-				border-radius: 4upx;
+				width: 140rpx;
+				height: 140rpx;
+				border-radius: 4rpx;
 			}
 
 			.right {
 				flex: 1;
-				padding-left: 24upx;
+				padding-left: 24rpx;
 				overflow: hidden;
 			}
 
 			.title {
-				font-size: 30upx;
+				font-size: 30rpx;
 				color: $font-color-dark;
 			}
 
 			.spec {
-				font-size: 26upx;
+				font-size: 26rpx;
 				color: $font-color-light;
+				.spec-text{
+					margin-right: 10rpx;
+				}
 			}
 
 			.price-box {
 				display: flex;
 				align-items: center;
-				font-size: 32upx;
+				font-size: 32rpx;
 				color: $font-color-dark;
-				padding-top: 10upx;
+				padding-top: 10rpx;
 
 				.price {
-					margin-bottom: 4upx;
+					margin-bottom: 4rpx;
 				}
 				.number{
-					font-size: 26upx;
+					font-size: 26rpx;
 					color: $font-color-base;
-					margin-left: 20upx;
+					margin-left: 20rpx;
 				}
 			}
 
@@ -323,15 +433,15 @@
 		}
 	}
 	.yt-list {
-		margin-top: 16upx;
+		margin-top: 16rpx;
 		background: #fff;
 	}
 
 	.yt-list-cell {
 		display: flex;
 		align-items: center;
-		padding: 10upx 30upx 10upx 40upx;
-		line-height: 70upx;
+		padding: 10rpx 30rpx 10rpx 40rpx;
+		line-height: 70rpx;
 		position: relative;
 
 		&.cell-hover {
@@ -339,19 +449,19 @@
 		}
 
 		&.b-b:after {
-			left: 30upx;
+			left: 30rpx;
 		}
 
 		.cell-icon {
-			height: 32upx;
-			width: 32upx;
-			font-size: 22upx;
+			height: 32rpx;
+			width: 32rpx;
+			font-size: 22rpx;
 			color: #fff;
 			text-align: center;
-			line-height: 32upx;
+			line-height: 32rpx;
 			background: #f85e52;
-			border-radius: 4upx;
-			margin-right: 12upx;
+			border-radius: 4rpx;
+			margin-right: 12rpx;
 
 			&.hb {
 				background: #ffaa0e;
@@ -365,21 +475,21 @@
 
 		.cell-more {
 			align-self: center;
-			font-size: 24upx;
+			font-size: 24rpx;
 			color: $font-color-light;
-			margin-left: 8upx;
-			margin-right: -10upx;
+			margin-left: 8rpx;
+			margin-right: -10rpx;
 		}
 
 		.cell-tit {
 			flex: 1;
-			font-size: 26upx;
+			font-size: 26rpx;
 			color: $font-color-light;
-			margin-right: 10upx;
+			margin-right: 10rpx;
 		}
 
 		.cell-tip {
-			font-size: 26upx;
+			font-size: 26rpx;
 			color: $font-color-dark;
 
 			&.disabled {
@@ -396,7 +506,7 @@
 
 		&.desc-cell {
 			.cell-tit {
-				max-width: 90upx;
+				max-width: 90rpx;
 			}
 		}
 
@@ -409,38 +519,38 @@
 	
 	/* 支付列表 */
 	.pay-list{
-		padding-left: 40upx;
-		margin-top: 16upx;
+		padding-left: 40rpx;
+		margin-top: 16rpx;
 		background: #fff;
 		.pay-item{
 			display: flex;
 			align-items: center;
-			padding-right: 20upx;
+			padding-right: 20rpx;
 			line-height: 1;
-			height: 110upx;	
+			height: 110rpx;	
 			position: relative;
 		}
 		.icon-weixinzhifu{
-			width: 80upx;
-			font-size: 40upx;
+			width: 80rpx;
+			font-size: 40rpx;
 			color: #6BCC03;
 		}
 		.icon-alipay{
-			width: 80upx;
-			font-size: 40upx;
+			width: 80rpx;
+			font-size: 40rpx;
 			color: #06B4FD;
 		}
-		.icon-xuanzhong2{
+		.iconchenggong{
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			width: 60upx;
-			height: 60upx;
-			font-size: 40upx;
+			width: 60rpx;
+			height: 60rpx;
+			font-size: 40rpx;
 			color: $base-color;
 		}
 		.tit{
-			font-size: 32upx;
+			font-size: 32rpx;
 			color: $font-color-dark;
 			flex: 1;
 		}
@@ -454,32 +564,32 @@
 		display: flex;
 		align-items: center;
 		width: 100%;
-		height: 90upx;
+		height: 90rpx;
 		justify-content: space-between;
-		font-size: 30upx;
+		font-size: 30rpx;
 		background-color: #fff;
 		z-index: 998;
 		color: $font-color-base;
 		box-shadow: 0 -1px 5px rgba(0,0,0,.1);
 		.price-content{
-			padding-left: 30upx;
+			padding-left: 30rpx;
 		}
 		.price-tip{
 			color: $base-color;
-			margin-left: 8upx;
+			margin-left: 8rpx;
 		}
 		.price{
-			font-size: 36upx;
+			font-size: 36rpx;
 			color: $base-color;
 		}
 		.submit{
 			display:flex;
 			align-items:center;
 			justify-content: center;
-			width: 280upx;
+			width: 280rpx;
 			height: 100%;
 			color: #fff;
-			font-size: 32upx;
+			font-size: 32rpx;
 			background-color: $base-color;
 		}
 	}
@@ -522,14 +632,14 @@
 	.coupon-item{
 		display: flex;
 		flex-direction: column;
-		margin: 20upx 24upx;
+		margin: 20rpx 24rpx;
 		background: #fff;
 		.con{
 			display: flex;
 			align-items: center;
 			position: relative;
-			height: 120upx;
-			padding: 0 30upx;
+			height: 120rpx;
+			padding: 0 30rpx;
 			&:after{
 				position: absolute;
 				left: 0;
@@ -547,15 +657,15 @@
 			justify-content: center;
 			flex: 1;
 			overflow: hidden;
-			height: 100upx;
+			height: 100rpx;
 		}
 		.title{
-			font-size: 32upx;
+			font-size: 32rpx;
 			color: $font-color-dark;
-			margin-bottom: 10upx;
+			margin-bottom: 10rpx;
 		}
 		.time{
-			font-size: 24upx;
+			font-size: 24rpx;
 			color: $font-color-light;
 		}
 		.right{
@@ -563,36 +673,36 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-			font-size: 26upx;
+			font-size: 26rpx;
 			color: $font-color-base;
-			height: 100upx;
+			height: 100rpx;
 		}
 		.price{
-			font-size: 44upx;
+			font-size: 44rpx;
 			color: $base-color;
 			&:before{
 				content: '￥';
-				font-size: 34upx;
+				font-size: 34rpx;
 			}
 		}
 		.tips{
-			font-size: 24upx;
+			font-size: 24rpx;
 			color: $font-color-light;
-			line-height: 60upx;
-			padding-left: 30upx;
+			line-height: 60rpx;
+			padding-left: 30rpx;
 		}
 		.circle{
 			position: absolute;
-			left: -6upx;
-			bottom: -10upx;
+			left: -6rpx;
+			bottom: -10rpx;
 			z-index: 10;
-			width: 20upx;
-			height: 20upx;
+			width: 20rpx;
+			height: 20rpx;
 			background: #f3f3f3;
 			border-radius: 100px;
 			&.r{
 				left: auto;
-				right: -6upx;
+				right: -6rpx;
 			}
 		}
 	}

@@ -3,28 +3,38 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+let _session = uni.getStorageSync('yzhloginSession')
 const store = new Vuex.Store({
 	state: {
-		hasLogin: false,
-		userInfo: {},
+		hasLogin: !!_session,
+		userInfo:{},
+		afterLoginUrl:"",  //用于存储登录之后跳转的页面
+		afterLoginIsTab:false,  //登录之后跳转的页面是否是tab
+		order:[],  //直接购买临时存储的商品
+		selectAddr:null,  //购买时选中的地址
+		msgNms:0,  //未读消息总数
 	},
 	mutations: {
-		login(state, provider) {
-
-			state.hasLogin = true;
-			state.userInfo = provider;
-			uni.setStorage({//缓存用户登陆状态
-			    key: 'userInfo',  
-			    data: provider  
-			}) 
-			console.log(state.userInfo);
+		setMsgNms(state,data){
+			state.msgNms = data
 		},
-		logout(state) {
-			state.hasLogin = false;
-			state.userInfo = {};
-			uni.removeStorage({  
-                key: 'userInfo'  
-            })
+		setLogin(state,data){
+			state.hasLogin = data
+		},
+		setUserInfo(state,data){
+			state.userInfo = data
+		},
+		setAfterLoginUrl(state,data){
+			state.afterLoginUrl = data
+		},
+		setAfterLoginIsTab(state,data){
+			state.afterLoginIsTab = data
+		},
+		setOrder(state,data){
+			state.order = data
+		},
+		setSelectAddr(state,data){
+			state.selectAddr = data
 		}
 	},
 	actions: {

@@ -1,238 +1,145 @@
 <template>
 	<view class="container">
-		<!-- 小程序头部兼容 -->
-		<!-- #ifdef MP -->
-		<view class="mp-search-box">
-			<input class="ser-input" type="text" value="输入关键字搜索" disabled />
-		</view>
-		<!-- #endif -->
-		
 		<!-- 头部轮播 -->
 		<view class="carousel-section">
-			<!-- 标题栏和状态栏占位符 -->
-			<view class="titleNview-placing"></view>
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
-				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
-					<image :src="item.src" />
+				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @tap="pageJump(item.jumpType,item.jumpId)">
+					<image :src="item.pic" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
 			<view class="swiper-dots">
-				<text class="num">{{swiperCurrent+1}}</text>
+				<text class="num nm-font">{{swiperCurrent+1}}</text>
 				<text class="sign">/</text>
-				<text class="num">{{swiperLength}}</text>
+				<text class="num nm-font">{{swiperLength}}</text>
 			</view>
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item">
-				<image src="/static/temp/c3.png"></image>
-				<text>环球美食</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c5.png"></image>
-				<text>个护美妆</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c6.png"></image>
-				<text>营养保健</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c7.png"></image>
-				<text>家居厨卫</text>
-			</view>
-			<view class="cate-item">
-				<image src="/static/temp/c8.png"></image>
-				<text>速食生鲜</text>
-			</view>
-		</view>
-		
-		<view class="ad-1">
-			<image src="/static/temp/ad1.jpg" mode="scaleToFill"></image>
-		</view>
-		
-		<!-- 秒杀楼层 -->
-		<view class="seckill-section m-t">
-			<view class="s-header">
-				<image class="s-img" src="/static/temp/secskill-img.jpg" mode="widthFix"></image>
-				<text class="tip">8点场</text>
-				<text class="hour timer">07</text>
-				<text class="minute timer">13</text>
-				<text class="second timer">55</text>
-				<text class="yticon icon-you"></text>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		
-		<!-- 团购楼层 -->
-		<view class="f-header m-t">
-			<image src="/static/temp/h1.png"></image>
-			<view class="tit-box">
-				<text class="tit">精品团购</text>
-				<text class="tit2">Boutique Group Buying</text>
-			</view>
-			<text class="yticon icon-you"></text>
-		</view>
-		<view class="group-section">
-			<swiper class="g-swiper" :duration="500">
-				<swiper-item
-					class="g-swiper-item"
-					v-for="(item, index) in goodsList" :key="index"
-					v-if="index%2 === 0"
-					@click="navToDetailPage(item)"
-				>
-					<view class="g-item left">
-						<image :src="item.image" mode="aspectFill"></image>
-						<view class="t-box">
-							<text class="title clamp">{{item.title}}</text>
-							<view class="price-box">
-								<text class="price">￥{{item.price}}</text> 
-								<text class="m-price">￥188</text> 
-							</view>
-							
-							<view class="pro-box">
-							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
-							  	</view>
-								<text>6人成团</text>
-							</view>
-						</view>
-						            
-					</view>
-					<view class="g-item right">
-						<image :src="goodsList[index+1].image" mode="aspectFill"></image>
-						<view class="t-box">
-							<text class="title clamp">{{goodsList[index+1].title}}</text>
-							<view class="price-box">
-								<text class="price">￥{{goodsList[index+1].price}}</text> 
-								<text class="m-price">￥188</text> 
-							</view>
-							<view class="pro-box">
-							  	<view class="progress-box">
-							  		<progress percent="72" activeColor="#fa436a" active stroke-width="6" />
-							  	</view>
-								<text>10人成团</text>
-							</view>
-						</view>
+			<swiper class="swiper-nav" indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="navs.length > 2" :autoplay="false" :interval="2000" :duration="500">
+				<swiper-item class="swiper-nav-item" v-for="(item0,index0) in navs" :key="index0">
+					<view class="cate-item" v-for="(item1,index1) in item0" :key="index1"  @tap="pageJump(item1.jumpType,item1.jumpId)">
+						<image :src="item1.icon" class="cate-item-img"/>
+						<view class="cate-item-text">{{item1.name}}</view>
 					</view>
 				</swiper-item>
-
+			</swiper>
+		</view>
+		<!-- 滚动广告 -->
+		<view class="ad-1">
+			<div class="ad-1-box">
+				<image class="ad-1-img" src="../../static/ad.png" mode="widthFix"></image>
+				<swiper class="ad-1-swiper" :vertical="true" :indicator-dots="false" :autoplay="true" :interval="2000" :duration="500">
+					<swiper-item class="ad-1-swiper-item" v-for="(item,index) in notices" :key="index" @tap="toArtilce(item.noticeId)">
+						<view class="ad1-item-text">{{item.noticeTitle}}</view>
+					</swiper-item>
+				</swiper>
+			</div>
+		</view>
+		<!-- 主题推荐 -->
+		<view class="f-header2 m-t m-t2">
+			<view class="tit-box">
+				<text class="tit">主题推荐</text>
+			</view>
+			<view class="tit-box2" @tap="toMore()">
+				更多
+				<text class="iconfont iconright"></text>
+			</view>
+		</view>
+		<view class="group-section2">
+			<swiper class="g-swiper" :duration="500" :autoplay="true">
+				<swiper-item
+					class="g-swiper-item"
+					v-for="(item, index) in tipics" :key="index"
+					@tap="toTopic(item.id)"
+				>
+					<image class="g-image" :src="item.pic" mode="widthFix"></image>
+					<view class="t-box">
+						<text class="title">{{item.title}}</text>
+						<view class="price-box" v-if="item.price">
+							<text class="price nm-font">￥{{item.price}}</text> 
+							<text class="m-price">起</text>
+						</view>
+					</view>
+					<view class="pro-box">{{item.description}}</view>
+				</swiper-item>
 			</swiper>
 		</view>
 		
 		
-		
-		<!-- 分类推荐楼层 -->
-		<view class="f-header m-t">
-			<image src="/static/temp/h1.png"></image>
+		<!-- 新品首发 -->
+		<view class="seckill-section m-t">
+			<view class="f-header2 m-t f-header3">
+				<view class="tit-box">
+					<text class="tit">新品首发</text>
+				</view>
+				<view class="tit-box2" @tap="pageJump(1)">
+					更多
+					<text class="iconfont iconright"></text>
+				</view>
+			</view>
+			<scroll-view class="floor-list" scroll-x>
+				<view class="scoll-wrapper">
+					<view 
+						@click="navToDetailPage(item.productId)"
+						v-for="(item, index) in topics123[1]" :key="index"
+						class="floor-item floor-item2"
+					>
+						<image class="floor-item-img" :src="item.picUrl"></image>
+						<text class="title clamp">{{item.title}}</text>
+						<text class="price nm-font">￥{{item.promotionPrice}}</text>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+	
+		<!-- 精品专区 -->
+		<view class="f-header2 m-t">
 			<view class="tit-box">
-				<text class="tit">分类精选</text>
-				<text class="tit2">Competitive Products For You</text>
+				<text class="tit">精品专区</text>
 			</view>
-			<text class="yticon icon-you"></text>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409398864&di=4a12763adccf229133fb85193b7cc08f&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201703%2F19%2F20170319150032_MNwmn.jpeg" mode="scaleToFill"></image>
+			<view class="tit-box2" @tap="pageJump(2)">
+				更多
+				<text class="iconfont iconright"></text>
 			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409984228&di=dee176242038c2d545b7690b303d65ea&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F5ef4da9f17faaf4612f0d5046f4161e556e9bbcfdb5b-rHjf00_fw658" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image3" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-		<view class="hot-floor">
-			<view class="floor-img-box">
-				<image class="floor-img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1553409794730&di=12b840ec4f5748ef06880b85ff63e34e&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01dc03589ed568a8012060c82ac03c.jpg%40900w_1l_2o_100sh.jpg" mode="scaleToFill"></image>
-			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						v-for="(item, index) in goodsList" :key="index"
-						class="floor-item"
-						@click="navToDetailPage(item)"
-					>
-						<image :src="item.image2" mode="aspectFill"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price">￥{{item.price}}</text>
-					</view>
-					<view class="more">
-						<text>查看全部</text>
-						<text>More+</text>
-					</view>
-				</view>
-			</scroll-view>
-		</view>
-
-		<!-- 猜你喜欢 -->
-		<view class="f-header m-t">
-			<image src="/static/temp/h1.png"></image>
-			<view class="tit-box">
-				<text class="tit">猜你喜欢</text>
-				<text class="tit2">Guess You Like It</text>
-			</view>
-			<text class="yticon icon-you"></text>
 		</view>
 		
 		<view class="guess-section">
 			<view 
-				v-for="(item, index) in goodsList" :key="index"
+				@click="navToDetailPage(item.productId)"
+				v-for="(item, index) in topics123[2]" :key="index"
 				class="guess-item"
-				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price">￥{{item.price}}</text>
+				<text class="price nm-fon">￥{{item.promotionPrice}}</text>
+			</view>
+		</view>
+		<!-- 促销专区 -->
+		<view class="f-header2 m-t">
+			<view class="tit-box">
+				<text class="tit">促销专区</text>
+			</view>
+			<view class="tit-box2" @tap="pageJump(3,1)">
+				更多
+				<text class="iconfont iconright"></text>
+			</view>
+		</view>
+		<view class="guess-section">
+			<view 
+				@click="navToDetailPage(item.productId)"
+				v-for="(item, index) in topics123[0]" :key="index"
+				class="guess-item"
+			>
+				<view class="image-wrapper">
+					<image :src="item.picUrl" mode="aspectFill"></image>
+				</view>
+				<text class="title clamp">{{item.title}}</text>
+				<text class="price nm-fon">￥{{item.promotionPrice}}</text>
 			</view>
 		</view>
 		
@@ -241,61 +148,134 @@
 </template>
 
 <script>
-
+import {
+	mapState,
+	mapMutations
+} from 'vuex';
+import utils from '@/utils/method.js'
 	export default {
 
 		data() {
 			return {
-				titleNViewBackground: '',
-				swiperCurrent: 0,
-				swiperLength: 0,
-				carouselList: [],
-				goodsList: []
+				carouselList: [], //轮播图数据
+				titleNViewBackground: '',  //当前轮播的图片背景
+				swiperCurrent: 0,  //当前轮播index
+				swiperLength: 0,  //轮播内容长度
+				navs:[],// 动态导航
+				notices:[],  //滚动通知/广告
+				tipics:[],  //主题内容
+				topics123:[[],[],[]],  //促销内容，新品，精选
 			};
 		},
-
-		onLoad() {
-			this.loadData();
-			uni.showLoading({
-			    title: '加载中'
-			});
-			let req1 = {
-				apiName:"test1",
-				data:{type:1}
-			};
-			let req2 = {
-				apiName:"test1",
-				data:{type:2}
+		computed:{
+			...mapState(['hasLogin','userInfo'])
+		},
+		async onShow(){
+			let that = this
+			setTimeout(() => {
+				if(that.hasLogin){
+					that.getCartNms();  //获取购物车数量
+				}
+				that.$getMsgNms()
+			},800)
+		},
+		async onLoad() {
+			this.$checkUpdate()
+			await this.initData()
+		},
+		onHide() {
+			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){
+				this.getUserInfo()
 			}
-			let resAll = this.$httpAll([req1,req2])
-			// this.$http({
-			// 	apiName:"test1",
-			// 	data:{type:1}
-			// }).then(res => {
-			// 	console.log(111,res)
-			// }).catch(err => {
-			// 	//err请求失败的信息
-			// })
-			uni.hideLoading()
 		},
 		methods: {
-			
-			
-			
-			
-			
-			/**
-			 * 请求静态数据只是为了代码不那么乱
-			 * 分次请求未作整合
-			 */
-			async loadData() {
-				let carouselList = await this.$api.json('carouselList');
+			...mapMutations(['setUserInfo','setAfterLoginUrl']),
+			getCartNms(){
+				this.$http({
+					apiName:"getCartNms"
+				}).then(res => {
+					if(res.data > 0){
+						uni.setTabBarBadge({
+						  index: 2,
+						  text: String(res.data)
+						})
+					}else{
+						uni.removeTabBarBadge({
+							index: 2,
+						})
+					}
+				}).catch(_ => {})
+			},
+			async getUserInfo(){
+				await this.$http({
+					apiName:"getUserInfo"
+				}).then(res => {
+					this.setUserInfo(res.data)
+				}).catch(_ => {})
+			},
+			//初始化数据
+			initData(){
+				uni.showLoading({ title: '加载中' });
+				this.getBanner()
+				this.getDynamicNav()
+				this.getNotice()
+				this.getTopic()
+				this.getTopic123()
+				uni.hideLoading()
+			},
+			//轮播图
+			async getBanner(){
+				await this.$http({
+					apiName:"getBanner",
+					data:{type:0}
+				}).then(res => {
+					this.loadData(res.data)
+				}).catch(_ => {})
+			},
+			//动态菜单
+			async getDynamicNav(){
+				await this.$http({
+					apiName:"getDynamicNav"
+				}).then(res => {
+					if(res.data.length){
+						for(var i=0;i<res.data.length;i+=5){
+						    this.navs.push(res.data.slice(i,i+5));
+						}
+					}
+				}).catch(_ => {})
+			},
+			//滚动广告
+			async getNotice(){
+				await this.$http({
+					apiName:"getAds"
+				}).then(res => {
+					this.notices = res.data
+				}).catch(_ => {})
+			},
+			//主题推荐
+			async getTopic(){
+				await this.$http({
+					apiName:"getTopic"
+				}).then(res => {
+					this.tipics = res.data
+				}).catch(_ => {})
+			},
+			//获取促销1，新品2，精选3内容
+			async getTopic123(){
+				for(let i = 0 ; i < 3 ; i ++){
+					await this.$http({
+						apiName:"getModule",
+						data:{type:i+1}
+					}).then(res => {
+						this.$set(this.topics123,i,res.data)
+					}).catch(_ => {})
+				}
+				// console.log(this.topics123)
+			},
+			async loadData(carouselList) {
 				this.titleNViewBackground = carouselList[0].background;
 				this.swiperLength = carouselList.length;
 				this.carouselList = carouselList;
-				
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
@@ -303,159 +283,203 @@
 				this.swiperCurrent = index;
 				this.titleNViewBackground = this.carouselList[index].background;
 			},
+			toTopic(id){
+				uni.navigateTo({
+					url: '/pages/topic/topic?id=' + id
+				})
+			},
+			toMore(){
+				uni.navigateTo({
+					url: '/pages/topic/list'
+				})
+			},
 			//详情页
-			navToDetailPage(item) {
-				//测试数据没有写id，用title代替
-				let id = item.title;
+			navToDetailPage(id) {
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
 			},
+			navTo(url){
+				if(!this.hasLogin){
+					this.setAfterLoginUrl(url)
+					url = '/pages/public/login';
+				}
+				uni.navigateTo({  
+					url
+				})  
+			}, 
+			//模块跳转
+			//type：1新品首发，2精品推荐，3促销专区，4积分兑换，5今日签到，6商品详情，7专题详情 8文章
+			pageJump(typeId,dataId){
+				switch(Number(typeId)){
+					case 1:
+						uni.navigateTo({
+							url:"/pages/product/typeList?typeId=2"
+						})
+						break;
+					case 2:
+						uni.navigateTo({
+							url:"/pages/product/typeList?typeId=3"
+						})
+						break;
+					case 3:
+						uni.navigateTo({
+							url:"/pages/product/typeList?typeId=1"
+						})
+						break;
+					case 4:
+						uni.navigateTo({
+							url:"/pages/product/typeList?score=true"
+						})
+						break;
+					case 5:
+						this.navTo("/pages/integral/integral")
+						break;
+					case 6:
+						uni.navigateTo({
+							url:"/pages/product/product?id=" + dataId
+						})
+						break;
+					case 7:
+						uni.navigateTo({
+							url:"/pages/topic/topic?id=" + dataId
+						})
+						break;
+					case 8:
+						uni.navigateTo({
+							url:"/pages/article/article?id=" + dataId
+						})
+						break;
+					default:
+						return
+						break;
+				}
+			},
+			//跳转内容
+			toArtilce(id){
+				uni.navigateTo({
+					url:"/pages/article/article?noticeId=" + id
+				})
+			},
+			//重置数据
+			resetData(){
+				this.carouselList = [];
+				this.titleNViewBackground = '';
+				this.swiperCurrent =  0;  //当前轮播index
+				this.swiperLength =  0;  //轮播内容长度
+				this.navs = [];// 动态导航
+				this.notices = [];  //滚动通知/广告
+				this.tipics = [];  //主题内容
+				this.topics123 = [[],[],[]];  //促销内容，新品，精选
+			}
 		},
-		// #ifndef MP
-		// 标题栏input搜索框点击
-		onNavigationBarSearchInputClicked: async function(e) {
-			this.$api.msg('点击了搜索框');
+		//下拉刷新
+		async onPullDownRefresh(){
+			this.resetData()
+			await this.initData()
+			uni.stopPullDownRefresh();
+			uni.showToast({
+				title: '刷新成功'
+			})
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {
 			const index = e.index;
-			if (index === 0) {
-				this.$api.msg('点击了扫描');
-			} else if (index === 1) {
-				// #ifdef APP-PLUS
-				const pages = getCurrentPages();
-				const page = pages[pages.length - 1];
-				const currentWebview = page.$getAppWebview();
-				currentWebview.hideTitleNViewButtonRedDot({
-					index
-				});
-				// #endif
+			// #ifdef APP-PLUS
+			const pages = getCurrentPages();
+			const page = pages[pages.length - 1];
+			const currentWebview = page.$getAppWebview();
+			currentWebview.hideTitleNViewButtonRedDot({
+				index
+			});
+			// #endif
+			
+			if (index === 1) {
 				uni.navigateTo({
-					url: '/pages/notice/notice'
+					url: '/pages/product/list'
+				})
+			} else if (index === 0) {
+				uni.navigateTo({
+					url: '/pages/notice/index'
 				})
 			}
 		}
-		// #endif
 	}
 </script>
 
 <style lang="scss">
-	/* #ifdef MP */
-	.mp-search-box{
-		position:absolute;
-		left: 0;
-		top: 30upx;
-		z-index: 9999;
-		width: 100%;
-		padding: 0 80upx;
-		.ser-input{
-			flex:1;
-			height: 56upx;
-			line-height: 56upx;
-			text-align: center;
-			font-size: 28upx;
-			color:$font-color-base;
-			border-radius: 20px;
-			background: rgba(255,255,255,.6);
-		}
-	}
-	page{
-		.cate-section{
-			position:relative;
-			z-index:5;
-			border-radius:16upx 16upx 0 0;
-			margin-top:-20upx;
-		}
-		.carousel-section{
-			padding: 0;
-			.titleNview-placing {
-				padding-top: 0;
-				height: 0;
-			}
-			.carousel{
-				.carousel-item{
-					padding: 0;
-				}
-			}
-			.swiper-dots{
-				left:45upx;
-				bottom:40upx;
-			}
-		}
-	}
-	/* #endif */
-	
-	
 	page {
-		background: #f5f5f5;
+		background: #F9FAFB;
 	}
 	.m-t{
-		margin-top: 16upx;
+		margin-top: 16rpx;
+	}
+	.m-t2{
+		margin-top: 0;
 	}
 	/* 头部 轮播图 */
 	.carousel-section {
 		position: relative;
 		padding-top: 10px;
 
-		.titleNview-placing {
-			height: var(--status-bar-height);
-			padding-top: 44px;
-			box-sizing: content-box;
-		}
+		// .titleNview-placing {
+		// 	height: var(--status-bar-height);
+		// 	padding-top: 44px;
+		// 	box-sizing: content-box;
+		// }
 
 		.titleNview-background {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 426upx;
+			height: 338rpx;
 			transition: .4s;
 		}
 	}
 	.carousel {
 		width: 100%;
-		height: 350upx;
+		height: 350rpx;
 
 		.carousel-item {
 			width: 100%;
 			height: 100%;
-			padding: 0 28upx;
+			padding: 0 28rpx;
 			overflow: hidden;
 		}
 
 		image {
 			width: 100%;
 			height: 100%;
-			border-radius: 10upx;
+			border-radius: 10rpx;
 		}
 	}
 	.swiper-dots {
 		display: flex;
 		position: absolute;
-		left: 60upx;
-		bottom: 15upx;
-		width: 72upx;
-		height: 36upx;
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAYAAADDhn8LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTk4MzlBNjE0NjU1MTFFOUExNjRFQ0I3RTQ0NEExQjMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTk4MzlBNjA0NjU1MTFFOUExNjRFQ0I3RTQ0NEExQjMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Q0E3RUNERkE0NjExMTFFOTg5NzI4MTM2Rjg0OUQwOEUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Q0E3RUNERkI0NjExMTFFOTg5NzI4MTM2Rjg0OUQwOEUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4Gh5BPAAACTUlEQVR42uzcQW7jQAwFUdN306l1uWwNww5kqdsmm6/2MwtVCp8CosQtP9vg/2+/gY+DRAMBgqnjIp2PaCxCLLldpPARRIiFj1yBbMV+cHZh9PURRLQNhY8kgWyL/WDtwujjI8hoE8rKLqb5CDJaRMJHokC6yKgSCR9JAukmokIknCQJpLOIrJFwMsBJELFcKHwM9BFkLBMKFxNcBCHlQ+FhoocgpVwwnv0Xn30QBJGMC0QcaBVJiAMiec/dcwKuL4j1QMsVCXFAJE4s4NQA3K/8Y6DzO4g40P7UcmIBJxbEesCKWBDg8wWxHrAiFgT4fEGsB/CwIhYE+AeBAAdPLOcV8HRmWRDAiQVcO7GcV8CLM8uCAE4sQCDAlHcQ7x+ABQEEAggEEAggEEAggEAAgQACASAQQCCAQACBAAIBBAIIBBAIIBBAIABe4e9iAe/xd7EAJxYgEGDeO4j3EODp/cOCAE4sYMyJ5cwCHs4rCwI4sYBxJ5YzC84rCwKcXxArAuthQYDzC2JF0H49LAhwYUGsCFqvx5EF2T07dMaJBetx4cRyaqFtHJ8EIhK0i8OJBQxcECuCVutxJhCRoE0cZwMRyRcFefa/ffZBVPogePihhyCnbBhcfMFFEFM+DD4m+ghSlgmDkwlOgpAl4+BkkJMgZdk4+EgaSCcpVX7bmY9kgXQQU+1TgE0c+QJZUUz1b2T4SBbIKmJW+3iMj2SBVBWz+leVfCQLpIqYbp8b85EskIxyfIOfK5Sf+wiCRJEsllQ+oqEkQfBxmD8BBgA5hVjXyrBNUQAAAABJRU5ErkJggg==);
+		left: 60rpx;
+		bottom: 15rpx;
+		width: 72rpx;
+		height: 36rpx;
+		background-image: url(/static/lunbodian.png);
 		background-size: 100% 100%;
 
 		.num {
-			width: 36upx;
-			height: 36upx;
+			width: 36rpx;
+			height: 36rpx;
 			border-radius: 50px;
-			font-size: 24upx;
+			font-size: 24rpx;
 			color: #fff;
 			text-align: center;
-			line-height: 36upx;
+			line-height: 40rpx;
 		}
 
 		.sign {
 			position: absolute;
 			top: 0;
 			left: 50%;
-			line-height: 36upx;
-			font-size: 12upx;
+			line-height: 36rpx;
+			font-size: 12rpx;
 			color: #fff;
 			transform: translateX(-50%);
 		}
@@ -466,72 +490,84 @@
 		justify-content: space-around;
 		align-items: center;
 		flex-wrap:wrap;
-		padding: 30upx 22upx; 
+		padding: 30rpx 22rpx; 
+		padding-bottom: 0;
 		background: #fff;
+		.swiper-nav{
+			width: 100%;
+			height: 190rpx;
+			.swiper-nav-item{
+				width: 100%;
+				height: 100%;
+				display: flex;
+				// justify-content: space-between;
+				.cate-item{
+					width: 25%;
+					text-align: center;
+					.cate-item-img{
+						width: 88rpx;
+						height: 88rpx;
+					}
+					.cate-item-text{
+						// margin-top: 10rpx;
+						font-size: 26rpx;
+						color: #606266;
+					}
+				}
+			}
+		}
 		.cate-item {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			font-size: $font-sm + 2upx;
+			font-size: $font-sm + 2rpx;
 			color: $font-color-dark;
 		}
 		/* 原图标颜色太深,不想改图了,所以加了透明度 */
 		image {
-			width: 88upx;
-			height: 88upx;
-			margin-bottom: 14upx;
+			width: 88rpx;
+			height: 88rpx;
+			margin-bottom: 14rpx;
 			border-radius: 50%;
 			opacity: .7;
-			box-shadow: 4upx 4upx 20upx rgba(250, 67, 106, 0.3);
+			box-shadow: 4rpx 4rpx 20rpx rgba(250, 67, 106, 0.3);
 		}
 	}
 	.ad-1{
 		width: 100%;
-		height: 210upx;
-		padding: 10upx 0;
-		background: #fff;
-		image{
-			width:100%;
-			height: 100%; 
+		box-sizing: border-box;
+		background-color: #F9FAFB;
+		padding: 20rpx 32rpx;
+		.ad-1-box{
+			background-color: #fff;
+			padding: 20rpx;
+			width: 100%;
+			box-sizing: border-box;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			.ad-1-img{
+				width: 144rpx;
+				height: auto;
+			}
+			.ad-1-swiper{
+				flex: 1;
+				height: 32rpx;
+				margin-left: 20rpx;
+				.ad1-item-text{
+					font-size: 26rpx;
+					color: #909399;
+					overflow: hidden;
+					text-overflow:ellipsis;
+					white-space: nowrap;
+				}
+			}
 		}
 	}
 	/* 秒杀专区 */
 	.seckill-section{
-		padding: 4upx 30upx 24upx;
+		padding: 4rpx 30rpx 24rpx;
 		background: #fff;
-		.s-header{
-			display:flex;
-			align-items:center;
-			height: 92upx;
-			line-height: 1;
-			.s-img{
-				width: 140upx;
-				height: 30upx;
-			}
-			.tip{
-				font-size: $font-base;
-				color: $font-color-light;
-				margin: 0 20upx 0 40upx;
-			}
-			.timer{
-				display:inline-block;
-				width: 40upx;
-				height: 36upx;
-				text-align:center;
-				line-height: 36upx;
-				margin-right: 14upx;
-				font-size: $font-sm+2upx;
-				color: #fff;
-				border-radius: 2px;
-				background: rgba(0,0,0,.8);
-			}
-			.icon-you{
-				font-size: $font-lg;
-				color: $font-color-light;
-				flex: 1;
-				text-align: right;
-			}
-		}
 		.floor-list{
 			white-space: nowrap;
 		}
@@ -539,69 +575,158 @@
 			display:flex;
 			align-items: flex-start;
 		}
-		.floor-item{
-			width: 150upx;
-			margin-right: 20upx;
-			font-size: $font-sm+2upx;
+		.floor-item2{
+			margin-right: 20rpx;
+			font-size: $font-sm+2rpx;
 			color: $font-color-dark;
 			line-height: 1.8;
-			image{
-				width: 150upx;
-				height: 150upx;
-				border-radius: 6upx;
+			width: 48%;
+			.floor-item-img{
+				width: 332rpx;
+				height: 332rpx;
+				border-radius: 6rpx;
+			}
+			.title{
+				color: #303133;
+				font-size: 30rpx;
+				overflow: hidden;
+				text-overflow:ellipsis;
+				white-space: nowrap;
 			}
 			.price{
-				color: $uni-color-primary;
+				color: #F23D3D;
+				font-size: 34rpx;
 			}
 		}
 	}
-	
-	.f-header{
+	.f-header2{
 		display:flex;
 		align-items:center;
-		height: 140upx;
-		padding: 6upx 30upx 8upx;
+		height: 90rpx;
+		padding: 6rpx 30rpx 8rpx;
 		background: #fff;
 		image{
 			flex-shrink: 0;
-			width: 80upx;
-			height: 80upx;
-			margin-right: 20upx;
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 20rpx;
 		}
 		.tit-box{
 			flex: 1;
 			display: flex;
 			flex-direction: column;
 		}
+		.tit-box2{
+			font-size: 24rpx;
+			color: #C0C4CC;
+			display: flex;
+		}
 		.tit{
-			font-size: $font-lg +2upx;
-			color: #font-color-dark;
-			line-height: 1.3;
+			font-size: 32rpx;
+			color: #303133;
+			font-weight: bold;
+		}
+	}
+	.f-header3{
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.f-header{
+		display:flex;
+		align-items:center;
+		height: 140rpx;
+		padding: 6rpx 30rpx 8rpx;
+		background: #fff;
+		image{
+			flex-shrink: 0;
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 20rpx;
+		}
+		.tit-box{
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+		}
+		.tit-box2{
+			font-size: 24rpx;
+			color: #C0C4CC;
+			display: flex;
+		}
+		.tit{
+			font-size: 32rpx;
+			color: #303133;
+			font-weight: bold;
 		}
 		.tit2{
 			font-size: $font-sm;
 			color: $font-color-light;
 		}
-		.icon-you{
-			font-size: $font-lg +2upx;
-			color: $font-color-light;
-		}
 	}
 	/* 团购楼层 */
+	.group-section2{
+		background: #fff;
+		.g-swiper{
+			height: 440rpx;
+			padding-bottom: 30rpx;
+			.g-swiper-item{
+				padding: 0 30rpx;
+				.g-image{
+					width: 100%;
+					height: auto;
+					border-radius: 8rpx;
+				}
+				.t-box{
+					margin-top: 10rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.title{
+						color: #303133;
+						font-size: 34rpx;
+						font-weight: bold;
+					}
+					.price-box{
+						.price{
+							color: #F23D3D;
+							font-size: 38rpx;
+							font-weight: bold;
+							margin-right: 10rpx;
+						}
+						.m-price{
+							color: #C0C4CC;
+							font-size: 24rpx;
+						}
+					}
+				}
+				.pro-box{
+					margin-top: 10rpx;
+					color: #909399;
+					font-size: 28rpx;
+					width:100%;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+				}
+			}
+		}
+	}
 	.group-section{
 		background: #fff;
 		.g-swiper{
-			height: 650upx;
-			padding-bottom: 30upx;
+			height: 650rpx;
+			padding-bottom: 30rpx;
 		}
 		.g-swiper-item{
 			width: 100%;
-			padding: 0 30upx;
+			padding: 0 30rpx;
 			display:flex;
 		}
 		image{
 			width: 100%;
-			height: 460upx;
+			height: 460rpx;
 			border-radius: 4px;
 		}
 		.g-item{
@@ -611,21 +736,21 @@
 		}
 		.left{
 			flex: 1.2;
-			margin-right: 24upx;
+			margin-right: 24rpx;
 			.t-box{
-				padding-top: 20upx;
+				padding-top: 20rpx;
 			}
 		}
 		.right{
 			flex: 0.8;
 			flex-direction: column-reverse;
 			.t-box{
-				padding-bottom: 20upx;
+				padding-bottom: 20rpx;
 			}
 		}
 		.t-box{
-			height: 160upx;
-			font-size: $font-base+2upx;
+			height: 160rpx;
+			font-size: $font-base+2rpx;
 			color: $font-color-dark;
 			line-height: 1.6;
 		}
@@ -633,34 +758,34 @@
 			color:$uni-color-primary;
 		}
 		.m-price{
-			font-size: $font-sm+2upx;
+			font-size: $font-sm+2rpx;
 			text-decoration: line-through;
 			color: $font-color-light;
-			margin-left: 8upx;
+			margin-left: 8rpx;
 		}
 		.pro-box{
 			display:flex;
 			align-items:center;
-			margin-top: 10upx;
+			margin-top: 10rpx;
 			font-size: $font-sm;
 			color: $font-base;
-			padding-right: 10upx;
+			padding-right: 10rpx;
 		}
 		.progress-box{
 			flex: 1;
 			border-radius: 10px;
 			overflow: hidden;
-			margin-right: 8upx;
+			margin-right: 8rpx;
 		}
 	}
 	/* 分类推荐楼层 */
 	.hot-floor{
 		width: 100%;
 		overflow: hidden;
-		margin-bottom: 20upx;
+		margin-bottom: 20rpx;
 		.floor-img-box{
 			width: 100%;
-			height:320upx;
+			height:320rpx;
 			position:relative;
 			&:after{
 				content: '';
@@ -678,11 +803,11 @@
 		}
 		.floor-list{
 			white-space: nowrap;
-			padding: 20upx;
-			padding-right: 50upx;
-			border-radius: 6upx;
-			margin-top:-140upx;
-			margin-left: 30upx;
+			padding: 20rpx;
+			padding-right: 50rpx;
+			border-radius: 6rpx;
+			margin-top:-140rpx;
+			margin-left: 30rpx;
 			background: #fff;
 			box-shadow: 1px 1px 5px rgba(0,0,0,.2);
 			position: relative;
@@ -693,15 +818,15 @@
 			align-items: flex-start;
 		}
 		.floor-item{
-			width: 180upx;
-			margin-right: 20upx;
-			font-size: $font-sm+2upx;
+			width: 180rpx;
+			margin-right: 20rpx;
+			font-size: $font-sm+2rpx;
 			color: $font-color-dark;
 			line-height: 1.8;
 			image{
-				width: 180upx;
-				height: 180upx;
-				border-radius: 6upx;
+				width: 180rpx;
+				height: 180rpx;
+				border-radius: 6rpx;
 			}
 			.price{
 				color: $uni-color-primary;
@@ -713,14 +838,14 @@
 			justify-content: center;
 			flex-direction: column;
 			flex-shrink: 0;
-			width: 180upx;
-			height: 180upx;
-			border-radius: 6upx;
+			width: 180rpx;
+			height: 180rpx;
+			border-radius: 6rpx;
 			background: #f3f3f3;
 			font-size: $font-base;
 			color: $font-color-light;
 			text:first-child{
-				margin-bottom: 4upx;
+				margin-bottom: 4rpx;
 			}
 		}
 	}
@@ -728,20 +853,20 @@
 	.guess-section{
 		display:flex;
 		flex-wrap:wrap;
-		padding: 0 30upx;
+		padding: 0 30rpx;
 		background: #fff;
 		.guess-item{
 			display:flex;
 			flex-direction: column;
 			width: 48%;
-			padding-bottom: 40upx;
+			padding-bottom: 40rpx;
 			&:nth-child(2n+1){
 				margin-right: 4%;
 			}
 		}
 		.image-wrapper{
 			width: 100%;
-			height: 330upx;
+			height: 330rpx;
 			border-radius: 3px;
 			overflow: hidden;
 			image{
@@ -753,7 +878,7 @@
 		.title{
 			font-size: $font-lg;
 			color: $font-color-dark;
-			line-height: 80upx;
+			line-height: 80rpx;
 		}
 		.price{
 			font-size: $font-lg;

@@ -1,82 +1,148 @@
 <template>
 	<view class="content b-t">
-		<view class="list b-b" v-for="(item, index) in addressList" :key="index" @click="checkAddress(item)">
+		<view class="list b-b" v-for="(item, index) in dataList" :key="index" @click="checkAddress(item)">
 			<view class="wrapper">
 				<view class="address-box">
-					<text v-if="item.default" class="tag">默认</text>
-					<text class="address">{{item.addressName}} {{item.area}}</text>
+					<text v-if="index == 0" class="tag">默认</text>
+					<text class="address">{{item.province}}{{item.city}}{{item.region}}{{item.detailAddress}}</text>
 				</view>
 				<view class="u-box">
 					<text class="name">{{item.name}}</text>
-					<text class="mobile">{{item.mobile}}</text>
+					<text class="mobile">{{item.phoneNumber}}</text>
 				</view>
 			</view>
-			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
+			<text class="iconfont iconbianji" @click.stop="toEdit(item.id)"></text>
 		</view>
-		<text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">
-			重要：添加和修改地址回调仅增加了一条数据做演示，实际开发中将回调改为请求后端接口刷新一下列表即可
-		</text>
-		
+		<view class="dsaw1weq" v-if="dataList.length == 0 && noMore">
+			<image src="../../static/nomsg.png" class="emsdds" mode=""></image>
+			<view class="dsadwqtext">暂无收货地址，请点击新增地址</view>
+		</view>
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
 	</view>
 </template>
 
 <script>
+	import {
+	   mapMutations
+	} from 'vuex';
 	export default {
 		data() {
 			return {
+				dataList:[],
+				page:1,
+				size:8,
+				dataLoading:false,  //是否是在加载数据
+				noMore:false,
 				source: 0,
-				addressList: [
-					{
-						name: '刘晓晓',
-						mobile: '18666666666',
-						addressName: '贵族皇仕牛排(东城店)',
-						address: '北京市东城区',
-						area: 'B区',
-						default: true
-					},{
-						name: '刘大大',
-						mobile: '18667766666',
-						addressName: '龙回1区12号楼',
-						address: '山东省济南市历城区',
-						area: '西单元302',
-						default: false,
-					}
-				]
+				score:""
 			}
 		},
 		onLoad(option){
-			console.log(option.source);
+			// console.log(option.source);
 			this.source = option.source;
+			this.score = option.score
+		},
+		async onShow() {
+			this.dataList = []
+			this.getAddr()
 		},
 		methods: {
+			...mapMutations(['setSelectAddr']),
+			async getAddr(){
+				await this.$http({
+					apiName:"addrList",
+					data:{
+						page:this.page,
+						size:this.size
+					}
+				}).then(res => {
+					this.noMore = !res.data.hasNextPage
+					this.dataList = this.dataList.concat(res.data.list)
+					if(this.dataList == 0){
+						this.setSelectAddr(null)
+					}
+				}).catch(_ => {})
+			},
+			toEdit(id){
+				uni.navigateTo({
+					url: `/pages/address/addressManage?id=${id}&source=${this.source}&score=${this.score}`
+				})
+			},
+			
+			
 			//选择地址
 			checkAddress(item){
-				if(this.source == 1){
-					//this.$api.prePage()获取上一页实例，在App.vue定义
-					this.$api.prePage().addressData = item;
+				if(this.source == 1 || this.source == 3){
+					this.setSelectAddr(item)
 					uni.navigateBack()
 				}
 			},
 			addAddress(type, item){
 				uni.navigateTo({
-					url: `/pages/address/addressManage?type=${type}&data=${JSON.stringify(item)}`
+					url: `/pages/address/addressManage?source=${this.source}&score=${this.score}`
 				})
 			},
-			//添加或修改成功之后回调
-			refreshList(data, type){
-				//添加或修改后事件，这里直接在最前面添加了一条数据，实际应用中直接刷新地址列表即可
-				this.addressList.unshift(data);
+			// //添加或修改成功之后回调
+			// refreshList(data, type){
+			// 	//添加或修改后事件，这里直接在最前面添加了一条数据，实际应用中直接刷新地址列表即可
+			// 	this.addressList.unshift(data);
 				
-				console.log(data, type);
+			// 	console.log(data, type);
+			// }
+		},
+		//下拉刷新
+		async onPullDownRefresh(){
+			this.dataList = [];
+			this.page = 1;
+			await this.getAddr()
+			uni.stopPullDownRefresh();
+			uni.showToast({
+				title: '刷新成功'
+			})
+		},
+		//触底加载更多
+		onReachBottom(){
+			if(this.noMore){
+				return
 			}
+			this.page ++;
+			this.getAddr()
+		},
+		onBackPress(e){
+			if(this.source == 2){
+				uni.switchTab({
+					url:"/pages/user/user"
+				})
+			}else if(this.source == 1){  //直接购买或者积分兑换的来源
+				uni.redirectTo({
+					url:"/pages/order/createOrder?score=" + this.score
+				})
+			}else if(this.source == 3){  //购物车来源
+				uni.redirectTo({
+					url:"/pages/order/createOrder?cart=1"
+				})
+			}
+			return true
 		}
 	}
 </script>
 
 <style lang='scss'>
 	page{
-		padding-bottom: 120upx;
+		padding-bottom: 120rpx;
+	}
+	.dsaw1weq{
+		text-align: center;
+		.emsdds{
+			margin-top: 300rpx;
+			width: 312rpx;
+			height: 260rpx;
+		}
+		.dsadwqtext{
+			
+			color: #909399;
+			font-size: 28rpx;
+		}
 	}
 	.content{
 		position: relative;
@@ -84,7 +150,7 @@
 	.list{
 		display: flex;
 		align-items: center;
-		padding: 20upx 30upx;;
+		padding: 20rpx 30rpx;;
 		background: #fff;
 		position: relative;
 	}
@@ -97,52 +163,52 @@
 		display: flex;
 		align-items: center;
 		.tag{
-			font-size: 24upx;
+			font-size: 24rpx;
 			color: $base-color;
-			margin-right: 10upx;
+			margin-right: 10rpx;
 			background: #fffafb;
 			border: 1px solid #ffb4c7;
-			border-radius: 4upx;
-			padding: 4upx 10upx;
+			border-radius: 4rpx;
+			padding: 4rpx 10rpx;
 			line-height: 1;
 		}
 		.address{
-			font-size: 30upx;
+			font-size: 30rpx;
 			color: $font-color-dark;
 		}
 	}
 	.u-box{
-		font-size: 28upx;
+		font-size: 28rpx;
 		color: $font-color-light;
-		margin-top: 16upx;
+		margin-top: 16rpx;
 		.name{
-			margin-right: 30upx;
+			margin-right: 30rpx;
 		}
 	}
 	.icon-bianji{
 		display: flex;
 		align-items: center;
-		height: 80upx;
-		font-size: 40upx;
+		height: 80rpx;
+		font-size: 40rpx;
 		color: $font-color-light;
-		padding-left: 30upx;
+		padding-left: 30rpx;
 	}
 	
 	.add-btn{
 		position: fixed;
-		left: 30upx;
-		right: 30upx;
-		bottom: 16upx;
+		left: 30rpx;
+		right: 30rpx;
+		bottom: 50rpx;
 		z-index: 95;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 690upx;
-		height: 80upx;
-		font-size: 32upx;
+		width: 690rpx;
+		height: 80rpx;
+		font-size: 32rpx;
 		color: #fff;
 		background-color: $base-color;
-		border-radius: 10upx;
+		border-radius: 10rpx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);		
 	}
 </style>
