@@ -70,7 +70,7 @@
 									:index="index"
 									@eventChange="numberChange"
 								></uni-number-box>
-								<text class="price nm-font">¥{{item.promotionPrice}}</text>
+								<text class="price nm-font">¥{{item.minPrice}}</text>
 							</view>
 						</view>
 						<text class="del-btn iconfont iconclose-hei" @click="deleteCartItem(index,item.id)"></text>

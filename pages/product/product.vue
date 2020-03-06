@@ -237,7 +237,7 @@
 					skuJson: obj
 				}
 				this.$http({
-					apiName: "skuJson ",
+					apiName: "getSkuStock",
 					data:data
 				}).then(res=>{
 					console.log(res);
