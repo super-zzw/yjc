@@ -264,8 +264,8 @@
 				}).then(res => {
 					this.imgList = JSON.parse(res.data.product.albumPics)
 					this.title = res.data.product.title
-					this.minPrice = res.data.product.minPrice
-					this.originalPrice = res.data.product.originalPrice
+					// this.minPrice = res.data.product.minPrice
+					// this.originalPrice = res.data.product.originalPrice
 					this.sale = res.data.product.totalSale
 					this.stock = res.data.product.totalStock
 					this.views = res.data.product.views
@@ -399,7 +399,7 @@
 						title:this.title,
 						picUrl:this.picUrl,
 						specSelected:this.specSelected,
-						price:this.minPrice,
+						price:this.stockInfo.promotionPrice,
 						exchangePoints:this.exchangePoints || 0
 					})
 					uni.navigateTo({
