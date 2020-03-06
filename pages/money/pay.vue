@@ -6,7 +6,18 @@
 		</view>
 
 		<view class="pay-type-list">
-
+			<!-- <view class="type-item b-b" @click="changePayType(index)" v-for="(item,index) in payTypes" :key="index">
+				<text class="icon iconfont iconweixin"></text>
+				<view class="con">
+					<text class="tit">微信支付</text>
+					<text>推荐使用微信支付</text>
+				</view>
+				<label class="radio">
+					<radio value="" color="#F23D3D" :checked='payType == 1' />
+					</radio>
+				</label>
+			</view> -->
+			
 			<view class="type-item b-b" @click="changePayType(1)">
 				<text class="icon iconfont iconweixin"></text>
 				<view class="con">
