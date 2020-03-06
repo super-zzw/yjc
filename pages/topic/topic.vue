@@ -32,7 +32,7 @@
 					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-fon">￥{{item.promotionPrice}}</text>
+				<text class="price nm-fon">￥{{item.minPrice}}</text>
 			</view>
 		</view>
 	</view>

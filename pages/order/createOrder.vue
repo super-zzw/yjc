@@ -37,7 +37,7 @@
 						<text class="spec-text" v-for="(aitem,aindex) in JSON.parse(item.specifications)" :key="aindex">{{aitem.value}}</text>
 					</text>
 					<view class="price-box">
-						<text class="price nm-font">￥{{item.promotionPrice}}</text>
+						<text class="price nm-font">￥{{item.minPrice}}</text>
 						<text class="number">x {{item.number}}</text>
 					</view>
 				</view>
@@ -163,7 +163,7 @@
 					this.orderList = res.data
 					this.orderList.map(item => {
 						if(item.checkedFlag){
-							that.total = that.total + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
+							that.total = that.total + Number((Number(Number(item.minPrice * item.number).toFixed(2))).toFixed(2))
 							// that.total = (that.total + Number(Number(item.promotionPrice * item.number).toFixed(2)))
 							// console.log(that.total)
 						}

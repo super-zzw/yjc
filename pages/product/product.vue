@@ -21,8 +21,8 @@
 			</view>
 			<view class="price-box" v-else>
 				<text class="price-tip">¥</text>
-				<text class="price nm-font">{{promotionPrice}}</text>
-				<text class="m-price nm-font" v-if="promotionPrice < originalPrice">{{originalPrice}}</text>
+				<text class="price nm-font">{{minPrice}}</text>
+				<text class="m-price nm-font" v-if="minPrice < originalPrice">{{originalPrice}}</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{sale}}</text>
@@ -45,7 +45,7 @@
 					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 						{{sItem.value}}
 					</text>
-					<text class="selected-text">数量:{{number}}</text>
+					<!-- <text class="selected-text">数量:{{number}}</text> -->
 				</view>
 				<text class="iconfont iconright"></text>
 			</view>
@@ -122,10 +122,10 @@
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
 				<view class="a-t">
-					<!-- <image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image> -->
+					<image src="https://gd3.alicdn.com/imgextra/i3/0/O1CN01IiyFQI1UGShoFKt1O_!!0-item_pic.jpg_400x400.jpg"></image>
 					<view class="right">
-						<!-- <text class="price">¥328.00</text> -->
-						<!-- <text class="stock">库存：188件</text> -->
+						<text class="price">¥{{sale}}</text>
+						<text class="stock">库存：{{stock}}件</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
@@ -148,7 +148,7 @@
 						</text>
 					</view>
 				</view>
-				<view class="attr-list">
+				<!-- <view class="attr-list">
 					<text>数量</text>
 					<view class="item-list">
 						<uni-number-box
@@ -161,7 +161,7 @@
 							@eventChange="numberChange"
 						></uni-number-box>
 					</view>
-				</view>
+				</view> -->
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
@@ -185,7 +185,7 @@
 				productId:"",  //商品id
 				imgList: [],  //轮播图列表
 				title:"",
-				promotionPrice:0,  //促销价
+				minPrice:0,  //促销价
 				originalPrice:0,  //原价
 				sale:0,  //销量
 				stock:999999,  //库存
@@ -227,6 +227,22 @@
 					this.cartNms = res.data
 				}).catch(_ => {})
 			},
+			getPriceInfo(){
+				let obj = {};
+				this.specSelected.forEach((item,index) => {
+					obj[item.key] = item.value
+				})
+				let data = {
+					productId: this.productId,
+					skuJson: obj
+				}
+				this.$http({
+					apiName: "skuJson ",
+					data:data
+				}).then(res=>{
+					console.log(res);
+				})
+			},
 			moredComment(){
 				uni.navigateTo({
 					url:"/pages/product/comment?id=" + this.productId
@@ -246,10 +262,10 @@
 				}).then(res => {
 					this.imgList = JSON.parse(res.data.product.albumPics)
 					this.title = res.data.product.title
-					this.promotionPrice = res.data.product.promotionPrice
+					this.minPrice = res.data.product.minPrice
 					this.originalPrice = res.data.product.originalPrice
-					this.sale = res.data.product.sale
-					this.stock = res.data.product.stock
+					this.sale = res.data.product.totalSale
+					this.stock = res.data.product.totalStock
 					this.views = res.data.product.views
 					this.giftPoint = res.data.product.giftPoint
 					this.desc = res.data.product.descriptionHtml.replace(/\<img/gi, '<img class="cont_img2" ');
@@ -266,7 +282,6 @@
 						}
 					}
 					
-					this.stock = res.data.product.stock
 					this.picUrl = res.data.product.picUrl
 					this.setSpec(res.data.specificationList)
 				}).catch(_ => {})
@@ -299,6 +314,7 @@
 						}
 					}
 				})
+				this.getPriceInfo();
 			},
 			//规格弹窗开关
 			toggleSpec() {
@@ -340,6 +356,7 @@
 						})
 					} 
 				})
+				this.getPriceInfo();
 			},
 			//收藏
 			async toFavorite(){
@@ -380,7 +397,7 @@
 						title:this.title,
 						picUrl:this.picUrl,
 						specSelected:this.specSelected,
-						price:this.promotionPrice,
+						price:this.minPrice,
 						exchangePoints:this.exchangePoints || 0
 					})
 					uni.navigateTo({
