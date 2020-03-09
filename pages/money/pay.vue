@@ -191,7 +191,7 @@ import {
 					// 	location.href = res.url;
 					// }
 					// // #endif
-					
+					// #ifdef APP-PLUS
 					let orderInfo = obj
 					uni.requestPayment({
 						provider: 'wxpay',
@@ -233,7 +233,7 @@ import {
 				}).catch(_ => {})
 				
 			},
-			async aliPay(){
+			async aliPay(){ 
 				await this.$http({
 					apiName:"aliPay",
 					type:"POST",
