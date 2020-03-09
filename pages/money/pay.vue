@@ -192,7 +192,6 @@ import {
 					// }
 					// // #endif
 					
-					// #ifdef APP-PLUS
 					let orderInfo = obj
 					uni.requestPayment({
 						provider: 'wxpay',
@@ -211,19 +210,26 @@ import {
 						}
 					});
 					// #endif
-					//小程序和app内支付
-					// #ifdef APP-PLUS
+					
+					// #ifdef MP-WEIXIN
 					uni.requestPayment({
 					    provider: 'wxpay',
-					    orderInfo: res.data, //微信、支付宝订单数据
+					    ...obj,
 					    success: function (res) {
-					        console.log('success:' + JSON.stringify(res));
+							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+					        uni.navigateTo({
+					        	url:"/pages/money/paySuccess"
+					        })
 					    },
 					    fail: function (err) {
-					        console.log('fail:' + JSON.stringify(err));
+							console.log(err);
+					        uni.navigateTo({
+					        	url:"/pages/money/payFail"
+					        })
 					    }
 					});
 					// #endif
+					
 				}).catch(_ => {})
 				
 			},
