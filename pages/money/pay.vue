@@ -43,7 +43,7 @@
 				</view>
 			</view>
 		</view>
-		
+		<text>{{err}}</text>
 		<text class="mix-btn" @click="confirm">
 			<text v-if="payType == 3">确定</text>
 			<text v-else>确认支付</text>
@@ -62,7 +62,8 @@ import {
 				orderId:"",
 				payType: 1,
 				orderInfo: {},
-				payTypes:[]
+				payTypes:[],
+				err:""
 			};
 		},
 		computed: {
@@ -191,15 +192,31 @@ import {
 					// }
 					// // #endif
 					
-					
-					
-					//小程序和app内支付
+					// #ifdef APP-PLUS
+					let orderInfo = obj
+					uni.requestPayment({
+						provider: 'wxpay',
+						orderInfo: orderInfo, //微信、支付宝订单数据
+						success: function (res) {
+							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+							uni.navigateTo({
+								url:"/pages/money/paySuccess"
+							})
+						},
+						fail: function (err) {
+							this.err = JSON.stringify(err)
+							// uni.navigateTo({
+							// 	url:"/pages/money/payFail"
+							// })
+						}
+					});
+					// #endif
+					// #ifdef MP-WEIXIN
 					uni.requestPayment({
 					    provider: 'wxpay',
 					    ...obj,
 					    success: function (res) {
 							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-							console.log(res);
 					        uni.navigateTo({
 					        	url:"/pages/money/paySuccess"
 					        })
@@ -210,6 +227,8 @@ import {
 					        })
 					    }
 					});
+					// #endif
+					
 					
 				}).catch(_ => {})
 				
