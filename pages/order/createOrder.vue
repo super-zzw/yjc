@@ -37,7 +37,7 @@
 						<text class="spec-text" v-for="(aitem,aindex) in JSON.parse(item.specifications)" :key="aindex">{{aitem.value}}</text>
 					</text>
 					<view class="price-box">
-						<text class="price nm-font">￥{{item.minPrice}}</text>
+						<text class="price nm-font">￥{{item.minPrice || item.promotionPrice}}</text>
 						<text class="number">x {{item.number}}</text>
 					</view>
 				</view>

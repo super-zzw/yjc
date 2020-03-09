@@ -127,8 +127,7 @@ import {
 					
 				})
 			},
-			 async wxPay(){
-				
+			 async wxPay(){	
 				var _wxPayType = "APP";
 				// #ifdef APP-PLUS
 				_wxPayType = "APP";
@@ -148,10 +147,11 @@ import {
 						wxPayType:_wxPayType
 					}
 				}).then(res => {
+					console.log(res);
 					let obj = {
 						appId: res.data.appId,
 						nonceStr: res.data.nonceStr,
-						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主
+						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主'
 						timeStamp: res.data.timeStamp,
 						paySign: res.data.sign ,// 根据签名算法生成签名
 						signType:"MD5"
@@ -211,25 +211,19 @@ import {
 						}
 					});
 					// #endif
-					// #ifdef MP-WEIXIN
+					//小程序和app内支付
+					// #ifdef APP-PLUS
 					uni.requestPayment({
 					    provider: 'wxpay',
-					    ...obj,
+					    orderInfo: res.data, //微信、支付宝订单数据
 					    success: function (res) {
-							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-					        uni.navigateTo({
-					        	url:"/pages/money/paySuccess"
-					        })
+					        console.log('success:' + JSON.stringify(res));
 					    },
 					    fail: function (err) {
-					        uni.navigateTo({
-					        	url:"/pages/money/payFail"
-					        })
+					        console.log('fail:' + JSON.stringify(err));
 					    }
 					});
 					// #endif
-					
-					
 				}).catch(_ => {})
 				
 			},
@@ -239,6 +233,7 @@ import {
 					type:"POST",
 					data:{orderNo:this.orderId}
 				}).then(res => {
+					console.log(res);
 					uni.requestPayment({
 					    provider: 'alipay',
 					    orderInfo: res.data, //微信、支付宝订单数据
