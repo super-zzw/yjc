@@ -4,7 +4,7 @@ import utils from "./method.js"
 var test = true;
 var _baseUrl = '';
 if (test) {
-	_baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强
+	_baseUrl = 'http://192.168.1.8:9502/api';  //测试地址日强
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
 	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 } else {

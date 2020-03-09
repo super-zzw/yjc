@@ -34,7 +34,7 @@
 		<!--  分享 -->
 		<view class="share-section" v-if="!(isScore == 'true')">
 			<text class="iconfont iconjifen"></text>
-			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint}}积分</text>
+			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint || '0'}}积分</text>
 			
 		</view>
 		
