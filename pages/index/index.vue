@@ -180,7 +180,9 @@ import utils from '@/utils/method.js'
 			},800)
 		},
 		async onLoad() {
+			// #ifdef APP-PLUS 
 			this.$checkUpdate()
+			// #endif
 			await this.initData()
 		},
 		onHide() {

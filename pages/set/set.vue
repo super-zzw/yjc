@@ -50,7 +50,9 @@
 		methods:{
 			...mapMutations(['setLogin']),
 			updateV(){
-				this.$checkUpdate(true)
+				// #ifdef APP-PLUS
+				this.$checkUpdate(true);
+				// #endif
 			},
 			toAbout(){
 				uni.navigateTo({
