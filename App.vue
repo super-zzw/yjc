@@ -103,6 +103,8 @@
 		}
 	}
 	/* 定义数字字体 */
+	
+	/*  #ifdef APP-PLUS || H5 */
 	@font-face {
 		font-family: rmttf;
 		font-weight: normal;
@@ -112,6 +114,7 @@
 	.nm-font{
 		font-family: "rmttf" !important;
 	}
+	/*  #endif  */
 	/*
 		全局公共样式和字体图标
 	*/

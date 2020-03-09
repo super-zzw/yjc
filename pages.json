@@ -42,7 +42,9 @@
 		{
 			"path": "pages/product/product",
 			"style": {
-				"navigationBarTitleText": "",
+				// #ifdef MP-WEIXIN
+				"navigationBarTitleText":"商品详情",
+				// #endif
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -121,6 +123,9 @@
 		}, {
 			"path": "pages/cart/cart",
 			"style": {
+				// #ifdef MP-WEIXIN
+				"navigationBarTitleText":"购物车",
+				// #endif
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -423,6 +428,9 @@
         ,{
             "path" : "pages/category/category",
             "style": {
+				// #ifdef MP-WEIXIN
+				"navigationBarTitleText":"分类",
+				// #endif
             	"app-plus": {
 					"bounce": "none",
             		"titleNView": {
@@ -877,8 +885,11 @@
 		"selectedColor": "#F23D3D",
 		"borderStyle": "black",
 		"backgroundColor": "#FAFAFA",
+		// #ifdef APP-PLUS || H5
 		"fontSize":"12px",
 		"iconWidth":"24px",
+		// #endif
+		
 		"list": [{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/tab-home.png",
