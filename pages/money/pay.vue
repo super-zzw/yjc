@@ -19,6 +19,7 @@
 						</radio>
 					</label>
 				</view>
+				<!-- #ifndef MP-WEIXIN -->
 				<view class="type-item b-b" @click="changePayType(2)"  v-if="item.payType === 1">
 					<text class="icon iconfont iconzhifubao"></text>
 					<view class="con">
@@ -29,6 +30,7 @@
 						</radio>
 					</label>
 				</view>
+				<!-- #endif -->
 				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 1">
 					<text class="icon iconfont iconhuodaofukuan"></text>
 					<view class="con">
