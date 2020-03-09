@@ -3,6 +3,7 @@
 		<text class="iconfont iconchenggong"></text>
 		<text class="tit" v-if="isDh == 0">支付成功</text>
 		<text class="tit" v-if="isDh == 1">兑换成功</text>
+		<text class="tit" v-if="isDh == 2">提交成功</text>
 		<view class="btn-group">
 			<navigator url="/pages/order/order?state=0" open-type="redirect" class="mix-btn">查看订单</navigator>
 			<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>

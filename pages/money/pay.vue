@@ -6,42 +6,46 @@
 		</view>
 
 		<view class="pay-type-list">
-			<!-- <view class="type-item b-b" @click="changePayType(index)" v-for="(item,index) in payTypes" :key="index">
-				<text class="icon iconfont iconweixin"></text>
-				<view class="con">
-					<text class="tit">微信支付</text>
-					<text>推荐使用微信支付</text>
+			<!-- 1=支付宝；2=微信 4=货到付款, -->
+			<view class="" v-for="(item,index) in payTypes" :key="index">
+				<view class="type-item b-b" @click="changePayType(1)" v-if="item.payType === 2">
+					<text class="icon iconfont iconweixin"></text>
+					<view class="con">
+						<text class="tit">微信支付</text>
+						<text>推荐使用微信支付</text>
+					</view>
+					<label class="radio">
+						<radio value="" color="#F23D3D" :checked='payType == 1' />
+						</radio>
+					</label>
 				</view>
-				<label class="radio">
-					<radio value="" color="#F23D3D" :checked='payType == 1' />
-					</radio>
-				</label>
-			</view> -->
-			
-			<view class="type-item b-b" @click="changePayType(1)">
-				<text class="icon iconfont iconweixin"></text>
-				<view class="con">
-					<text class="tit">微信支付</text>
-					<text>推荐使用微信支付</text>
+				<view class="type-item b-b" @click="changePayType(2)"  v-if="item.payType === 1">
+					<text class="icon iconfont iconzhifubao"></text>
+					<view class="con">
+						<text class="tit">支付宝支付</text>
+					</view>
+					<label class="radio">
+						<radio value="" color="#F23D3D" :checked='payType == 2' />
+						</radio>
+					</label>
 				</view>
-				<label class="radio">
-					<radio value="" color="#F23D3D" :checked='payType == 1' />
-					</radio>
-				</label>
-			</view>
-			<view class="type-item b-b" @click="changePayType(2)">
-				<text class="icon iconfont iconzhifubao"></text>
-				<view class="con">
-					<text class="tit">支付宝支付</text>
+				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 1">
+					<text class="icon iconfont iconhuodaofukuan"></text>
+					<view class="con">
+						<text class="tit">货到付款</text>
+					</view>
+					<label class="radio">
+						<radio value="" color="#F23D3D" :checked='payType == 3' />
+						</radio>
+					</label>
 				</view>
-				<label class="radio">
-					<radio value="" color="#F23D3D" :checked='payType == 2' />
-					</radio>
-				</label>
 			</view>
 		</view>
 		
-		<text class="mix-btn" @click="confirm">确认支付</text>
+		<text class="mix-btn" @click="confirm">
+			<text v-if="payType == 3">确定</text>
+			<text v-else>确认支付</text>
+		</text>
 	</view>
 </template>
 
@@ -90,17 +94,53 @@ import {
 					await this.wxPay()
 				}else if(this.payType == 2){
 					await this.aliPay()
+				}else if(this.payType == 3){
+					let _self = this;
+					uni.showModal({
+					    title: '提示',
+					    content: '为确保您能及时收到商品，请确认您的收货信息准确无误！',
+					    success: function (res) {
+					        if (res.confirm) {
+					            _self.afterSale()
+					        } else if (res.cancel) {
+					            
+					        }
+					    }
+					});
 				}
-				// uni.redirectTo({
-				// 	url: '/pages/money/paySuccess'
-				// })
+			},
+			async afterSale(){
+				let that = this;
+				await this.$http({
+					apiName:"payAfter",
+					type:"POST",
+					data:{orderNo:this.orderId}
+				}).then(res => {
+					that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+					uni.navigateTo({
+						url:"/pages/money/paySuccess?isDh=2"
+					})
+				}).catch(err => {
+					
+				})
 			},
 			 async wxPay(){
-				 var that = this
+				var _openId = "";
+				var _wxPayType = "APP";
+				// #ifdef APP-PLUS
+				_openId = "";
+				wxPayType = "APP";
+				// #endif
+				 
+				var that = this;
 				await this.$http({
 					apiName:"wxPay",
 					type:"POST",
-					data:{orderNo:this.orderId}
+					data:{
+						orderNo:this.orderId,
+						openId:_openId,
+						wxPayType:_wxPayType
+					}
 				}).then(res => {
 					let obj = {
 						appid: res.data.appid,
@@ -139,17 +179,21 @@ import {
 					type:"POST",
 					data:{orderNo:this.orderId}
 				}).then(res => {
-					
-					// uni.requestPayment({
-					//     provider: 'alipay',
-					//     orderInfo: 'orderInfo', //微信、支付宝订单数据
-					//     success: function (data) {
-					//         console.log('success:' + JSON.stringify(data));
-					//     },
-					//     fail: function (err) {
-					//         console.log('fail:' + JSON.stringify(err));
-					//     }
-					// });
+					uni.requestPayment({
+					    provider: 'alipay',
+					    orderInfo: res.data, //微信、支付宝订单数据
+					    success: function (data) {
+					        that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+					        uni.navigateTo({
+					        	url:"/pages/money/paySuccess"
+					        })
+					    },
+					    fail: function (err) {
+					        uni.navigateTo({
+					        	url:"/pages/money/payFail"
+					        })
+					    }
+					});
 				}).catch(_ => {})
 				
 			}
@@ -211,6 +255,9 @@ import {
 		}
 		.iconzhifubao {
 			color: #01aaef;
+		}
+		.iconhuodaofukuan{
+			color: #0FCE8D;
 		}
 		.tit{
 			font-size: $font-lg;
