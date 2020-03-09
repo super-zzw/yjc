@@ -19,6 +19,7 @@
 						</radio>
 					</label>
 				</view>
+				<!-- #ifndef MP-WEIXIN -->
 				<view class="type-item b-b" @click="changePayType(2)"  v-if="item.payType === 1">
 					<text class="icon iconfont iconzhifubao"></text>
 					<view class="con">
@@ -29,6 +30,7 @@
 						</radio>
 					</label>
 				</view>
+				<!-- #endif -->
 				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 1">
 					<text class="icon iconfont iconhuodaofukuan"></text>
 					<view class="con">
@@ -124,36 +126,88 @@ import {
 					
 				})
 			},
-			 async wxPay(){
-				var _openId = "";
-				var _wxPayType = "H5";
+			 async wxPay(){	
+				var _wxPayType = "APP";
 				// #ifdef APP-PLUS
-				_openId = "";
-				wxPayType = "APP";
+				_wxPayType = "APP";
 				// #endif
-				 
+				// // #ifdef H5
+				// _wxPayType = "H5";
+				// // #endif
+				// #ifdef MP-WEIXIN
+				_wxPayType = "JSAPI";
+				// #endif
 				var that = this;
 				await this.$http({
 					apiName:"wxPay",
 					type:"POST",
 					data:{
 						orderNo:this.orderId,
-						openId:_openId,
 						wxPayType:_wxPayType
 					}
 				}).then(res => {
+					console.log(res);
 					let obj = {
 						appId: res.data.appId,
 						nonceStr: res.data.nonceStr,
-						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主
+						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主'
 						timeStamp: res.data.timeStamp,
 						paySign: res.data.sign ,// 根据签名算法生成签名
 						signType:"MD5"
 					}
-					// 第一种写法，传对象
-					// let orderInfo = obj
-					// 第二种写法，传对象字符串
-					// let orderInfo = JSON.stringify(obj)
+					
+					// // #ifdef H5
+					// //h5支付放弃
+					// //判断微信浏览器
+					// var ua = window.navigator.userAgent.toLowerCase();
+					// if (ua.match(/MicroMessenger/i) == "micromessenger") {
+					// 	//微信浏览器
+					// 	function onBridgeReady(){
+					// 	   WeixinJSBridge.invoke(
+					// 	      'getBrandWCPayRequest', obj,
+					// 	      function(res){
+					// 			  console.log(111,res)
+					// 			if(res.err_msg == "get_brand_wcpay_request:ok" ){
+					// 				// 使用以上方式判断前端返回,微信团队郑重提示：
+					// 	            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+					// 	      } 
+					// 	   }); 
+					// 	}
+					// 	if (typeof WeixinJSBridge == "undefined"){
+					// 	   if( document.addEventListener ){
+					// 	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+					// 	   }else if (document.attachEvent){
+					// 	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+					// 	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+					// 	   }
+					// 	}else{
+					// 	   onBridgeReady();
+					// 	}
+						
+						
+					// }else{
+					// 	//其他浏览器
+					// 	location.href = res.url;
+					// }
+					// // #endif
+					
+					
+					
+					//小程序和app内支付
+					// #ifdef APP-PLUS
+					uni.requestPayment({
+					    provider: 'wxpay',
+					    orderInfo: res.data, //微信、支付宝订单数据
+					    success: function (res) {
+					        console.log('success:' + JSON.stringify(res));
+					    },
+					    fail: function (err) {
+					        console.log('fail:' + JSON.stringify(err));
+					    }
+					});
+					// #endif
+					
+					// #ifdef MP-WEIXIN
 					uni.requestPayment({
 					    provider: 'wxpay',
 					    ...obj,
@@ -165,11 +219,13 @@ import {
 					        })
 					    },
 					    fail: function (err) {
+							console.log(err);
 					        uni.navigateTo({
 					        	url:"/pages/money/payFail"
 					        })
 					    }
 					});
+					// #endif
 				}).catch(_ => {})
 				
 			},
