@@ -191,7 +191,7 @@ import {
 					// 	location.href = res.url;
 					// }
 					// // #endif
-					
+					// #ifdef APP-PLUS
 					let orderInfo = obj
 					uni.requestPayment({
 						provider: 'wxpay',
@@ -229,7 +229,6 @@ import {
 					    }
 					});
 					// #endif
-					
 				}).catch(_ => {})
 				
 			},
