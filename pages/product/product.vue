@@ -256,7 +256,7 @@
 			initData(){
 				uni.showLoading()
 				this.getDetail()
-				this.getCartNms()
+				this.hasLogin && this.getCartNms()
 				uni.hideLoading()
 			},
 			//获取商品详情
