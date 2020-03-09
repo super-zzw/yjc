@@ -126,7 +126,7 @@ import {
 			},
 			 async wxPay(){
 				var _openId = "";
-				var _wxPayType = "APP";
+				var _wxPayType = "H5";
 				// #ifdef APP-PLUS
 				_openId = "";
 				wxPayType = "APP";
@@ -179,6 +179,7 @@ import {
 					type:"POST",
 					data:{orderNo:this.orderId}
 				}).then(res => {
+					console.log(res);
 					uni.requestPayment({
 					    provider: 'alipay',
 					    orderInfo: res.data, //微信、支付宝订单数据
