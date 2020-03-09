@@ -161,12 +161,12 @@ import {
 					    ...obj,
 					    success: function (res) {
 							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+							console.log(res);
 					        uni.navigateTo({
 					        	url:"/pages/money/paySuccess"
 					        })
 					    },
 					    fail: function (err) {
-							console.log(err)
 					        uni.navigateTo({
 					        	url:"/pages/money/payFail"
 					        })
