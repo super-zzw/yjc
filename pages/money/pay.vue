@@ -143,21 +143,20 @@ import {
 					}
 				}).then(res => {
 					let obj = {
-						appid: res.data.appid,
-						noncestr: res.data.noncestr,
-						package: res.data.package, // 固定值，以微信支付文档为主
-						partnerid: res.data.partnerid,
-						prepayid: res.data.prepayid,
-						timestamp: res.data.timestamp,
-						sign: res.data.sign // 根据签名算法生成签名
+						appId: res.data.appId,
+						nonceStr: res.data.nonceStr,
+						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主
+						timeStamp: res.data.timeStamp,
+						paySign: res.data.sign ,// 根据签名算法生成签名
+						signType:"MD5"
 					}
 					// 第一种写法，传对象
-					let orderInfo = obj
+					// let orderInfo = obj
 					// 第二种写法，传对象字符串
 					// let orderInfo = JSON.stringify(obj)
 					uni.requestPayment({
 					    provider: 'wxpay',
-					    orderInfo: orderInfo, //微信、支付宝订单数据
+					    ...obj,
 					    success: function (res) {
 							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
 					        uni.navigateTo({
@@ -165,6 +164,7 @@ import {
 					        })
 					    },
 					    fail: function (err) {
+							console.log(err)
 					        uni.navigateTo({
 					        	url:"/pages/money/payFail"
 					        })
