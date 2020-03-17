@@ -22,7 +22,7 @@
 			<view class="price-box" v-else>
 				<text class="price-tip">¥</text>
 				<text class="price nm-font">{{stockInfo.promotionPrice}}</text>
-				<text class="m-price nm-font" v-if="stockInfo.promotionPrice < stockInfo.originalPrice">{{stockInfo.originalPrice}}</text>
+				<text class="m-price nm-font" v-if="stockInfo.promotionPrice < stockInfo.originalPrice">¥{{stockInfo.originalPrice}}</text>
 			</view>
 			<view class="bot-row">
 				<text>销量: {{sale}}</text>
@@ -253,10 +253,13 @@
 					url:"/pages/product/comment?id=" + this.productId
 				})
 			},
-			initData(){
-				uni.showLoading()
-				this.getDetail()
-				this.hasLogin && this.getCartNms()
+			async initData(){
+				uni.showLoading({
+					title:"数据加载中...",
+					mask:true
+				})
+				await this.getDetail()
+				await this.hasLogin && this.getCartNms()
 				uni.hideLoading()
 			},
 			//获取商品详情
@@ -393,9 +396,16 @@
 			buy(){
 				if(!this.hasLogin){
 					this.setAfterLoginUrl(`/pages/product/product?id=${this.productId}`)
+					// #ifdef MP-WEIXIN
 					uni.navigateTo({
-						url:'/pages/public/login'
-					}) 
+						url: '/pages/wxlogin/index'
+					})
+					// #endif
+					// #ifndef MP-WEIXIN
+					uni.navigateTo({
+						url: '/pages/public/login'
+					})
+					// #endif
 				}else{
 					this.setOrder({
 						productId:this.productId,
@@ -438,10 +448,17 @@
 			},
 			//未登录跳转
 			toLogin(){
-				this.setAfterLoginUrl('/pages/product/product?id=' + this.productId)
+				this.setAfterLoginUrl('/pages/product/product?id=' + this.productId);
+				// #ifdef MP-WEIXIN
 				uni.navigateTo({
-					url:'/pages/public/login'
-				}) 
+					url: '/pages/wxlogin/index'
+				})
+				// #endif
+				// #ifndef MP-WEIXIN
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+				// #endif
 			},
 			stopPrevent(){},
 			//数量

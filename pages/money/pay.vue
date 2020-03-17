@@ -31,7 +31,7 @@
 					</label>
 				</view>
 				<!-- #endif -->
-				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 1">
+				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 4">
 					<text class="icon iconfont iconhuodaofukuan"></text>
 					<view class="con">
 						<text class="tit">货到付款</text>
@@ -120,7 +120,7 @@ import {
 					data:{orderNo:this.orderId}
 				}).then(res => {
 					that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-					uni.navigateTo({
+					uni.redirectTo({
 						url:"/pages/money/paySuccess?isDh=2"
 					})
 				}).catch(err => {
@@ -147,16 +147,8 @@ import {
 						wxPayType:_wxPayType
 					}
 				}).then(res => {
-					console.log(res);
-					let obj = {
-						appId: res.data.appId,
-						nonceStr: res.data.nonceStr,
-						package: "prepay_id=" + res.data.prepayId, // 固定值，以微信支付文档为主'
-						timeStamp: res.data.timeStamp,
-						paySign: res.data.sign ,// 根据签名算法生成签名
-						signType:"MD5"
-					}
 					
+					// console.log(obj)
 					// // #ifdef H5
 					// //h5支付放弃
 					// //判断微信浏览器
@@ -191,39 +183,59 @@ import {
 					// 	location.href = res.url;
 					// }
 					// // #endif
+					
+					
 					// #ifdef APP-PLUS
-					let orderInfo = obj
+					let obj1 = {
+						appid: res.data.appId,  //示例wxd678efh567hg6787
+						partnerid:res.data.partnerId,  //示例WX1217752501201407033233368018
+						prepayid:res.data.prepayId,  //示例WX1217752501201407033233368018
+						package: res.data.packageValue, // 固定值
+						noncestr: res.data.nonceStr,  //示例1900000109	
+						timestamp: res.data.timeStamp,  //时间戳
+						sign:res.data.sign,  //签名C380BEC2BFD727A4B6845133519F3AD6
+					}
+					// let orderInfo = JSON.stringify(obj1)
 					uni.requestPayment({
 						provider: 'wxpay',
-						orderInfo: orderInfo, //微信、支付宝订单数据
+						orderInfo: obj1, //微信、支付宝订单数据
 						success: function (res) {
 							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-							uni.navigateTo({
+							uni.redirectTo({
 								url:"/pages/money/paySuccess"
 							})
 						},
 						fail: function (err) {
-							this.err = JSON.stringify(err)
-							// uni.navigateTo({
-							// 	url:"/pages/money/payFail"
-							// })
+							// console.log(err)
+							// this.err = JSON.stringify(err)
+							uni.redirectTo({
+								url:"/pages/money/payFail"
+							})
 						}
 					});
 					// #endif
 					
 					// #ifdef MP-WEIXIN
+					let obj2 = {
+						nonceStr: res.data.nonceStr,
+						timeStamp: res.data.timeStamp,
+						package:res.data.packageValue,
+						signType:res.data.signType,
+						paySign:res.data.paySign,
+						appId: res.data.appId
+					}
 					uni.requestPayment({
 					    provider: 'wxpay',
-					    ...obj,
+					    ...obj2,
 					    success: function (res) {
 							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-					        uni.navigateTo({
+					        uni.redirectTo({
 					        	url:"/pages/money/paySuccess"
 					        })
 					    },
 					    fail: function (err) {
 							console.log(err);
-					        uni.navigateTo({
+					        uni.redirectTo({
 					        	url:"/pages/money/payFail"
 					        })
 					    }
@@ -233,6 +245,7 @@ import {
 				
 			},
 			async aliPay(){
+				var that = this;
 				await this.$http({
 					apiName:"aliPay",
 					type:"POST",
@@ -244,12 +257,12 @@ import {
 					    orderInfo: res.data, //微信、支付宝订单数据
 					    success: function (data) {
 					        that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-					        uni.navigateTo({
+					        uni.redirectTo({
 					        	url:"/pages/money/paySuccess"
 					        })
 					    },
 					    fail: function (err) {
-					        uni.navigateTo({
+					        uni.redirectTo({
 					        	url:"/pages/money/payFail"
 					        })
 					    }
@@ -257,7 +270,16 @@ import {
 				}).catch(_ => {})
 				
 			}
-		}
+		},
+		// // #ifdef APP-PLUS
+		// onBackPress(e){
+		// 	uni.navigateBack({
+		// 		delta:2
+		// 	})
+		// 	return true
+		// }
+		// // #endif
+		
 	}
 </script>
 

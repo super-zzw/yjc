@@ -1,5 +1,8 @@
 <template>
-	<view class="container">
+	<view class="container wxPage"  :style="{paddingTop:paddingTop}">
+		<!-- #ifdef MP-WEIXIN -->
+		<wxTabbar></wxTabbar>
+		<!-- #endif -->
 		<!-- 头部轮播 -->
 		<view class="carousel-section">
 			<!-- 背景色区域 -->
@@ -154,7 +157,6 @@ import {
 } from 'vuex';
 import utils from '@/utils/method.js'
 	export default {
-
 		data() {
 			return {
 				carouselList: [], //轮播图数据
@@ -168,7 +170,7 @@ import utils from '@/utils/method.js'
 			};
 		},
 		computed:{
-			...mapState(['hasLogin','userInfo'])
+			...mapState(['hasLogin','userInfo','paddingTop'])
 		},
 		async onShow(){
 			let that = this
@@ -304,7 +306,13 @@ import utils from '@/utils/method.js'
 			navTo(url){
 				if(!this.hasLogin){
 					this.setAfterLoginUrl(url)
+					// #ifdef MP-WEIXIN
+					url = '/pages/wxlogin/index';
+					// #endif
+					// #ifndef MP-WEIXIN
 					url = '/pages/public/login';
+					// #endif
+					
 				}
 				uni.navigateTo({  
 					url

@@ -1,5 +1,8 @@
 <template>
-	<view class="container">
+	<view class="container wxPage" :style="{paddingTop:paddingTop}">
+		<!-- #ifdef MP-WEIXIN -->
+		<wxTabbar></wxTabbar>
+		<!-- #endif -->
 		<!-- 空白页 -->
 		<view v-if="cartList.length == 0" class="empty">
 			<view class="emptybox">
@@ -137,7 +140,7 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin','utils','msgNms'])
+			...mapState(['hasLogin','utils','msgNms','paddingTop'])
 		},
 		methods: {
 			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab']),
@@ -200,9 +203,17 @@
 			navToLogin(){
 				this.setAfterLoginUrl('/pages/cart/cart')
 				this.setAfterLoginIsTab(true)
+				// #ifdef MP-WEIXIN
+				uni.navigateTo({
+					url: '/pages/wxlogin/index'
+				})
+				// #endif
+				// #ifndef MP-WEIXIN
 				uni.navigateTo({
 					url: '/pages/public/login'
 				})
+				// #endif
+				
 			},
 			 //选中状态处理
 			check(type, index,cartId){

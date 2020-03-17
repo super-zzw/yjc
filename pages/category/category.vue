@@ -1,5 +1,8 @@
 <template>
-	<view class="content">
+	<view class="content content2 wxPage" :style="{paddingTop:paddingTop}">
+		<!-- #ifdef MP-WEIXIN -->
+		<wxTabbar></wxTabbar>
+		<!-- #endif -->
 		<scroll-view scroll-y class="left-aside">
 			<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id == currentId}" @tap="tabtap(item)">
 				{{item.name}}
@@ -72,7 +75,7 @@ import utils from '@/utils/method.js'
 			this.resetData()
 		},
 		computed:{
-			...mapState(['msgNms','hasLogin'])
+			...mapState(['msgNms','hasLogin','paddingTop'])
 		},
 		methods: {
 			getCartNms(){
@@ -124,8 +127,9 @@ import utils from '@/utils/method.js'
 							this.tlist.push(...item.children)
 						}
 					}) 
+					this.currentId = this.flist[0].id
 					// this.categoryList = res.data
-					this.currentId = res.data[0].id
+					// this.currentId = res.data[0].id
 				}).catch(_ => {})
 			},
 			//获取头部banner
@@ -206,10 +210,17 @@ import utils from '@/utils/method.js'
 </script>
 
 <style lang='scss'>
-	page,
+	/* page{
+		background-color: #fff;
+	} */
+	/* page, */
 	.content {
 		height: 100%;
-		background-color: #f0efef;
+		background-color: #fff;
+	}
+	.content2{
+		height: calc(100vh - 88rpx);
+		box-sizing: border-box;
 	}
 	.right-aside{
 		
@@ -272,6 +283,7 @@ import utils from '@/utils/method.js'
 		flex: 1;
 		overflow: hidden;
 		padding-left: 20rpx;
+		background-color: #f0efef;
 		.lastItem{
 			height: calc(100vh + 4rpx);
 		}

@@ -53,7 +53,7 @@
 					<text class="spec">
 						<text class="spec-text" v-for="(item,index) in order.specSelected" :key="index">{{item.value}}</text>
 					</text>
-					<view class="price-box">
+					<view class="price-box" v-if="!isScore">
 						<text class="price">￥{{order.price}}</text>
 						<text class="number">x {{order.number}}</text>
 					</view>
@@ -84,7 +84,12 @@
 		
 		<!-- 底部 -->
 		<view class="footer">
-			<view class="price-content">
+			<view class="price-content" v-if="isScore">
+				<text>实付款</text>
+				<text class="price-tip">￥</text>
+				<text class="price">0.00</text>
+			</view>
+			<view class="price-content" v-else>
 				<text>实付款</text>
 				<text class="price-tip">￥</text>
 				<text class="price">{{total2}}</text>
@@ -117,28 +122,44 @@
 			}
 		},
 		async onLoad(opt){
+			this.cart = opt.cart;
+			if(opt.score == 'true'){
+				this.isScore = true
+			}
+			// if(!this.selectAddr){
+			// 	await this.getAddr()
+			// }
+			// if(opt.cart == 1){
+			// 	this.cart = opt.cart
+			// 	await this.getCart()
+			// 	await this.getCartYf()
+			// }else{
+			// 	this.total = Number(this.order.price * this.order.number).toFixed(2)
+			// 	console.log(this.order)
+			// 	await this.getYf()
+			// 	if(opt.score == 'true'){
+			// 		this.isScore = true
+			// 		this.totalScore = this.order.exchangePoints
+			// 	}
+			// }
+		},
+		async onShow(){
+			this.total = 0;
 			if(!this.selectAddr){
 				await this.getAddr()
 			}
-			if(opt.cart == 1){
-				this.cart = opt.cart
+			if(this.cart == 1){
 				await this.getCart()
 				await this.getCartYf()
 			}else{
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
-				console.log(this.order)
-				await this.getYf()
-				if(opt.score == 'true'){
-					this.isScore = true
+				if(this.isScore == true){
 					this.totalScore = this.order.exchangePoints
+				}else{
+					await this.getYf()
 				}
 			}
 		},
-		// async onShow(){
-		// 	if(!this.selectAddr){
-		// 		await this.getAddr()
-		// 	}
-		// },
 		computed:{
 			...mapState(['order','selectAddr'])
 		},
@@ -189,7 +210,7 @@
 					}
 				}).then(res => {
 					if(that.isScore){
-						uni.navigateTo({
+						uni.redirectTo({
 							url:"/pages/money/paySuccess?isDh=1"
 						})
 					}else{
@@ -280,17 +301,18 @@
 					url:'/pages/cart/cart'
 				})
 				return true
-			}else if(this.isScore){
-				uni.redirectTo({
-					url:"/pages/product/product?id=" + this.order.productId + "&score=true"
-				})
-				return true
-			}else{
-				uni.redirectTo({
-					url:"/pages/product/product?id=" + this.order.productId
-				})
-				return true
 			}
+			// else if(this.isScore){
+			// 	uni.redirectTo({
+			// 		url:"/pages/product/product?id=" + this.order.productId + "&score=true"
+			// 	})
+			// 	return true
+			// }else{
+			// 	uni.redirectTo({
+			// 		url:"/pages/product/product?id=" + this.order.productId
+			// 	})
+			// 	return true
+			// }
 		}
 	}
 </script>

@@ -1,5 +1,10 @@
 <template>
 	<view class="sWrap">
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="whi" @tap="clear" v-if="dataList.length > 0">
+			清空历史
+		</view>
+		<!-- #endif -->
 		<view class="s-empty" v-if="dataList == 0 && noMore">
 			<image src="../../static/empty.png" mode="widthFix"></image>
 			<view class="s-empty-text">暂无浏览商品</view>
@@ -7,7 +12,7 @@
 		<view class="s-box" v-if="dataList.length">
 			<view class="s-item" v-for="(item,index) in dataList" :key="index" @tap="toDetail(item.productId,item.productType)">
 				<view class="s-bgk">
-					<image :src="item.picUrl" class="s-img" mode="widthFix"></image>
+					<image :src="item.picUrl" class="s-img" mode=""></image>
 				</view>
 				<view class="s-info">
 					<view class="s-info1">{{item.title}}</view>
@@ -18,7 +23,7 @@
 						</view>
 						<view class="s-info2 nm-font" v-else>
 							积分
-							{{item.exchangePoint}}
+							{{item.minPoints}}
 						</view>
 						<view class="s-info3">{{item.createTime | dealTime}}</view>
 					</view>
@@ -119,8 +124,18 @@
 
 <style lang="scss" scoped>
 .sWrap{
-	min-height: calc(100vh - 88rpx);
+	min-height: 100vh;
 	background-color: #F9FAFB;
+	.whi{
+		position: fixed;
+		bottom: 32rpx;
+		right: 32rpx;
+		background-color: #e7ecf5;
+		color: #F23D3D;
+		border-radius: 6rpx;
+		padding: 6rpx 32rpx;
+		font-size: 32rpx;
+	}
 	.s-empty{
 		text-align: center;
 		image{
@@ -149,9 +164,14 @@
 				width: 144rpx;
 				height: 144rpx;
 				border-radius: 8rpx;
-				overflow: hidden;
+				// overflow: hidden;
 				background: #C0C4CC;
 				margin: 20rpx;
+				.s-img{
+					width: 144rpx;
+					height: 144rpx;
+					border-radius: 8rpx;
+				}
 			}
 			.s-info-boo{
 				margin-top: 24rpx;

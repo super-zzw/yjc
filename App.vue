@@ -1,10 +1,15 @@
 <script>
 	import utils from 'utils/method.js'
+	
 	export default {
 		methods: {
 		},
 		onLaunch() {
 			// this.$getMsgNms()
+			// #ifdef MP-WEIXIN
+			let menuButton = uni.getMenuButtonBoundingClientRect();
+			this.$store.commit('setPaddingTop',menuButton.top + 'px');
+			// #endif
 		},
 		onShow: function() {
 			// console.log('App Show')
@@ -42,6 +47,11 @@
 
 <style lang='scss'>
 	@import  "/static/font/iconfont/iconfont.css";
+	/* #ifdef MP-WEIXIN */
+	.wxPage{
+		margin-top: 88rpx;
+	}
+	/* #endif */
 	uni-checkbox .uni-checkbox-input{
 		border-radius: 50%;
 		width: 30rpx;

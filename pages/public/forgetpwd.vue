@@ -102,6 +102,10 @@
 				if(this.coding){
 					return
 				}
+				uni.showLoading({
+					title:"获取验证码...",
+					mask:true
+				})
 				let _data = [
 					{
 						data:this.phone.trim(),
@@ -134,7 +138,9 @@
 							}
 						},1000)
 					}).catch(_ => {})
-					
+					uni.hideLoading()
+				}else{
+					uni.hideLoading()
 				}
 				
 			}

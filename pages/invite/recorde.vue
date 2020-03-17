@@ -11,7 +11,7 @@
 		</view>
 		<view class="sir-gang"></view>
 		<view class="sir-cont">
-			<view class="sir-cbox">
+			<view class="sir-cbox" v-if="dataList.length > 0">
 				<view class="sir-title">
 					<view class="sirt-cell1">我的好友</view>
 					<view class="sirt-cell1">注册时间</view>
@@ -22,6 +22,9 @@
 					<view class="sirt-cell1 sirt-cell0">{{item.createTime | dealTime}}</view>
 					<view class="sirt-cell3">{{item.integration}}</view>
 				</view>
+			</view>
+			<view class="sir-cbox sir-cbox2" v-else>
+				暂无邀请数据
 			</view>
 		</view>
 	</view>
@@ -134,6 +137,9 @@ export default{
 				.sir-items:last-child{
 					border-bottom: none;
 				}
+			}
+			.sir-cbox2{
+				text-align: center;
 			}
 		}
 	}

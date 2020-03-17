@@ -113,7 +113,12 @@
 			navTo(url){
 				if(!this.hasLogin){
 					this.setAfterLoginUrl(url)
+					// #ifdef MP-WEIXIN
+					url = '/pages/wxlogin/index';
+					// #endif
+					// #ifndef MP-WEIXIN
 					url = '/pages/public/login';
+					// #endif
 				}
 				uni.navigateTo({  
 					url

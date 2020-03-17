@@ -1,6 +1,8 @@
 <template>  
     <view class="container">  
-		
+		<!-- #ifdef MP-WEIXIN -->
+		<wxTabbar :showSearch="-1" :topbgk="topbgk"></wxTabbar>
+		<!-- #endif -->
 		<view class="user-section">
 			<image class="bg" src="/static/user-bg.png"></image>
 			<view class="user-section-asd">
@@ -91,7 +93,7 @@
 		},
 		data(){
 			return {
-				
+				topbgk:"transparent"
 			}
 		},
 		async onShow(){
@@ -148,7 +150,12 @@
 			navTo(url){
 				if(!this.hasLogin){
 					this.setAfterLoginUrl(url)
+					// #ifdef MP-WEIXIN
+					url = "/pages/wxlogin/index"
+					// #endif
+					// #ifndef MP-WEIXIN
 					url = '/pages/public/login';
+					// #endif
 				}
 				uni.navigateTo({  
 					url
@@ -158,9 +165,17 @@
 				if(!this.hasLogin){
 					this.setAfterLoginUrl('/pages/index/index')
 					this.setAfterLoginIsTab(true)
-					uni.reLaunch({
+					// #ifdef MP-WEIXIN
+					uni.navigateTo({
+						url:"/pages/wxlogin/index"
+					})
+					// #endif
+					// #ifndef MP-WEIXIN
+					uni.navigateTo({
 						url:"/pages/public/login"
 					})
+					// #endif
+					
 				}else{
 					uni.navigateTo({
 						url
@@ -189,6 +204,13 @@
 				})
 			}
 		},
+		onPageScroll(e){
+			if(e.scrollTop > 10){
+				this.topbgk = "#f23d3d"
+			}else{
+				this.topbgk = "transparent"
+			}
+		}
     }  
 </script>  
 <style lang='scss'>
@@ -204,8 +226,11 @@
 	  align-content: center;
 	  background: #fff;
 	}
+	page{
+		background: #F9FAFB;
+	}
 	.container{
-		min-height: calc(100vh - 100rpx);
+		min-height: calc(100vh - 0);
 		background: #F9FAFB;
 		box-sizing: border-box;
 	}

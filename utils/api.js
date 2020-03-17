@@ -88,4 +88,5 @@ export default{
 	getGoodDeliver:"/oms/express/check",  //待收货物流
 	
 	checkUpdate:"/app/client/update",  //检查更新
+	mpLogin:"/ums/miniApp/Login",  //小程序关联
 }

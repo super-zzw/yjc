@@ -8,7 +8,7 @@
 			<view class="s-item" v-for="(item,index) in dataList" :key="index">
 				<view class="s-ileft" @tap="toDetail(item.productId)">
 					<view class="s-bgk">
-						<image :src="item.picUrl" class="s-img" mode="widthFix"></image>
+						<image :src="item.picUrl" class="s-img" mode=""></image>
 					</view>
 					<view class="s-info">
 						<view class="s-info1">{{item.title}}</view>
@@ -136,10 +136,13 @@
 					width: 144rpx;
 					height: 144rpx;
 					border-radius: 8rpx;
-					overflow: hidden;
 					background: #C0C4CC;
 					margin: 20rpx;
-					
+					.s-img{
+						width: 144rpx;
+						height: 144rpx;
+						border-radius: 8rpx;
+					}
 				}
 				.s-info{
 					margin-top: 20rpx;

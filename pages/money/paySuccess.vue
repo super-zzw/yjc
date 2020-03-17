@@ -5,8 +5,8 @@
 		<text class="tit" v-if="isDh == 1">兑换成功</text>
 		<text class="tit" v-if="isDh == 2">提交成功</text>
 		<view class="btn-group">
-			<navigator url="/pages/order/order?state=0" open-type="redirect" class="mix-btn">查看订单</navigator>
-			<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
+			<navigator open-type="redirect" url="/pages/order/order?state=0" class="mix-btn">查看订单</navigator>
+			<navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
 		</view>
 	</view>
 </template>
@@ -28,6 +28,12 @@
 					title:"兑换成功"
 				})
 			}
+		},
+		onBackPress(e){
+			uni.switchTab({
+				url:"/pages/order/order"
+			})
+			return true
 		}
 	}
 </script>

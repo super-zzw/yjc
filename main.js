@@ -36,6 +36,10 @@ Vue.prototype.$httpAll = httpAll;
 Vue.prototype.$getMsgNms = getMsgNms;
 Vue.prototype.$checkUpdate = checkUpdate;
 Vue.prototype.$api = {prePage};
+
+import wxTabbar from '@/components/wx-tabbar.vue'
+Vue.component('wxTabbar',wxTabbar)
+
 App.mpType = 'app'
 
 const app = new Vue({

@@ -1,5 +1,12 @@
 <template>
 	<view class="content">
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="mtb_center">
+			<input class="minput" confirm-type="search" @confirm="bindinput" type="text" placeholder="请输入商品名称" placeholder-class/>
+			<text class="iconfont iconsearch"></text>
+		</view>
+		<!-- #endif -->
+		
 		<view class="contentBox" v-if="(searchVal || categoryId != '') && goodsList.length > 0">
 			<view class="navbar" :style="{position:headerPosition,top:headerTop}">
 				<view class="nav-item" :class="{current: sort === 0}" @click="tabClick(0)">
@@ -59,7 +66,7 @@
 					<text class="rehl-item" v-for="item in history" :key="item" @tap="kewSearch(item)">{{item}}</text>
 				</view>
 			</view>
-			<view class="re-his">
+			<view class="re-his" v-if="keyWords.length > 0">
 				<view class="re-histop">
 					<view class="re-his-text">热门搜索</view>
 				</view>
@@ -132,6 +139,7 @@
 				})
 				return
 			}
+			uni.hideKeyboard();
 			this.goodsList = []
 			this.searchVal = e.text
 			this.search()
@@ -160,6 +168,29 @@
 			}
 		},
 		methods: {
+			bindinput(e){
+				if(!e.detail.value.trim()){
+					uni.showToast({
+						title:"请输入商品名称",
+						icon:"none"
+					})
+					return
+				}
+				this.goodsList = []
+				this.searchVal = e.detail.value
+				this.search()
+				let _index = this.history.indexOf(this.searchVal)
+				if(_index >= 0){
+					this.history.splice(_index,1)
+				}else{
+					if(this.history.length >= 20){
+						this.history.pop()
+					}
+				}
+				
+				this.history.push(this.searchVal)
+				uni.setStorageSync("yzhsearch_words",this.history)
+			},
 			navToDetailPage(id){
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
@@ -186,6 +217,10 @@
 				}).catch(_ => {})
 			},
 			async search(){
+				uni.showLoading({
+					title:"搜索中...",
+					mask:true
+				})
 				this.categoryId = ""
 				await this.$http({
 					apiName:"search",
@@ -200,6 +235,7 @@
 					this.noMore = res.data.last
 					this.goodsList = this.goodsList.concat(res.data.content)
 				}).catch(_ => {})
+				uni.hideLoading()
 			},
 			//点击关键字搜索
 			kewSearch(word){
@@ -267,6 +303,34 @@
 </script>
 
 <style lang="scss" scoped>
+	.mtb_center{
+		position: relative;
+		flex: 1;
+		height: 96rpx;
+		background-color: #fff;
+		padding-left: 32rpx;
+		padding-right: 32rpx;
+		box-sizing: border-box;
+		.minput{
+			background-color: #f2f2f4;
+			border-radius: 12rpx;
+			height: 80rpx;
+			padding-left: 60rpx;
+			padding-right: 20rpx;
+			box-sizing: border-box;
+		}
+		.input-placeholde{
+			color: #f2f2f4;
+			font-size: 40rpx;
+		}
+		.iconfont{
+			position: absolute;
+			left: 40rpx;
+			top: 10rpx;
+			font-size: 50rpx;
+			
+		}
+	}
 	page, .content,.contentBox{
 		background: #f8f8f8;
 		min-height: 100vh;
@@ -276,6 +340,9 @@
 	}
 	.content{
 		padding-top: 96rpx;
+		/* #ifdef MP-WEIXIN */
+		padding-top:0;
+		/* #endif */
 	}
 	.empty{
 		text-align: center;
@@ -292,6 +359,9 @@
 	}
 	.re-wrap{
 		margin-top: -96rpx;
+		/* #ifdef MP-WEIXIN */
+		margin-top: 0;
+		/* #endif */
 		.re-his{
 			background-color: #fff;
 			padding: 20rpx 32rpx;

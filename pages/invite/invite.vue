@@ -43,6 +43,9 @@
 		</view>
 		<image class="sPoster" :src="poster" mode="widthFix"></image>
 		<view class="s-btn" @tap="saveImg">保存到本地</view>
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="s-btn" @tap="toPath('/pages/invite/recorde')">邀请记录</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -54,6 +57,11 @@
 			}
 		},
 		methods: {
+			toPath(path){
+				uni.navigateTo({
+					url:path
+				})
+			},
 			async getImg(){
 				await this.$http({
 					apiName:"getInvitePoster"
@@ -62,6 +70,7 @@
 				}).catch(_ => {})
 			},
 			saveImg(){
+				// #ifndef MP-WEIXIN
 				let _self = this
 				uni.saveImageToPhotosAlbum({
 					filePath:this.poster,
@@ -72,6 +81,66 @@
 						});
 					}
 				});
+				// #endif
+				
+				// #ifdef MP-WEIXIN
+				uni.showLoading({
+					title:"保存中..."
+				})
+				let that = this
+				uni.downloadFile({
+					url: that.poster,
+					success:function (res) {
+						//图片保存到本地
+						uni.saveImageToPhotosAlbum({
+							filePath: res.tempFilePath,
+							success:function (data) {
+								uni.showToast({
+								    title: "保存成功",
+								    duration: 1000
+								});
+							},
+							fail:function (err) {
+								if (err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" || err.errMsg === "saveImageToPhotosAlbum:fail auth deny" || err.errMsg === "saveImageToPhotosAlbum:fail authorize no response") {
+									uni.showModal({
+										title: '提示',
+										content: '需要您授权保存相册',
+										showCancel: false,
+										success: modalSuccess => {
+										uni.openSetting({
+											success(settingdata) {
+												if (settingdata.authSetting['scope.writePhotosAlbum']) {
+													uni.showModal({
+														title: '提示',
+														content: '获取权限成功,再次点击保存',
+														showCancel: false,
+													})
+												} else {
+													uni.showModal({
+														title: '提示',
+														content: '获取权限失败，将无法保存到相册哦~',
+														showCancel: false,
+													})
+												}
+											},
+											fail(failData) {
+												console.log("failData", failData)
+											},
+											complete(finishData) {
+												console.log("finishData", finishData)
+											}
+										})
+										}
+									})
+								}
+							}
+						})
+					},
+					complete(){
+						uni.hideLoading()
+					}
+				});
+				// #endif
 			},
 		},
 		onLoad() {

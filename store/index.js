@@ -13,8 +13,12 @@ const store = new Vuex.Store({
 		order:[],  //直接购买临时存储的商品
 		selectAddr:null,  //购买时选中的地址
 		msgNms:0,  //未读消息总数
+		paddingTop:""
 	},
 	mutations: {
+		setPaddingTop(state,data){
+			state.paddingTop = data;
+		},
 		setMsgNms(state,data){
 			state.msgNms = data
 		},

@@ -2,6 +2,32 @@ import store from '../store'
 import Md5 from './md5/index.js'
 import {getMsgNms} from './request.js'
 export default{
+	wxLogin(){
+		return new Promise((resolve,reject) => {
+			uni.login({
+			  provider: 'weixin',
+			  success: function (res) {
+				if (res.code) {
+					resolve(res.code);
+				  //   uni.getUserInfo({
+				  //   	provider: 'weixin',
+				  //   	success: function(infoRes) {
+						// 	let result = {}
+						// 	Object.assign(result,infoRes.userInfo,{jsCode:res.code});
+						// 	resolve(result);
+				  //   	},
+				  //   	fail(res) {
+						// 	resolve(false)
+						// }
+				  //   });
+				}else{
+					resolve(false)
+				}
+			  },
+			  fail:function(res){resolve(false)}
+			})
+		})
+	},
 	//数据校验
 	judgeData(arr) {
 		let res = true;

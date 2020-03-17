@@ -33,6 +33,11 @@
 				</picker>
 			</view>
 		</view>
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="list-cell log-out-btn" @click="saveInfo">
+			<text class="cell-tit">保存</text>
+		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -151,6 +156,21 @@
 .sWrap{
 	background-color: #F9FAFB;
 	min-height: 100vh;
+	.log-out-btn{
+		margin-top: 40rpx;
+		display:flex;
+		align-items:baseline;
+		padding: 20rpx $page-row-spacing;
+		line-height:60rpx;
+		position:relative;
+		background: #fff;
+		justify-content: center;
+		.cell-tit{
+			color: $uni-color-primary;
+			text-align: center;
+			margin-right: 0;
+		}
+	}
 	.s-box{
 		padding-left: 32rpx;
 		padding-right: 32rpx;

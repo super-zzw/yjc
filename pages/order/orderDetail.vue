@@ -28,9 +28,9 @@
 					<view class="swb2-item2">
 						<view class="swb2-item2-title">{{item.productName}}</view>
 						<view class="swb2-item2-cont">
-							<text class="swb2-item2-text1">￥{{item.payAmount}}</text>
+							<text class="swb2-item2-text1" v-if="order.payType != 3">￥{{item.promotionPrice}}</text>
 							<text class="swb2-item2-text2">
-								<text v-for="(aitem,aindex) in JSON.parse(item.specifications)" :key="aindex">{{aitem.value}}</text>
+								<text v-for="(aitem,akey,aindex) of JSON.parse(item.specifications)" :key="aindex">{{aitem}}</text>
 							</text>
 						</view>
 					</view>
@@ -38,12 +38,13 @@
 				</view>
 			</view>
 			<view class="swb-total">
-				<text class="swb-total-text1">订单总价：</text>
-				<text class="swb-total-text2">￥{{order.payAmount}}</text>
+				<text class="swb-total-text1" v-if="order.payType != 3">订单总价：</text>
+				<text class="swb-total-text2" v-if="order.payType == 3">消耗{{order.payAmount}}积分</text>
+				<text class="swb-total-text2" v-else>￥{{order.payAmount}}</text>
 			</view>
 			<view class="swb2-foot">
 				<view class="swb2f-btn1" @tap="callService">联系客服</view>
-				<view class="swb2f-btn1" @tap="afterSale()" v-if="(order.status == 1 || order.status == 2) && order.payType != 3 ">申请售后</view>
+				<view class="swb2f-btn1" @tap="afterSale()" v-if="(order.status == 1 || order.status == 2) && order.payType != 3 && order.payType != 4">申请售后</view>
 				<view class="swb2f-btn1" v-if="order.status == 0" @tap="toPay">去付款</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
 			</view>
@@ -225,8 +226,10 @@ export default{
 						}
 					}
 					.swb2-item4{
+						width: 30%;
 						color: #909399;
 						font-size: 26rpx;
+						text-align: right;
 					}
 				}
 			}

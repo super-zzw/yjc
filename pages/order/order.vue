@@ -49,7 +49,7 @@
 							></text>
 						</view>
 						
-						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x>
+						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x @tap="toDetail(item.id)">
 							<view
 								v-for="(goodsItem, goodsIndex) in item.itemList" :key="goodsIndex"
 								class="goods-item"
@@ -67,10 +67,10 @@
 							<view class="right">
 								<text class="title clamp">{{goodsItem.productName}}</text>
 								<text class="attr-box">
-									规格：<text v-for="(aitem,aindex) in JSON.parse(goodsItem.specifications)" :key="aindex">{{aitem.value}}</text>
+									规格：<text v-for="(aitem,akey,aindex) of JSON.parse(goodsItem.specifications)" :key="aindex">{{aitem}}</text>
 									；<text>数量：{{goodsItem.productQuantity}}</text>
 								</text>
-								<text class="price">{{goodsItem.minPrice}}</text>
+								<text class="price" v-if="item.payType != 3">{{goodsItem.promotionPrice}}</text>
 							</view>
 						</view>
 						<view class="good-box-sn">
@@ -89,13 +89,15 @@
 							<button class="action-btn recom" @tap="toPay(item.payAmount,item.id)">立即支付</button>
 						</view>
 						<view class="action-box b-t" v-if="item.status == 1">
-							<button class="action-btn" @click="cancelOrder(index,item.id)">取消订单</button>
-							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3">申请售后</button>
+							<!-- <button class="action-btn" @click="cancelOrder(index,item.id)">取消订单</button> -->
+							<text v-if="item.payType == 3" class="b-t2">积分兑换订单</text>
+							<text v-if="item.payType == 4" class="b-t2">货到付款订单</text>
+							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3 && item.payType != 4">申请售后</button>
 						</view>
 						<view class="action-box b-t" v-if="item.status == 2">
 							<button class="action-btn" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" @click="getGood(index,item.id)">确认收货</button>
-							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3">申请售后</button>
+							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3 && item.payType != 4">申请售后</button>
 						</view>
 						<view class="action-box b-t" v-if="item.status == 3">
 							<button class="action-btn recom" @tap="toAssess(item.id)">去评价</button>
@@ -597,6 +599,9 @@
 			height: 100rpx;
 			position: relative;
 			padding-right: 30rpx;
+			.b-t2{
+				font-size: 26rpx;
+			}
 		}
 		.action-btn{
 			width: 160rpx;

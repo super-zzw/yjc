@@ -19,6 +19,12 @@
 		},
 		methods: {
 			
+		},
+		onBackPress(e){
+			uni.switchTab({
+				url:"/pages/order/order"
+			})
+			return true
 		}
 	}
 </script>

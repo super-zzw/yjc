@@ -4,13 +4,14 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+				// #ifndef MP-WEIXIN
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
 						"splitLine": {
 							"color":"#DBDBDB"
 						},
-						"titleText":"IM商城",
+						"titleText":"辰悠优品汇",
 						"titleSize":"16",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
@@ -36,6 +37,10 @@
 						"offset": "0"
 					}
 				},
+				// #endif
+				// #ifdef MP-WEIXIN
+				"navigationStyle": "custom",
+				// #endif
 				"enablePullDownRefresh": true
 			}
 		},
@@ -123,9 +128,7 @@
 		}, {
 			"path": "pages/cart/cart",
 			"style": {
-				// #ifdef MP-WEIXIN
-				"navigationBarTitleText":"购物车",
-				// #endif
+				// #ifndef MP-WEIXIN
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -151,7 +154,12 @@
 							}
 						]
 					}
-				}
+				},
+				// #endif
+				// #ifdef MP-WEIXIN
+				"navigationStyle":"custom",
+				// #endif
+				"enablePullDownRefresh": false
 			}
 		}, {
 			"path": "pages/public/login",
@@ -428,35 +436,38 @@
         ,{
             "path" : "pages/category/category",
             "style": {
-				// #ifdef MP-WEIXIN
-				"navigationBarTitleText":"分类",
-				// #endif
-            	"app-plus": {
+				// #ifndef MP-WEIXIN
+				"app-plus": {
 					"bounce": "none",
-            		"titleNView": {
+					"titleNView": {
 						"splitLine": {
 							"color":"#DBDBDB"
 						},
-            			"titleText":"分类",
-            			"titleSize":"16",
-            			"buttons": [{
-            					"fontSrc": "/static/font/iconfont/iconfont.ttf",
-            					"text": "\ue761",
-            					"fontSize": "28",
-            					"color": "#303133",
-            					"float": "left",
-            					"background": "rgba(0,0,0,0)"
-            				},
-            				{
-            					"fontSrc": "/static/font/iconfont/iconfont.ttf",
-            					"text": "\ue7b3",
-            					"fontSize": "28",
-            					"color": "#303133",
-            					"background": "rgba(0,0,0,0)"
-            				}
-            			]
-            		}
-            	}
+						"titleText":"分类",
+						"titleSize":"16",
+						"buttons": [{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue761",
+								"fontSize": "28",
+								"color": "#303133",
+								"float": "left",
+								"background": "rgba(0,0,0,0)"
+							},
+							{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue7b3",
+								"fontSize": "28",
+								"color": "#303133",
+								"background": "rgba(0,0,0,0)"
+							}
+						]
+					}
+				},
+				// #endif
+            	// #ifdef MP-WEIXIN
+				"navigationStyle":"custom",
+				// #endif
+				"enablePullDownRefresh": false
             }
         }
         ,{
@@ -827,7 +838,7 @@
 		{
 		    "path" : "pages/public/about",
 		    "style": {
-		    	"navigationBarTitleText": "关于IM商城",
+		    	"navigationBarTitleText": "关于辰悠优品汇",
 		    	"app-plus":{
 		    		"bounce": "none",
 		    		"titleNView":{
@@ -873,10 +884,24 @@
             	}
             }
         }
+        ,{
+            "path" : "pages/wxlogin/index",
+            "style" : {
+				"navigationBarTitleText": "授权登录",
+				"app-plus":{
+					"bounce": "none",
+					"titleNView":{
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					}
+				}
+			}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "IM商城",
+		"navigationBarTitleText": "辰悠优品汇",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},

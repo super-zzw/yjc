@@ -126,9 +126,10 @@
 								title:"保存成功"
 							})
 							setTimeout(function(){
-								uni.redirectTo({
-									url:`/pages/address/address?source=${that.source}&score=${that.score}`
-								});
+								uni.navigateBack()
+								// uni.redirectTo({
+								// 	url:`/pages/address/address?source=${that.source}&score=${that.score}`
+								// });
 							},1500)
 							
 						}).catch(_ => {})
@@ -151,9 +152,10 @@
 								title:"保存成功"
 							})
 							setTimeout(function(){
-								uni.redirectTo({
-									url:`/pages/address/address?source=${that.source}&score=${that.score}`
-								});
+								uni.navigateBack()
+								// uni.redirectTo({
+								// 	url:`/pages/address/address?source=${that.source}&score=${that.score}`
+								// });
 							},1500)
 							
 						}).catch(_ => {})
@@ -191,9 +193,10 @@
 						title:"删除成功"
 					})
 					setTimeout(function(){
-						uni.redirectTo({
-							url:`/pages/address/address?source=${that.source}&score=${that.score}`
-						});
+						// uni.redirectTo({
+						// 	url:`/pages/address/address?source=${that.source}&score=${that.score}`
+						// });
+						uni.navigateBack()
 					},1500)
 				}).catch(_ => {})
 				uni.hideLoading()

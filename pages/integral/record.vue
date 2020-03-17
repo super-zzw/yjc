@@ -16,10 +16,10 @@
 					<view class="right">
 						<text class="title clamp">{{item.productName}}</text>
 						<text class="attr-box">
-							规格：<text v-for="(aitem,aindex) in JSON.parse(item.specifications)" :key="aindex">{{aitem.value}}</text>
+							规格：<text v-for="(aitem,akey,aindex) of JSON.parse(item.specifications)" :key="aindex">{{aitem}}</text>
 							；<text>数量：{{item.productQuantity}}</text>
 						</text>
-						<text class="price">{{item.minPrice}}</text>
+						<!-- <text class="price">{{item.minPrice}}</text> -->
 					</view>
 				</view>
 				<view class="good-box-sn">
