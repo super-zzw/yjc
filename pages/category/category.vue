@@ -9,7 +9,7 @@
 			</view>
 		</scroll-view>
 		<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
-			<view v-for="(item,index) in categoryList" :key="item.id" class="s-list" :id="'main-'+item.id" :class="{lastItem: index == categoryList.length - 1}">
+			<view v-for="(item,index) in categoryList" :key="item.id" class="s-list" :id="'main-'+item.id" :class="{lastItem: (index == categoryList.length - 1) && loaded}">
 				
 				<view class="h-list" v-if="carouselList.length > 0 && index == 0"></view>
 				<swiper v-if="carouselList.length > 0 && index == 0" class="carousel" circular indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="carouselList.length > 1" :autoplay="true">
@@ -42,7 +42,8 @@ import utils from '@/utils/method.js'
 				flist: [],
 				tlist:[],
 				carouselList:[],
-				otherBoxStyle:{}
+				otherBoxStyle:{},
+				loaded:false
 			}
 		},
 		async onLoad() {
@@ -130,6 +131,9 @@ import utils from '@/utils/method.js'
 					this.currentId = this.flist[0].id
 					// this.categoryList = res.data
 					// this.currentId = res.data[0].id
+					this.$nextTick(function(){
+						this.loaded = true;
+					})
 				}).catch(_ => {})
 			},
 			//获取头部banner
@@ -219,7 +223,15 @@ import utils from '@/utils/method.js'
 		background-color: #fff;
 	}
 	.content2{
+		/* #ifdef H5 */
+		height: calc(100vh - 188rpx);
+		/* #endif */
+		/* #ifdef  MP-WEIXIN */
 		height: calc(100vh - 88rpx);
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		height: 100vh;
+		/* #endif */
 		box-sizing: border-box;
 	}
 	.right-aside{
@@ -285,7 +297,15 @@ import utils from '@/utils/method.js'
 		padding-left: 20rpx;
 		background-color: #f0efef;
 		.lastItem{
-			height: calc(100vh + 4rpx);
+			/* #ifdef MP-WEIXIN */
+			height: calc(100vh - 130rpx);
+			/* #endif */
+			/* #ifdef H5 */
+			height: calc(100vh - 180rpx);
+			/* #endif */
+			/* #ifdef APP-PLUS */
+			height: calc(100vh + 10rpx);
+			/* #endif */
 		}
 	}
 	.s-item{
