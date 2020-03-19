@@ -928,19 +928,12 @@
 			"path" : "pages/fight/list",
 			"style" : {
 				"enablePullDownRefresh": true,
+				"navigationBarTitleText": "限时拼团",
 				"app-plus":{
 					"bounce": "none",
 					"titleNView":{
 						"splitLine": {
 							"color":"#DBDBDB"
-						},
-						"searchInput": {
-							"autoFocus":"false",
-							"align":"left",
-							"backgroundColor": "rgba(242,242,244,1)",
-							"borderRadius": "6px",
-							"placeholder": "请输入商品名称",
-							"placeholderColor":"rgba(192,196,204,1)"
 						}
 					},
 					"pullToRefresh": {
@@ -948,6 +941,46 @@
 						"style": "circle",
 						"color": "#F23D3D",
 						"offset": "0"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/fight/productDetail",
+			"style": {
+				// #ifdef MP-WEIXIN
+				"navigationBarTitleText":"商品详情",
+				// #endif
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						},
+						"type": "transparent",
+						"buttons": [{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue674",
+								"fontSize": "18",
+								"color": "#303133",
+								"float": "right",
+								"background": "rgba(0,0,0,0)"
+							}
+						]
+					}
+				}
+			}
+		}
+		,{
+		    "path" : "pages/fight/rules",
+		    "style" : {
+				"navigationBarTitleText": "限时拼团流程",
+				"app-plus":{
+					"bounce": "none",
+					"titleNView":{
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
 					}
 				}
 			}

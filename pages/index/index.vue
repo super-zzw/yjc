@@ -71,6 +71,31 @@
 			</swiper>
 		</view>
 		
+		<!-- 超值拼团 -->
+		<view class="seckill-section m-t" v-if="fightList.length > 0">
+			<view class="f-header2 m-t f-header3">
+				<view class="tit-box">
+					<text class="tit">超值拼团</text>
+				</view>
+				<view class="tit-box2" @tap="pageJump(9)">
+					更多
+					<text class="iconfont iconright"></text>
+				</view>
+			</view>
+			<scroll-view class="floor-list" scroll-x>
+				<view class="scoll-wrapper">
+					<view 
+						@click="navToDetailPage(item.productId)"
+						v-for="(item, index) in fightList" :key="index"
+						class="floor-item floor-item2"
+					>
+						<image class="floor-item-img" :src="item.picUrl"></image>
+						<text class="title clamp">{{item.title}}</text>
+						<text class="price nm-font">￥{{item.minPrice}}</text>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
 		
 		<!-- 新品首发 -->
 		<view class="seckill-section m-t">
@@ -167,6 +192,7 @@ import utils from '@/utils/method.js'
 				notices:[],  //滚动通知/广告
 				tipics:[],  //主题内容
 				topics123:[[],[],[]],  //促销内容，新品，精选
+				fightList:[]
 			};
 		},
 		computed:{
@@ -319,7 +345,7 @@ import utils from '@/utils/method.js'
 				})  
 			}, 
 			//模块跳转
-			//type：1新品首发，2精品推荐，3促销专区，4积分兑换，5今日签到，6商品详情，7专题详情 8文章
+			//type：1新品首发，2精品推荐，3促销专区，4积分兑换，5今日签到，6商品详情，7专题详情 8文章,9超值拼团
 			pageJump(typeId,dataId){
 				switch(Number(typeId)){
 					case 1:
@@ -358,6 +384,11 @@ import utils from '@/utils/method.js'
 					case 8:
 						uni.navigateTo({
 							url:"/pages/article/article?id=" + dataId
+						})
+						break;
+					case 9:
+						uni.navigateTo({
+							url:"/pages/fight/list"
 						})
 						break;
 					default:
