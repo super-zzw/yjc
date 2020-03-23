@@ -7,20 +7,24 @@
 			<image class="bg" src="/static/user-bg.png"></image>
 			<view class="user-section-asd">
 				<view class="user-info-box">
-					<view class="portrait-box">
-						<!-- <image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image> -->
-						<image class="portrait" :src="userInfo.icon || '/static/missing-face.png'"></image>
-					</view>
-					<view class="info-box">
-						<text class="username">{{userInfo.wusername || '游客'}}</text>
-						<view class="user-star" v-if="hasLogin">
-							<image src="/static/star.png" mode="widthFix" v-for="item in userInfo.level" :key="item"></image>
+					<view class="user-info-box-left">
+						<view class="portrait-box">
+							<!-- <image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image> -->
+							<image class="portrait" :src="userInfo.icon || '/static/missing-face.png'"></image>
+						</view>
+						<view class="info-box" @tap="toUserInfo('/pages/userinfo/userinfo')">
+							<view class="username">{{userInfo.wusername || '游客'}} <text class="iconfont iconright"></text></view>
+							
+							<view class="user-star" v-if="hasLogin">
+								<image src="/static/star.png" mode="widthFix" v-for="item in userInfo.level" :key="item"></image>
+							</view>
 						</view>
 					</view>
+					<view class="signIn" v-if="hasLogin" @tap="navTo(`/pages/integral/integral`)">每日签到</view>
 				</view>
-				<view class="user-more" @tap="toUserInfo('/pages/userinfo/userinfo')">
-					<text class="iconfont iconright"></text>
-				</view>
+<!-- 				<view class="user-more" >
+					
+				</view> -->
 			</view>
 		</view>
 		
@@ -75,6 +79,9 @@
 				</view>
 				<view class="" @tap="navTo('/pages/invite/invite')">
 					<list-cell class="last-list" iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
+				</view>
+				<view class="" @tap="navTo('/pages/rebate/index')">
+					<list-cell class="last-list" iconfont="iconfont iconyaoqingfanliicon-gerenye" iconColor="#ff488f" title="邀请返利"  tips=" "></list-cell>
 				</view>
 			</view>
 			<!-- <view class="submit" v-if="hasLogin" @tap="loginOut">退出登录</view> -->
@@ -236,7 +243,7 @@
 	}
 	.user-section{
 		height: 420rpx;
-		padding: 180rpx 30rpx 0;
+		padding: 180rpx 32rpx 0 56rpx;
 		padding-bottom: 80rpx;
 		position:relative;
 		box-sizing: border-box;
@@ -267,8 +274,25 @@
 		height: 180rpx;
 		display:flex;
 		align-items:center;
+		justify-content: space-between;
 		position:relative;
+		width: 100%;
 		z-index: 1;
+		.user-info-box-left{
+			display: flex;
+			align-items: center;
+		}
+		.signIn{
+			width: 176rpx;
+			height: 60rpx;
+			background: #F2A43D;
+			border-radius: 200rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 30rpx;
+			color: #FFFFFF;
+		}
 		.info-box{
 			margin-left: 20rpx;
 		}
@@ -280,6 +304,9 @@
 		.username{
 			font-size: $font-lg + 6rpx;
 			color: #fff;;
+			.iconfont{
+				margin-left: 14rpx;
+			}
 		}
 		.user-star{
 			margin-top: 12rpx;

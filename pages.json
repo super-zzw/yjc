@@ -327,7 +327,27 @@
 				},
 				"enablePullDownRefresh": true
 			}
-		}, {
+		},{
+			"path": "pages/rebate/record",
+			"style": {
+				"navigationBarTitleText": "邀请记录",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "circle",
+						"color": "#F23D3D",
+						"offset": "0"
+					}
+				}
+			}
+		}
+		, {
 			"path": "pages/address/addressManage",
 			"style": {
 				"navigationBarTitleText": "地址管理",
@@ -674,6 +694,29 @@
 				}
 			}
         } ,{
+            "path" : "pages/rebate/index",
+            "style" : {
+				"navigationBarTitleText": "邀请返利",
+				"app-plus":{
+					"bounce": "none",
+					"titleNView":{
+						"splitLine": {
+							"color":"#DBDBDB"
+						},
+						"buttons": [{
+								"text": "邀请记录",
+								"fontSize": "14px",
+								"width": "68px",
+								"color": "#909399",
+								"float": "right"
+							}
+						]
+					}
+				}
+			}
+        },
+		
+		{
             "path" : "pages/invite/recorde",
             "style" : {
 				"navigationBarTitleText": "邀请记录",
