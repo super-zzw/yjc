@@ -89,4 +89,12 @@ export default{
 	
 	checkUpdate:"/app/client/update",  //检查更新
 	mpLogin:"/ums/miniApp/Login",  //小程序关联
+	
+	
+	
+	// 返利
+	getRebateInfo: "/ums/rebateinfo" ,// 获取用户返利信息
+	getMyRebateList: "/ums/get/rebateList", // 获取我的返利记录
+	withdraw: "/ums/withdraw" , //提现申请
+	getInvite: "/ums/get/inviteList" , // 获取我的邀请记录
 }

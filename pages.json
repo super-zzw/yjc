@@ -346,6 +346,86 @@
 					}
 				}
 			}
+		},
+		{
+			"path": "pages/rebate/applyFor",
+			"style": {
+				"navigationBarTitleText": "提现申请",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "circle",
+						"color": "#F23D3D",
+						"offset": "0"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/rebate/successToast",
+			"style": {
+				"navigationBarTitleText": "提现成功",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "circle",
+						"color": "#F23D3D",
+						"offset": "0"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/rebate/failToast",
+			"style": {
+				"navigationBarTitleText": "提现失败",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "circle",
+						"color": "#F23D3D",
+						"offset": "0"
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/rebate/rule",
+			"style": {
+				"navigationBarTitleText": "详细规则",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					},
+					"pullToRefresh": {
+						"support": true,
+						"style": "circle",
+						"color": "#F23D3D",
+						"offset": "0"
+					}
+				}
+			}
 		}
 		, {
 			"path": "pages/address/addressManage",

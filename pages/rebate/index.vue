@@ -58,7 +58,7 @@
 					<text>好友注册/登录</text>
 				</view>
 				
-				<text class="rule">详细规则？</text>
+				<text class="rule" @tap="navTo('./rule')">详细规则？</text>
 			</view>
 		</view>
 		<view class="block">
@@ -67,40 +67,117 @@
 			</view>
 			<view class="bottom-block flex align-items justify-between">
 				<view class="bottom-block-left flex flex-column">
-					<view >当前返现比例  <text class="ratio">3%</text></view>
-					<view>可提现/元  <text class="ratio">1880</text></view>
+					<view >当前返现比例  <text class="ratio">{{dataInfo.rebateRate * 100 || 0}}%</text></view>
+					<view>可提现/元  <text class="ratio">{{dataInfo.amount || 0}}</text></view>
 				</view>
 				<view class="bottom-block-right">
-					<view class="btn flex align-items justify-center">立即提现</view>
+					<view class="btn flex align-items justify-center" @tap="navTo('./applyFor')">立即提现</view>
 				</view>
 			</view>
 			<view class="bottom-table flex ">
 				<view class="flex align-items flex-column justify-center">
 					<text class="tips">累计</text>
-					<text class="money">¥9800</text>
+					<text class="money">¥{{dataInfo.sumAmount || 0}}</text>
 				</view>
 				<view class="flex align-items flex-column justify-center">
 					<text class="tips">已提现</text>
-					<text class="money">¥9800</text>
+					<text class="money">¥{{dataInfo.withdrawAmount || 0}}</text>
 				</view>
 				<view class="flex align-items flex-column justify-center">
 					<text class="tips">冻结中</text>
-					<text class="money">¥9800</text>
+					<text class="money">¥{{dataInfo.freezeAmount || 0}}</text>
 				</view>
 			</view>
 		</view>
-		<button class="invite">立即邀请</button>
+		<button class="invite" @tap="share">立即邀请</button>
+		<!-- 分享 -->
+		<share 
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template>
 
 <script>
+	import Share from "../../components/share.vue";
 	export default{
+		data(){
+			return{
+				shareList:[
+					{
+						icon: "../../static/wxhy.png",
+						text: "微信好友"
+					},
+					{
+						icon: "../../static/pyq.png",
+						text: "朋友圈"
+					},
+					{
+						icon: "../../static/fzlj.png",
+						text: "复制链接"
+					},
+				],
+				dataInfo:{}
+			}
+		},
+		components:{
+			Share
+		},
 		onNavigationBarButtonTap(e){
 			const index = e.index;
 			if(index == 0){
 				uni.navigateTo({
 					url:'./record'
 				})
+			}
+		},
+		onLoad() {
+			this.getInfo();
+		},
+		methods:{
+			navTo(path){
+				uni.navigateTo({
+					url: path
+				})
+			},
+			async getInfo(){
+				try{
+					const res = await this.$http({
+						apiName: "getRebateInfo"
+					});
+					this.dataInfo = res.data
+				}catch(e){
+					console.log(e)
+				}
+			},
+			//分享
+			share(){
+				this.$refs.share.toggleMask();	
+			},
+			shareOthers(e){
+				let name = "";
+				if(e == "微信好友" ){
+					name = "WXSceneSession";
+				}else if(e == "朋友圈"){
+					name = "WXSenceTimeline"
+				}
+				// #ifdef APP-PLUS
+					uni.share({
+						provider: "weixin",
+						scene: "WXSceneSession",
+						type:1,
+						summary: "分享测试",
+						success(res) {
+							console.log(res);
+						},
+						fail(err){
+							console.log(err);
+						}
+					})
+				// #endif
+				
 			}
 		}
 	}
