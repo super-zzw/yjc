@@ -117,7 +117,7 @@
 						</view>
 						<!-- 拼团订单 -->
 						<view class="action-box b-t" v-else>
-							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)">邀请好友</button>
+							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share">邀请好友</button>
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
 							<button class="action-btn recom" v-if="item.status == 2" @tap="afterSale(item.id)">申请售后</button>
@@ -137,15 +137,23 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
+		<share
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template> 
 
 <script>
 	import empty from "@/components/empty";
 	import utils from "@/utils/method.js"
+	import Share from "../../components/share.vue";
 	export default {
 		components: {
-			empty
+			empty,
+			Share
 		},
 		data() {
 			return {
@@ -200,6 +208,20 @@
 						dataLoading:false,  //是否是在加载数据
 						noMore:false,
 					}
+				],
+				shareList:[
+					{
+						icon: require( "../../static/wxhy.png"),
+						text: "微信好友"
+					},
+					{
+						icon: require("../../static/pyq.png"),
+						text: "朋友圈"
+					},
+					{
+						icon: require("../../static/fzlj.png"),
+						text: "复制链接"
+					},
 				],
 			};
 		},
@@ -421,6 +443,50 @@
 					}
 				});
 			},
+			//分享
+			share(){
+				this.$refs.share.toggleMask();	
+			},
+			appShare(name,type){
+				uni.share({
+					provider: "weixin",
+					scene: name,
+					type:0,
+					title: `${type}分享`,
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					summary: "分享测试",
+					href: "www.baidu.com",
+					success(res) {
+						console.log(res);
+					},
+					fail(err){
+						console.log(err);
+					}
+				})
+			},
+			shareOthers(e){
+				let name = "";
+				if(e == "微信好友" ){
+					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+					
+				}else if(e == "朋友圈"){
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+				}else if(e == "复制链接"){
+					uni.setClipboardData({
+						data: "www.baidu.com",
+						success(res) {
+							console.log(res);
+						}
+					});
+				}
+				
+			}
 		},
 		//下拉刷新
 		async onPullDownRefresh(){

@@ -197,6 +197,12 @@
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
+		<share
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template>
 
@@ -207,10 +213,12 @@
 	import utils from '@/utils/method.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
+	import Share from "../../components/share.vue";
 	export default{
 		components: {
 			uniNumberBox,
-			uniCountdown
+			uniCountdown,
+			Share
 		},
 		data() {
 			return {
@@ -244,7 +252,21 @@
 				startDate:"",
 				trDate:null,  //转化后的时间对象
 				fightData:null,
-				creset:false
+				creset:false,
+				shareList:[
+					{
+						icon: require( "../../static/wxhy.png"),
+						text: "微信好友"
+					},
+					{
+						icon: require("../../static/pyq.png"),
+						text: "朋友圈"
+					},
+					{
+						icon: require("../../static/fzlj.png"),
+						text: "复制链接"
+					},
+				],
 			};
 		},
 		async onLoad(options){
@@ -258,6 +280,46 @@
 		},
 		methods:{
 			...mapMutations(['setAfterLoginUrl','setOrder','setGroupProductId']),
+			shareOthers(e){
+				let name = "";
+				if(e == "微信好友" ){
+					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+					
+				}else if(e == "朋友圈"){
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+				}else if(e == "复制链接"){
+					uni.setClipboardData({
+						data: "www.baidu.com",
+						success(res) {
+							console.log(res);
+						}
+					});
+				}
+				
+			},
+			appShare(name,type){
+				uni.share({
+					provider: "weixin",
+					scene: name,
+					type:0,
+					title: `${type}分享`,
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					summary: "分享测试",
+					href: "www.baidu.com",
+					success(res) {
+						console.log(res);
+					},
+					fail(err){
+						console.log(err);
+					}
+				})
+			},
 			timeUp(){
 				console.log("计时结束");
 				this.creset = false;
@@ -522,7 +584,7 @@
 			
 			if (index === 0) {
 				//弹出分享
-				console.log("分享")
+				this.$refs.share.toggleMask();	
 			}
 		}
 	}

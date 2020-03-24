@@ -79,7 +79,7 @@
 				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
 			</view>
 			<view class="swb2-foot" v-else>
-				<view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)">邀请好友</view>
+				<view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)" @tap="share">邀请好友</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="getGood">确认收货</view>
 				<view class="swb2f-btn1 recom" v-if="order.status == 2" @tap="afterSale">申请售后</view>
@@ -109,6 +109,12 @@
 				</view>
 			</view>
 		</view>
+		<share
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template>
 
@@ -117,7 +123,11 @@
 	   mapState
 	} from 'vuex';
 import utils from '@/utils/method.js'
+import Share from "../../components/share.vue";
 export default{
+	components:{
+		Share
+	},
 	data(){
 		return {
 			orderId:"",
@@ -127,6 +137,20 @@ export default{
 			grouponRules:null,
 			currentTime:"",  //服务器当前时间
 			groupStatus:"",  //1待成团，时间没到，人数没满；2拼团成功，人够了，时间没到；3拼团失败，人没够，时间到了;4时间到了，人满了，正常订单
+			shareList:[
+				{
+					icon: require( "../../static/wxhy.png"),
+					text: "微信好友"
+				},
+				{
+					icon: require("../../static/pyq.png"),
+					text: "朋友圈"
+				},
+				{
+					icon: require("../../static/fzlj.png"),
+					text: "复制链接"
+				},
+			],
 		}
 	},
 	computed:{
@@ -249,6 +273,50 @@ export default{
 				}
 			});
 		},
+		//分享
+		share(){
+			this.$refs.share.toggleMask();	
+		},
+		appShare(name,type){
+			uni.share({
+				provider: "weixin",
+				scene: name,
+				type:0,
+				title: `${type}分享`,
+				imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+				summary: "分享测试",
+				href: "www.baidu.com",
+				success(res) {
+					console.log(res);
+				},
+				fail(err){
+					console.log(err);
+				}
+			})
+		},
+		shareOthers(e){
+			let name = "";
+			if(e == "微信好友" ){
+				name = "WXSceneSession";
+				// #ifdef APP-PLUS
+				this.appShare(name,e);
+				// #endif
+				
+			}else if(e == "朋友圈"){
+				name = "WXSenceTimeline";
+				// #ifdef APP-PLUS
+				this.appShare(name,e);
+				// #endif
+			}else if(e == "复制链接"){
+				uni.setClipboardData({
+					data: "www.baidu.com",
+					success(res) {
+						console.log(res);
+					}
+				});
+			}
+			
+		}
 	},
 	onLoad(opt) {
 		if(opt.id){

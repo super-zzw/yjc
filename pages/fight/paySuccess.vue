@@ -21,9 +21,15 @@
 			</view>
 		</view>
 		<view class="btn-group">
-			<navigator open-type="redirect" url="/pages/order/order?state=0" class="mix-btn">邀请好友参团</navigator>
+			<view  class="mix-btn" @tap="share">邀请好友参团</view>
 			<navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
 		</view>
+		<share
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template>
 
@@ -32,12 +38,30 @@
 	   mapState
     } from 'vuex';
 	import utils from '../../utils/method.js'
+	import Share from "../../components/share.vue";
 	export default {
+		components:{
+			Share
+		},
 		data() {
 			return {
 				isDh:0,
 				fightData:null,
-				trDate:null
+				trDate:null,
+				shareList:[
+					{
+						icon: require( "../../static/wxhy.png"),
+						text: "微信好友"
+					},
+					{
+						icon: require("../../static/pyq.png"),
+						text: "朋友圈"
+					},
+					{
+						icon: require("../../static/fzlj.png"),
+						text: "复制链接"
+					},
+				],
 			}
 		},
 		methods: {
@@ -66,6 +90,50 @@
 				}).catch(_ => {})
 				this.creset = true;
 			},
+			//分享
+			share(){
+				this.$refs.share.toggleMask();	
+			},
+			appShare(name,type){
+				uni.share({
+					provider: "weixin",
+					scene: name,
+					type:0,
+					title: `${type}分享`,
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					summary: "分享测试",
+					href: "www.baidu.com",
+					success(res) {
+						console.log(res);
+					},
+					fail(err){
+						console.log(err);
+					}
+				})
+			},
+			shareOthers(e){
+				let name = "";
+				if(e == "微信好友" ){
+					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+					
+				}else if(e == "朋友圈"){
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+				}else if(e == "复制链接"){
+					uni.setClipboardData({
+						data: "www.baidu.com",
+						success(res) {
+							console.log(res);
+						}
+					});
+				}
+				
+			}
 		},
 		computed:{
 			...mapState(['groupProductId','userInfo'])
