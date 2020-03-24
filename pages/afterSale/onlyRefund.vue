@@ -8,7 +8,7 @@
 			<text>>></text>
 			<text>完成退款</text>
 		</view>
-		<picker mode="selector" :range="types" @change="bindPickerChange">
+		<picker mode="selector" :range="config.MALL_ORDER_REFUND" @change="bindPickerChange">
 			<view class="sor-cont">
 				<view class="sor-cleft">
 					<view class="sor-cleft-text1">申请类型：</view>
@@ -57,21 +57,24 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default{
 	data(){
 		return {
 			orderId:"",
-			types:["货品拒收","货品未收到，直接退款"],
-			type:"货品拒收",
+			type:"",
 			dataList:[],
 			total:"",
 			orderSn:"",
 			desc:""
 		}
 	},
+	computed:{
+		...mapState(['config'])
+	},
 	methods:{
 		bindPickerChange(e){
-			this.type = this.types[e.detail.value]
+			this.type = this.config.MALL_ORDER_REFUND[e.detail.value]
 		},
 		async getData(){
 			await this.$http({
@@ -108,6 +111,7 @@ export default{
 		}
 	},
 	onLoad(opt) {
+		this.type = this.config.MALL_ORDER_REFUND[0]
 		if(opt.id){
 			this.orderId = opt.id
 			this.getData()

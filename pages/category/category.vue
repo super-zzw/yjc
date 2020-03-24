@@ -18,7 +18,7 @@
 					</swiper-item>
 				</swiper>
 				<view class="h-list"></view>
-				<view class="t-list t-list2" v-if="config.MALL_CATEGORY_STYLE == 2">
+				<view class="t-list t-list2" v-if="config.MALL_CATEGORY_STYLE == 1">
 					<view class="t-item2" v-for="(titem,tindex) in tlist" v-if="titem.parentId == item.id" :key="tindex">
 						<view class="t-item3">
 							<image  @tap="navToDetailPage(titem.productId)" class="img" :src="titem.picUrl"></image>
@@ -217,12 +217,11 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 				uni.hideLoading()
 			},
 			async getData(){
-				// let _type = this.config.MALL_CATEGORY_STYLE;
-				let _type = 1;
+				let _type = this.config.MALL_CATEGORY_STYLE;
+				// let _type = 1;
 				await this.$http({
 					apiName:"getCategory",
 					data:{
-						// type:this.config.MALL_CATEGORY_STYLE,
 						type:_type
 					}
 				}).then(res => {
