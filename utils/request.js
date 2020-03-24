@@ -4,9 +4,9 @@ import utils from "./method.js"
 var test = true;
 var _baseUrl = '';
 if (test) {
-	// _baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强
+	_baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
-	_baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
+	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 	// _baseUrl = 'http://t.api.youmall.vip/api';  //线上测试
 } else {
 	_baseUrl = 'http://api.youmall.vip/api';  //正式地址
@@ -168,7 +168,14 @@ export function httpAll(opts){
 	// });
 	return ret;
 }
-
+//获取项目配置
+export function getConfig(){
+	http({
+		apiName:"getConfig",
+	}).then(res => {
+		store.commit('setConfig',res.data)
+	}).catch(_ => {})
+}
 //获取未读消息总数
 export function getMsgNms(){
 	if(!store.state.hasLogin){
@@ -182,6 +189,7 @@ export function getMsgNms(){
 		utils.setBadgeText(0,res.data)
 	}).catch(_ => {})
 }
+
 //检查更新
 export function checkUpdate(isAlert){
 	// #ifdef MP-WEIXIN

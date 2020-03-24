@@ -47,9 +47,7 @@
 		{
 			"path": "pages/product/product",
 			"style": {
-				// #ifdef MP-WEIXIN
 				"navigationBarTitleText":"商品详情",
-				// #endif
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -59,11 +57,11 @@
 						"type": "transparent",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
-								"text": "\ue674",
-								"fontSize": "18",
+								"text": "\ue63c",
+								"fontSize": "16",
 								"color": "#303133",
 								"float": "right",
-								"background": "rgba(0,0,0,0)"
+								"background": "rgba(0,0,0,0.5)"
 							}
 						]
 					}
@@ -897,32 +895,6 @@
 					}
 				}
 			}
-        }
-        ,{
-            "path" : "pages/fight/index",
-            "style": {
-            	// #ifdef MP-WEIXIN
-            	"navigationBarTitleText":"商品详情",
-            	// #endif
-            	"app-plus": {
-            		"bounce": "none",
-            		"titleNView": {
-            			"splitLine": {
-            				"color":"#DBDBDB"
-            			},
-            			"type": "transparent",
-            			"buttons": [{
-            					"fontSrc": "/static/font/iconfont/iconfont.ttf",
-            					"text": "\ue674",
-            					"fontSize": "18",
-            					"color": "#303133",
-            					"float": "right",
-            					"background": "rgba(0,0,0,0)"
-            				}
-            			]
-            		}
-            	}
-            }
         },
 		{
 			"path" : "pages/fight/list",
@@ -948,9 +920,7 @@
 		{
 			"path": "pages/fight/productDetail",
 			"style": {
-				// #ifdef MP-WEIXIN
 				"navigationBarTitleText":"商品详情",
-				// #endif
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {
@@ -960,11 +930,11 @@
 						"type": "transparent",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
-								"text": "\ue674",
-								"fontSize": "18",
+								"text": "\ue63c",
+								"fontSize": "16",
 								"color": "#303133",
 								"float": "right",
-								"background": "rgba(0,0,0,0)"
+								"background": "rgba(0,0,0,0.5)"
 							}
 						]
 					}
@@ -981,6 +951,35 @@
 						"splitLine": {
 							"color":"#DBDBDB"
 						}
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/fight/createOrder",
+			"style": {
+				"navigationBarTitleText": "创建订单",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					}
+				}
+			}
+		},
+		{
+			"path": "pages/fight/paySuccess",
+			"style": {
+				"navigationBarTitleText": "支付成功",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						},
+						"autoBackButton":false
 					}
 				}
 			}

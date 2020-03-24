@@ -19,6 +19,28 @@
 				</view>
 			</view>
 		</view>
+		<view class="swrap-group">
+			<view class="sgp1">
+				<image class="img1" v-if="groupStatus == 1" src="../../static/ptz.png" mode="widthFix"></image>
+				<image class="img2" v-if="groupStatus == 2 || groupStatus == 4" src="../../static/ptcg.png"  mode="widthFix"></image>
+				<image class="img3" v-if="groupStatus == 3" src="../../static/ptwcg.png"  mode="widthFix"></image>
+				<text class="text" v-if="groupStatus == 1">
+					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules.endTime | dealTimep}}结束
+				</text>
+			</view>
+			<view class="ptImgs">
+				<view class="fpNumstImg" v-for="(imgItem,imgIndex) in groupList" :key="imgIndex">
+					<image v-if="imgItem.icon && imgIndex < 10" class="img" :src="imgItem.icon" mode=""></image>
+				</view>
+				<view class="fpNumstImg">
+					<image class="img" :src="userInfo.icon" mode=""></image>
+				</view>
+				<view class="fightImgMine">
+					<text v-if="groupStatus == 3">已退款</text>
+					<text v-else>已支付</text>
+				</view>
+			</view>
+		</view>
 		<view class="swrap-box2">
 			<view class="swb2-item" v-for="(item,index) in orderItems" :key="index">
 				<view class="swb2-item1">
@@ -42,11 +64,31 @@
 				<text class="swb-total-text2" v-if="order.payType == 3">消耗{{order.payAmount}}积分</text>
 				<text class="swb-total-text2" v-else>￥{{order.payAmount}}</text>
 			</view>
-			<view class="swb2-foot">
-				<view class="swb2f-btn1" @tap="callService">联系客服</view>
-				<view class="swb2f-btn1" @tap="afterSale()" v-if="(order.status == 1 || order.status == 2) && order.payType != 3 && order.payType != 4">申请售后</view>
-				<view class="swb2f-btn1" v-if="order.status == 0" @tap="toPay">去付款</view>
+			<view class="swb2-foot" v-if="order.orderType != 2">
+				<view class="swb2f-btn1" v-if="order.status == 0 && order.payType != 4" @click="cancelOrder">取消订单</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 0 && order.payType != 4" @tap="toPay">立即支付</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 1 && order.payType != 4" @tap="afterSale">申请售后</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1" v-if="order.status == 2" @click="getGood">确认收货</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 2 && order.payType != 4" @tap="afterSale">申请售后</view>
+				<view class="swb2f-btn1" v-if="order.status == 3" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 3" @tap="toAssess">去评价</view>
+				<view class="swb2f-btn1" v-if="order.status == 4" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1 recom" @tap="callService">联系客服</view>
+				<view class="swb2f-btn1" v-if="order.status == 5 && order.payType != 4" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
+			</view>
+			<view class="swb2-foot" v-else>
+				<view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)">邀请好友</view>
+				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1" v-if="order.status == 2" @click="getGood">确认收货</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 2" @tap="afterSale">申请售后</view>
+				<view class="swb2f-btn1" v-if="order.status == 3" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 3" @tap="toAssess">去评价</view>
+				<view class="swb2f-btn1" v-if="order.status == 4" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1" v-if="order.status == 5" @click="toDelivery">查看物流</view>
+				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5">售后进度</view>
+				<view class="swb2f-btn1 recom" @tap="callService">联系客服</view>
 			</view>
 		</view>
 		<view class="swrap-box3">
@@ -71,6 +113,9 @@
 </template>
 
 <script>
+	import {
+	   mapState
+	} from 'vuex';
 import utils from '@/utils/method.js'
 export default{
 	data(){
@@ -78,7 +123,14 @@ export default{
 			orderId:"",
 			orderItems:[],
 			order:{},
+			groupList:[],
+			grouponRules:null,
+			currentTime:"",  //服务器当前时间
+			groupStatus:"",  //1待成团，时间没到，人数没满；2拼团成功，人够了，时间没到；3拼团失败，人没够，时间到了;4时间到了，人满了，正常订单
 		}
+	},
+	computed:{
+		...mapState(['userInfo'])
 	},
 	methods:{
 		toDelivery(id){
@@ -100,13 +152,82 @@ export default{
 				url:"/pages/service/service"
 			})
 		},
+		cancelOrder(){
+			let that = this
+			uni.showModal({
+				title: '提示',
+				content: '确定取消该订单？',
+				success: function (res) {
+					if (res.confirm) {
+						that.cancelOrderOk()
+					} else if (res.cancel) {
+						
+					}
+				}
+			})
+		},
+		//评价
+		toAssess(){
+			uni.navigateTo({
+				url:`/pages/order/assess?id=${this.orderId}`
+			})
+		},
+		async cancelOrderOk(){
+			uni.showLoading({
+				title:"取消中..."
+			})
+			await this.$http({
+				apiName:"cancelOrder",
+				type:"POST",
+				data:{orderId:this.orderId}
+			}).then(res => {
+				this.$set(this.order,"status",-1)
+				uni.showToast({
+					title:"订单已取消"
+				})
+			}).catch(_ => {})
+			uni.hideLoading()
+		},
+		//确定确认收货
+		async getGood(){
+			uni.showLoading({
+				title: '加载中...'
+			})
+			await this.$http({
+				apiName:"getGood",
+				type:"POST",
+				data:{orderId:this.orderId}
+			}).then(res => {
+				this.$set(this.order,"status",3)
+				uni.showToast({
+					title:"已收货"
+				})
+			}).catch(_ => {})
+			uni.hideLoading();
+		},
 		async getData(){
 			await this.$http({
 				apiName:"getOrderDetail",
 				data:{orderId:this.orderId}
 			}).then(res => {
 				this.orderItems = res.data.orderItems;
-				this.order = res.data.order
+				this.order = res.data.order;
+				this.groupList = res.data.groupList;  //团成员不包括本人，本人单独放上去
+				this.grouponRules = res.data.grouponRules;
+				this.currentTime = res.timestamp;
+				if(this.currentTime < this.grouponRules.endTime){  //时间没到
+					if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间没到人没够
+						this.groupStatus = 1;
+					}else{  //时间没到人够了
+						this.groupStatus = 2;
+					}
+				}else{
+					if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间到了人没够
+						this.groupStatus = 3;
+					}else{  //时间到了人够了
+						this.groupStatus = 4;
+					}
+				}
 			}).catch(_ => {})
 		},
 		//售后
@@ -138,6 +259,10 @@ export default{
 	filters:{
 		dealTime(val){
 			return utils.unixToDatetime(val) || ""
+		},
+		dealTimep(val){
+			let _str = utils.transToDate(val);
+			return _str.h + "小时" + _str.m + "分钟"
 		}
 	}
 }
@@ -180,6 +305,78 @@ export default{
 					.swb1-right-boo-item{
 						margin-right: 10rpx;
 					}
+				}
+			}
+		}
+		.swrap-group{
+			border-top: 20rpx solid #F9FAFB;
+			.sgp1{
+				display: flex;
+				align-items: center;
+				padding: 20rpx 30rpx;
+				margin-top: 20rpx;
+				.img1{
+					width: 74rpx;
+					height: auto;
+				}
+				.img2{
+					width: 118rpx;
+					height: auto;
+				}
+				.img3{
+					width: 142rpx;
+					height: auto;
+				}
+				.text{
+					color: #606266;
+					font-size: 28rpx;
+					margin-left: 10rpx;
+				}
+			}
+			.fgGroup{
+				padding-left: 60rpx;
+				padding-right: 60rpx;
+				margin-top: 40rpx;
+				.fgInfo{
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					.ptImg{
+						width: 90rpx;
+					}
+					.ptText{
+						color: #606266;
+						font-size: 28rpx;
+						margin-left: 16rpx;
+					}
+				}
+			}
+			.ptImgs{
+				// margin-top: 40rpx;
+				padding-left: 40rpx;
+				font-size: 28rpx;
+				display: flex;
+				align-items: center;
+				justify-content: left;
+				.fpNumstImg{
+					margin-left: -20rpx;
+					display: inline-block;
+					.img{
+						width: 60rpx;
+						height: 60rpx;
+						border-radius: 50%;
+						border: 2rpx solid #fff;
+					}
+				}
+				.fightImgMine{
+					background-color: #F23D3D;
+					color: #fff;
+					font-size: 20rpx;
+					border-radius: 20rpx;
+					padding: 0 8rpx;
+					align-self: flex-start;
+					margin-left: -30rpx;
+					z-index: 9;
 				}
 			}
 		}

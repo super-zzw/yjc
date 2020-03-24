@@ -13,9 +13,17 @@ const store = new Vuex.Store({
 		order:[],  //直接购买临时存储的商品
 		selectAddr:null,  //购买时选中的地址
 		msgNms:0,  //未读消息总数
-		paddingTop:""
+		paddingTop:"",
+		config:null,
+		groupProductId:""
 	},
 	mutations: {
+		setGroupProductId(state,data){
+			state.groupProductId = data
+		},
+		setConfig(state,data){
+			state.config = data
+		},
 		setPaddingTop(state,data){
 			state.paddingTop = data;
 		},

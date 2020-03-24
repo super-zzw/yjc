@@ -14,14 +14,25 @@
 				<view 
 					v-for="(item, index) in goodsList" :key="index"
 					class="goods-item"
-					@click="navToDetailPage(item.productId,item.id)"
+					@click="navToDetailPage(item.id)"
 				>
 					<view class="image-wrapper">
 						<image :src="item.picUrl" mode="aspectFill"></image>
 					</view>
-					<text class="title clamp">{{item.title}}</text>
-					<view class="price-box">
-						<text class="price nm-font">{{item.minPrice}}</text>
+					<view class="price-box nm-font">
+						<text class="price1">¥{{item.minGroupPrice}}</text>
+						<text class="price2">¥{{item.minPromotionPrice}}</text>
+					</view>
+					<view class="title">{{item.title}}</view>
+					<view class="fTextBox" v-if="item.status == 0">
+						<text class="fText1 nm-font">{{item.startDate}}</text>开始
+					</view>
+					<view class="fTextBox" v-if="item.status == 1 && creset">
+						<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
+						<text class="fText2">后结束</text>
+					</view>
+					<view class="fTextBox" v-if="item.status == 2">
+						<text class="fText2">拼团已结束</text>
 					</view>
 				</view>
 				<view v-if="goodsList.length > 0 && noMore" class="no_more">
@@ -39,7 +50,12 @@
 </template>
 
 <script>
+	import utils from '@/utils/method.js'
+	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	export default {
+		components: {
+			uniCountdown
+		},
 		data() {
 			return {
 				page:1,
@@ -47,6 +63,7 @@
 				noMore:false,
 				goodsList: [],
 				typeId:"1",
+				creset:false
 			};
 		},
 		//下拉刷新
@@ -68,10 +85,6 @@
 			this.getData()
 		},
 		onLoad(opt){
-			// if(opt.typeId){
-			// 	this.typeId = opt.typeId
-			// 	this.initData()
-			// }
 			this.initData()
 		},
 		methods: {
@@ -90,26 +103,15 @@
 				this.getData()
 				uni.hideLoading()
 			},
-			//更多类型的商品
-			async getScoreData(){
-				uni.showLoading({ title: '加载中' });
-				await this.$http({
-					apiName:"getCateList",
-					data:{
-						productType:1,
-						page:this.page,
-						size:this.size
-					}
-				}).then(res => {
-					this.noMore = res.data.last
-					this.goodsList = this.goodsList.concat(res.data.content)
-				}).catch(_ => {})
-				uni.hideLoading()
+			timeUp(){
+				console.log("计时结束");
+				this.creset = false;
+				this.getFight();
 			},
 			//更多类型的商品
 			async getData(){
 				await this.$http({
-					apiName:"getMoreModule",
+					apiName:"fightList",
 					data:{
 						type:this.typeId,
 						page:this.page,
@@ -117,8 +119,24 @@
 					}
 				}).then(res => {
 					this.noMore = !res.data.hasNextPage
-					this.goodsList = this.goodsList.concat(res.data.list)
+					this.currentTime = res.timestamp;
+					res.data.list.map(item => {
+						if(item.status == 0){
+							item["startDate"] = utils.unixToDatetime(item.startTime,8)
+						}
+						if(item.status == 1){
+							var etime = item.endTime - this.currentTime;
+							if(etime > 0){
+								let _trDate = utils.transToDate(etime);
+								item["hour"] = _trDate.h;
+								item["minute"] = _trDate.m;
+								item["second"] = _trDate.s;
+							}
+						}
+					})
+					this.goodsList = this.goodsList.concat(res.data.list);
 				}).catch(_ => {})
+				this.creset = true;
 			},
 		},
 	}
@@ -133,13 +151,14 @@
 		padding-top: 2rpx;
 		.prltop{
 			display: flex;
-			padding: 20rpx 32rpx;
+			padding: 20rpx 0;
 			box-sizing: border-box;
 			width: 100%;
 			background-color: #fff;
 			align-items: center;
 			justify-content: space-between;
 			margin-bottom: 20rpx;
+			justify-content: center;
 			.prltopimg{
 				width: 90rpx;
 				height: 44rpx;
@@ -147,6 +166,8 @@
 			.prltoptext{
 				color: #303133;
 				font-size: 28rpx;
+				margin-left: 10rpx;
+				margin-right: 10rpx;
 			}
 			.iconfont{
 				font-size: 32rpx;
@@ -333,6 +354,38 @@
 			&:nth-child(2n+1){
 				margin-right: 4%;
 			}
+			.price-box{
+				color: #F23D3D;
+				font-size: 36rpx;
+				display: block;
+				padding-top: 16rpx;
+				padding-bottom: 4rpx;
+				.price2{
+					text-decoration: line-through;
+					color: #909399;
+					font-size: 26rpx;
+					margin-left: 20rpx;
+				}
+			}
+			.title{
+				font-size: 30rpx;
+				color: #303133;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				padding-bottom: 10rpx;
+			}
+			.fTextBox{
+				font-size: 26rpx;
+				.fText1{
+					color: #F23D3D;
+					font-size: 30rpx;
+					margin-right: 10rpx;
+				}
+				.fText2{
+					color: #909399;
+				}
+			}
 		}
 		.image-wrapper{
 			width: 100%;
@@ -345,32 +398,7 @@
 				opacity: 1;
 			}
 		}
-		.title{
-			font-size: $font-lg;
-			color: $font-color-dark;
-			line-height: 80rpx;
-		}
-		.price-box{
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding-right: 10rpx;
-			font-size: 24rpx;
-			color: $font-color-light;
-			.nm-font{
-				font-size: 28rpx;
-				color: #F23D3D;
-			}
-		}
-		.price{
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 1;
-			&:before{
-				content: '￥';
-				font-size: 26rpx;
-			}
-		}
+		
 	}
 	
 

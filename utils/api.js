@@ -6,6 +6,7 @@ export default{
 	msgNum:"/ums/message/count",  //获取未读消息总数
 	msgList:"/ums/get/myMessageList",  //获取消息列表
 	msgDetail:"/ums/get/myMessageInfo",  //获取消息详情
+	getConfig:"/app/getConfig",  //获取项目配置
 	
 	getDynamicNav:"/app/get/home/nav",  //首页动态导航
 	getAds:"/app/get/home/noticeList",  //首页滚动广告
@@ -89,4 +90,9 @@ export default{
 	
 	checkUpdate:"/app/client/update",  //检查更新
 	mpLogin:"/ums/miniApp/Login",  //小程序关联
+	
+	HomeFight:"/sms/get/home/groupProduct/list",  //首页团购列表
+	fightList:"/sms/get/more/home/groupProduct/list",  //团购列表
+	fightDetail:"/pms/get/groupRulesInfo",  //团购商品详情
+	createFightOrder:"/oms/add/groupOrder",  //创建拼团订单
 }

@@ -18,7 +18,44 @@
 					</swiper-item>
 				</swiper>
 				<view class="h-list"></view>
-				<view class="t-list">
+				<view class="t-list t-list2" v-if="config.MALL_CATEGORY_STYLE == 2">
+					<view class="t-item2" v-for="(titem,tindex) in tlist" v-if="titem.parentId == item.id" :key="tindex">
+						<view class="t-item3">
+							<image  @tap="navToDetailPage(titem.productId)" class="img" :src="titem.picUrl"></image>
+							<view class="tl2">
+								<view class="tl2t1Box"  @tap="navToDetailPage(titem.productId)">
+									<view class="tl2t1">
+										{{titem.title}}
+									</view>
+								</view>
+								<view class="tl2t3" v-if="titem.skuName">
+									<text v-for="(val,key) in JSON.parse(titem.skuName)" :key="key">
+										<text>{{key}}</text>:<text>{{val}}</text>;
+									</text>
+								</view>
+								<view class="tl2t2">
+									<view class="gcprice nm-font">
+										¥{{titem.promotionPrice}}
+									</view>
+									<text v-if="!hasLogin || titem.num == 0" @tap.stop="addCart(titem)" class="iconfont iconxiadangoumaiicon-yaoqingfanliye"></text>
+									<uniNumberBox
+										v-if="hasLogin && titem.num > 0"
+										class="gcNum"
+										:cartId="String(titem.cartId)"
+										:min="0" 
+										:max="titem.stock"
+										:value="titem.num > titem.stock ? titem.stock : titem.num"
+										:isMax="titem.num >= titem.stock ? true : false"
+										:isMin="titem.num == 0"
+										:otherData="{currentIndex:tindex}"
+										@eventChange="numberChange"
+									></uniNumberBox>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="t-list" v-else>
 					<view class="t-item" @tap="toList(titem.id)" v-for="(titem,tindex) in tlist" v-if="titem.parentId == item.id" :key="tindex">
 						<image :src="titem.img"></image>
 						<text>{{titem.name}}</text>
@@ -30,9 +67,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState,mapMutations } from 'vuex';
 import utils from '@/utils/method.js'
+import uniNumberBox from '@/components/uni-number-box.vue'
 	export default {
+		components: {
+			uniNumberBox
+		},
 		data() {
 			return {
 				sizeCalcState: false,
@@ -76,9 +117,73 @@ import utils from '@/utils/method.js'
 			this.resetData()
 		},
 		computed:{
-			...mapState(['msgNms','hasLogin','paddingTop'])
+			...mapState(['msgNms','hasLogin','paddingTop','config'])
 		},
 		methods: {
+			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab']),
+			async addCart(item){
+				if(this.hasLogin){
+					uni.showLoading({
+						mask:true
+					})
+					await this.$http({
+						apiName:"addCart",
+						type:"POST",
+						data:{
+							productId :item.productId,
+							checked :1,
+							num :1,
+							skuJson : item.skuName
+						}
+					}).then(res => {
+						uni.showToast({
+							title:"添加成功"
+						})
+						this.$set(item,'num',item.num + 1 );
+						this.$set(item,'cartId',res.data )
+						this.getCartNms()
+					}).catch(_ => {})
+					uni.hideLoading()
+				}else{
+					this.toLogin()
+				}
+			},
+			async numberChange(data){
+				uni.showLoading({
+					mask:true
+				})
+				await this.$http({
+					apiName:"changeCartGoodNm",
+					type:"POST",
+					data:{
+						cartId:data.cartId,
+						num:data.number
+					}
+				}).then(res => {
+					this.$set(this.tlist[data.item.currentIndex],'num',data.number)
+				}).catch(_ => {})
+				uni.hideLoading()
+			},
+			//未登录跳转
+			toLogin(){
+				this.setAfterLoginUrl('/pages/category/category')
+				this.setAfterLoginIsTab(true)
+				// #ifdef MP-WEIXIN
+				uni.navigateTo({
+					url: '/pages/wxlogin/index'
+				})
+				// #endif
+				// #ifndef MP-WEIXIN
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+				// #endif
+			},
+			navToDetailPage(id){
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
+			},
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -112,25 +217,50 @@ import utils from '@/utils/method.js'
 				uni.hideLoading()
 			},
 			async getData(){
+				// let _type = this.config.MALL_CATEGORY_STYLE;
+				let _type = 1;
 				await this.$http({
-					apiName:"getCategory"
+					apiName:"getCategory",
+					data:{
+						// type:this.config.MALL_CATEGORY_STYLE,
+						type:_type
+					}
 				}).then(res => {
-					res.data.forEach(item=>{
-						if(item.children){
-							this.flist.push({
-								id:item.id,
-								name:item.name
-							});
-							this.categoryList.push({
-								id:item.id,
-								name:item.name
-							});
-							this.tlist.push(...item.children)
+					if(_type == 1){
+						for(let key in res.data){
+							let item = res.data[key];
+							if(item.length > 0){
+								this.flist.push({
+									id:key,
+									name:key
+								});
+								this.categoryList.push({
+									id:key,
+									name:key,
+								});
+								item.map(chilItem => {
+									this.$set(chilItem,"parentId",key)
+								});
+								this.tlist.push(...item)
+							}
 						}
-					}) 
+					}else{
+						res.data.forEach(item=>{
+							if(item.children){
+								this.flist.push({
+									id:item.id,
+									name:item.name
+								});
+								this.categoryList.push({
+									id:item.id,
+									name:item.name
+								});
+								this.tlist.push(...item.children)
+							}
+						}) 
+					}
+					
 					this.currentId = this.flist[0].id
-					// this.categoryList = res.data
-					// this.currentId = res.data[0].id
 					this.$nextTick(function(){
 						this.loaded = true;
 					})
@@ -331,21 +461,113 @@ import utils from '@/utils/method.js'
 			flex: 99;
 			height: 0;
 		}
+		.t-item{
+			flex-shrink: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			width: 176rpx;
+			font-size: 26rpx;
+			color: #666;
+			padding-bottom: 20rpx;
+			
+			image{
+				width: 140rpx;
+				height: 140rpx;
+			}
+		}
 	}
-	.t-item{
-		flex-shrink: 0;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		width: 176rpx;
-		font-size: 26rpx;
-		color: #666;
-		padding-bottom: 20rpx;
-		
-		image{
-			width: 140rpx;
-			height: 140rpx;
+	.t-list2{
+		display: unset;
+		.t-item2{
+			background-color: #fff;
+			padding: 20rpx;
+			padding-bottom: 0;
+			.t-item3{
+				display: flex;
+				justify-content: space-between;
+				padding-bottom: 20rpx;
+				border-bottom: 2rpx solid #F5F5F8;
+				.img{
+					width: 140rpx;
+					height: 140rpx;
+					background-color: #C0C4CC;
+				}
+				.tl2{
+					flex: 1;
+					margin-left: 20rpx;
+					.tl2t1Box{
+						height: 70rpx;
+					}
+					.tl2t1{
+						color: #303133;
+						font-size: 26rpx;
+						word-break: break-all;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp: 2;
+						overflow: hidden;
+					}
+					.tl2t2{
+						margin-top: 8rpx;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						.gcprice{
+							color: #F23D3D;
+							font-size: 28rpx;
+						}
+						.iconfont{
+							color: #909399;
+							font-size: 24rpx;
+							width: 42rpx;
+							height: 42rpx;
+							border-radius: 50%;
+							border: 2rpx solid #909399;
+							text-align: center;
+							line-height: 42rpx;
+						}
+						.gcNum{
+							width: 150rpx;
+							height: 35rpx;
+							position: unset;
+							background: none;
+							/deep/ .uni-numbox-minus,
+							/deep/ .uni-numbox-plus{
+								box-sizing: border-box;
+								width: 34rpx;
+								height: 34rpx;
+								border: 2rpx solid #C0C4CC;
+								border-radius: 50%!important;
+								line-height: 20rpx;
+								.iconfont{
+									font-size: 20rpx;
+								}
+							}
+							/deep/ .uni-numbox-value{
+								width: 80rpx;
+								min-width: 80rpx;
+							}
+							/deep/ .uni-numbox-plus{
+								background-color: #F23D3D;
+								border-color: #F23D3D;
+								.iconfont{
+									color: #fff;
+								}
+							}
+						}
+					}
+					.tl2t3{
+						color: #909399;
+						font-size: 26rpx;
+						text-overflow: ellipsis;
+						overflow: hidden;
+						white-space: nowrap;
+					}
+				}
+			}
 		}
 	}
 </style>

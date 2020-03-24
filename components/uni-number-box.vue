@@ -59,6 +59,10 @@
 			cartId:{
 				type:String,
 				default:""
+			},
+			otherData:{
+				type:Object,
+				default:null
 			}
 		},
 		data() {
@@ -71,7 +75,7 @@
 		created(){
 			this.maxDisabled = this.isMax;
 			this.minDisabled = this.isMin;
-			console.log(this.cartId)
+			// console.log(this.cartId)
 		},
 		computed: {
 
@@ -81,7 +85,8 @@
 				const data = {
 					number: number,
 					index: this.index,
-					cartId:this.cartId
+					cartId:this.cartId,
+					item:this.otherData
 				}
 				this.$emit('eventChange', data);
 			}

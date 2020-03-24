@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from './store'
 import App from './App'
-import {http,upLoadImg,httpAll,getMsgNms,checkUpdate} from './utils/request.js'
+import {http,upLoadImg,httpAll,getMsgNms,checkUpdate,getConfig} from './utils/request.js'
 
 
 const msg = (title, duration=1500, mask=false, icon='none')=>{
@@ -35,6 +35,7 @@ Vue.prototype.$upLoadImg = upLoadImg;
 Vue.prototype.$httpAll = httpAll;
 Vue.prototype.$getMsgNms = getMsgNms;
 Vue.prototype.$checkUpdate = checkUpdate;
+Vue.prototype.$getConfig = getConfig;
 Vue.prototype.$api = {prePage};
 
 import wxTabbar from '@/components/wx-tabbar.vue'
