@@ -106,6 +106,7 @@ export default{
 		  if(x === 5){return (Y+M+'-'+"01");}//2019-09-01
 		  if(x === 6){return (Y+M);}//2019-09
 		  if(x === 7){return (Y+M+'-'+D+h+m+':'+s);}//精确到秒
+		  if(x === 8){return (M+'-'+D+h+m);}//2017-09-29 21:30
 		  if(x === 0){//取上一个月
 		    var Y2 = date.getFullYear(); //获取当前日期的年份
 		    var M2 = parseInt(date.getMonth());
@@ -145,5 +146,16 @@ export default{
 		uni.navigateTo({
 			url:`/pages/service/service?uid=${_data.uid}&pid=${_data.pid}&oid=${_data.oid}`
 		})
+	},
+	transToDate(data) {
+		var s;
+		var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		var minutes = parseInt((data % (1000 * 60 * 60)) / (1000 * 60));
+		var seconds = parseInt((data % (1000 * 60)) / 1000);
+		return {
+			h:hours,
+			m:minutes,
+			s:seconds
+		};
 	}
 }

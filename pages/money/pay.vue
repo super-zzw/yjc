@@ -63,15 +63,17 @@ import {
 				payType: 1,
 				orderInfo: {},
 				payTypes:[],
-				err:""
+				err:"",
+				group:""
 			};
 		},
 		computed: {
 		
 		},
 		onLoad(opt) {
-			this.money = opt.money
-			this.orderId = opt.orderid
+			this.money = opt.money;
+			this.orderId = opt.orderid;  //
+			this.group = opt.group;  //拼团订单
 			this.getPayType()
 		},
 
@@ -120,9 +122,13 @@ import {
 					data:{orderNo:this.orderId}
 				}).then(res => {
 					that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
-					uni.redirectTo({
-						url:"/pages/money/paySuccess?isDh=2"
-					})
+					if(this.group == 1){
+						
+					}else{
+						uni.redirectTo({
+							url:"/pages/money/paySuccess?isDh=2"
+						})
+					}
 				}).catch(err => {
 					
 				})

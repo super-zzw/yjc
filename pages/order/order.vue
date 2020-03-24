@@ -31,16 +31,23 @@
 							<text class="state">
 								<!-- -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部 -->
 								<!-- 发货之后不可取消订单，只有联系售后 -->
-								<text v-if="item.status == -2">售后关闭</text>
-								<text v-if="item.status == -1">已取消</text>
-								<text v-if="item.status == 0">待付款</text>
-								<text v-if="item.status == 1">待发货</text>
-								<text v-if="item.status == 2">待收货</text>
-								<text v-if="item.status == 3">已完成</text>
-								<text v-if="item.status == 4">已评价</text>
-								<text v-if="item.status == 5">售后处理中</text>
-								<text v-if="item.status == 6">退款中</text>
-								<text v-if="item.status == 7">退款完成</text>
+								<text v-if="item.orderType == 2">
+									<text v-if="currentTime < item.endGroupTime && item.groupMember < item.minMember">待成团</text>
+									<text v-else-if="item.groupMember >= item.minMember">已成团，待发货</text>
+									<text v-else>未成团</text>
+								</text>
+								<text v-else>
+									<text v-if="item.status == -2">售后关闭</text>
+									<text v-if="item.status == -1">已取消</text>
+									<text v-if="item.status == 0">待付款</text>
+									<text v-if="item.status == 1">待发货</text>
+									<text v-if="item.status == 2">待收货</text>
+									<text v-if="item.status == 3">已完成</text>
+									<text v-if="item.status == 4">已评价</text>
+									<text v-if="item.status == 5">售后处理中</text>
+									<text v-if="item.status == 6">退款中</text>
+									<text v-if="item.status == 7">退款完成</text>
+								</text>
 							</text>
 							<text 
 								v-if="item.status == 3 || item.status == 4" 
@@ -48,7 +55,10 @@
 								@click="deleteOrder(index,item.id)"
 							></text>
 						</view>
-						
+						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember">
+							<image src="../../static/ptz.png" mode="widthFix" class="igImg"></image>
+							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep}}结束</text>
+						</view>
 						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x @tap="toDetail(item.id)">
 							<view
 								v-for="(goodsItem, goodsIndex) in item.itemList" :key="goodsIndex"
@@ -67,8 +77,8 @@
 							<view class="right">
 								<text class="title clamp">{{goodsItem.productName}}</text>
 								<text class="attr-box">
-									规格：<text v-for="(aitem,akey,aindex) of JSON.parse(goodsItem.specifications)" :key="aindex">{{aitem}}</text>
-									；<text>数量：{{goodsItem.productQuantity}}</text>
+									<text v-for="(aitem,akey,aindex) of JSON.parse(goodsItem.specifications)" :key="aindex">{{akey}}：{{aitem}};</text>
+									<text>数量：{{goodsItem.productQuantity}}</text>
 								</text>
 								<text class="price" v-if="item.payType != 3">{{goodsItem.promotionPrice}}</text>
 							</view>
@@ -84,28 +94,38 @@
 							<text class="price1" v-if="item.payType == 3">消耗{{item.payAmount}}积分</text>
 							<text class="price1" v-else>￥{{item.payAmount}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.status == 0">
-							<button class="action-btn" @click="cancelOrder(index,item.id)">取消订单</button>
-							<button class="action-btn recom" @tap="toPay(item.payAmount,item.id)">立即支付</button>
-						</view>
-						<view class="action-box b-t" v-if="item.status == 1">
+						<view class="action-box b-t" v-if="item.status == 1 && currentTime >= item.endGroupTime && item.groupMember >= item.minMember">
 							<!-- <button class="action-btn" @click="cancelOrder(index,item.id)">取消订单</button> -->
 							<text v-if="item.payType == 3" class="b-t2">积分兑换订单</text>
 							<text v-if="item.payType == 4" class="b-t2">货到付款订单</text>
 							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3 && item.payType != 4">申请售后</button>
 						</view>
-						<view class="action-box b-t" v-if="item.status == 2">
-							<button class="action-btn" @click="toDelivery(item.id)">查看物流</button>
-							<button class="action-btn" @click="getGood(index,item.id)">确认收货</button>
-							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3 && item.payType != 4">申请售后</button>
+						<!-- 非拼团订单 -->
+						<view class="action-box b-t" v-if="item.orderType != 2">
+							<button class="action-btn" v-if="item.status == 0 && item.payType != 4" @click="cancelOrder(index,item.id)">取消订单</button>
+							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id)">立即支付</button>
+							<button class="action-btn recom" v-if="item.status == 1 && item.payType != 4" @tap="afterSale(item.id)">申请售后</button>
+							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
+							<button class="action-btn recom" v-if="item.status == 2 && item.payType != 4" @tap="afterSale(item.id)">申请售后</button>
+							<button class="action-btn" v-if="item.status == 3" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
+							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn recom" @tap="callService">联系客服</button>
+							<button class="action-btn" v-if="item.status == 5 && item.payType != 4" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5 && item.payType != 4">售后进度</button>
 						</view>
-						<view class="action-box b-t" v-if="item.status == 3">
-							<button class="action-btn recom" @tap="toAssess(item.id)">去评价</button>
-						</view>
-						<view class="action-box b-t" v-if="item.status == 4">
-						</view>
-						<view class="action-box b-t" v-if="item.status == 5 || item.status == 6 || item.status == 7">
-							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)"  v-if="item.payType != 3">售后进度</button>
+						<!-- 拼团订单 -->
+						<view class="action-box b-t" v-else>
+							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)">邀请好友</button>
+							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
+							<button class="action-btn recom" v-if="item.status == 2" @tap="afterSale(item.id)">申请售后</button>
+							<button class="action-btn" v-if="item.status == 3" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
+							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn" v-if="item.status == 5" @click="toDelivery(item.id)">查看物流</button>
+							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5">售后进度</button>
 							<button class="action-btn recom" @tap="callService">联系客服</button>
 						</view>
 					</view>
@@ -129,6 +149,8 @@
 		},
 		data() {
 			return {
+				// payType,只有4是到付
+				currentTime:"",  //服务器当前时间戳
 				tabCurrentIndex: 0,
 				// -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部
 				navList: [{
@@ -184,6 +206,10 @@
 		filters:{
 			dealTime(val){
 				return utils.unixToDatetime(val) || ""
+			},
+			dealTimep(val){
+				let _str = utils.transToDate(val);
+				return _str.h + "小时" + _str.m + "分钟"
 			}
 		},
 		onLoad(options){
@@ -280,9 +306,9 @@
 						status:this.navList[index].state,
 					}
 				}).then(res => {
-					this.$set(this.navList[index],"noMore",!res.data.hasNextPage)
-					this.$set(this.navList[index],"orderList",this.navList[index].orderList.concat(res.data.list))
-					
+					this.$set(this.navList[index],"noMore",!res.data.hasNextPage);
+					this.$set(this.navList[index],"orderList",this.navList[index].orderList.concat(res.data.list));
+					this.currentTime = res.timestamp;
 				}).catch(_ => {})
 				this.$set(this.navList[index],"dataLoading",false)
 				uni.hideLoading()
@@ -500,6 +526,22 @@
 					top: 50%;
 					transform: translateY(-50%);
 				}
+			}
+		}
+		.i-group{
+			margin-left: -30rpx;
+			background-color: #FFF2F2;
+			padding-left: 30rpx;
+			height: 70rpx;
+			display: flex;
+			align-items: center;
+			.igImg{
+				width: 74rpx;
+			}
+			.igText{
+				margin-left: 20rpx;
+				color: #606266;
+				font-size: 28rpx;
 			}
 		}
 		/* 多条商品 */

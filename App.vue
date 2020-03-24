@@ -12,6 +12,7 @@
 			// #endif
 		},
 		onShow: function() {
+			this.$getConfig()
 			// console.log('App Show')
 			// #ifdef APP-PLUS
 			var args= plus.runtime.arguments;

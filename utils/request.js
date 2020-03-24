@@ -168,7 +168,14 @@ export function httpAll(opts){
 	// });
 	return ret;
 }
-
+//获取项目配置
+export function getConfig(){
+	http({
+		apiName:"getConfig",
+	}).then(res => {
+		store.commit('setConfig',res.data)
+	}).catch(_ => {})
+}
 //获取未读消息总数
 export function getMsgNms(){
 	if(!store.state.hasLogin){
@@ -182,6 +189,7 @@ export function getMsgNms(){
 		utils.setBadgeText(0,res.data)
 	}).catch(_ => {})
 }
+
 //检查更新
 export function checkUpdate(isAlert){
 	// #ifdef MP-WEIXIN

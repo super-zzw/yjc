@@ -62,7 +62,7 @@
 					<view class="t-box">
 						<text class="title">{{item.title}}</text>
 						<view class="price-box" v-if="item.price">
-							<text class="price nm-font">￥{{item.price}}</text> 
+							<text class="price nm-font">¥{{item.price}}</text> 
 							<text class="m-price">起</text>
 						</view>
 					</view>
@@ -85,13 +85,27 @@
 			<scroll-view class="floor-list" scroll-x>
 				<view class="scoll-wrapper">
 					<view 
-						@click="navToDetailPage(item.productId)"
+						@click="fightDetailPage(item.id)"
 						v-for="(item, index) in fightList" :key="index"
 						class="floor-item floor-item2"
 					>
-						<image class="floor-item-img" :src="item.picUrl"></image>
+						<image mode="widthFix" class="floor-item-img" :src="item.picUrl"></image>
+						
+						<text class="price nm-font price12">
+							<text class="price1">¥{{item.minGroupPrice}}</text>
+							<text class="price2">¥{{item.minPromotionPrice}}</text>
+						</text>
 						<text class="title clamp">{{item.title}}</text>
-						<text class="price nm-font">￥{{item.minPrice}}</text>
+						<view class="fTextBox" v-if="item.status == 0">
+							<text class="fText1 nm-font">{{item.startDate}}</text>开始
+						</view>
+						<view class="fTextBox" v-if="item.status == 1 && creset">
+							<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
+							<text class="fText2">后结束</text>
+						</view>
+						<view class="fTextBox" v-if="item.status == 2">
+							<text class="fText2">拼团已结束</text>
+						</view>
 					</view>
 				</view>
 			</scroll-view>
@@ -115,9 +129,9 @@
 						v-for="(item, index) in topics123[1]" :key="index"
 						class="floor-item floor-item2"
 					>
-						<image class="floor-item-img" :src="item.picUrl"></image>
+						<image mode="widthFix" class="floor-item-img" :src="item.picUrl"></image>
 						<text class="title clamp">{{item.title}}</text>
-						<text class="price nm-font">￥{{item.minPrice}}</text>
+						<text class="price nm-font">¥{{item.minPrice}}</text>
 					</view>
 				</view>
 			</scroll-view>
@@ -144,7 +158,7 @@
 					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-fon">￥{{item.minPrice}}</text>
+				<text class="price nm-font">¥{{item.minPrice}}</text>
 			</view>
 		</view>
 		<!-- 促销专区 -->
@@ -167,7 +181,7 @@
 					<image :src="item.picUrl" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-fon">￥{{item.minPrice}}</text>
+				<text class="price nm-font">¥{{item.minPrice}}</text>
 			</view>
 		</view>
 		
@@ -181,7 +195,11 @@ import {
 	mapMutations
 } from 'vuex';
 import utils from '@/utils/method.js'
+import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	export default {
+		components: {
+			uniCountdown
+		},
 		data() {
 			return {
 				carouselList: [], //轮播图数据
@@ -192,7 +210,9 @@ import utils from '@/utils/method.js'
 				notices:[],  //滚动通知/广告
 				tipics:[],  //主题内容
 				topics123:[[],[],[]],  //促销内容，新品，精选
-				fightList:[]
+				fightList:[],
+				currentTime:"",
+				creset:false,
 			};
 		},
 		computed:{
@@ -220,6 +240,40 @@ import utils from '@/utils/method.js'
 		},
 		methods: {
 			...mapMutations(['setUserInfo','setAfterLoginUrl']),
+			timeUp(){
+				console.log("计时结束");
+				this.creset = false;
+				this.getFight();
+			},
+			//拼团数据
+			async getFight(){
+				await this.$http({
+					apiName:"HomeFight"
+				}).then(res => {
+					this.fightList = res.data;
+					this.currentTime = res.timestamp;
+					this.fightList.map(item => {
+						if(item.status == 0){
+							item["startDate"] = utils.unixToDatetime(item.startTime,8)
+						}
+						if(item.status == 1){
+							var etime = item.endTime - this.currentTime;
+							if(etime > 0){
+								let _trDate = utils.transToDate(etime);
+								item["hour"] = _trDate.h;
+								item["minute"] = _trDate.m;
+								item["second"] = _trDate.s;
+							}
+						}
+					})
+				}).catch(_ => {});
+				this.creset = true;
+			},
+			fightDetailPage(id){
+				uni.navigateTo({
+					url: `/pages/fight/productDetail?id=${id}`
+				})
+			},
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -251,6 +305,7 @@ import utils from '@/utils/method.js'
 				this.getNotice()
 				this.getTopic()
 				this.getTopic123()
+				this.getFight()
 				uni.hideLoading()
 			},
 			//轮播图
@@ -623,20 +678,27 @@ import utils from '@/utils/method.js'
 		background: #fff;
 		.floor-list{
 			white-space: nowrap;
+			width: 100%;
 		}
 		.scoll-wrapper{
 			display:flex;
 			align-items: flex-start;
+			padding-bottom: 40rpx;
 		}
 		.floor-item2{
 			margin-right: 20rpx;
-			font-size: $font-sm+2rpx;
+			font-size: 30rpx;
 			color: $font-color-dark;
 			line-height: 1.8;
-			width: 48%;
+			overflow: hidden;
+			box-sizing: border-box;
+			box-shadow: 0 0 20rpx 0 rgba(0,0,0,.13);
+			border-radius: 20rpx;
+			border: 2rpx solid rgba(0,0,0,.13);
+			overflow: hidden;
+			flex: 1 0 48%;
 			.floor-item-img{
-				width: 332rpx;
-				height: 332rpx;
+				width: 100%;
 				border-radius: 6rpx;
 			}
 			.title{
@@ -645,10 +707,38 @@ import utils from '@/utils/method.js'
 				overflow: hidden;
 				text-overflow:ellipsis;
 				white-space: nowrap;
+				padding: 0 20rpx;
+				line-height: 40rpx;
 			}
 			.price{
 				color: #F23D3D;
-				font-size: 34rpx;
+				font-size: 30rpx;
+				display: block;
+				padding: 0 20rpx 16rpx;
+				.price2{
+					text-decoration: line-through;
+					color: #909399;
+					font-size: 26rpx;
+					margin-left: 20rpx;
+				}
+			}
+			.price12{
+				line-height: 40rpx;
+				padding-bottom: 0;
+			}
+			.title2{
+				padding-bottom: 20rpx;
+			}
+			.fTextBox{
+				padding: 0 20rpx 20rpx;
+				font-size: 28rpx;
+				.fText1{
+					color: #F23D3D;
+					font-weight: bold;
+				}
+				.fText2{
+					color: #909399;
+				}
 			}
 		}
 	}
@@ -873,7 +963,7 @@ import utils from '@/utils/method.js'
 		.floor-item{
 			width: 180rpx;
 			margin-right: 20rpx;
-			font-size: $font-sm+2rpx;
+			font-size: 30rpx;
 			color: $font-color-dark;
 			line-height: 1.8;
 			image{
@@ -912,7 +1002,11 @@ import utils from '@/utils/method.js'
 			display:flex;
 			flex-direction: column;
 			width: 48%;
-			padding-bottom: 40rpx;
+			margin-bottom: 30rpx;
+			overflow: hidden;
+			box-sizing: border-box;
+			box-shadow: 0 0 20rpx 0 rgba(0,0,0,.13);
+			border-radius: 20rpx;
 			&:nth-child(2n+1){
 				margin-right: 4%;
 			}
@@ -929,11 +1023,13 @@ import utils from '@/utils/method.js'
 			}
 		}
 		.title{
-			font-size: $font-lg;
+			font-size: 30rpx;
 			color: $font-color-dark;
-			line-height: 80rpx;
+			line-height: 60rpx;
+			padding: 0 20rpx;
 		}
 		.price{
+			padding: 0 20rpx 16rpx;
 			font-size: $font-lg;
 			color: $uni-color-primary;
 			line-height: 1;

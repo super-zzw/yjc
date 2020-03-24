@@ -89,9 +89,9 @@
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom page-bottom-score" v-if="isScore == 'true'" @click="buy">去兑换</view>
 		<view class="page-bottom" v-else>
-			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
-				<text class="iconfont iconyemian-copy-copy"></text>
-				<text>首页</text>
+			<navigator url="/pages/service/service" open-type="navigate" class="p-b-btn">
+				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
+				<text>客服</text>
 			</navigator>
 			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2">
 				<text class="iconfont icongouwuche1"></text>
@@ -419,6 +419,7 @@
 					uni.navigateTo({
 						url: `/pages/order/createOrder?score=${this.isScore}`
 					})
+					
 				}
 				
 			},
@@ -479,17 +480,8 @@
 			// #endif
 			
 			if (index === 0) {
-				// utils.getService({
-				// 	pid:this.productId,
-				// 	oid:""
-				// })
-				// uni.showToast({
-				// 	icon:"none",
-				// 	title:"客服系统努力开发中..."
-				// })
-				uni.navigateTo({
-					url:"/pages/service/service"
-				})
+				//弹出分享
+				console.log("分享")
 			}
 		}
 	}
@@ -816,7 +808,7 @@
 			padding: 20rpx 0 0;
 			display: flex;
 			flex-wrap: wrap;
-			/deep/ .uni-numbox{
+			/deep/ .uni-numbox.step{
 				position: unset;
 				border-radius: 8rpx;
 				border: 2rpx solid #F5F5F5;
@@ -971,18 +963,16 @@
 	}
 	.page-bottom{
 		position:fixed;
-		left: 30rpx;
-		bottom:30rpx;
+		left: 0;
+		bottom:0;
 		z-index: 95;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 690rpx;
+		width: 100%;
 		height: 100rpx;
-		background: rgba(255,255,255,.9);
-		box-shadow: 0 0 20rpx 0 rgba(0,0,0,.5);
-		border-radius: 16rpx;
-		
+		background: rgba(255,255,255,1);
+		border-top: 2rpx solid #ebebec;
 		.p-b-btn{
 			display:flex;
 			flex-direction: column;
@@ -992,12 +982,15 @@
 			color: $font-color-base;
 			width: 96rpx;
 			height: 80rpx;
-			.icon-fenxiang2{
-				font-size: 42rpx;
-				transform: translateY(-2rpx);
+			.iconkefu{
+				font-weight: bold;
+				font-size: 38rpx;
 			}
-			.icon-shoucang{
-				font-size: 46rpx;
+			.icongouwuche1{
+				font-size: 38rpx;
+			}
+			.iconxin{
+				font-size: 38rpx;
 			}
 		}
 		.p-b-btn2{
@@ -1022,25 +1015,10 @@
 		}
 		.action-btn-group{
 			display: flex;
-			height: 76rpx;
-			border-radius: 100px;
-			overflow: hidden;
-			box-shadow: 0 20rpx 40rpx -16rpx #fa436a;
-			box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
-			background: linear-gradient(to right, #ffac30,#fa436a,#F56C6C);
-			margin-left: 20rpx;
+			height: 72rpx;
 			position:relative;
-			&:after{
-				content: '';
-				position:absolute;
-				top: 50%;
-				right: 50%;
-				transform: translateY(-50%);
-				height: 28rpx;
-				width: 0;
-				border-right: 1px solid rgba(255,255,255,.5);
-			}
 			.action-btn{
+				margin-left: 24rpx;
 				display:flex;
 				align-items: center;
 				justify-content: center;
@@ -1048,8 +1026,17 @@
 				height: 100%;
 				font-size: $font-base ;
 				padding: 0;
-				border-radius: 0;
+				border-radius: 36rpx;
 				background: transparent;
+			}
+			.buy-now-btn{
+				background-color: #F2A43D;
+			}
+			.add-cart-btn{
+				background-color: #F23D3D;
+			}
+			.action-btn::after{
+				display: none;
 			}
 		}
 	}
