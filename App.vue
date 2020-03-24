@@ -92,6 +92,13 @@
 		vertical-align:top;
 	}
 	/* 公共(组件)样式 */
+	.flex{display: flex;}
+	.align-items{align-items: center;}
+	.justify-center{justify-content: center;}
+	.justify-around{justify-content: space-around;}
+	.justify-between{justify-content: space-between;}
+	.flex-wrap{flex-wrap: wrap;}
+	.flex-column{flex-direction: column;}
 	.no_more{
 		width: 100%;
 		box-sizing: border-box;

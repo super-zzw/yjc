@@ -95,4 +95,10 @@ export default{
 	fightList:"/sms/get/more/home/groupProduct/list",  //团购列表
 	fightDetail:"/pms/get/groupRulesInfo",  //团购商品详情
 	createFightOrder:"/oms/add/groupOrder",  //创建拼团订单
+	
+	// 返利
+	getRebateInfo: "/ums/rebateinfo" ,// 获取用户返利信息
+	getMyRebateList: "/ums/get/rebateList", // 获取我的返利记录
+	withdraw: "/ums/withdraw" , //提现申请
+	getInvite: "/ums/inviteinfo" , // 获取我的邀请记录
 }
