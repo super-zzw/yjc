@@ -15,7 +15,8 @@
             "delay" : 0
         },
         "modules" : {
-            "Payment" : {}
+            "Payment" : {},
+            "Share" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -61,7 +62,13 @@
                         "UniversalLinks" : "https://www.youmall.vip/ulink/"
                     }
                 },
-                "ad" : {}
+                "ad" : {},
+                "share" : {
+                    "weixin" : {
+                        "appid" : "wx869ea006d7b72f96",
+                        "UniversalLinks" : ""
+                    }
+                }
             },
             "icons" : {
                 "android" : {

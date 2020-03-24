@@ -96,5 +96,5 @@ export default{
 	getRebateInfo: "/ums/rebateinfo" ,// 获取用户返利信息
 	getMyRebateList: "/ums/get/rebateList", // 获取我的返利记录
 	withdraw: "/ums/withdraw" , //提现申请
-	getInvite: "/ums/get/inviteList" , // 获取我的邀请记录
+	getInvite: "/ums/inviteinfo" , // 获取我的邀请记录
 }

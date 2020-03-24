@@ -14,16 +14,33 @@
 				<view class="share-header">
 					分享到
 				</view>
-				<view class="share-list">
-					<view 
-						v-for="(item, index) in shareList" :key="index"
-						class="share-item" 
-						@click="shareToFriend(item.text)"
-					>
-						<image :src="item.icon" mode=""></image>
-						<text>{{item.text}}</text>
+				<!-- #ifdef APP-PLUS || H5 -->
+					<view class="share-list">
+						<view 
+							v-for="(item, index) in shareList" :key="index"
+							class="share-item" 
+							@click="shareToFriend(item.text)"
+						>
+							<image :src="item.icon" mode=""></image>
+							<text>{{item.text}}</text>
+						</view>
 					</view>
-				</view>
+				<!-- #endif -->
+				<!-- #ifdef MP-WEIXIN -->
+					<view class="share-list">
+						<button 
+							v-for="(item, index) in shareList" :key="index"
+							class="share-item btn" 
+							@click="shareToFriend(item.text)"
+							hover-class="none"
+							:open-type="index === 0 ? 'share':''"
+							v-if="index !== 1"
+						>
+							<image :src="item.icon" mode=""></image>
+							<text>{{item.text}}</text>
+						</button>
+					</view>
+				<!-- #endif -->
 			</scroll-view>
 			<view class="bottom b-t" @click="toggleMask">取消</view>
 		</view>
@@ -181,6 +198,7 @@
 	.share-list{
 		display:flex;
 		flex-wrap: wrap;
+		
 	}
 	.share-item{
 		min-width: 33.33%;
@@ -197,6 +215,17 @@
 		text{
 			font-size: $font-base;
 			color: $font-color-base;
+		}
+	}
+	.btn{
+		outline: 0;
+		border: 0;
+		background-color: transparent;
+		image{
+			margin-bottom: 0;
+		}
+		&::after{
+			border: none;
 		}
 	}
 </style>

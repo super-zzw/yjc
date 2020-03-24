@@ -6,7 +6,7 @@
 					<text class="iconfont iconyichenggongyaoqinghaoyoushuicon-yaoqingjiluye"></text>
 				</view>
 				<view class="top-left-text flex flex-column justify-between">
-					<text class="number">108</text>
+					<text class="number">{{peoples.invite}}</text>
 					<text class="tips">已成功邀请好友数</text>
 				</view>
 			</view>
@@ -15,7 +15,7 @@
 					<text class="iconfont iconyixiadanhaoyoushuicon-yaoqingjiluye"></text>
 				</view>
 				<view class="top-left-text flex flex-column justify-between">
-					<text class="number">108</text>
+					<text class="number">{{peoples.orderNum}}</text>
 					<text class="tips">已下单好友数</text>
 				</view>
 			</view>
@@ -56,9 +56,9 @@
 				peoples:{}
 			}
 		},
-		onLoad() {
-			this.getList();
-			this.getPeople();
+		 onLoad() {
+			 this.getList();
+			 this.getPeople();
 		},
 		methods:{
 			async getList(){
@@ -66,14 +66,13 @@
 					const res = await this.$http({
 						apiName: "getMyRebateList"
 					});
-					res.data.forEach(item => {
+					res.data.list.forEach(item => {
 						item['mobile'] = item['mobile'].substring(0,3)+"****"+item['mobile'].substring(7);
 						item['createTime'] = Utils.unixToDatetime(item['createTime']).split(" ")[0];
 					})
-					this.dataList = res.data;
-					console.log(this.dataList);
+					this.dataList = res.data.list;
 				}catch(e){
-					
+					console.log(e);
 				}
 			},
 			async getPeople(){
@@ -81,7 +80,7 @@
 					const res = await this.$http({
 						apiName: "getInvite"
 					});
-					console.log(res);
+					this.peoples = res.data
 				}catch(e){
 					console.log(e)
 				}

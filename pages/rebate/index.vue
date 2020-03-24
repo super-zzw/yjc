@@ -18,7 +18,7 @@
 					</view>
 					<view class="flow-block flex flex-column align-items justify-center">
 						<view class="icon flex align-items justify-center flex">
-							<text class="iconfont iconyaoqinghaoyouicon-yaoqingfanliye"></text>
+							<text class="iconfont iconhaoyouzhucedenglu"></text>
 						</view>
 					</view>
 				</view>
@@ -40,7 +40,7 @@
 				<view class="flow-row two flex  align-items justify-between">
 					<view class="flow-block flex flex-column align-items justify-center">
 						<view class="icon flex align-items justify-center flex">
-							<text class="iconfont iconyaoqinghaoyouicon-yaoqingfanliye"></text>
+							<text class="iconfont iconquerenshouhuodefanliicon-yaoqingfanliye"></text>
 						</view>
 					</view>
 					<view class="flow-row-line flex align-items">
@@ -49,13 +49,13 @@
 					</view>
 					<view class="flow-block flex flex-column align-items justify-center">
 						<view class="icon flex align-items justify-center flex">
-							<text class="iconfont iconyaoqinghaoyouicon-yaoqingfanliye"></text>
+							<text class="iconfont icongouwucheicon-xiangqingye"></text>
 						</view>
 					</view>
 				</view>
-				<view class="flow-row flex justify-between w">
-					<text>邀请好友</text>
-					<text>好友注册/登录</text>
+				<view class="flow-row flex justify-between w h">
+					<text>确认收货得返利</text>
+					<text>好友下单购买商品</text>
 				</view>
 				
 				<text class="rule" @tap="navTo('./rule')">详细规则？</text>
@@ -64,6 +64,9 @@
 		<view class="block">
 			<view class="block-title flex align-items justify-center">
 				<text class="smPoint one"></text><text class="bigPoint"></text> <text class="t">我的返利</text><text class="bigPoint"></text><text class="smPoint two"></text>
+				<!-- #ifdef MP-WEIXIN -->
+				<text class="mpweixin" @tap="navTo('./record')">邀请记录</text>
+				<!-- #endif -->
 			</view>
 			<view class="bottom-block flex align-items justify-between">
 				<view class="bottom-block-left flex flex-column">
@@ -103,19 +106,29 @@
 <script>
 	import Share from "../../components/share.vue";
 	export default{
+		onShareAppMessage(res) {
+			console.log(res);
+			if(res.from === "button"){
+				
+			}
+			return {
+				title: "分享标题",
+				path: "/pages/index/index"
+			}
+		},
 		data(){
 			return{
 				shareList:[
 					{
-						icon: "../../static/wxhy.png",
+						icon: require( "../../static/wxhy.png"),
 						text: "微信好友"
 					},
 					{
-						icon: "../../static/pyq.png",
+						icon: require("../../static/pyq.png"),
 						text: "朋友圈"
 					},
 					{
-						icon: "../../static/fzlj.png",
+						icon: require("../../static/fzlj.png"),
 						text: "复制链接"
 					},
 				],
@@ -156,27 +169,44 @@
 			share(){
 				this.$refs.share.toggleMask();	
 			},
+			appShare(name,type){
+				uni.share({
+					provider: "weixin",
+					scene: name,
+					type:0,
+					title: `${type}分享`,
+					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
+					summary: "分享测试",
+					href: "www.baidu.com",
+					success(res) {
+						console.log(res);
+					},
+					fail(err){
+						console.log(err);
+					}
+				})
+			},
 			shareOthers(e){
 				let name = "";
 				if(e == "微信好友" ){
 					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+					
 				}else if(e == "朋友圈"){
-					name = "WXSenceTimeline"
-				}
-				// #ifdef APP-PLUS
-					uni.share({
-						provider: "weixin",
-						scene: "WXSceneSession",
-						type:1,
-						summary: "分享测试",
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
+				}else if(e == "复制链接"){
+					uni.setClipboardData({
+						data: "www.baidu.com",
 						success(res) {
 							console.log(res);
-						},
-						fail(err){
-							console.log(err);
 						}
-					})
-				// #endif
+					});
+				}
 				
 			}
 		}
@@ -235,6 +265,14 @@
 							}
 						}
 					}
+					&.h{
+						width: 558rpx;
+						text{
+							&:first-child{
+								margin-right:165rpx;
+							}
+						}
+					}
 					width: 436rpx;
 					font-size: 28rpx;
 					.text{
@@ -274,6 +312,14 @@
 			}
 			.block-title{
 				height: 42rpx;
+				position: relative;
+				.mpweixin{
+					position: absolute;
+					right: 0;
+					color: rgb(144, 147, 153);
+					font-size: 28rpx;
+					font-weight: normal;
+				}
 				.t{
 					font-size: 30rpx;
 					color: #303133;

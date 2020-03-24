@@ -61,9 +61,15 @@
 							type: "POST",
 							data:{...this.formData}
 						})
-						console.log(res);
+						uni.redirectTo({
+							url:"./successToast"
+						})
 					}catch(e){
-						console.log(e)
+						setTimeout(()=>{
+							uni.navigateTo({
+								url: "./failToast"
+							})
+						},1500)
 					}
 				}
 			}
