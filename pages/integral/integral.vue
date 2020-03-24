@@ -148,6 +148,7 @@
 					apiName:"setSigin",
 					type:"POST"
 				}).then(res => {
+					this.userInfo.integration += 5;
 					uni.showToast({
 						title:"签到成功"
 					})

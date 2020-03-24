@@ -16,7 +16,7 @@
 			<view class="apply-title"><text>手机号码</text></view>
 			<input type="number" v-model="formData.mobile" placeholder="请输入您的手机号码" placeholder-class="place"/>
 		</view>
-		<button class="subBtn" @tap="submit">提 交</button>
+		<button class="subBtn" @tap="submit" :disabled="btnDisable" :loading="btnDisable">提 交</button>
 	</view>
 </template>
 
@@ -29,12 +29,14 @@
 					withdrawAmount : "",
 					accounts: "",
 					payee: "",
-					mobile: ""
+					mobile: "",
+					btnDisable: false
 				}
 			}
 		},
 		methods:{
 			async submit(){
+				if(this.btnDisable){return};
 				const _data = [
 					{
 						data: this.formData.withdrawAmount ,
@@ -56,16 +58,27 @@
 				const jres = Utils.judgeData(_data);
 				if(jres){
 					try{
+						this.btnDisable = true;
 						const res = await this.$http({
 							apiName: "withdraw",
 							type: "POST",
 							data:{...this.formData}
 						})
-						uni.redirectTo({
-							url:"./successToast"
+						
+						uni.showToast({
+							title: "提交成功",
+							icon: "success"
 						})
+						setTimeout(() => {
+							this.btnDisable = false;
+							uni.redirectTo({
+								url:"./successToast"
+							})
+						},1500)
+						
 					}catch(e){
 						setTimeout(()=>{
+							this.btnDisable = false;
 							uni.navigateTo({
 								url: "./failToast"
 							})
