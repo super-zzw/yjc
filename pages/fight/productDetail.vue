@@ -217,7 +217,8 @@
 	export default{
 		onShareAppMessage(res) {
 			return {
-				title: "分享标题",
+				title: "辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！",
+				imageUrl: "../../static/fx.png",
 				path: "/pages/fight/productDetail?id=" + this.productId
 			}
 		},
