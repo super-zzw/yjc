@@ -72,7 +72,7 @@
 		</view>
 		
 		<!-- 超值拼团 -->
-		<view class="seckill-section m-t" v-if="fightList.length > 0">
+		<view class="seckill-section m-t" v-if="fightList.length > 0 && config.MALL_HOMW_SWAITCH.groupFlag == 1">
 			<view class="f-header2 m-t f-header3">
 				<view class="tit-box">
 					<text class="tit">超值拼团</text>
@@ -112,7 +112,7 @@
 		</view>
 		
 		<!-- 新品首发 -->
-		<view class="seckill-section m-t">
+		<view class="seckill-section m-t" v-if="config.MALL_HOMW_SWAITCH.newFlag == 1">
 			<view class="f-header2 m-t f-header3">
 				<view class="tit-box">
 					<text class="tit">新品首发</text>
@@ -138,7 +138,7 @@
 		</view>
 	
 		<!-- 精品专区 -->
-		<view class="f-header2 m-t">
+		<view class="f-header2 m-t"  v-if="config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
 			<view class="tit-box">
 				<text class="tit">精品专区</text>
 			</view>
@@ -148,7 +148,7 @@
 			</view>
 		</view>
 		
-		<view class="guess-section">
+		<view class="guess-section"  v-if="config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
 			<view 
 				@click="navToDetailPage(item.productId)"
 				v-for="(item, index) in topics123[2]" :key="index"
@@ -162,7 +162,7 @@
 			</view>
 		</view>
 		<!-- 促销专区 -->
-		<view class="f-header2 m-t">
+		<view class="f-header2 m-t" v-if="config.MALL_HOMW_SWAITCH.promotionFlag == 1">
 			<view class="tit-box">
 				<text class="tit">促销专区</text>
 			</view>
@@ -171,7 +171,7 @@
 				<text class="iconfont iconright"></text>
 			</view>
 		</view>
-		<view class="guess-section">
+		<view class="guess-section" v-if="config.MALL_HOMW_SWAITCH.promotionFlag == 1">
 			<view 
 				@click="navToDetailPage(item.productId)"
 				v-for="(item, index) in topics123[0]" :key="index"
@@ -216,7 +216,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			};
 		},
 		computed:{
-			...mapState(['hasLogin','userInfo','paddingTop'])
+			...mapState(['hasLogin','userInfo','paddingTop','config'])
 		},
 		async onShow(){
 			let that = this
@@ -227,11 +227,14 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				that.$getMsgNms()
 			},800)
 		},
-		async onLoad() {
+		async onLoad(opt) {
 			// #ifdef APP-PLUS 
-			this.$checkUpdate()
+			this.$checkUpdate();
 			// #endif
-			await this.initData()
+			await this.initData();
+			if(opt.inviteCode){
+				this.$store.commit('setICode',opt.inviteCode)
+			}
 		},
 		onHide() {
 			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){

@@ -15,9 +15,13 @@ const store = new Vuex.Store({
 		msgNms:0,  //未读消息总数
 		paddingTop:"",
 		config:null,
-		groupProductId:""
+		groupProductId:"",
+		iCode:"",
 	},
 	mutations: {
+		setICode(state,data){
+			state.iCode = data
+		},
 		setGroupProductId(state,data){
 			state.groupProductId = data
 		},

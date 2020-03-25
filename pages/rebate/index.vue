@@ -111,7 +111,7 @@
 		onShareAppMessage(res) {
 			return {
 				title: "分享标题",
-				path: "/pages/index/index"
+				path: "/pages/index/index?inviteCode=" + this.userInfo.inviteCode
 			}
 		},
 		computed:{

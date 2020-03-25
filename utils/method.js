@@ -161,14 +161,14 @@ export default{
 		uni.share({
 			provider: "weixin",
 			scene: name,
-			type:5,
+			type:5,  //5是小程序
 			title: `${type}分享`,
 			imageUrl: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/app/share-logo@3.png',
-			miniProgram:{
+			miniProgram:{  //小程序的配置信息
 				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID
 				path: path+'?id='+gid, 
-				type: 0,
-				webUrl: 'http://uniapp.dcloud.io'
+				type: 2,  //0-正式版； 1-测试版； 2-体验版
+				// webUrl: 'http://uniapp.dcloud.io'
 			},
 			success(res) { 
 				console.log(res);
