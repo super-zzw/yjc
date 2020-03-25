@@ -127,7 +127,7 @@
 						单独购买
 					</view>
 				</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn" :class="this.fightData.status == 2 ? 'unable' : ''" @tap="buy(2)" :disabled="this.fightData.status == 2">
+				<button type="primary" class=" action-btn no-border add-cart-btn" :class="(this.fightData.status == 2 || this.fightData.status == 0) ? 'unable' : ''" @tap="buy(2)" :disabled="this.fightData.status == 2 || this.fightData.status == 0">
 					<view class="action-btn1">
 						¥{{stockInfo.groupPrice}}
 					</view>

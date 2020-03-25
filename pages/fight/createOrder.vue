@@ -36,7 +36,7 @@
 		<view class="goods-section" >
 			<!-- 商品列表 -->
 			
-			<view class="fightInfo">
+			<view class="fightInfo" v-if="order">
 				<view class="fightText">
 					为您加入仅差{{order.groupTotal - order.group.length}}人的拼团，支付后即可
 					<text v-if="order.groupTotal == order.group.length">拼购</text>
