@@ -156,5 +156,26 @@ export default{
 			m:minutes,
 			s:seconds
 		};
+	},
+	wxShare({name,type,gid}){
+		uni.share({
+			provider: "weixin",
+			scene: name,
+			type:5,
+			title: `${type}分享`,
+			imageUrl: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/app/share-logo@3.png',
+			miniProgram:{
+				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID
+				path: "pages/fight/productDetail?id="+gid, 
+				type: 0,
+				webUrl: 'http://uniapp.dcloud.io'
+			},
+			success(res) { 
+				console.log(res);
+			},
+			fail(err){
+				console.log(err);
+			}
+		})
 	}
 }

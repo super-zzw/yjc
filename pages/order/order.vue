@@ -447,35 +447,27 @@
 			share(){
 				this.$refs.share.toggleMask();	
 			},
-			appShare(name,type){
-				uni.share({
-					provider: "weixin",
-					scene: name,
-					type:0,
-					title: `${type}分享`,
-					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
-					summary: "分享测试",
-					href: "www.baidu.com",
-					success(res) {
-						console.log(res);
-					},
-					fail(err){
-						console.log(err);
-					}
-				})
-			},
+
 			shareOthers(e){
 				let name = "";
 				if(e == "微信好友" ){
 					name = "WXSceneSession";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.productId
+					})
 					// #endif
 					
 				}else if(e == "朋友圈"){
 					name = "WXSenceTimeline";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.productId
+					})
 					// #endif
 				}else if(e == "复制链接"){
 					uni.setClipboardData({
