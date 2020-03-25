@@ -7,7 +7,7 @@
 				<checkbox value="1" checked/>
 			</label>
 		</checkbox-group>
-		<view @tap="fetchAddr"  class="address-section" v-if="receiveWay == 1">
+		<view @tap="fetchAddr"  class="address-section" v-if="receiveWay == 0">
 			<view class="order-content order-content2" v-if="!selectAddr">
 				<text class="iconfont icondizhi"></text>
 				<view class="cen">
@@ -107,7 +107,7 @@
 	export default {
 		data() {
 			return {
-				receiveWay:"",
+				receiveWay:1,  //1自提，0快递
 				total:0,
 				totalScore:0,
 				desc: '', //备注
@@ -138,7 +138,7 @@
 				if(_i){
 					this.receiveWay = 1;
 				}else{
-					this.receiveWay = -1
+					this.receiveWay = 0
 				}
 			},
 			fetchAddr(){
