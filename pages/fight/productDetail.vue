@@ -225,7 +225,8 @@
 				exchangePoints:0,
 				isScore:false,  //是否为积分兑换
 				stockInfo:{},// 规格界面详情
-				productId:"",  //商品id
+				groupId:"",  //团购id，即url里面的id
+				productId:"",  //商品id，在请求商品数据里面返回
 				imgList: [],  //轮播图列表
 				title:"",
 				minPrice:0,  //拼团价
@@ -271,7 +272,7 @@
 		},
 		async onLoad(options){
 			if(options.id){
-				this.productId = options.id
+				this.groupId = options.id
 				this.initData()
 			}
 		},
@@ -312,7 +313,7 @@
 					imageUrl: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/app/share-logo@3.png',
 					miniProgram:{
 						id: 'gh_abcdefg',
-						path: "pages/fight/productDetail?id="+this.productId,
+						path: "pages/fight/productDetail?id="+this.groupId,
 						type: 0,
 						webUrl: 'http://uniapp.dcloud.io'
 					},
@@ -376,8 +377,9 @@
 			async getDetail(){
 				await this.$http({
 					apiName:"fightDetail",
-					data:{groupRulesId:this.productId}
+					data:{groupRulesId:this.groupId}
 				}).then(res => {
+					this.productId = res.data.product.id;
 					this.imgList = JSON.parse(res.data.product.albumPics)
 					this.title = res.data.product.title
 					// this.minPrice = res.data.product.minPrice
@@ -533,6 +535,7 @@
 					this.setOrder({
 						rulesId:this.fightData.id,
 						productId:this.productId,
+						groupId:this.groupId,
 						number:this.number,
 						title:this.title,
 						picUrl:this.picUrl,
@@ -542,7 +545,7 @@
 						group:this.fightData.group,  //已拼团信息
 						groupTotal:this.fightData.minMember,  //拼团总人数
 					})
-					this.setGroupProductId(this.productId);
+					this.setGroupProductId(this.groupId);
 					if(type == 1){  //普通购买
 						uni.navigateTo({
 							url: `/pages/order/createOrder`
@@ -558,7 +561,7 @@
 			},
 			//未登录跳转
 			toLogin(){
-				this.setAfterLoginUrl('/pages/product/product?id=' + this.productId);
+				this.setAfterLoginUrl('/pages/fight/productDetail?id=' + this.groupId);
 				// #ifdef MP-WEIXIN
 				uni.navigateTo({
 					url: '/pages/wxlogin/index'

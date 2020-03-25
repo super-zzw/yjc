@@ -109,8 +109,11 @@
 				let seconds = this.seconds
 				let [day, hour, minute, second] = [0, 0, 0, 0]
 				if (seconds > 0) {
-					day = Math.floor(seconds / (60 * 60 * 24))
-					hour = Math.floor(seconds / (60 * 60)) - (day * 24)
+					// day = Math.floor(seconds / (60 * 60 * 24))
+					// hour = Math.floor(seconds / (60 * 60)) - (day * 24)
+					//需要把天计算到小时上
+					day = 0;
+					hour = Math.floor(seconds / (60 * 60))
 					minute = Math.floor(seconds / 60) - (day * 24 * 60) - (hour * 60)
 					second = Math.floor(seconds) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
 				} else {

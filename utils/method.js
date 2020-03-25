@@ -148,10 +148,9 @@ export default{
 		})
 	},
 	transToDate(data) {
-		var s;
-		var hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-		var minutes = parseInt((data % (1000 * 60 * 60)) / (1000 * 60));
-		var seconds = parseInt((data % (1000 * 60)) / 1000);
+		var hours = parseInt(data / (60 * 60 * 1000));  //小时数
+		var minutes = parseInt((data - hours * 60 * 60 * 1000) / (60 * 1000));  //剩余分钟
+		var seconds = parseInt((data - hours * 60 * 60 * 1000 - minutes * 60 * 1000) / 1000);  //剩余秒
 		return {
 			h:hours,
 			m:minutes,
