@@ -191,7 +191,15 @@
 						addressId:this.selectAddr.id,
 						num:this.order.number,
 						productId:this.order.productId,
+						// #ifdef APP-PLUS
 						sourceType:'1',
+						// #endif
+						// #ifdef H5
+						sourceType:'2',
+						// #endif
+						// #ifdef MP-WEIXIN
+						sourceType:'3',
+						// #endif
 						skuJson:JSON.stringify(_skuJson),
 						remark:this.desc
 					}
@@ -209,7 +217,15 @@
 					type:"POST",
 					data:{
 						addressId:this.selectAddr.id,
+						// #ifdef APP-PLUS
 						sourceType:'1',
+						// #endif
+						// #ifdef H5
+						sourceType:'2',
+						// #endif
+						// #ifdef MP-WEIXIN
+						sourceType:'3',
+						// #endif
 					}
 				}).then(res => {
 					uni.redirectTo({
