@@ -117,7 +117,7 @@
 						</view>
 						<!-- 拼团订单 -->
 						<view class="action-box b-t" v-else>
-							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share">邀请好友</button>
+							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button>
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
 							<button class="action-btn recom" v-if="item.status == 2" @tap="afterSale(item.id)">申请售后</button>
@@ -147,6 +147,9 @@
 </template> 
 
 <script>
+	import {
+	   mapState
+	} from 'vuex';
 	import empty from "@/components/empty";
 	import utils from "@/utils/method.js"
 	import Share from "../../components/share.vue";
@@ -155,10 +158,14 @@
 			empty,
 			Share
 		},
+		computed:{
+			...mapState(['userInfo'])
+		},
 		data() {
 			return {
 				// payType,只有4是到付
 				currentTime:"",  //服务器当前时间戳
+				id: "",
 				tabCurrentIndex: 0,
 				// -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部
 				navList: [{
@@ -444,8 +451,9 @@
 				});
 			},
 			//分享
-			share(){
+			share(id){
 				this.$refs.share.toggleMask();	
+				this.id = id;
 			},
 
 			shareOthers(e){
@@ -456,7 +464,7 @@
 					utils.wxShare({
 						name,
 						type: e,
-						gid: this.productId
+						gid: this.id
 					})
 					// #endif
 					
@@ -466,16 +474,15 @@
 					utils.wxShare({
 						name,
 						type: e,
-						gid: this.productId
+						gid: this.id
 					})
 					// #endif
 				}else if(e == "复制链接"){
-					uni.setClipboardData({
-						data: "www.baidu.com",
-						success(res) {
-							console.log(res);
-						}
-					});
+					const code = this.userInfo.inviteCode;
+					utils.setClip({
+						code,
+						id:this.id
+					})
 				}
 				
 			}
