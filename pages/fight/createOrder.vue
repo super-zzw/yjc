@@ -33,7 +33,7 @@
 
 			<image class="a-bg" src="../../static/orderLine.png"></image>
 		</view>
-		<view class="getSelf">
+		<view class="getSelf" v-else>
 			<view class="gsTitle">
 				自提地址：
 			</view>

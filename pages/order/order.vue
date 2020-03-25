@@ -57,7 +57,7 @@
 						</view>
 						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember">
 							<image src="../../static/ptz.png" mode="widthFix" class="igImg"></image>
-							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep}}结束</text>
+							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
 						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x @tap="toDetail(item.id)">
 							<view
@@ -117,6 +117,8 @@
 						</view>
 						<!-- 拼团订单 -->
 						<view class="action-box b-t" v-else>
+							<button class="action-btn" v-if="item.status == 0 && item.payType != 4" @click="cancelOrder(index,item.id)">取消订单</button>
+							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>
 							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button>
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
@@ -243,8 +245,8 @@
 			dealTime(val){
 				return utils.unixToDatetime(val) || ""
 			},
-			dealTimep(val){
-				let _str = utils.transToDate(val);
+			dealTimep(val,currentTime){
+				let _str = utils.transToDate(val - currentTime);
 				return _str.h + "小时" + _str.m + "分钟"
 			}
 		},
@@ -284,9 +286,9 @@
 				
 			},
 			//立即支付
-			toPay(total,orderid){
+			toPay(total,orderid,group){
 				uni.navigateTo({
-					url: `/pages/money/pay?money=${total}&orderid=${orderid}`
+					url: `/pages/money/pay?money=${total}&orderid=${orderid}&group={group}`
 				})
 			},
 			//售后

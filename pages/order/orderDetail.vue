@@ -6,7 +6,7 @@
 					<image class="swb1-img" src="/static/location.png" mode=""></image>
 				</view>
 			</view>
-			<view class="swb1-right">
+			<view class="swb1-right" v-if="order.receiverWay != 1">
 				<view class="swb1-right-top">
 					<text class="swb1-rit1">{{order.receiverName}}</text>
 					<text class="swb1-rit2">{{order.receiverPhone}}</text>
@@ -18,6 +18,14 @@
 					<text class="swb1-right-boo-item">{{order.receiverDetailAddress}}</text>
 				</view>
 			</view>
+			<view class="swb1-right" v-else>
+				<view class="swb1-right-top swb1-right-top2">
+					自提地址：
+				</view>
+				<view class="swb1-right-boo">
+					{{config.MALL_MENTION_ADDRESS}}
+				</view>
+			</view>
 		</view>
 		<view class="swrap-group">
 			<view class="sgp1">
@@ -25,7 +33,7 @@
 				<image class="img2" v-if="groupStatus == 2 || groupStatus == 4" src="../../static/ptcg.png"  mode="widthFix"></image>
 				<image class="img3" v-if="groupStatus == 3" src="../../static/ptwcg.png"  mode="widthFix"></image>
 				<text class="text" v-if="groupStatus == 1">
-					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules.endTime | dealTimep}}结束
+					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules.endTime | dealTimep(currentTime)}}结束
 				</text>
 			</view>
 			<view class="ptImgs">
@@ -79,6 +87,8 @@
 				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
 			</view>
 			<view class="swb2-foot" v-else>
+				<view class="swb2f-btn1" v-if="order.status == 0 && order.payType != 4" @click="cancelOrder">取消订单</view>
+				<view class="swb2f-btn1 recom" v-if="order.status == 0 && order.payType != 4" @tap="toPay(1)">立即支付</view>
 				<view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)" @tap="share">邀请好友</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="getGood">确认收货</view>
@@ -161,7 +171,7 @@ export default{
 		}
 	},
 	computed:{
-		...mapState(['userInfo'])
+		...mapState(['userInfo','config'])
 	},
 	methods:{
 		toDelivery(id){
@@ -169,9 +179,9 @@ export default{
 				url:`/pages/order/delivery?id=${this.order.id}`
 			})
 		},
-		toPay(){
+		toPay(group){
 			uni.redirectTo({
-				url: `/pages/money/pay?money=${this.order.payAmount}&orderid=${this.orderId}`
+				url: `/pages/money/pay?money=${this.order.payAmount}&orderid=${this.orderId}&group={group}`
 			})
 		},
 		callService(){
@@ -326,8 +336,8 @@ export default{
 		dealTime(val){
 			return utils.unixToDatetime(val) || ""
 		},
-		dealTimep(val){
-			let _str = utils.transToDate(val);
+		dealTimep(val,currentTime){
+			let _str = utils.transToDate(val - currentTime);
 			return _str.h + "小时" + _str.m + "分钟"
 		}
 	}
@@ -366,6 +376,10 @@ export default{
 					.swb1-rit1{
 						margin-right: 42rpx;
 					}
+				}
+				.swb1-right-top2{
+					color: #F23D3D;
+					font-weight: bold;
 				}
 				.swb1-right-boo{
 					.swb1-right-boo-item{
