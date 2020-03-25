@@ -232,6 +232,7 @@
 				exchangePoints:0,
 				isScore:false,  //是否为积分兑换
 				stockInfo:{},// 规格界面详情
+				groupId:"",   //拼团id
 				productId:"",  //商品id
 				imgList: [],  //轮播图列表
 				title:"",
@@ -278,7 +279,7 @@
 		},
 		async onLoad(options){
 			if(options.id){
-				this.productId = options.id
+				this.groupId = options.id
 				this.initData()
 			}
 		},
@@ -295,7 +296,7 @@
 					utils.wxShare({
 						name,
 						type: e,
-						gid: this.productId
+						gid: this.groupId
 					})
 					// #endif
 					
@@ -305,7 +306,7 @@
 					utils.wxShare({
 						name,
 						type: e,
-						gid: this.productId,
+						gid: this.groupId,
 						
 					})
 					// #endif
@@ -313,7 +314,7 @@
 					const code = this.userInfo.inviteCode;
 					utils.setClip({
 						code,
-						id:this.productId
+						id:this.groupId
 					})
 				}
 				
@@ -368,8 +369,9 @@
 			async getDetail(){
 				await this.$http({
 					apiName:"fightDetail",
-					data:{groupRulesId:this.productId}
+					data:{groupRulesId:this.groupId}
 				}).then(res => {
+					this.productId = res.data.product.id;
 					this.imgList = JSON.parse(res.data.product.albumPics)
 					this.title = res.data.product.title
 					// this.minPrice = res.data.product.minPrice
@@ -510,7 +512,7 @@
 			//购买
 			buy(type){
 				if(!this.hasLogin){
-					this.setAfterLoginUrl(`/pages/product/product?id=${this.productId}`)
+					this.setAfterLoginUrl(`/pages/product/product?id=${this.groupId}`)
 					// #ifdef MP-WEIXIN
 					uni.navigateTo({
 						url: '/pages/wxlogin/index'
@@ -528,6 +530,7 @@
 					}
 					this.setOrder({
 						rulesId:this.fightData.id,
+						groupId:this.groupId,
 						productId:this.productId,
 						number:this.number,
 						title:this.title,
@@ -538,7 +541,7 @@
 						group:this.fightData.group,  //已拼团信息
 						groupTotal:this.fightData.minMember,  //拼团总人数
 					})
-					this.setGroupProductId(this.productId);
+					this.setGroupProductId(this.groupId);
 					if(type == 1){  //普通购买
 						uni.navigateTo({
 							url: `/pages/order/createOrder`
