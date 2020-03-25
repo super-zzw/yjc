@@ -161,6 +161,12 @@
 		computed:{
 			...mapState(['userInfo'])
 		},
+		onShareAppMessage(res) {
+			return {
+				title: "分享标题",
+				path: "/pages/fight/productDetail?id=" + this.id
+			}
+		},
 		data() {
 			return {
 				// payType,只有4是到付

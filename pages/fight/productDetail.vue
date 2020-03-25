@@ -215,6 +215,12 @@
 	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	import Share from "../../components/share.vue";
 	export default{
+		onShareAppMessage(res) {
+			return {
+				title: "分享标题",
+				path: "/pages/fight/productDetail?id=" + this.productId
+			}
+		},
 		components: {
 			uniNumberBox,
 			uniCountdown,
