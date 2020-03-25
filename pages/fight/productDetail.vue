@@ -307,16 +307,22 @@
 				uni.share({
 					provider: "weixin",
 					scene: name,
-					type:0,
+					type:5,
 					title: `${type}分享`,
-					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
-					summary: "分享测试",
-					href: "www.baidu.com",
+					imageUrl: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/app/share-logo@3.png',
+					miniProgram:{
+						id: 'gh_abcdefg',
+						path: "pages/fight/productDetail?id="+this.productId,
+						type: 0,
+						webUrl: 'http://uniapp.dcloud.io'
+					},
 					success(res) {
 						console.log(res);
+						alert(res);
 					},
 					fail(err){
 						console.log(err);
+						alert(err);
 					}
 				})
 			},

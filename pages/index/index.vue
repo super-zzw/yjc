@@ -266,6 +266,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 							}
 						}
 					})
+					console.log(this.fightList);
 				}).catch(_ => {});
 				this.creset = true;
 			},
