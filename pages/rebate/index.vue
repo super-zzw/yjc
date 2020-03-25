@@ -94,17 +94,19 @@
 		</view>
 		<button class="invite" @tap="share">立即邀请</button>
 		<!-- 分享 -->
-		<share 
+		<Share 
 			ref="share" 
 			:contentHeight="400"
 			:shareList="shareList"
 			@invite="shareOthers"
-		></share>
+		></Share>
 	</view>
 </template>
 
 <script>
 	import Share from "../../components/share.vue";
+	import utils from '@/utils/method.js'
+	import {mapState } from 'vuex';
 	export default{
 		onShareAppMessage(res) {
 			console.log(res);
@@ -115,6 +117,9 @@
 				title: "分享标题",
 				path: "/pages/index/index"
 			}
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		data(){
 			return{
@@ -169,7 +174,7 @@
 			share(){
 				this.$refs.share.toggleMask();	
 			},
-			appShare(name,type){
+			appShare(name,type,code){
 				uni.share({
 					provider: "weixin",
 					scene: name,
@@ -177,7 +182,7 @@
 					title: `${type}分享`,
 					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
 					summary: "分享测试",
-					href: "www.baidu.com",
+					href: `http://t.web.youmall.vip/register.html?inviteCode=${code}&id=${0}`,
 					success(res) {
 						console.log(res);
 					},
@@ -188,24 +193,24 @@
 			},
 			shareOthers(e){
 				let name = "";
+				const code = this.userInfo.inviteCode;
 				if(e == "微信好友" ){
 					name = "WXSceneSession";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					this.appShare(name,e,code);
 					// #endif
 					
 				}else if(e == "朋友圈"){
 					name = "WXSenceTimeline";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					this.appShare(name,e,code);
 					// #endif
 				}else if(e == "复制链接"){
-					uni.setClipboardData({
-						data: "www.baidu.com",
-						success(res) {
-							console.log(res);
-						}
-					});
+					
+					utils.setClip({
+						code,
+						id:1
+					})
 				}
 				
 			}

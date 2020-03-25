@@ -286,7 +286,7 @@ export default{
 				utils.wxShare({
 					name,
 					type: e,
-					gid: this.productId
+					gid: this.grouponRules.id
 				})
 				// #endif
 				
@@ -296,17 +296,16 @@ export default{
 				utils.wxShare({
 					name,
 					type: e,
-					gid: this.productId
+					gid: this.grouponRules.id
 				})
 				// #endif
 			}else if(e == "复制链接"){
-				uni.setClipboardData({
-					data: "www.baidu.com",
-					success(res) {
-						console.log(res);
-					}
-				});
-			}
+				const code = this.userInfo.inviteCode;
+				utils.setClip({
+					code,
+					id: this.grouponRules.id
+				})
+			} 
 			
 		}
 	},
