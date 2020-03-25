@@ -31,7 +31,7 @@
 					</label>
 				</view>
 				<!-- #endif -->
-				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 4">
+				<view class="type-item b-b" @click="changePayType(3)"  v-if="item.payType === 4 && group != 1">
 					<text class="icon iconfont iconhuodaofukuan"></text>
 					<view class="con">
 						<text class="tit">货到付款</text>
