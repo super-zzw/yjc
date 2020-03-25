@@ -285,13 +285,21 @@
 				if(e == "微信好友" ){
 					name = "WXSceneSession";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.productId
+					})
 					// #endif
 					
 				}else if(e == "朋友圈"){
 					name = "WXSenceTimeline";
 					// #ifdef APP-PLUS
-					this.appShare(name,e);
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.productId
+					})
 					// #endif
 				}else if(e == "复制链接"){
 					uni.setClipboardData({
@@ -302,29 +310,6 @@
 					});
 				}
 				
-			},
-			appShare(name,type){
-				uni.share({
-					provider: "weixin",
-					scene: name,
-					type:5,
-					title: `${type}分享`,
-					imageUrl: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/app/share-logo@3.png',
-					miniProgram:{
-						id: 'gh_abcdefg',
-						path: "pages/fight/productDetail?id="+this.productId,
-						type: 0,
-						webUrl: 'http://uniapp.dcloud.io'
-					},
-					success(res) {
-						console.log(res);
-						alert(res);
-					},
-					fail(err){
-						console.log(err);
-						alert(err);
-					}
-				})
 			},
 			timeUp(){
 				console.log("计时结束");
