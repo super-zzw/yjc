@@ -180,7 +180,7 @@ export default{
 		},
 		toPay(group){
 			uni.redirectTo({
-				url: `/pages/money/pay?money=${this.order.payAmount}&orderid=${this.orderId}&group={group}`
+				url: `/pages/money/pay?money=${this.order.payAmount}&orderid=${this.orderId}&group=${group}`
 			})
 		},
 		callService(){

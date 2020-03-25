@@ -287,7 +287,7 @@
 			//立即支付
 			toPay(total,orderid,group){
 				uni.navigateTo({
-					url: `/pages/money/pay?money=${total}&orderid=${orderid}&group={group}`
+					url: `/pages/money/pay?money=${total}&orderid=${orderid}&group=${group}`
 				})
 			},
 			//售后

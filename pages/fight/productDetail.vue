@@ -521,6 +521,10 @@
 					})
 					// #endif
 				}else{
+					let _price = this.stockInfo.promotionPrice;
+					if(type == 2){
+						_price = this.stockInfo.groupPrice;
+					}
 					this.setOrder({
 						rulesId:this.fightData.id,
 						productId:this.productId,
@@ -528,7 +532,7 @@
 						title:this.title,
 						picUrl:this.picUrl,
 						specSelected:this.specSelected,
-						price:this.stockInfo.promotionPrice,
+						price:_price,
 						exchangePoints:this.exchangePoints || 0,
 						group:this.fightData.group,  //已拼团信息
 						groupTotal:this.fightData.minMember,  //拼团总人数
