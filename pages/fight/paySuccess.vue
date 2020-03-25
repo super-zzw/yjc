@@ -43,6 +43,12 @@
 		components:{
 			Share
 		},
+		onShareAppMessage(res) {
+			return {
+				title: "分享标题",
+				path: "/pages/fight/productDetail?id=" + this.fightData.id
+			}
+		},
 		data() {
 			return {
 				isDh:0,

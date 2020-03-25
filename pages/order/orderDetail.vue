@@ -128,6 +128,12 @@ export default{
 	components:{
 		Share
 	},
+	onShareAppMessage(res) {
+		return {
+			title: "分享标题",
+			path: "/pages/fight/productDetail?id=" + this.grouponRules.id
+		}
+	},
 	data(){
 		return {
 			orderId:"",
