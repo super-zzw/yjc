@@ -227,11 +227,14 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				that.$getMsgNms()
 			},800)
 		},
-		async onLoad() {
+		async onLoad(opt) {
 			// #ifdef APP-PLUS 
-			this.$checkUpdate()
+			this.$checkUpdate();
 			// #endif
-			await this.initData()
+			await this.initData();
+			if(opt.inviteCode){
+				this.$store.commit('setICode',opt.inviteCode)
+			}
 		},
 		onHide() {
 			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){

@@ -109,13 +109,9 @@
 	import {mapState } from 'vuex';
 	export default{
 		onShareAppMessage(res) {
-			console.log(res);
-			if(res.from === "button"){
-				
-			}
 			return {
 				title: "分享标题",
-				path: "/pages/index/index"
+				path: "/pages/index/index?inviteCode=" + this.userInfo.inviteCode
 			}
 		},
 		computed:{
