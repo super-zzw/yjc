@@ -110,8 +110,8 @@
 	export default{
 		onShareAppMessage(res) {
 			return {
-				title: "辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！",
-				imageUrl: "../../static/fx.png",
+				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 				path: "/pages/index/index?inviteCode=" + this.userInfo.inviteCode
 			}
 		},

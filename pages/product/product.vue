@@ -45,7 +45,7 @@
 					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
 						{{sItem.value}}
 					</text>
-					<!-- <text class="selected-text">数量:{{number}}</text> -->
+					<text class="tit">购买数量:{{number}}</text>
 				</view>
 				<text class="iconfont iconright"></text>
 			</view>
@@ -149,7 +149,7 @@
 						</text>
 					</view>
 				</view>
-				<!-- <view class="attr-list">
+				<view class="attr-list">
 					<text>数量</text>
 					<view class="item-list">
 						<uni-number-box
@@ -162,10 +162,16 @@
 							@eventChange="numberChange"
 						></uni-number-box>
 					</view>
-				</view> -->
+				</view>
 				<button class="btn" @click="toggleSpec">完成</button>
 			</view>
 		</view>
+		<share
+			ref="share" 
+			:contentHeight="400"
+			:shareList="shareList"
+			@invite="shareOthers"
+		></share>
 	</view>
 </template>
 
@@ -175,9 +181,18 @@
     } from 'vuex';
 	import utils from '@/utils/method.js'
 	import uniNumberBox from '@/components/uni-number-box.vue'
+	import Share from "../../components/share.vue";
 	export default{
 		components: {
-			uniNumberBox
+			uniNumberBox,
+			Share
+		},
+		onShareAppMessage(res) {
+			return {
+				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
+				path: "/pages/fight/productDetail?id=" + this.productId
+			}
 		},
 		data() {
 			return {
@@ -207,6 +222,20 @@
 				collectionFlag:false,
 				cartNms:0,  //购物车中的数量
 				obj:{},// 要提交的规则
+				shareList:[
+					{
+						icon: require( "../../static/wxhy.png"),
+						text: "微信好友"
+					},
+					{
+						icon: require("../../static/pyq.png"),
+						text: "朋友圈"
+					},
+					{
+						icon: require("../../static/fzlj.png"),
+						text: "复制链接"
+					},
+				],
 			};
 		},
 		async onLoad(options){
@@ -223,6 +252,37 @@
 		},
 		methods:{
 			...mapMutations(['setAfterLoginUrl','setOrder']),
+			shareOthers(e){
+				let name = "";
+				if(e == "微信好友" ){
+					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.groupId
+					})
+					// #endif
+					
+				}else if(e == "朋友圈"){
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					utils.wxShare({
+						name,
+						type: e,
+						gid: this.groupId,
+						
+					})
+					// #endif
+				}else if(e == "复制链接"){
+					const code = this.userInfo.inviteCode;
+					utils.setClip({
+						code,
+						id:this.groupId
+					})
+				}
+				
+			},
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -481,7 +541,8 @@
 			
 			if (index === 0) {
 				//弹出分享
-				console.log("分享")
+				this.$refs.share.toggleMask();	
+				// console.log("分享")
 			}
 		}
 	}
@@ -808,7 +869,7 @@
 			padding: 20rpx 0 0;
 			display: flex;
 			flex-wrap: wrap;
-			/deep/ .uni-numbox.step{
+			/deep/ .uni-numbox{
 				position: unset;
 				border-radius: 8rpx;
 				border: 2rpx solid #F5F5F5;

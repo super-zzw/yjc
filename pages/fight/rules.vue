@@ -26,28 +26,37 @@
 </template>
 
 <script>
+	import {
+	   mapState
+	} from 'vuex';
 	export default{
 		data(){
 			return{
-				data:[
+				data:[]
+			}
+		},
+		computed:{
+			...mapState(['config'])
+		},
+		onLoad() {
+			this.data = [
 					{
 						text:"进入对应拼团商品页面，点击“我要参团”按钮",
-						img_url:"https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/r1.png"
+						img_url:this.config.MALL_IMG_DEFAULT.groupR1
 					},
 					{
 						text:"提交并成功支付订单",
-						img_url:"https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/r2.png"
+						img_url:this.config.MALL_IMG_DEFAULT.groupR2
 					},
 					{
 						text:"点击“邀请好友参团”按钮并成功分享",
-						img_url:"https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/r3.png"
+						img_url:this.config.MALL_IMG_DEFAULT.groupR3
 					},
 					{
 						text:"在开团有效时间内，凑齐人数即可拼团成功；未凑齐人数则拼团失败，平台将原路退款到付款账户",
-						img_url:"https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/r4.png"
+						img_url:this.config.MALL_IMG_DEFAULT.groupR4
 					}
 				]
-			}
 		}
 	}
 </script>

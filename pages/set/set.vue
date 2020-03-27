@@ -10,7 +10,7 @@
 			<text class="cell-more iconfont iconright"></text>
 		</view> -->
 		<view class="list-cell b-b" @click="toAbout()" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">关于辰悠优品汇</text>
+			<text class="cell-tit">关于IM商城</text>
 			<text class="cell-more iconfont iconright"></text>
 		</view>
 		<view class="list-cell" @tap="updateV">

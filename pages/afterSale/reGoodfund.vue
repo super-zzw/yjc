@@ -43,7 +43,7 @@
 							<view class="soril-info2">
 								<text class="soril-info-text1 nm-font">￥{{item.payAmount}}</text>
 								<text class="soril-info-text2">
-									<text :key="sindex" v-for="(sitem,sindex) in JSON.parse(item.specifications)">{{sitem.vlaue}}</text>
+									<text :key="sindex" v-for="(sval,skey,sindex) of item.specificationsMap">{{skey}}:{{sval}};</text>
 								</text>
 							</view>
 						</view>
@@ -245,6 +245,8 @@ export default{
 			.sori-right{
 				color: #909399;
 				font-size: 26rpx;
+				min-width: 60rpx;
+				text-align: right;
 			}
 		}
 		.sor-item-cont.active{

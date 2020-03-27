@@ -59,7 +59,7 @@
 						<view class="item-right">
 							<text class="clamp title"  @tap="navToDetailPage(item.productId)">{{item.title}}</text>
 							<text class="attr"  @tap="navToDetailPage(item.productId)">
-								<text v-for="(aitem,akey,aindex) of JSON.parse(item.specifications)" :key="aindex">{{akey}}：{{aitem}};</text>   
+								<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>   
 							</text>
 							<view class="item-right-box">
 								<uni-number-box
@@ -180,7 +180,6 @@
 			//处理数据
 			loadData(list){
 				let cartList = list.map(item => {
-					// item["standard"] = JSON.parse(item.specifications.replace(/'/g,'"'))
 					return item;
 				});
 				this.cartList = cartList;

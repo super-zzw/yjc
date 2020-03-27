@@ -31,7 +31,7 @@
 							<text class="state">
 								<!-- -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部 -->
 								<!-- 发货之后不可取消订单，只有联系售后 -->
-								<text v-if="item.orderType == 2">
+								<text v-if="item.orderType == 2 && item.status != 5">
 									<text v-if="currentTime < item.endGroupTime && item.groupMember < item.minMember">待成团</text>
 									<text v-else-if="item.groupMember >= item.minMember">已成团，待发货</text>
 									<text v-else>未成团</text>
@@ -55,7 +55,7 @@
 								@click="deleteOrder(index,item.id)"
 							></text>
 						</view>
-						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember">
+						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember && item.status != 5">
 							<image src="../../static/ptz.png" mode="widthFix" class="igImg"></image>
 							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
@@ -77,7 +77,7 @@
 							<view class="right">
 								<text class="title clamp">{{goodsItem.productName}}</text>
 								<text class="attr-box">
-									<text v-for="(aitem,akey,aindex) of JSON.parse(goodsItem.specifications)" :key="aindex">{{akey}}：{{aitem}};</text>
+									<text v-for="(aitem,akey,aindex) of goodsItem.specificationsMap" :key="aindex">{{akey}}：{{aitem}};</text>
 									<text>数量：{{goodsItem.productQuantity}}</text>
 								</text>
 								<text class="price" v-if="item.payType != 3">{{goodsItem.promotionPrice}}</text>
@@ -94,11 +94,11 @@
 							<text class="price1" v-if="item.payType == 3">消耗{{item.payAmount}}积分</text>
 							<text class="price1" v-else>￥{{item.payAmount}}</text>
 						</view>
-						<view class="action-box b-t" v-if="item.status == 1 && currentTime >= item.endGroupTime && item.groupMember >= item.minMember">
-							<!-- <button class="action-btn" @click="cancelOrder(index,item.id)">取消订单</button> -->
-							<text v-if="item.payType == 3" class="b-t2">积分兑换订单</text>
-							<text v-if="item.payType == 4" class="b-t2">货到付款订单</text>
-							<button class="action-btn recom" @tap="afterSale(item.id)" v-if="item.payType != 3 && item.payType != 4">申请售后</button>
+						<view class="action-box b-t" v-if="item.payType == 3">
+							<text class="b-t2">积分兑换订单</text>
+						</view>
+						<view class="action-box b-t" v-if="item.payType == 4">
+							<text class="b-t2">货到付款订单</text>
 						</view>
 						<!-- 非拼团订单 -->
 						<view class="action-box b-t" v-if="item.orderType != 2">
@@ -112,7 +112,7 @@
 							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
 							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn recom" @tap="callService">联系客服</button>
-							<button class="action-btn" v-if="item.status == 5 && item.payType != 4" @click="toDelivery(item.id)">查看物流</button>
+							<!-- <button class="action-btn" v-if="item.status == 5 && item.payType != 4" @click="toDelivery(item.id)">查看物流</button> -->
 							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5 && item.payType != 4">售后进度</button>
 						</view>
 						<!-- 拼团订单 -->
@@ -126,7 +126,7 @@
 							<button class="action-btn" v-if="item.status == 3" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
 							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
-							<button class="action-btn" v-if="item.status == 5" @click="toDelivery(item.id)">查看物流</button>
+							<!-- <button class="action-btn" v-if="item.status == 5" @click="toDelivery(item.id)">查看物流</button> -->
 							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5">售后进度</button>
 							<button class="action-btn recom" @tap="callService">联系客服</button>
 						</view>
@@ -165,8 +165,8 @@
 		},
 		onShareAppMessage(res) {
 			return {
-				title: "辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！",
-				imageUrl: "../../static/fx.png",
+				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 				path: "/pages/fight/productDetail?id=" + this.id
 			}
 		},

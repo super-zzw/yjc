@@ -204,7 +204,7 @@
 			//根据分类id查询列表
 			async getCateList(){
 				await this.$http({
-					apiName:"getCateList",
+					apiName:"getCateList2",
 					data:{
 						categoryId:this.categoryId,
 						page:this.page,

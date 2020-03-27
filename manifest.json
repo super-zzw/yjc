@@ -1,9 +1,9 @@
 {
-    "name" : "辰悠优品汇",
+    "name" : "IM商城",
     "appid" : "__UNI__5D0627C",
     "description" : "",
-    "versionName" : "1.2.0",
-    "versionCode" : 120,
+    "versionName" : "1.2.1",
+    "versionCode" : 121,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -117,7 +117,7 @@
         }
     },
     "h5" : {
-        "title" : "辰悠优汇品",
+        "title" : "IM商城",
         "domain" : "prd.gzcyou.com",
         "router" : {
             "mode" : "history"

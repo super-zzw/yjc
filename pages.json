@@ -11,7 +11,7 @@
 						"splitLine": {
 							"color":"#DBDBDB"
 						},
-						"titleText":"辰悠优品汇",
+						"titleText":"IM商城",
 						"titleSize":"16",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
@@ -959,7 +959,7 @@
 		{
 		    "path" : "pages/public/about",
 		    "style": {
-		    	"navigationBarTitleText": "关于辰悠优品汇",
+		    	"navigationBarTitleText": "关于IM商城",
 		    	"app-plus":{
 		    		"bounce": "none",
 		    		"titleNView":{
@@ -1110,7 +1110,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "辰悠优品汇",
+		"navigationBarTitleText": "IM商城",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},

@@ -78,7 +78,7 @@
 			async getPeople(){
 				try{
 					const res = await this.$http({
-						apiName: "getInvite"
+						apiName: "getInviteInfo"
 					});
 					this.peoples = res.data
 				}catch(e){

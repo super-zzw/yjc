@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="apply-row flex flex-column justify-center">
 			<view class="apply-title"><text>提现金额</text></view>
-			<input type="number" v-model="formData.withdrawAmount" placeholder="请输入提现金额(n元起提)" placeholder-class="place"/>
+			<input type="number" v-model="formData.withdrawAmount" placeholder="请输入提现金额" placeholder-class="place"/>
 		</view>
 		<view class="apply-row flex flex-column justify-center">
 			<view class="apply-title"><text>支付宝账号</text></view>

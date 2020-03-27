@@ -162,13 +162,13 @@ export default{
 			provider: "weixin",
 			scene: name,
 			type:5,  //5是小程序
-			title: `辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！`,
+			title: `IM商城汇聚了海内外优质商品，快来嗨购吧！`,
 			imageUrl: 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/share.png',
 			miniProgram:{  //小程序的配置信息
 				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID
 				path: path+'?id='+gid, 
 				type: 2,  //0-正式版； 1-测试版； 2-体验版
-				// webUrl: 'http://uniapp.dcloud.io'
+				webUrl: 'http://t.web.youmall.vip'
 			},
 			success(res) { 
 				console.log(res);

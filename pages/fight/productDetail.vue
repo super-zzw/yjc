@@ -127,7 +127,7 @@
 						单独购买
 					</view>
 				</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn" :class="this.fightData.status == 2 ? 'unable' : ''" @tap="buy(2)" :disabled="this.fightData.status == 2">
+				<button type="primary" class=" action-btn no-border add-cart-btn" :class="(fightData.status == 2 || fightData.status == 0) ? 'unable' : ''" @tap="buy(2)" :disabled="(fightData.status == 2 || fightData.status == 0)">
 					<view class="action-btn1">
 						¥{{stockInfo.groupPrice}}
 					</view>
@@ -217,8 +217,8 @@
 	export default{
 		onShareAppMessage(res) {
 			return {
-				title: "辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！",
-				imageUrl: "../../static/fx.png",
+				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 				path: "/pages/fight/productDetail?id=" + this.productId
 			}
 		},

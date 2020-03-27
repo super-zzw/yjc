@@ -20,7 +20,7 @@
 				<view class="sir-title sir-items" v-for="(item,index) in dataList" :key="index">
 					<view class="sirt-cell1 sirt-cell0">{{item.phone}}</view>
 					<view class="sirt-cell1 sirt-cell0">{{item.createTime | dealTime}}</view>
-					<view class="sirt-cell3">{{item.integration}}</view>
+					<view class="sirt-cell3">{{item.integration || 0}}</view>
 				</view>
 			</view>
 			<view class="sir-cbox sir-cbox2" v-else>

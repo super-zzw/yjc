@@ -103,7 +103,7 @@
 			async getScoreData(){
 				uni.showLoading({ title: '加载中' });
 				await this.$http({
-					apiName:"getCateList",
+					apiName:"getCateList2",
 					data:{
 						productType:1,
 						page:this.page,

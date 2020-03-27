@@ -1,5 +1,5 @@
 <template>
-	<view class="uni-numbox">
+	<view class="uni-numbox" :class="selfName">
 		<view class="uni-numbox-minus" 
 			@click="_calcValue('subtract')"
 		>
@@ -62,7 +62,12 @@
 			},
 			otherData:{
 				type:Object,
-				default:null
+				default:null,
+				required: false
+			},
+			selfName:{
+				type:String,
+				default:""
 			}
 		},
 		data() {

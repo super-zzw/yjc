@@ -16,7 +16,7 @@
 					<view class="right">
 						<text class="title clamp">{{item.productName}}</text>
 						<text class="attr-box">
-							规格：<text v-for="(aitem,akey,aindex) of JSON.parse(item.specifications)" :key="aindex">{{aitem}}</text>
+							规格：<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
 							；<text>数量：{{item.productQuantity}}</text>
 						</text>
 						<!-- <text class="price">{{item.minPrice}}</text> -->

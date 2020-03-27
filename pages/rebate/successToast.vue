@@ -4,7 +4,7 @@
 			<image src="../../static/success.png" mode="widthFix"></image>
 		</view>
 		<view class="title">提交成功</view>
-		<text class="tips">钱款将在N个工作日内退回所填账户</text>
+		<text class="tips">钱款将在1-3个工作日内退回所填账户</text>
 		<button class="backBtn" @tap="backIndex">返回首页</button>
 	</view>
 </template>

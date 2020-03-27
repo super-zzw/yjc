@@ -78,7 +78,7 @@
 					<list-cell iconfont="iconfont iconduihuan" iconColor="#F7CA20" title="积分兑换记录"  tips=" "></list-cell>
 				</view>
 				<view class="" @tap="navTo('/pages/invite/invite')">
-					<list-cell class="last-list" iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
+					<list-cell iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
 				</view>
 				<view class="" @tap="navTo('/pages/rebate/index')">
 					<list-cell class="last-list" iconfont="iconfont iconyaoqingfanliicon-gerenye" iconColor="#ff488f" title="邀请返利"  tips=" "></list-cell>

@@ -28,7 +28,8 @@ export default{
 	changeCartGoodNm:"/oms/update/quantity",  //修改购物车某种商品数量
 	
 	getCategory:"/pms/get/product/category",  //获取分类
-	getCateList:"/pms/get/productCategory",  //根据分类id获取列表
+	getCateList1:"/pms/get/one/productCategory",  //根据分类id获取列表
+	getCateList2:"/pms/get/two/productCategory",  //根据分类id获取列表
 	
 	getCartList:"/oms/get/cartList",  //获取购物车列表
 	checkCartGood:"/oms/update/Checked",  //选中/取消购物车某个商品
@@ -55,6 +56,7 @@ export default{
 	deleteComment:"/ums/delete/myComment",  //删除某条评论
 	getInvitePoster:"/ums/getInviteImage",  //获取分享海报
 	getInvite:"/ums/get/inviteList",  //获取邀请列表
+	getInviteInfo: "/ums/inviteinfo" , // 获取我的邀请记录
 	scoreExList:"/oms/get/exchangeHistory",  //积分兑换列表
 	deleteOrder:"/ums/delete/myOrder",  //删除订单
 	reOrder:"/oms/add/orderReturnApply",  //退单
@@ -100,5 +102,5 @@ export default{
 	getRebateInfo: "/ums/rebateinfo" ,// 获取用户返利信息
 	getMyRebateList: "/ums/get/rebateList", // 获取我的返利记录
 	withdraw: "/ums/withdraw" , //提现申请
-	getInvite: "/ums/inviteinfo" , // 获取我的邀请记录
+	
 }

@@ -4,7 +4,7 @@
 			<view class="w1d1">
 				<image class="w1d1img" src="../../static/logo.png" mode=""></image>
 				<view class="w1d1text">
-					辰悠优品汇
+					IM商城
 				</view>
 			</view>
 			<view class="w1d2">

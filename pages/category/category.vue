@@ -1,68 +1,87 @@
 <template>
-	<view class="content content2 wxPage" :style="{paddingTop:paddingTop}">
+	<view >
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
-		<scroll-view scroll-y class="left-aside">
-			<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id == currentId}" @tap="tabtap(item)">
-				{{item.name}}
+		<!-- v-if="config.MALL_CATEGORY_STYLE == 1" -->
+		<view class="content content2 wxPage t2Cate" :style="{paddingTop:paddingTop}" v-if="config.MALL_CATEGORY_STYLE == 1">
+			<view class="t2z">
+				<view v-for="item in t2Names" :key="item.id" class="f-item b-b" :class="{active: item.id == t2CurrentId}" @tap="changeT2(item.id)">
+					{{item.name}}
+				</view>
 			</view>
-		</scroll-view>
-		<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
-			<view v-for="(item,index) in categoryList" :key="item.id" class="s-list" :id="'main-'+item.id" :class="{lastItem: (index == categoryList.length - 1) && loaded}">
-				
-				<view class="h-list" v-if="carouselList.length > 0 && index == 0"></view>
-				<swiper v-if="carouselList.length > 0 && index == 0" class="carousel" circular indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="carouselList.length > 1" :autoplay="true">
-					<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item">
-						<image :src="item.pic" mode="widthFix"/>
-					</swiper-item>
-				</swiper>
-				<view class="h-list"></view>
-				<view class="t-list t-list2" v-if="config.MALL_CATEGORY_STYLE == 1">
-					<view class="t-item2" v-for="(titem,tindex) in tlist" v-if="titem.parentId == item.id" :key="tindex">
-						<view class="t-item3">
-							<image  @tap="navToDetailPage(titem.productId)" class="img" :src="titem.picUrl"></image>
-							<view class="tl2">
-								<view class="tl2t1Box"  @tap="navToDetailPage(titem.productId)">
-									<view class="tl2t1">
-										{{titem.title}}
-									</view>
+			<view class="t2y">
+				<view class="t-item2" v-for="(titem,tindex) in t2Data" :key="tindex">
+					<view class="t-item3">
+						<image  @tap="navToDetailPage(titem.productId)" class="img" :src="titem.picUrl"></image>
+						<view class="tl2">
+							<view class="tl2t1Box"  @tap="navToDetailPage(titem.productId)">
+								<view class="tl2t1">
+									{{titem.title}}
 								</view>
-								<view class="tl2t3" v-if="titem.skuName">
-									<text v-for="(val,key) in JSON.parse(titem.skuName)" :key="key">
-										<text>{{key}}</text>:<text>{{val}}</text>;
-									</text>
+							</view>
+							<view class="tl2t3" v-if="titem.skuName">
+								<text v-for="(val,key) in titem.skuMap" :key="key">
+									<text>{{key}}</text>:<text>{{val}};</text>;
+								</text>
+							</view>
+							<view class="tl2t2">
+								<view class="gcprice nm-font">
+									¥{{titem.promotionPrice}}
 								</view>
-								<view class="tl2t2">
-									<view class="gcprice nm-font">
-										¥{{titem.promotionPrice}}
-									</view>
-									<text v-if="!hasLogin || titem.num == 0" @tap.stop="addCart(titem)" class="iconfont iconxiadangoumaiicon-yaoqingfanliye"></text>
-									<uniNumberBox
-										v-if="hasLogin && titem.num > 0"
-										class="gcNum"
-										:cartId="String(titem.cartId)"
-										:min="0" 
-										:max="titem.stock"
-										:value="titem.num > titem.stock ? titem.stock : titem.num"
-										:isMax="titem.num >= titem.stock ? true : false"
-										:isMin="titem.num == 0"
-										:otherData="{currentIndex:tindex}"
-										@eventChange="numberChange"
-									></uniNumberBox>
-								</view>
+								<text v-if="!hasLogin || titem.num == 0" @tap.stop="addCart(titem)" class="iconfont iconxiadangoumaiicon-yaoqingfanliye"></text>
+								<uniNumberBox
+									v-if="hasLogin && titem.num > 0"
+									:selfName="'gcNum'"
+									:cartId="String(titem.cartId)"
+									:min="0" 
+									:max="titem.stock"
+									:value="titem.num > titem.stock ? titem.stock : titem.num"
+									:isMax="titem.num >= titem.stock ? true : false"
+									:isMin="titem.num == 0"
+									:index="tindex"
+									@eventChange="numberChange"
+								></uniNumberBox>
 							</view>
 						</view>
 					</view>
 				</view>
-				<view class="t-list" v-else>
-					<view class="t-item" @tap="toList(titem.id)" v-for="(titem,tindex) in tlist" v-if="titem.parentId == item.id" :key="tindex">
-						<image :src="titem.img"></image>
-						<text>{{titem.name}}</text>
-					</view>
+				<view class="moreStyle" v-if="t2HasMore && t2Data.length > 0" @tap="getMore">
+					点击加载更多
+				</view>
+				<view class="moreStyle" v-if="!t2HasMore">
+					没有更多数据
+				</view>
+				<view class="moreStyle moreStyle2" v-if="!t2HasMore && t2Data.length == 0">
+					该分类下暂无数据
 				</view>
 			</view>
-		</scroll-view>
+		</view>
+		<view class="content content2 wxPage" :style="{paddingTop:paddingTop}" v-else>
+			<scroll-view scroll-y class="left-aside">
+				<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id == currentId}" @tap="tabtap(item)">
+					{{item.name}}
+				</view>
+			</scroll-view>
+			<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
+				<view v-for="(item,index) in categoryList" :key="item.id" class="s-list" :id="'main-'+item.id" :class="{lastItem: (index == categoryList.length - 1) && loaded}">
+					
+					<view class="h-list" v-if="carouselList.length > 0 && index == 0"></view>
+					<swiper v-if="carouselList.length > 0 && index == 0" class="carousel" circular indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="carouselList.length > 1" :autoplay="true">
+						<swiper-item v-for="(citem, cindex) in carouselList" :key="cindex" class="carousel-item">
+							<image :src="citem.pic" mode="widthFix"/>
+						</swiper-item>
+					</swiper>
+					<view class="h-list"></view>
+					<view class="t-list">
+						<view class="t-item" @tap="toList(sitem.id)" v-for="(sitem,sindex) in tlist" v-if="sitem.parentId == item.id" :key="sindex">
+							<image :src="sitem.img"></image>
+							<text>{{sitem.name}}</text>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
 	</view>
 </template>
 
@@ -84,7 +103,13 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 				tlist:[],
 				carouselList:[],
 				otherBoxStyle:{},
-				loaded:false
+				loaded:false,
+				
+				t2Names:[],
+				t2Data:[],
+				t2CurrentId:"",
+				t2page:1,
+				t2HasMore:true
 			}
 		},
 		async onLoad() {
@@ -121,6 +146,42 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 		},
 		methods: {
 			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab']),
+			getMore(){
+				this.t2page ++;
+				this.getT2Data()
+			},
+			changeT2(id){
+				if(this.t2CurrentId == id){
+					return
+				}else{
+					this.t2HasMore = true;
+					this.t2Data = [];
+					this.t2page = 1;
+					this.t2CurrentId = id;
+					this.getT2Data()
+				}
+			},
+			async getT2Data(){
+				uni.showLoading({
+					mask:true
+				})
+				await this.$http({
+					apiName:"getCateList1",
+					data:{
+						categoryId:this.t2CurrentId,
+						page:this.t2page,
+						size:10
+					}
+				}).then(res => {
+					this.t2Data = this.t2Data.concat(res.data[0].data);
+					if(res.data[0].nextPage == 0){
+						this.t2HasMore = false;
+					}else{
+						this.t2HasMore = true;
+					}
+				}).catch(err => {})
+				uni.hideLoading()
+			},
 			async addCart(item){
 				if(this.hasLogin){
 					uni.showLoading({
@@ -160,7 +221,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 						num:data.number
 					}
 				}).then(res => {
-					this.$set(this.tlist[data.item.currentIndex],'num',data.number)
+					this.$set(this.t2Data[data.index],'num',data.number)
 				}).catch(_ => {})
 				uni.hideLoading()
 			},
@@ -226,23 +287,9 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 					}
 				}).then(res => {
 					if(_type == 1){
-						for(let key in res.data){
-							let item = res.data[key];
-							if(item.length > 0){
-								this.flist.push({
-									id:key,
-									name:key
-								});
-								this.categoryList.push({
-									id:key,
-									name:key,
-								});
-								item.map(chilItem => {
-									this.$set(chilItem,"parentId",key)
-								});
-								this.tlist.push(...item)
-							}
-						}
+						this.t2Names = res.data;
+						this.t2CurrentId = this.t2Names[0].id;
+						this.getT2Data()
 					}else{
 						res.data.forEach(item=>{
 							if(item.children){
@@ -477,96 +524,128 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 			}
 		}
 	}
-	.t-list2{
-		display: unset;
-		.t-item2{
+	.t2Cate{
+		display: flex;
+		justify-content: space-between;
+		.t2z{
+			width: 200rpx;
 			background-color: #fff;
-			padding: 20rpx;
-			padding-bottom: 0;
-			.t-item3{
-				display: flex;
-				justify-content: space-between;
-				padding-bottom: 20rpx;
-				border-bottom: 2rpx solid #F5F5F8;
-				.img{
-					width: 140rpx;
-					height: 140rpx;
-					background-color: #C0C4CC;
-				}
-				.tl2{
-					flex: 1;
-					margin-left: 20rpx;
-					.tl2t1Box{
-						height: 70rpx;
+			height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+		.t2y{
+			flex: 1;
+			background-color: #f0efef;
+			height: 100%;
+			overflow-y: auto;
+			overflow-x: hidden;
+			padding: 20rpx 0 20rpx 20rpx;
+			.t-item2{
+				background-color: #fff;
+				padding: 20rpx;
+				padding-bottom: 0;
+				.t-item3{
+					display: flex;
+					justify-content: space-between;
+					padding-bottom: 20rpx;
+					border-bottom: 2rpx solid #F5F5F8;
+					.img{
+						width: 140rpx;
+						height: 140rpx;
+						background-color: #C0C4CC;
 					}
-					.tl2t1{
-						color: #303133;
-						font-size: 26rpx;
-						word-break: break-all;
-						text-overflow: ellipsis;
-						display: -webkit-box;
-						-webkit-box-orient: vertical;
-						-webkit-line-clamp: 2;
-						overflow: hidden;
-					}
-					.tl2t2{
-						margin-top: 8rpx;
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						.gcprice{
-							color: #F23D3D;
-							font-size: 28rpx;
+					.tl2{
+						flex: 1;
+						margin-left: 20rpx;
+						.tl2t1Box{
+							height: 70rpx;
 						}
-						.iconfont{
+						.tl2t1{
+							color: #303133;
+							font-size: 26rpx;
+							word-break: break-all;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
+							-webkit-line-clamp: 2;
+							overflow: hidden;
+						}
+						.tl2t2{
+							margin-top: 8rpx;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+							.gcprice{
+								color: #F23D3D;
+								font-size: 28rpx;
+							}
+							.iconxiadangoumaiicon-yaoqingfanliye{
+								color: #909399;
+								font-size: 24rpx;
+								width: 42rpx;
+								height: 42rpx;
+								border-radius: 50%;
+								border: 2rpx solid #909399;
+								text-align: center;
+								line-height: 42rpx;
+							}
+							.gcNum{
+								width: 150rpx;
+								height: 35rpx;
+								position: unset;
+								background: none;
+								/deep/ .uni-numbox-minus,
+								/deep/ .uni-numbox-plus{
+									box-sizing: border-box;
+									width: 34rpx;
+									height: 34rpx;
+									border: 2rpx solid #C0C4CC;
+									border-radius: 50%!important;
+									line-height: 20rpx;
+									.iconjian{
+										font-size: 20rpx;
+									}
+								}
+								/deep/ .uni-numbox-value{
+									width: 40rpx;
+									min-width: 40rpx;
+									margin-left: 20rpx;
+									margin-right: 20rpx;
+								}
+								/deep/ .uni-numbox-plus{
+									background-color: #F23D3D;
+									border-color: #F23D3D;
+									.iconjia{
+										color: #fff;
+										font-size: 20rpx;
+									}
+								}
+							}
+						}
+						.tl2t3{
 							color: #909399;
-							font-size: 24rpx;
-							width: 42rpx;
-							height: 42rpx;
-							border-radius: 50%;
-							border: 2rpx solid #909399;
-							text-align: center;
-							line-height: 42rpx;
+							font-size: 26rpx;
+							text-overflow: ellipsis;
+							overflow: hidden;
+							white-space: nowrap;
 						}
-						.gcNum{
-							width: 150rpx;
-							height: 35rpx;
-							position: unset;
-							background: none;
-							/deep/ .uni-numbox-minus,
-							/deep/ .uni-numbox-plus{
-								box-sizing: border-box;
-								width: 34rpx;
-								height: 34rpx;
-								border: 2rpx solid #C0C4CC;
-								border-radius: 50%!important;
-								line-height: 20rpx;
-								.iconfont{
-									font-size: 20rpx;
-								}
-							}
-							/deep/ .uni-numbox-value{
-								width: 80rpx;
-								min-width: 80rpx;
-							}
-							/deep/ .uni-numbox-plus{
-								background-color: #F23D3D;
-								border-color: #F23D3D;
-								.iconfont{
-									color: #fff;
-								}
-							}
-						}
-					}
-					.tl2t3{
-						color: #909399;
-						font-size: 26rpx;
-						text-overflow: ellipsis;
-						overflow: hidden;
-						white-space: nowrap;
 					}
 				}
 			}
+			.moreStyle{
+				text-align: center;
+				font-size: 28rpx;
+				color: #909399;
+				margin-top: 10rpx;
+				line-height: 60rpx;
+			}
+			.moreStyle2{
+				margin-top: 40%;
+			}
 		}
 	}
+	
+	
+	
 </style>

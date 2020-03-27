@@ -27,13 +27,13 @@
 				</view>
 			</view>
 		</view>
-		<view class="swrap-group">
+		<view class="swrap-group" v-if="grouponRules">
 			<view class="sgp1">
 				<image class="img1" v-if="groupStatus == 1" src="../../static/ptz.png" mode="widthFix"></image>
 				<image class="img2" v-if="groupStatus == 2 || groupStatus == 4" src="../../static/ptcg.png"  mode="widthFix"></image>
 				<image class="img3" v-if="groupStatus == 3" src="../../static/ptwcg.png"  mode="widthFix"></image>
 				<text class="text" v-if="groupStatus == 1">
-					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules.endTime | dealTimep(currentTime)}}结束
+					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules | dealTimep(currentTime)}}结束
 				</text>
 			</view>
 			<view class="ptImgs">
@@ -50,7 +50,7 @@
 			</view>
 		</view>
 		<view class="swrap-box2">
-			<view class="swb2-item" v-for="(item,index) in orderItems" :key="index">
+			<view class="swb2-item" v-for="(item,index) in orderItems" :key="index" @click="navToDetailPage(item.productId)">
 				<view class="swb2-item1">
 					<image class="swb2-item-img" :src="item.picUrl" mode=""></image>
 				</view>
@@ -60,7 +60,7 @@
 						<view class="swb2-item2-cont">
 							<text class="swb2-item2-text1" v-if="order.payType != 3">￥{{item.promotionPrice}}</text>
 							<text class="swb2-item2-text2">
-								<text v-for="(aitem,akey,aindex) of JSON.parse(item.specifications)" :key="aindex">{{aitem}}</text>
+								<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
 							</text>
 						</view>
 					</view>
@@ -112,9 +112,9 @@
 					<text v-if="order.payType == 2">支付方式：微信支付</text>
 					<text v-if="order.payType == 3">支付方式：积分兑换</text>
 				</view>
-				<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流公司：{{order.deliveryCompany}}</view>
+				<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流公司：{{order.deliveryCompany || "暂无数据"}}</view>
 				<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流单号：
-					<text class="swrap-box3-text1">{{order.deliverySn}}</text>
+					<text class="swrap-box3-text1">{{order.deliverySn || "暂无数据"}}</text>
 					<text class="iconfont iconfuzhi" @tap="copyOrderSn(order.deliverySn)"></text>
 				</view>
 			</view>
@@ -140,8 +140,8 @@ export default{
 	},
 	onShareAppMessage(res) {
 		return {
-			title: "辰悠优品汇汇聚了海内外优质商品，快来嗨购吧！",
-			imageUrl: "../../static/fx.png",
+			title: "IM商城汇汇聚了海内外优质商品，快来嗨购吧！",
+			imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 			path: "/pages/fight/productDetail?id=" + this.grouponRules.id
 		}
 	},
@@ -174,6 +174,18 @@ export default{
 		...mapState(['userInfo','config'])
 	},
 	methods:{
+		navToDetailPage(id){
+			if(this.order.orderType == 2){
+				id = this.grouponRules.id;
+				uni.navigateTo({
+					url: `/pages/fight/productDetail?id=${id}`
+				})
+			}else{
+				uni.navigateTo({
+					url: `/pages/product/product?id=${id}`
+				})
+			}
+		},
 		toDelivery(id){
 			uni.navigateTo({
 				url:`/pages/order/delivery?id=${this.order.id}`
@@ -256,19 +268,22 @@ export default{
 				this.groupList = res.data.groupList;  //团成员不包括本人，本人单独放上去
 				this.grouponRules = res.data.grouponRules;
 				this.currentTime = res.timestamp;
-				if(this.currentTime < this.grouponRules.endTime){  //时间没到
-					if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间没到人没够
-						this.groupStatus = 1;
-					}else{  //时间没到人够了
-						this.groupStatus = 2;
-					}
-				}else{
-					if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间到了人没够
-						this.groupStatus = 3;
-					}else{  //时间到了人够了
-						this.groupStatus = 4;
+				if(this.grouponRules){
+					if(this.currentTime < this.grouponRules.endTime){  //时间没到
+						if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间没到人没够
+							this.groupStatus = 1;
+						}else{  //时间没到人够了
+							this.groupStatus = 2;
+						}
+					}else{
+						if((this.groupList.length + 1) < this.grouponRules.minMember){  //时间到了人没够
+							this.groupStatus = 3;
+						}else{  //时间到了人够了
+							this.groupStatus = 4;
+						}
 					}
 				}
+				
 			}).catch(_ => {})
 		},
 		//售后
@@ -337,8 +352,13 @@ export default{
 			return utils.unixToDatetime(val) || ""
 		},
 		dealTimep(val,currentTime){
-			let _str = utils.transToDate(val - currentTime);
-			return _str.h + "小时" + _str.m + "分钟"
+			if(val){
+				let _str = utils.transToDate(val.endTime - currentTime);
+				return _str.h + "小时" + _str.m + "分钟"
+			}else{
+				return ""
+			}
+			
 		}
 	}
 }
