@@ -126,9 +126,10 @@
 			if(opt.score == 'true'){
 				this.isScore = true
 			}
-			// if(!this.selectAddr){
-			// 	await this.getAddr()
-			// }
+			if(!this.selectAddr){
+				// await this.getAddr()
+				this.total2 = "请选择地址"
+			}
 			// if(opt.cart == 1){
 			// 	this.cart = opt.cart
 			// 	await this.getCart()
@@ -192,6 +193,14 @@
 				}).catch(_ => {})
 			},
 			async submit(){
+				if(!this.selectAddr){
+					uni.showToast({
+						title:"请先选择地址",
+						mask:true,
+						icon:"none"
+					})
+					return
+				}
 				var that = this;
 				var _skuJson = {};
 				this.order.specSelected.map(item => {
@@ -230,6 +239,14 @@
 				
 			},
 			async submit2(){
+				if(!this.selectAddr){
+					uni.showToast({
+						title:"请先选择地址",
+						mask:true,
+						icon:"none"
+					})
+					return
+				}
 				var that = this
 				await this.$http({
 					apiName:"createCartOrder",

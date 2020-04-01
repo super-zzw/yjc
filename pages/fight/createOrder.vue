@@ -188,7 +188,7 @@
 					data:{
 						rulesId:this.order.rulesId,
 						receiveWay:this.receiveWay,
-						addressId:this.selectAddr.id || "",
+						addressId:this.selectAddr ? this.selectAddr.id : "",
 						num:this.order.number,
 						productId:this.order.productId,
 						// #ifdef APP-PLUS

@@ -1,5 +1,5 @@
 {
-    "name" : "IM商城",
+    "name" : "IM",
     "appid" : "__UNI__5D0627C",
     "description" : "",
     "versionName" : "1.2.1",
@@ -58,14 +58,14 @@
                 "payment" : {
                     "alipay" : {},
                     "weixin" : {
-                        "appid" : "wx3e2043f6604d1b94",
+                        "appid" : "wx4c4af1149bf6832e",
                         "UniversalLinks" : "https://www.youmall.vip/ulink/"
                     }
                 },
                 "ad" : {},
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx3e2043f6604d1b94",
+                        "appid" : "wx4c4af1149bf6832e",
                         "UniversalLinks" : ""
                     }
                 }
@@ -112,8 +112,9 @@
         "usingComponents" : true,
         "appid" : "wx869ea006d7b72f96",
         "setting" : {
-            "urlCheck" : true,
-            "es6" : true
+            "urlCheck" : false,
+            "es6" : true,
+            "minified" : false
         }
     },
     "h5" : {

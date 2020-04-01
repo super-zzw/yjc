@@ -116,7 +116,7 @@
 			}
 		},
 		computed:{
-			...mapState(['userInfo'])
+			...mapState(['userInfo','config'])
 		},
 		data(){
 			return{
@@ -172,13 +172,14 @@
 				this.$refs.share.toggleMask();	
 			},
 			appShare(name,type,code){
+				let _self = this;
 				uni.share({
 					provider: "weixin",
 					scene: name,
 					type:0,
-					title: `${type}分享`,
-					imageUrl: "https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/uni@2x.png",
-					summary: "分享测试",
+					title: `IM商城汇聚了海内外优质商品`,
+					imageUrl: _self.config.MALL_IMG_DEFAULT.groupShare,
+					summary: "快来嗨购吧！",
 					href: `http://t.web.youmall.vip/register.html?inviteCode=${code}&id=${0}`,
 					success(res) {
 						console.log(res);

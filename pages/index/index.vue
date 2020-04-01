@@ -42,7 +42,7 @@
 			</div>
 		</view>
 		<!-- 主题推荐 -->
-		<view class="f-header2 m-t m-t2">
+		<view class="f-header2 m-t m-t2" v-if="tipics.length > 0 && config.MALL_HOMW_SWAITCH.themeFlag == 1">
 			<view class="tit-box">
 				<text class="tit">主题推荐</text>
 			</view>
@@ -51,7 +51,7 @@
 				<text class="iconfont iconright"></text>
 			</view>
 		</view>
-		<view class="group-section2">
+		<view class="group-section2" v-if="tipics.length > 0 && config.MALL_HOMW_SWAITCH.themeFlag == 1">
 			<swiper class="g-swiper" :duration="500" :autoplay="true">
 				<swiper-item
 					class="g-swiper-item"
@@ -269,7 +269,6 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 							}
 						}
 					})
-					console.log(this.fightList);
 				}).catch(_ => {});
 				this.creset = true;
 			},
@@ -359,7 +358,6 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 						this.$set(this.topics123,i,res.data)
 					}).catch(_ => {})
 				}
-				// console.log(this.topics123)
 			},
 			async loadData(carouselList) {
 				this.titleNViewBackground = carouselList[0].background;
