@@ -2,9 +2,9 @@
 	<view class="wxlogin">
 		<view class="w1">
 			<view class="w1d1">
-				<image class="w1d1img" src="../../static/logo.png" mode=""></image>
+				<image class="w1d1img" :src="config.MALL_LOGO_URL" mode=""></image>
 				<view class="w1d1text">
-					IM商城
+					{{config.MALL_APP_NAME}}
 				</view>
 			</view>
 			<view class="w1d2">
@@ -38,6 +38,9 @@
 </template>
 
 <script>
+	import {
+	   mapState
+	} from 'vuex';
 	import utils from '../../utils/method.js'
 	export default {
 		data() {
@@ -45,6 +48,9 @@
 				showModal:false,
 				jsCode:""
 			}
+		},
+		computed:{
+			...mapState(['config'])
 		},
 		methods: {
 			cancel(){

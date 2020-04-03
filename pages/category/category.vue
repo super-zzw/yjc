@@ -57,7 +57,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="content content2 wxPage" :style="{paddingTop:paddingTop}" v-else>
+		<view class="content content2 wxPage" :style="{paddingTop:paddingTop}" v-if="config.MALL_CATEGORY_STYLE == 2">
 			<scroll-view scroll-y class="left-aside">
 				<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id == currentId}" @tap="tabtap(item)">
 					{{item.name}}
@@ -274,7 +274,9 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 				uni.showLoading({ title: '加载中' });
 				await this.getData()
 				await this.getBanner()
-				await this.calcSize()
+				setTimeout(()=>{
+					this.calcSize()
+				},1000)
 				uni.hideLoading()
 			},
 			async getData(){

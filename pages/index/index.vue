@@ -58,7 +58,7 @@
 					v-for="(item, index) in tipics" :key="index"
 					@tap="toTopic(item.id)"
 				>
-					<image class="g-image" :src="item.pic" mode="widthFix"></image>
+					<image class="g-image" :src="item.pic" mode=""></image>
 					<view class="t-box">
 						<text class="title">{{item.title}}</text>
 						<view class="price-box" v-if="item.price">
@@ -89,7 +89,7 @@
 						v-for="(item, index) in fightList" :key="index"
 						class="floor-item floor-item2"
 					>
-						<image mode="widthFix" class="floor-item-img" :src="item.picUrl"></image>
+						<image mode="" class="floor-item-img" :src="item.picUrl"></image>
 						
 						<text class="price nm-font price12">
 							<text class="price1">¥{{item.minGroupPrice}}</text>
@@ -129,7 +129,7 @@
 						v-for="(item, index) in topics123[1]" :key="index"
 						class="floor-item floor-item2"
 					>
-						<image mode="widthFix" class="floor-item-img" :src="item.picUrl"></image>
+						<image mode="" class="floor-item-img" :src="item.picUrl"></image>
 						<text class="title clamp">{{item.title}}</text>
 						<text class="price nm-font">¥{{item.minPrice}}</text>
 					</view>
@@ -702,6 +702,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			.floor-item-img{
 				width: 100%;
 				border-radius: 6rpx;
+				height: 330rpx;
 			}
 			.title{
 				color: #303133;
@@ -818,7 +819,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				padding: 0 30rpx;
 				.g-image{
 					width: 100%;
-					height: auto;
+					height: 345rpx;
 					border-radius: 8rpx;
 				}
 				.t-box{

@@ -189,7 +189,7 @@
 		},
 		onShareAppMessage(res) {
 			return {
-				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				title: this.config.MALL_APP_NAME + "汇聚了海内外优质商品，快来嗨购吧！",
 				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 				path: "/pages/fight/productDetail?id=" + this.productId
 			}

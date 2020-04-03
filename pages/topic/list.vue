@@ -2,7 +2,7 @@
 	<view class="sWrap">
 		<view class="itemBox">
 			<view class="s-item" v-for="(item,index) in dataList" :key="index" @tap="toTopic(item.id)">
-				<image mode="widthFix" class="item-img" :src="item.pic" />
+				<image mode="" class="item-img" :src="item.pic" />
 				<view class="sbox">
 					<view class="t-box">
 						<text class="title">{{item.title}}</text>
@@ -97,7 +97,7 @@
 			padding-right: 32rpx;
 			.item-img{
 				width: 100%;
-				height: auto;
+				height: 343rpx;
 				border-radius: 10rpx;
 			}
 		}

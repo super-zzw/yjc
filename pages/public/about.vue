@@ -3,7 +3,7 @@
 		<view class="sBox">
 			<view class="sCont">
 				<image
-					src="/static/logo.png" 
+					:src="config.MALL_LOGO_URL" 
 					class="sWrap-logo" 
 					mode="widthFix"
 				></image>
@@ -20,11 +20,15 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default{
 	data() {
 		return {
 			version:""
 		};
+	},
+	computed:{
+		...mapState(['config'])
 	},
 	onLoad() {
 		// #ifdef APP-PLUS

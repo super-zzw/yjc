@@ -110,7 +110,7 @@
 	export default{
 		onShareAppMessage(res) {
 			return {
-				title: "IM商城汇聚了海内外优质商品，快来嗨购吧！",
+				title: this.config.MALL_APP_NAME + "汇聚了海内外优质商品，快来嗨购吧！",
 				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
 				path: "/pages/index/index?inviteCode=" + this.userInfo.inviteCode
 			}
@@ -177,7 +177,7 @@
 					provider: "weixin",
 					scene: name,
 					type:0,
-					title: `IM商城汇聚了海内外优质商品`,
+					title: `${this.config.MALL_APP_NAME}汇聚了海内外优质商品`,
 					imageUrl: _self.config.MALL_IMG_DEFAULT.groupShare,
 					summary: "快来嗨购吧！",
 					href: `http://t.web.youmall.vip/register.html?inviteCode=${code}&id=${0}`,

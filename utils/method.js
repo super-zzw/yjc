@@ -162,7 +162,7 @@ export default{
 			provider: "weixin",
 			scene: name,
 			type:5,  //5是小程序
-			title: `IM商城汇聚了海内外优质商品，快来嗨购吧！`,
+			title: `${store.state.config.MALL_APP_NAME}汇聚了海内外优质商品，快来嗨购吧！`,
 			imageUrl: 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/share.png',
 			miniProgram:{  //小程序的配置信息
 				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID
