@@ -8,12 +8,9 @@ if (test) {
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
 	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 } else {
-	_baseUrl = 'http://api.youmall.vip/api';  //IM商城，只对app
-	// #ifdef MP-WEIXIN
-	_baseUrl = 'http://t.api.youmall.vip/api';  //辰悠优汇品，只对小程序
-	// _baseUrl = 'http://youmall.gzcyou.com/api' 
-	// _baseUrl = 'https://www.zmhstem.com.cn/api'  //迈智汇
-	// #endif
+	// _baseUrl = 'http://api.youmall.vip/api';  //IM商城，只对app
+	// _baseUrl = 'http://t.api.youmall.vip/api';  //辰悠优汇品，只对小程序
+	_baseUrl = 'https://www.zmhstem.com.cn/api'  //迈智汇小程序
 }
 var baseUrl = _baseUrl;
 // 请求loading交给页面处理
