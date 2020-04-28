@@ -163,12 +163,12 @@ export default{
 			scene: name,
 			type:5,  //5是小程序
 			title: `${store.state.config.MALL_APP_NAME}汇聚了海内外优质商品，快来嗨购吧！`,
-			imageUrl: 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/default/share.png',
+			imageUrl: store.state.config.MALL_IMG_DEFAULT.groupShare,
 			miniProgram:{  //小程序的配置信息
-				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID
+				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID//辰悠优品汇
 				path: path+'?id='+gid, 
 				type: 2,  //0-正式版； 1-测试版； 2-体验版
-				webUrl: 'http://t.web.youmall.vip'
+				webUrl: 'http://web.vyunmall.com',  //辰悠优品汇
 			},
 			success(res) { 
 				console.log(res);
@@ -180,7 +180,7 @@ export default{
 	},
 	setClip({code,id}){
 		uni.setClipboardData({
-			data: `http://t.web.youmall.vip/register.html?inviteCode=${code}&id=${id}`,
+			data: `http://web.vyunmall.com/register.html?inviteCode=${code}&id=${id}`,
 			success(res) {
 				uni.hideToast();
 				uni.showToast({

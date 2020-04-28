@@ -17,7 +17,7 @@
 			// #ifdef APP-PLUS
 			var args= plus.runtime.arguments;
 			let _inviteCode = args.split('?')[1]
-			if(args && _inviteCode){
+			if(args && _inviteCode && _inviteCode.length == 6){
 				if(!uni.getStorageSync("yzhrefreshSession")){
 					uni.reLaunch({
 						url:"/pages/public/register?inviteCode=" + _inviteCode

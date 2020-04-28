@@ -1,9 +1,9 @@
 {
-    "name" : "IM",
+    "name" : "辰悠优品汇",
     "appid" : "__UNI__5D0627C",
     "description" : "",
-    "versionName" : "1.2.2",
-    "versionCode" : 122,
+    "versionName" : "1.0.0",
+    "versionCode" : 100,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -47,26 +47,27 @@
             "ios" : {
                 "urltypes" : [
                     {
-                        "urlidentifier" : "com.yhp.youmall",
+                        "urlidentifier" : "com.gzcyou.yphmall",
                         "urlschemes" : [ "youmall" ]
                     }
                 ],
-                "urlschemewhitelist" : [ "youmall" ]
+                "urlschemewhitelist" : [ "youmall" ],
+                "idfa" : false
             },
             /* ios打包配置 */
             "sdkConfigs" : {
                 "payment" : {
                     "alipay" : {},
                     "weixin" : {
-                        "appid" : "wx4c4af1149bf6832e",
-                        "UniversalLinks" : ""
+                        "appid" : "wx3e2043f6604d1b94",
+                        "UniversalLinks" : "https://www.vyunmall.com/ulinks"
                     }
                 },
                 "ad" : {},
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx4c4af1149bf6832e",
-                        "UniversalLinks" : ""
+                        "appid" : "wx3e2043f6604d1b94",
+                        "UniversalLinks" : "https://www.vyunmall.com/ulinks"
                     }
                 }
             },
@@ -110,7 +111,7 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "",
+        "appid" : "wx869ea006d7b72f96",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
@@ -118,7 +119,7 @@
         }
     },
     "h5" : {
-        "title" : "IM商城",
+        "title" : "辰悠优品汇",
         "domain" : "prd.gzcyou.com",
         "router" : {
             "mode" : "history"

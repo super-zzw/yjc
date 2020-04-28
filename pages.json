@@ -11,7 +11,7 @@
 						"splitLine": {
 							"color":"#DBDBDB"
 						},
-						"titleText":"IM商城",
+						"titleText":"辰悠优品汇",
 						"titleSize":"16",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
@@ -54,17 +54,16 @@
 						"splitLine": {
 							"color":"#DBDBDB"
 						},
-						"type": "transparent"
-						// ,
-						// "buttons": [{
-						// 		"fontSrc": "/static/font/iconfont/iconfont.ttf",
-						// 		"text": "\ue63c",
-						// 		"fontSize": "16",
-						// 		"color": "#303133",
-						// 		"float": "right",
-						// 		"background": "rgba(0,0,0,0.5)"
-						// 	}
-						// ]
+						"type": "transparent",
+						"buttons": [{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue63c",
+								"fontSize": "16",
+								"color": "#303133",
+								"float": "right",
+								"background": "rgba(0,0,0,0.5)"
+							}
+						]
 					}
 				}
 			}
@@ -960,7 +959,7 @@
 		{
 		    "path" : "pages/public/about",
 		    "style": {
-		    	"navigationBarTitleText": "关于IM商城",
+		    	"navigationBarTitleText": "关于辰悠优品汇",
 		    	"app-plus":{
 		    		"bounce": "none",
 		    		"titleNView":{
@@ -1112,7 +1111,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "IM商城",
+		"navigationBarTitleText": "辰悠优品汇",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},

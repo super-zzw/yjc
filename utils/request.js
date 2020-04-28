@@ -8,8 +8,8 @@ if (test) {
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
 	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 } else {
-	_baseUrl = 'http://api.youmall.vip/api';  //i&m商城，只对app
-	// _baseUrl = 'http://t.api.youmall.vip/api';  //辰悠优汇品，只对小程序
+	// _baseUrl = 'http://api.youmall.vip/api';  //i&m商城，只对app
+	_baseUrl = 'https://api.vyunmall.com/api';  //辰悠优汇品，只对app和小程序
 	// _baseUrl = 'https://www.zmhstem.com.cn/api'  //迈智汇小程序
 }
 var baseUrl = _baseUrl;

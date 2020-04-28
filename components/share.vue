@@ -21,7 +21,11 @@
 							class="share-item" 
 							@click="shareToFriend(item.text)"
 						>
-							<image :src="item.icon" mode=""></image>
+							<!-- <image :src="item.icon" mode=""></image> -->
+							<!-- uniapp的坑 -->
+							<image v-if="item.text == '微信好友'" src="../static/wxhy.png" mode=""></image>
+							<image v-if="item.text == '朋友圈'" src="../static/pyq.png" mode=""></image>
+							<image v-if="item.text == '复制链接'" src="../static/fzlj.png" mode=""></image>
 							<text>{{item.text}}</text>
 						</view>
 					</view>

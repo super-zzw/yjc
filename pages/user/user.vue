@@ -80,7 +80,7 @@
 				<view class="" @tap="navTo('/pages/invite/invite')">
 					<list-cell iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
 				</view>
-				<view class="" @tap="navTo('/pages/rebate/index')">
+				<view class="" @tap="navTo('/pages/rebate/index',true)">
 					<list-cell class="last-list" iconfont="iconfont iconyaoqingfanliicon-gerenye" iconColor="#ff488f" title="邀请返利"  tips=" "></list-cell>
 				</view>
 			</view>
@@ -154,9 +154,13 @@
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
 			 */
-			navTo(url){
+			navTo(url,needInfo){
 				if(!this.hasLogin){
 					this.setAfterLoginUrl(url)
+					if(needInfo){
+						this.setAfterLoginIsTab(true)
+						this.setAfterLoginUrl("/pages/user/user");
+					}
 					// #ifdef MP-WEIXIN
 					url = "/pages/wxlogin/index"
 					// #endif
