@@ -116,7 +116,7 @@
 			class="popup spec" 
 			:class="specClass"
 			@touchmove.stop.prevent="stopPrevent"
-			@click="toggleSpec"
+			@click="hiddenSpec"
 		>
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
@@ -383,11 +383,28 @@
 						}
 					}
 				})
-				console.log("我准备执行了")
 				this.getPriceInfo();
 			},
-			//规格弹窗开关
+			//规格弹窗开关，并处理多个规格购买或加入购物车情况
 			toggleSpec() {
+				if(this.specClass === 'show'){
+					this.specClass = 'hide';
+					if(this.clickType === "addCar"){
+						this.clickType = "";
+						this.addToCar();
+					}else if(this.clickType === "buy"){
+						this.clickType = "";
+						this.shoppingItem();
+					}
+					setTimeout(() => {
+						this.specClass = 'none';
+					}, 250);
+				}else if(this.specClass === 'none'){
+					this.specClass = 'show';
+				}
+			},
+			// 隐藏规格弹框
+			hiddenSpec() {
 				if(this.specClass === 'show'){
 					this.specClass = 'hide';
 					setTimeout(() => {
@@ -468,18 +485,13 @@
 					})
 					// #endif
 				}else{
-					this.setOrder({
-						productId:this.productId,
-						number:this.number,
-						title:this.title,
-						picUrl:this.picUrl,
-						specSelected:this.specSelected,
-						price:this.stockInfo.promotionPrice,
-						exchangePoints:this.exchangePoints || 0
-					})
-					uni.navigateTo({
-						url: `/pages/order/createOrder?score=${this.isScore}`
-					})
+					if(this.specChildList.length === 1){
+						this.shoppingItem();
+					}else{
+						this.clickType = "buy";
+						this.toggleSpec();
+					}
+					
 					
 				}
 				
@@ -487,26 +499,51 @@
 			//加入购物车
 			async addCart(){
 				if(this.hasLogin){
-					uni.showLoading()
-					await this.$http({
-						apiName:"addCart",
-						type:"POST",
-						data:{
-							productId :this.productId,
-							checked :1,
-							num :this.number,
-							skuJson : JSON.stringify(this.obj)
-						}
-					}).then(res => {
-						uni.showToast({
-							title:"添加成功"
-						})
-						this.getCartNms()
-					}).catch(_ => {})
-					uni.hideLoading()
+					if(this.specChildList.length === 1){
+						this.addToCar();
+					}else{
+						this.clickType = "addCar";
+						this.toggleSpec();
+					}
+					
 				}else{
 					this.toLogin()
 				}
+			},
+			// 添加到购物车
+			addToCar(){
+				uni.showLoading()
+				this.$http({
+					apiName:"addCart",
+					type:"POST",
+					data:{
+						productId :this.productId,
+						checked :1,
+						num :this.number,
+						skuJson : JSON.stringify(this.obj)
+					}
+				}).then(res => {
+					uni.showToast({
+						title:"添加成功"
+					})
+					this.getCartNms()
+				}).catch(_ => {})
+				uni.hideLoading()
+			},
+			// 立即购买物品
+			shoppingItem(){
+				this.setOrder({
+					productId:this.productId,
+					number:this.number,
+					title:this.title,
+					picUrl:this.picUrl,
+					specSelected:this.specSelected,
+					price:this.stockInfo.promotionPrice,
+					exchangePoints:this.exchangePoints || 0
+				})
+				uni.navigateTo({
+					url: `/pages/order/createOrder?score=${this.isScore}`
+				})
 			},
 			//未登录跳转
 			toLogin(){
