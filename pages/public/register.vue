@@ -17,7 +17,7 @@
 				<view class="slabel">短信验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入短信验证码"/>
-					<button :disabled="btnDisable"  hover-class="none" class="stext" @tap="sendCode">{{codeText}}</button>
+					<text  hover-class="none" class="stext" @tap="sendCode">{{codeText}}</text>
 				</view>
 			</view>
 			<view class="sItem">
@@ -65,7 +65,6 @@
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
 				codeText:"发送验证码",
-				btnDisable: false,
 				registerBtnDisable: false
 			}
 		},
@@ -161,7 +160,8 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
-					this.btnDisable = true;
+					this.coding = true;
+					this.countDown();
 					await this.$http({
 						apiName:"getCode",
 						type:"POST",
@@ -169,28 +169,30 @@
 							phoneNumber:this.phone,
 						}
 					}).then(res => {
-						this.coding = true
-						let _self = this;
-						this.btnDisable = false;
-						this.timer = setInterval(() => {
-							  _self.codeText = "请稍后" + _self.timeLeft + 's'
-							  _self.timeLeft -= 1;
-							  if (_self.timeLeft == 0) {
-								   clearInterval(_self.timer);
-								  _self.coding = false
-								  _self.timeLeft = 120
-								  _self.codeText = "发送验证码"
-							}
-						},1000)
+						uni.hideLoading();
 					}).catch(_ => {
-						this.btnDisable = false;
+						this.clearCountDown();
+						uni.hideLoading();
 					})
-					uni.hideLoading()
 				}else{
 					uni.hideLoading()
 				}
-				
-			}
+			},
+			countDown(){
+				this.timer = setInterval(() => {
+					  this.codeText = "请稍后" + this.timeLeft + 's'
+					  this.timeLeft -= 1;
+					  if(this.timeLeft == 0){
+						  this.clearCountDown();
+					  }
+				},1000)
+			},
+			clearCountDown(){
+				  clearInterval(this.timer);
+				  this.coding = false
+				  this.timeLeft = 120
+				  this.codeText = "发送验证码"
+			},
 		},
 		beforeDestroy() {
 			clearInterval(this.timer);
@@ -244,8 +246,6 @@
 				}
 				.stext{
 					min-width: 160rpx;
-					line-height: initial;
-					height: auto;
 					text-align: center;
 					font-size: 24rpx;
 					color: #F23D3D;
@@ -253,7 +253,6 @@
 					border: 2rpx solid #F23D3D;
 					padding: 10rpx 16rpx;
 					margin-left: 20rpx;
-					background-color: #ffffff;
 				}
 			}
 			
