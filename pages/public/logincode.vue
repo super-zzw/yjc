@@ -190,7 +190,12 @@
 		padding-top: 115px;
 		position:relative;
 		width: 100vw;
-		min-height: calc(100vh - 92rpx);
+		/* #ifdef H5 */
+		height: calc(100vh - 88rpx);
+		/* #endif */
+		/* #ifdef APP-PLUS */
+		height: 100vh;
+		/* #endif */
 		overflow: hidden;
 		background: #fff;
 		box-sizing: border-box;
