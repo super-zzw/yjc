@@ -4,7 +4,7 @@
 			<image src="../../static/success.png" mode="widthFix"></image>
 		</view>
 		<view class="title">提交成功</view>
-		<text class="tips">钱款将在1-3个工作日内退回所填账户</text>
+		<text class="tips">你的提现申请将在客服审核通过后打款，请耐心等待</text>
 		<button class="backBtn" @tap="backIndex">返回首页</button>
 	</view>
 </template>

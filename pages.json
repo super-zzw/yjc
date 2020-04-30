@@ -1,6 +1,5 @@
 {
 	"pages": [
-
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -42,6 +41,12 @@
 				"navigationStyle": "custom",
 				// #endif
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/index/agree",
+			"style":{
+				"navigationStyle": "custom"
 			}
 		},
 		{
