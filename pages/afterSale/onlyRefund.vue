@@ -66,7 +66,8 @@ export default{
 			dataList:[],
 			total:"",
 			orderSn:"",
-			desc:""
+			desc:"",
+			btnDisable: false
 		}
 	},
 	computed:{
@@ -87,7 +88,8 @@ export default{
 			}).catch(_ => {})
 		},
 		async submit(){
-			if(this.desc){
+			if(this.desc && !this.btnDisable){
+				this.btnDisable = true;
 				await this.$http({
 					apiName:"reOrder",
 					type:"POST",
@@ -98,10 +100,13 @@ export default{
 						type :0
 					}
 				}).then(res => {
+					this.btnDisable = false;
 					uni.navigateTo({
 						url:"/pages/afterSale/applyOk"
 					})
-				}).catch(_ => {})
+				}).catch(_ => {
+					this.btnDisable = false;
+				})
 			}else{
 				uni.showToast({
 					title:"请填写描述",

@@ -23,7 +23,7 @@
 			<text class="tit">设为默认</text>
 			<switch :checked="defaultStatus" color="#fa436a" @change="switchChange" />
 		</view>
-		<button class="add-btn" @click="confirm">提交</button>
+		<button class="add-btn" :disabled="btnDisable" :loading="btnDisable" @click="confirm">提交</button>
 		<button class="add-btn add-btn2" @click="deleteAddr" v-if="id">删除</button>
 		<simple-address ref="simpleAddress" :pickerValueDefault="cityPickerValueDefault" @onConfirm="onConfirm" themeColor='#007AFF'></simple-address>
 	</view>
@@ -50,7 +50,8 @@
 				id:"",  //删除地址id
 				source:"",  //页面来源
 				score:"",
-				cart:""
+				cart:"",
+				btnDisable: false
 			}
 		},
 		onLoad(opt){
@@ -103,6 +104,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.btnDisable = true;
 					uni.showLoading({
 						title:"保存中..."
 					})
@@ -126,13 +128,16 @@
 								title:"保存成功"
 							})
 							setTimeout(function(){
+								this.btnDisable = false;
 								uni.navigateBack()
 								// uni.redirectTo({
 								// 	url:`/pages/address/address?source=${that.source}&score=${that.score}`
 								// });
 							},1500)
 							
-						}).catch(_ => {})
+						}).catch(_ => {
+							this.btnDisable = false;
+						})
 					}else{
 						//添加保存
 						await this.$http({
@@ -152,13 +157,16 @@
 								title:"保存成功"
 							})
 							setTimeout(function(){
+								this.btnDisable = false;
 								uni.navigateBack()
 								// uni.redirectTo({
 								// 	url:`/pages/address/address?source=${that.source}&score=${that.score}`
 								// });
 							},1500)
 							
-						}).catch(_ => {})
+						}).catch(_ => {
+							this.btnDisable = false;
+						})
 					}
 					
 					uni.hideLoading()

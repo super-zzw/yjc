@@ -53,6 +53,7 @@ export default{
 		return {
 			orderId:"",
 			dataList:[],
+			btnDisable: false
 		}
 	},
 	methods:{
@@ -108,6 +109,10 @@ export default{
 			});
 		},
 		async submit(){
+			if(this.btnDisable){
+				return;
+			}
+			this.btnDisable = true;
 			let params = []
 			this.dataList.map(function(item){
 				params.push({
@@ -124,10 +129,13 @@ export default{
 				type:"POST",
 				data:{params:JSON.stringify(params)}
 			}).then(res => {
+				this.btnDisable = false;
 				uni.redirectTo({
 					url:'/pages/order/myAssess'
 				})
-			}).catch(_ => {})
+			}).catch(_ => {
+				this.btnDisable = false;
+			})
 		}
 	},
 	onLoad(opt){
