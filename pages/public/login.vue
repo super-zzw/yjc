@@ -123,6 +123,7 @@
 		position:relative;
 		width: 100vw;
 		min-height: calc(100vh - 92rpx);
+		height: 100vh;
 		overflow: hidden;
 		background: #fff;
 		box-sizing: border-box;

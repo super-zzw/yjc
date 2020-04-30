@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="carousel">
-			<swiper indicator-dots circular=true duration="400">
+			<swiper :indicator-dots="imgList.length === 1 ? false : true " circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
 						<image
@@ -236,6 +236,7 @@
 						text: "复制链接"
 					},
 				],
+				clickType:"", // 点击的类型
 			};
 		},
 		async onLoad(options){

@@ -93,7 +93,7 @@
 					</view>
 				</view>
 				<view class="total-box">
-					<text class="price nm-font">¥{{total}}</text>
+					<text class="price nm-font">合计：¥{{total}}</text>
 					<!-- <text class="coupon">
 						已优惠
 						<text class="nm-font">74.35</text>

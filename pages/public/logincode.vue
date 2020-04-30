@@ -33,7 +33,7 @@
 							@confirm="toLogin"
 							class="iitem-btn-input"
 						/>
-						<text class="tit2" @tap="getCode">{{codeText}}</text>
+						<button size="mini" :disabled="btnDisable" hover-class="none" :loading="btnDisable" class="tit2" @tap="getCode">{{codeText}}</button>
 					</view>
 				</view>
 				<view class="forget-section forget-section2" @tap="toPage('/pages/public/login')">
@@ -65,7 +65,8 @@
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
-				codeText:"发送验证码"
+				codeText:"发送验证码",
+				btnDisable: false
 			}
 		},
 		onLoad(){
@@ -109,6 +110,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.btnDisable = true;
 					await this.$http({
 						apiName:"getCode",
 						type:"POST",
@@ -119,6 +121,7 @@
 						this.coding = true
 						let _self = this;
 						this.timer = setInterval(() => {
+								_self.btnDisable = false;
 							  _self.codeText = "请稍后" + _self.timeLeft + 's'
 							  _self.timeLeft -= 1;
 							  if (_self.timeLeft == 0) {
@@ -128,7 +131,9 @@
 								  _self.codeText = "发送验证码"
 							}
 						},1000)
-					}).catch(_ => {})
+					}).catch(_ => {
+						_self.btnDisable = false;
+					})
 					uni.hideLoading()
 				}else{
 					uni.hideLoading()
@@ -315,6 +320,9 @@
 				border-radius: 30rpx;
 				border: 2rpx solid #F23D3D;
 				padding: 10rpx 16rpx;
+				line-height: initial;
+				height: auto;
+				background-color: #ffffff;
 			}
 		}
 	}

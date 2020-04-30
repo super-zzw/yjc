@@ -11,7 +11,7 @@
 				<view class="slabel">短信验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入短信验证码"/>
-					<text class="stext" @tap="sendCode">{{codeText}}</text>
+					<button class="stext" :disabled="btnDisable" @tap="sendCode">{{codeText}}</button>
 				</view>
 			</view>
 			<view class="sItem">
@@ -27,7 +27,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="btn" @tap="register">确认</view>
+		<button class="btn" :disabled="confirmBtnDisable" :loading="confirmBtnDisable" @tap="register" >确认</button>
 	</view>
 </template>
 
@@ -43,7 +43,9 @@
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
-				codeText:"发送验证码"
+				codeText:"发送验证码",
+				btnDisable: false,
+				confirmBtnDisable: false
 			}
 		},
 		methods:{
@@ -76,6 +78,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.confirmBtnDisable = true;
 					await this.$http({
 						apiName:"resetPwd",
 						type:"POST",
@@ -90,11 +93,14 @@
 							title:"重置成功"
 						})
 						setTimeout(_ => {
+							this.confirmBtnDisable = false;
 							uni.navigateTo({
 							    url: '/pages/public/login'
 							});
 						},2000)
-					}).catch(_ => {})
+					}).catch(_ => {
+						this.confirmBtnDisable = false;
+					})
 				}
 				
 			},
@@ -118,6 +124,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.btnDisable = true;
 					await this.$http({
 						apiName:"getCode",
 						type:"POST",
@@ -127,6 +134,7 @@
 					}).then(res => {
 						this.coding = true
 						let _self = this;
+						this.btnDisable = false;
 						this.timer = setInterval(() => {
 							  _self.codeText = "请稍后" + _self.timeLeft + 's'
 							  _self.timeLeft -= 1;
@@ -137,7 +145,9 @@
 								  _self.codeText = "发送验证码"
 							}
 						},1000)
-					}).catch(_ => {})
+					}).catch(_ => {
+						this.btnDisable = false;
+					})
 					uni.hideLoading()
 				}else{
 					uni.hideLoading()
@@ -194,7 +204,11 @@
 					border-radius: 20rpx;
 					font-size: 24rpx;
 					min-width: 160rpx;
+					margin: 0;
 					text-align: center;
+					line-height: initial;
+					height: auto;
+					background-color: #ffffff;
 				}
 			}
 			
@@ -208,6 +222,8 @@
 		border-radius: 44rpx;
 		margin-top: 120rpx;
 		text-align: center;
+		transition: opacity .2s ;
+		height: auto;
 	}
 	.btn:active{
 		opacity: 0.3;

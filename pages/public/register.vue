@@ -17,7 +17,7 @@
 				<view class="slabel">短信验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入短信验证码"/>
-					<text class="stext" @tap="sendCode">{{codeText}}</text>
+					<button :disabled="btnDisable"  hover-class="none" class="stext" @tap="sendCode">{{codeText}}</button>
 				</view>
 			</view>
 			<view class="sItem">
@@ -42,8 +42,8 @@
 		<view class="toLogin"  @tap="toPage('/pages/public/login')">
 			账号登录
 		</view>
-		<view class="btn" @tap="register">完成注册</view>
-		<view class="xieyi">
+		<button class="btn" hover-class="none" :loading="registerBtnDisable" :disabled="registerBtnDisable" @tap="register" >完成注册</button>
+		<view class="xieyi"> 
 			注册即表示同意
 			<text class="xieyi2" @tap="toArtcile(1)">商城协议</text>
 		</view>
@@ -64,7 +64,9 @@
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
-				codeText:"发送验证码"
+				codeText:"发送验证码",
+				btnDisable: false,
+				registerBtnDisable: false
 			}
 		},
 		onLoad(opt) {
@@ -116,6 +118,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.registerBtnDisable = true;
 					await this.$http({
 						apiName:"register",
 						type:"POST",
@@ -128,10 +131,13 @@
 							inviteCode:this.icode
 						}
 					}).then(res => {
+						this.registerBtnDisable = false;
 						uni.navigateTo({
 						    url: '/pages/public/registerok'
 						});
-					}).catch(_ => {})
+					}).catch(_ => {
+						this.registerBtnDisable = false;
+					})
 				}
 				
 			},
@@ -155,6 +161,7 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
+					this.btnDisable = true;
 					await this.$http({
 						apiName:"getCode",
 						type:"POST",
@@ -164,6 +171,7 @@
 					}).then(res => {
 						this.coding = true
 						let _self = this;
+						this.btnDisable = false;
 						this.timer = setInterval(() => {
 							  _self.codeText = "请稍后" + _self.timeLeft + 's'
 							  _self.timeLeft -= 1;
@@ -174,7 +182,9 @@
 								  _self.codeText = "发送验证码"
 							}
 						},1000)
-					}).catch(_ => {})
+					}).catch(_ => {
+						this.btnDisable = false;
+					})
 					uni.hideLoading()
 				}else{
 					uni.hideLoading()
@@ -234,6 +244,8 @@
 				}
 				.stext{
 					min-width: 160rpx;
+					line-height: initial;
+					height: auto;
 					text-align: center;
 					font-size: 24rpx;
 					color: #F23D3D;
@@ -241,6 +253,7 @@
 					border: 2rpx solid #F23D3D;
 					padding: 10rpx 16rpx;
 					margin-left: 20rpx;
+					background-color: #ffffff;
 				}
 			}
 			
@@ -254,6 +267,7 @@
 		border-radius: 44rpx;
 		margin-top: 70rpx;
 		text-align: center;
+		height: auto;
 	}
 	.btn:active{
 		opacity: 0.3;
