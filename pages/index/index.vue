@@ -229,12 +229,26 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 		},
 		async onLoad(opt) {
 			// #ifdef APP-PLUS 
-			this.$checkUpdate();
+			if(uni.getStorageSync("agree_key")){
+				this.$checkUpdate();
+				await this.initData();
+				if(opt.inviteCode){
+					this.$store.commit('setICode',opt.inviteCode)
+				}
+			}else{
+				uni.reLaunch({
+					url:"/pages/index/agree"
+				})
+			}
+			
 			// #endif
+			
+			// #ifndef APP-PLUS
 			await this.initData();
 			if(opt.inviteCode){
 				this.$store.commit('setICode',opt.inviteCode)
 			}
+			// #endif
 		},
 		onHide() {
 			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){
