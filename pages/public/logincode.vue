@@ -33,7 +33,7 @@
 							@confirm="toLogin"
 							class="iitem-btn-input"
 						/>
-						<button size="mini" :disabled="btnDisable" hover-class="none" :loading="btnDisable" class="tit2" @tap="getCode">{{codeText}}</button>
+						<text size="mini" hover-class="none"  class="tit2" @tap="getCode">{{codeText}}</text>
 					</view>
 				</view>
 				<view class="forget-section forget-section2" @tap="toPage('/pages/public/login')">
@@ -110,7 +110,8 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
-					this.btnDisable = true;
+					this.coding = true;
+					this.countDown();
 					await this.$http({
 						apiName:"getCode",
 						type:"POST",
@@ -118,23 +119,11 @@
 							phoneNumber:this.mobile,
 						}
 					}).then(res => {
-						this.coding = true
-						let _self = this;
-						this.timer = setInterval(() => {
-								_self.btnDisable = false;
-							  _self.codeText = "请稍后" + _self.timeLeft + 's'
-							  _self.timeLeft -= 1;
-							  if (_self.timeLeft == 0) {
-								   clearInterval(_self.timer);
-								  _self.coding = false
-								  _self.timeLeft = 120
-								  _self.codeText = "发送验证码"
-							}
-						},1000)
+						uni.hideLoading();
 					}).catch(_ => {
-						_self.btnDisable = false;
+						this.clearCountDown();
+						uni.hideLoading();
 					})
-					uni.hideLoading()
 				}else{
 					uni.hideLoading()
 				}
@@ -170,7 +159,23 @@
 				}
 				this.logining = false;
 			},
+			countDown(){
+				this.timer = setInterval(() => {
+					  this.codeText = "请稍后" + this.timeLeft + 's'
+					  this.timeLeft -= 1;
+					  if(this.timeLeft == 0){
+						  this.clearCountDown();
+					  }
+				},1000)
+			},
+			clearCountDown(){
+				  clearInterval(this.timer);
+				  this.coding = false
+				  this.timeLeft = 120
+				  this.codeText = "发送验证码"
+			},
 		},
+		
 		beforeDestroy() {
 			clearInterval(this.timer);
 		}
@@ -325,9 +330,6 @@
 				border-radius: 30rpx;
 				border: 2rpx solid #F23D3D;
 				padding: 10rpx 16rpx;
-				line-height: initial;
-				height: auto;
-				background-color: #ffffff;
 			}
 		}
 	}
