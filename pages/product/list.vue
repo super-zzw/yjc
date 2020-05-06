@@ -75,7 +75,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="empty" v-if="(searchVal || categoryId) && goodsList.length == 0">
+		<view class="empty"  v-if="(searchVal || categoryId) && goodsList.length == 0 && isShow">
 			<image src="../../static/empty.png" mode="widthFix" class="empty-img"></image>
 			<view class="empty-text">暂无此类商品，换个关键词试试</view>
 		</view>
@@ -101,6 +101,7 @@
 				keyWords:[],  //热门关键字
 				history:[],  //历史记录
 				categoryId:"",
+				isShow: false
 			};
 		},
 		onPageScroll(e){
@@ -212,7 +213,8 @@
 						sort:this.sort
 					}
 				}).then(res => {
-					this.noMore = res.data.last
+					this.noMore = res.data.last;
+					this.isShow = true;
 					this.goodsList = this.goodsList.concat(res.data.content)
 				}).catch(_ => {})
 			},
