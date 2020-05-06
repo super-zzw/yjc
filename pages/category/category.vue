@@ -325,6 +325,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 			},
 			//一级分类点击
 			async tabtap(item){
+				console.log(this.sizeCalcState);
 				if(!this.sizeCalcState){
 					await this.calcSize();
 				}

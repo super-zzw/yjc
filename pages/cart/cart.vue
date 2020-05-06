@@ -4,7 +4,7 @@
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
 		<!-- 空白页 -->
-		<view v-if="cartList.length == 0" class="empty">
+		<view v-if="cartList.length == 0 && isShow" class="empty">
 			<view class="emptybox">
 				<image src="/static/emptyCart.png" mode="aspectFit"></image>
 				<view v-if="hasLogin" class="empty-tips">
@@ -121,11 +121,15 @@
 				total: 0, //总价格
 				allChecked: false, //全选状态  true|false
 				cartList: [],
-				topicsList:[]
+				topicsList:[],
+				isShow: false
 			};
 		},
 		onLoad() {
 			utils.setBadgeText(0,this.msgNms)
+		},
+		onHide(){
+			this.isShow = false;
 		},
 		async onShow(){
 			this.total = 0
@@ -183,7 +187,6 @@
 					return item;
 				});
 				this.cartList = cartList;
-				console.log(this.cartList);
 				this.calcTotal();  //计算总价
 			},
 			//获取推荐商品
@@ -196,7 +199,8 @@
 						size:20
 					}
 				}).then(res => {
-					this.topicsList = res.data.list
+					this.topicsList = res.data.list;
+					this.isShow = true;
 				}).catch(_ => {})
 			},
 			navToLogin(){
