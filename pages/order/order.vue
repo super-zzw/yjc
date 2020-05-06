@@ -19,7 +19,7 @@
 					@scrolltolower="getMore"
 				>
 					<!-- 空白页 -->
-					<empty :desc="'暂无相关订单'" v-if="tabItem.loaded === true && tabItem.orderList.length === 0"></empty>
+					<empty :desc="'暂无相关订单'" v-if="tabItem.loaded === true && tabItem.orderList.length === 0 && isShow"></empty>
 					
 					<!-- 订单列表 -->
 					<view 
@@ -171,6 +171,7 @@
 		data() {
 			return {
 				// payType,只有4是到付
+				isShow: false,
 				currentTime:"",  //服务器当前时间戳
 				id: "",
 				tabCurrentIndex: 0,
@@ -344,6 +345,7 @@
 				}).then(res => {
 					this.$set(this.navList[index],"noMore",!res.data.hasNextPage);
 					this.$set(this.navList[index],"orderList",this.navList[index].orderList.concat(res.data.list));
+					this.isShow = true;
 					this.currentTime = res.timestamp;
 				}).catch(_ => {})
 				this.$set(this.navList[index],"dataLoading",false)
@@ -497,6 +499,7 @@
 		//下拉刷新
 		async onPullDownRefresh(){
 			let _index = this.tabCurrentIndex
+			this.isShow = false;
 			this.$set(this.navList[_index],"orderList",[])
 			this.$set(this.navList[_index],"page",1)
 			await this.getOrder()
