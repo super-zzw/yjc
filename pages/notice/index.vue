@@ -24,6 +24,7 @@
 						</view>
 					</view>
 					<view class="bot-right">
+						<text class="red-dot" v-if="serverNms > 0"></text>
 						<text class="br-nms" v-if="serverNms > 0">{{serverNms}}条未读消息</text>
 						<text class="more-icon iconfont iconright"></text>
 					</view>
@@ -40,6 +41,7 @@
 						</view>
 					</view>
 					<view class="bot-right">
+						<text class="red-dot" v-if="sysNms > 0"></text>
 						<text class="br-nms" v-if="sysNms > 0">{{sysNms}}条未读消息</text>
 						<text class="more-icon iconfont iconright"></text>
 					</view>
@@ -235,6 +237,14 @@
 			align-items: center;
 			.br-nms{
 				margin-right: 20rpx;
+			}
+			.red-dot{
+				display: inline-block;
+				width: 16rpx;
+				height: 16rpx;
+				background-color: #f43530;
+				border-radius: 50%;
+				margin-right: 6rpx;
 			}
 		}
 	}
