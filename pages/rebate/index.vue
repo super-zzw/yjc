@@ -109,11 +109,9 @@
 	import {mapState } from 'vuex';
 	export default{
 		onShareAppMessage(res) {
-			return {
-				title: this.config.MALL_APP_NAME + "汇聚了海内外优质商品，快来嗨购吧！",
-				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
+			return utils.homeShare({
 				path: "/pages/index/index?inviteCode=" + this.userInfo.inviteCode
-			}
+			})
 		},
 		computed:{
 			...mapState(['userInfo','config'])

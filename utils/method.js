@@ -189,5 +189,12 @@ export default{
 				})
 			}
 		});
+	},
+	homeShare({imageUrl,path}){
+		return {
+			title:`${store.state.config.MALL_APP_NAME}汇聚了海内外优质商品，快来嗨购吧！`,
+			path:path || '/pages/index/index',
+			imageUrl:imageUrl || store.state.config.MALL_IMG_DEFAULT.groupShare
+		}
 	}
 }

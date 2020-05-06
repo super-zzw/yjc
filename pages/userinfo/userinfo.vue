@@ -7,10 +7,14 @@
 			</view>
 			<view class="s-item">
 				<view class="s-label">头像</view>
-				<view class="s-userpic" @tap="setImage">
+				<Avatar
+					selWidth="200px" selHeight="400upx" @upload="myUpload" :avatarSrc="url" inner="true"
+					avatarStyle="width: 72rpx; height: 72rpx; border-radius: 100%;">
+				</Avatar>
+				<!-- <view class="s-userpic" @tap="setImage">
 					<image :src="userData.icon" mode="" v-if="userData.icon"></image>
 					<image src="../../static/defaultface.png" mode="" v-else></image>
-				</view>
+				</view> -->
 			</view>
 			<view class="s-item">
 				<view class="s-label">用户ID</view>
@@ -46,8 +50,12 @@
 	    mapState,  
 	    mapMutations  
 	} from 'vuex';  
+	import Avatar from "../../components/yq-avatar.vue";
 	import utils from '@/utils/method.js'
 	export default {
+		components:{
+			Avatar
+		},
 		data() {
 			return {
 				type:"男",
@@ -60,6 +68,7 @@
 				birth:"",
 				userData:{},
 				fromPage:"",  //跳转来源
+				url:""
 			};
 		},
 		methods:{
@@ -75,26 +84,43 @@
 				await this.$http({
 					apiName:"getUserInfo"
 				}).then(res => {
-					this.setUserInfo(res.data)
+					this.setUserInfo(res.data);
+					if(res.data.icon){
+						this.url = res.data.icon;
+					}else{
+						this.url = require("../../static/defaultface.png")
+					}
 				}).catch(_ => {})
 			},
-			//上传图像
-			setImage() {
-				uni.chooseImage({
-					count: 1,  //可选择张数
-					sizeType: ['original', 'compressed'],
-					sourceType: ['album'],
-					success: (res) => {
-						this.$upLoadImg({
-							apiName:"uploadImg",
-							filePath:res.tempFilePaths[0],
-							name:"file",
-						}).then(ret => {
-							this.$set(this.userData,"icon",ret.data)
-						}).catch(_ => {})
-					}
-				});
+			myUpload(rsp){
+				var that = this;
+				this.$upLoadImg({
+					apiName:"uploadImg",
+					filePath:rsp.path,
+					name:"file",
+				}).then(ret => {
+					this.$set(this.userData,"icon",ret.data);
+					this.setUserInfo(this.userData);
+					this.url = ret.data;
+				}).catch(_ => {})
 			},
+			//上传图像老版
+			// setImage() {
+			// 	uni.chooseImage({
+			// 		count: 1,  //可选择张数
+			// 		sizeType: ['original', 'compressed'],
+			// 		sourceType: ['album'],
+			// 		success: (res) => {
+			// 			this.$upLoadImg({
+			// 				apiName:"uploadImg",
+			// 				filePath:res.tempFilePaths[0],
+			// 				name:"file",
+			// 			}).then(ret => {
+			// 				this.$set(this.userData,"icon",ret.data)
+			// 			}).catch(_ => {})
+			// 		}
+			// 	});
+			// },
 			//保存用户信息
 			async saveInfo(){
 				await this.$http({

@@ -197,6 +197,9 @@ import {
 import utils from '@/utils/method.js'
 import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	export default {
+		onShareAppMessage (){
+			return utils.homeShare({})
+		},
 		components: {
 			uniCountdown
 		},

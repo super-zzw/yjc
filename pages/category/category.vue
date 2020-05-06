@@ -90,6 +90,9 @@ import { mapState,mapMutations } from 'vuex';
 import utils from '@/utils/method.js'
 import uniNumberBox from '@/components/uni-number-box.vue'
 	export default {
+		onShareAppMessage (){
+			return utils.homeShare({})
+		},
 		components: {
 			uniNumberBox
 		},

@@ -113,6 +113,9 @@
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import utils from '@/utils/method.js'
 	export default {
+		onShareAppMessage(){
+			return utils.homeShare({})
+		},
 		components: {
 			uniNumberBox
 		},

@@ -95,6 +95,9 @@
     } from 'vuex';
 	import utils from 'utils/method.js'
     export default {
+		onShareAppMessage(){
+			return utils.homeShare({})
+		},
 		components: {
 			listCell
 		},

@@ -215,12 +215,10 @@
 	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	import Share from "../../components/share.vue";
 	export default{
-		onShareAppMessage(res) {
-			return {
-				title: this.config.MALL_APP_NAME + "汇聚了海内外优质商品，快来嗨购吧！",
-				imageUrl: this.config.MALL_IMG_DEFAULT.groupShare,
+		onShareAppMessage() {
+			return utils.homeShare({
 				path: "/pages/fight/productDetail?id=" + this.productId
-			}
+			})
 		},
 		components: {
 			uniNumberBox,
