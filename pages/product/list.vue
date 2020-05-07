@@ -114,6 +114,7 @@
 		},
 		//下拉刷新
 		async onPullDownRefresh(){
+			this.isShow = false;
 			this.goodsList = [];
 			this.page = 1;
 			this.sort = 0;
@@ -214,8 +215,8 @@
 					}
 				}).then(res => {
 					this.noMore = res.data.last;
+					this.goodsList = this.goodsList.concat(res.data.content);
 					this.isShow = true;
-					this.goodsList = this.goodsList.concat(res.data.content)
 				}).catch(_ => {})
 			},
 			async search(){
@@ -235,7 +236,8 @@
 					type:"POST"
 				}).then(res => {
 					this.noMore = res.data.last
-					this.goodsList = this.goodsList.concat(res.data.content)
+					this.goodsList = this.goodsList.concat(res.data.content);
+					this.isShow = true;
 				}).catch(_ => {})
 				uni.hideLoading()
 			},

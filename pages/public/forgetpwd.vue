@@ -4,7 +4,7 @@
 			<view class="sItem">
 				<view class="slabel">手机号</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="phone" placeholder="请输入您注册的手机号"/>
+					<input placeholder-class="placeholderClass" maxlength="11" class="sinput w" type="number" v-model="phone" placeholder="请输入您注册的手机号"/>
 				</view>
 			</view>
 			<view class="sItem">
@@ -201,6 +201,9 @@
 				.sinput{
 					color: #303133;
 					font-size: 30rpx;
+					&.w{
+						width: 500rpx;
+					}
 				}
 				.placeholderClass{
 					color: #909399;

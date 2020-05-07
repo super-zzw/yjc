@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="carousel">
-			<swiper :indicator-dots="imgList.length === 1 ? false : true " circular=true duration="400">
+			<swiper :indicator-dots="indicatorDots" circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
 						<image
@@ -121,7 +121,7 @@
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
-				<image src="../../static/deleteIcon.png" class="deletedIcon"  @click="toggleSpec"></image>
+				<image src="../../static/deleteIcon.png" class="deletedIcon"  @click="hiddenSpec"></image>
 				<view class="a-t">
 					<image :src="stockInfo.pic"></image>
 					<view class="right">
@@ -247,7 +247,10 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin'])
+			...mapState(['hasLogin']),
+			indicatorDots(){
+				return this.imgList.length > 1
+			}
 		},
 		methods:{
 			...mapMutations(['setAfterLoginUrl','setOrder']),
