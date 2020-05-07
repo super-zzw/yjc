@@ -42,33 +42,35 @@
 			</div>
 		</view>
 		<!-- 主题推荐 -->
-		<view class="f-header2 m-t m-t2" v-if="tipics.length > 0 && config && config.MALL_HOMW_SWAITCH.themeFlag == 1">
-			<view class="tit-box">
-				<text class="tit">主题推荐</text>
+		<view v-if="tipics.length > 0 && config && config.MALL_HOMW_SWAITCH.themeFlag == 1">
+			<view class="f-header2 m-t m-t2">
+				<view class="tit-box">
+					<text class="tit">主题推荐</text>
+				</view>
+				<view class="tit-box2" @tap="toMore()">
+					更多
+					<text class="iconfont iconright"></text>
+				</view>
 			</view>
-			<view class="tit-box2" @tap="toMore()">
-				更多
-				<text class="iconfont iconright"></text>
-			</view>
-		</view>
-		<view class="group-section2" v-if="tipics.length > 0 && config && config.MALL_HOMW_SWAITCH.themeFlag == 1">
-			<swiper class="g-swiper" :duration="500" :autoplay="true">
-				<swiper-item
-					class="g-swiper-item"
-					v-for="(item, index) in tipics" :key="index"
-					@tap="toTopic(item.id)"
-				>
-					<image class="g-image" :src="item.pic" mode=""></image>
-					<view class="t-box">
-						<text class="title">{{item.title}}</text>
-						<view class="price-box" v-if="item.price">
-							<text class="price nm-font">¥{{item.price}}</text> 
-							<text class="m-price">起</text>
+			<view class="group-section2">
+				<swiper class="g-swiper" :duration="500" :autoplay="true">
+					<swiper-item
+						class="g-swiper-item"
+						v-for="(item, index) in tipics" :key="index"
+						@tap="toTopic(item.id)"
+					>
+						<image class="g-image" :src="item.pic" mode=""></image>
+						<view class="t-box">
+							<text class="title">{{item.title}}</text>
+							<view class="price-box" v-if="item.price">
+								<text class="price nm-font">¥{{item.price}}</text> 
+								<text class="m-price">起</text>
+							</view>
 						</view>
-					</view>
-					<view class="pro-box">{{item.description}}</view>
-				</swiper-item>
-			</swiper>
+						<view class="pro-box">{{item.description}}</view>
+					</swiper-item>
+				</swiper>
+			</view>
 		</view>
 		
 		<!-- 超值拼团 -->
@@ -112,8 +114,8 @@
 		</view>
 		
 		<!-- 新品首发 -->
-		<view class="seckill-section m-t" v-if="topics123[1].length > 0 && config && config.MALL_HOMW_SWAITCH.newFlag == 1">
-			<view class="f-header2 m-t f-header3">
+		<view class="item-module" v-if="topics123[1].length > 0 && config && config.MALL_HOMW_SWAITCH.newFlag == 1">
+			<view class="f-header2 m-t" >
 				<view class="tit-box">
 					<text class="tit">新品首发</text>
 				</view>
@@ -122,70 +124,73 @@
 					<text class="iconfont iconright"></text>
 				</view>
 			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						@click="navToDetailPage(item.productId)"
-						v-for="(item, index) in topics123[1]" :key="index"
-						class="floor-item floor-item2"
-					>
-						<image mode="" class="floor-item-img" :src="item.picUrl"></image>
-						<text class="title clamp">{{item.title}}</text>
-						<text class="price nm-font">¥{{item.minPrice}}</text>
+			<view class="guess-section guess-section2">
+				<view 
+					@click="navToDetailPage(item.productId)"
+					v-for="(item, index) in topics123[1]" :key="index"
+					class="guess-item"
+				>
+					<view class="image-wrapper">
+						<image :src="item.picUrl" mode="aspectFill"></image>
 					</view>
+					<text class="title clamp">{{item.title}}</text>
+					<text class="price nm-font">¥{{item.minPrice}}</text>
 				</view>
-			</scroll-view>
+			</view>
 		</view>
-	
+		
+		
 		<!-- 精品专区 -->
-		<view class="f-header2 m-t"  v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
-			<view class="tit-box">
-				<text class="tit">精品专区</text>
-			</view>
-			<view class="tit-box2" @tap="pageJump(2)">
-				更多
-				<text class="iconfont iconright"></text>
-			</view>
-		</view>
-		
-		<view class="guess-section"  v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
-			<view 
-				@click="navToDetailPage(item.productId)"
-				v-for="(item, index) in topics123[2]" :key="index"
-				class="guess-item"
-			>
-				<view class="image-wrapper">
-					<image :src="item.picUrl" mode="aspectFill"></image>
+		<view class="item-module" v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
+			<view class="f-header2 m-t" >
+				<view class="tit-box">
+					<text class="tit">精品专区</text>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-font">¥{{item.minPrice}}</text>
-			</view>
-		</view>
-		<!-- 促销专区 -->
-		<view class="f-header2 m-t" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
-			<view class="tit-box">
-				<text class="tit">促销专区</text>
-			</view>
-			<view class="tit-box2" @tap="pageJump(3,1)">
-				更多
-				<text class="iconfont iconright"></text>
-			</view>
-		</view>
-		<view class="guess-section" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
-			<view 
-				@click="navToDetailPage(item.productId)"
-				v-for="(item, index) in topics123[0]" :key="index"
-				class="guess-item"
-			>
-				<view class="image-wrapper">
-					<image :src="item.picUrl" mode="aspectFill"></image>
+				<view class="tit-box2" @tap="pageJump(2)">
+					更多
+					<text class="iconfont iconright"></text>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<text class="price nm-font">¥{{item.minPrice}}</text>
+			</view>
+			<view class="guess-section guess-section2">
+				<view 
+					@click="navToDetailPage(item.productId)"
+					v-for="(item, index) in topics123[2]" :key="index"
+					class="guess-item"
+				>
+					<view class="image-wrapper">
+						<image :src="item.picUrl" mode="aspectFill"></image>
+					</view>
+					<text class="title clamp">{{item.title}}</text>
+					<text class="price nm-font">¥{{item.minPrice}}</text>
+				</view>
 			</view>
 		</view>
-		
 
+		<!-- 促销专区 -->
+		<view  class="item-module" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
+			<view class="f-header2 m-t" >
+				<view class="tit-box">
+					<text class="tit">促销专区</text>
+				</view>
+				<view class="tit-box2" @tap="pageJump(3,1)">
+					更多
+					<text class="iconfont iconright"></text>
+				</view>
+			</view>
+			<view class="guess-section">
+				<view 
+					@click="navToDetailPage(item.productId)"
+					v-for="(item, index) in topics123[0]" :key="index"
+					class="guess-item"
+				>
+					<view class="image-wrapper">
+						<image :src="item.picUrl" mode="aspectFill"></image>
+					</view>
+					<text class="title clamp">{{item.title}}</text>
+					<text class="price nm-font">¥{{item.minPrice}}</text>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -672,6 +677,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			box-shadow: 4rpx 4rpx 20rpx rgba(250, 67, 106, 0.3);
 		}
 	}
+	// 滚动广告
 	.ad-1{
 		width: 100%;
 		box-sizing: border-box;
@@ -703,7 +709,8 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			}
 		}
 	}
-	/* 秒杀专区 */
+	/* 超值拼团 */
+	
 	.seckill-section{
 		padding: 4rpx 30rpx 24rpx;
 		background: #fff;
@@ -774,6 +781,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			}
 		}
 	}
+	// 主题推荐
 	.f-header2{
 		display:flex;
 		align-items:center;
@@ -802,43 +810,12 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			font-weight: bold;
 		}
 	}
+	// 超值拼团
 	.f-header3{
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.f-header{
-		display:flex;
-		align-items:center;
-		height: 140rpx;
-		padding: 6rpx 30rpx 8rpx;
-		background: #fff;
-		image{
-			flex-shrink: 0;
-			width: 80rpx;
-			height: 80rpx;
-			margin-right: 20rpx;
-		}
-		.tit-box{
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-		}
-		.tit-box2{
-			font-size: 24rpx;
-			color: #C0C4CC;
-			display: flex;
-		}
-		.tit{
-			font-size: 32rpx;
-			color: #303133;
-			font-weight: bold;
-		}
-		.tit2{
-			font-size: $font-sm;
-			color: $font-color-light;
-		}
-	}
-	/* 团购楼层 */
+	/* 主题推荐 */
 	.group-section2{
 		background: #fff;
 		.g-swiper{
@@ -888,185 +865,65 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			}
 		}
 	}
-	.group-section{
-		background: #fff;
-		.g-swiper{
-			height: 650rpx;
-			padding-bottom: 30rpx;
-		}
-		.g-swiper-item{
-			width: 100%;
-			padding: 0 30rpx;
+	.item-module{
+		padding-left: 30rpx;
+		padding-right: 30rpx;
+		.guess-section{
 			display:flex;
-		}
-		image{
-			width: 100%;
-			height: 460rpx;
-			border-radius: 4px;
-		}
-		.g-item{
-			display:flex;
-			flex-direction: column;
-			overflow:hidden;
-		}
-		.left{
-			flex: 1.2;
-			margin-right: 24rpx;
-			.t-box{
-				padding-top: 20rpx;
-			}
-		}
-		.right{
-			flex: 0.8;
-			flex-direction: column-reverse;
-			.t-box{
-				padding-bottom: 20rpx;
-			}
-		}
-		.t-box{
-			height: 160rpx;
-			font-size: $font-base+2rpx;
-			color: $font-color-dark;
-			line-height: 1.6;
-		}
-		.price{
-			color:$uni-color-primary;
-		}
-		.m-price{
-			font-size: $font-sm+2rpx;
-			text-decoration: line-through;
-			color: $font-color-light;
-			margin-left: 8rpx;
-		}
-		.pro-box{
-			display:flex;
-			align-items:center;
-			margin-top: 10rpx;
-			font-size: $font-sm;
-			color: $font-base;
-			padding-right: 10rpx;
-		}
-		.progress-box{
-			flex: 1;
-			border-radius: 10px;
-			overflow: hidden;
-			margin-right: 8rpx;
-		}
-	}
-	/* 分类推荐楼层 */
-	.hot-floor{
-		width: 100%;
-		overflow: hidden;
-		margin-bottom: 20rpx;
-		.floor-img-box{
-			width: 100%;
-			height:320rpx;
-			position:relative;
-			&:after{
-				content: '';
-				position:absolute;
-				left: 0;
-				top: 0;
-				width: 100%;
-				height: 100%;
-				background: linear-gradient(rgba(255,255,255,.06) 30%, #f8f8f8);
-			}
-		}
-		.floor-img{
-			width: 100%;
-			height: 100%;
-		}
-		.floor-list{
-			white-space: nowrap;
-			padding: 20rpx;
-			padding-right: 50rpx;
-			border-radius: 6rpx;
-			margin-top:-140rpx;
-			margin-left: 30rpx;
+			flex-wrap:wrap;
 			background: #fff;
-			box-shadow: 1px 1px 5px rgba(0,0,0,.2);
-			position: relative;
-			z-index: 1;
-		}
-		.scoll-wrapper{
-			display:flex;
-			align-items: flex-start;
-		}
-		.floor-item{
-			width: 180rpx;
-			margin-right: 20rpx;
-			font-size: 30rpx;
-			color: $font-color-dark;
-			line-height: 1.8;
-			image{
-				width: 180rpx;
-				height: 180rpx;
-				border-radius: 6rpx;
+			.guess-item{
+				display:flex;
+				flex-direction: column;
+				width: 48%;
+				margin-bottom: 30rpx;
+				overflow: hidden;
+				box-sizing: border-box;
+				box-shadow: 0 0 20rpx 0 rgba(0,0,0,.13);
+				border-radius: 20rpx;
+				height: 460rpx;
+				border: 1px solid rgba(0, 0, 0, 0.13);
+				&:nth-child(2n+1){
+					margin-right: 4%;
+				}
+			}
+			.image-wrapper{
+				width: 100%;
+				height: 330rpx;
+				border-radius: 3px;
+				overflow: hidden;
+				image{
+					width: 100%;
+					height: 100%;
+					opacity: 1;
+				}
+			}
+			.title{
+				font-size: 30rpx;
+				color: $font-color-dark;
+				line-height: 60rpx;
+				padding: 0 20rpx;
 			}
 			.price{
+				padding: 0 20rpx 16rpx;
+				font-size: $font-lg;
 				color: $uni-color-primary;
+				line-height: 1;
 			}
 		}
-		.more{
-			display:flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			flex-shrink: 0;
-			width: 180rpx;
-			height: 180rpx;
-			border-radius: 6rpx;
-			background: #f3f3f3;
-			font-size: $font-base;
-			color: $font-color-light;
-			text:first-child{
-				margin-bottom: 4rpx;
+		.guess-section2{
+			flex-wrap: nowrap;
+			overflow: auto;
+			padding-bottom: 40rpx;
+			padding-top: 20rpx;
+			.guess-item{
+				flex: 1 0 48%;
+				margin-right: 20rpx!important;
+				margin-bottom: 0;
 			}
 		}
 	}
-	/* 猜你喜欢 */
-	.guess-section{
-		display:flex;
-		flex-wrap:wrap;
-		padding: 0 30rpx;
-		background: #fff;
-		.guess-item{
-			display:flex;
-			flex-direction: column;
-			width: 48%;
-			margin-bottom: 30rpx;
-			overflow: hidden;
-			box-sizing: border-box;
-			box-shadow: 0 0 20rpx 0 rgba(0,0,0,.13);
-			border-radius: 20rpx;
-			&:nth-child(2n+1){
-				margin-right: 4%;
-			}
-		}
-		.image-wrapper{
-			width: 100%;
-			height: 330rpx;
-			border-radius: 3px;
-			overflow: hidden;
-			image{
-				width: 100%;
-				height: 100%;
-				opacity: 1;
-			}
-		}
-		.title{
-			font-size: 30rpx;
-			color: $font-color-dark;
-			line-height: 60rpx;
-			padding: 0 20rpx;
-		}
-		.price{
-			padding: 0 20rpx 16rpx;
-			font-size: $font-lg;
-			color: $uni-color-primary;
-			line-height: 1;
-		}
-	}
+	
 	
 
 </style>

@@ -37,11 +37,9 @@
 				</picker>
 			</view>
 		</view>
-		<!-- #ifdef MP-WEIXIN -->
 		<view class="list-cell log-out-btn" @click="saveInfo">
 			<text class="cell-tit">保存</text>
 		</view>
-		<!-- #endif -->
 	</view>
 </template>
 

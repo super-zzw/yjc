@@ -117,14 +117,7 @@
 							"color":"#DBDBDB"
 						},
 						"titleText":"个人资料",
-						"titleSize":"16",
-						"buttons": [{
-								"text": "保存",
-								"fontSize": "15",
-								"color": "#F23D3D",
-								"float": "right"
-							}
-						]
+						"titleSize":"16"
 					}
 				}
 			}
