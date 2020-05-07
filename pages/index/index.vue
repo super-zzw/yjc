@@ -4,7 +4,7 @@
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
 		<!-- 头部轮播 -->
-		<view class="carousel-section">
+		<view class="carousel-section" v-if="carouselList.length > 0">
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
@@ -20,7 +20,7 @@
 			</view>
 		</view>
 		<!-- 分类 -->
-		<view class="cate-section">
+		<view class="cate-section" v-if="navs.length > 0">
 			<swiper class="swiper-nav" indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="navs.length > 2" :autoplay="false" :interval="2000" :duration="500">
 				<swiper-item class="swiper-nav-item" v-for="(item0,index0) in navs" :key="index0">
 					<view class="cate-item" v-for="(item1,index1) in item0" :key="index1"  @tap="pageJump(item1.jumpType,item1.jumpId)">
@@ -31,7 +31,7 @@
 			</swiper>
 		</view>
 		<!-- 滚动广告 -->
-		<view class="ad-1">
+		<view class="ad-1" v-if="notices.length > 0">
 			<div class="ad-1-box">
 				<image class="ad-1-img" src="../../static/ad.png" mode="widthFix"></image>
 				<swiper class="ad-1-swiper" :vertical="true" :indicator-dots="false" :autoplay="true" :interval="2000" :duration="500">
@@ -112,7 +112,7 @@
 		</view>
 		
 		<!-- 新品首发 -->
-		<view class="seckill-section m-t" v-if="config && config.MALL_HOMW_SWAITCH.newFlag == 1">
+		<view class="seckill-section m-t" v-if="topics123[1].length > 0 && config && config.MALL_HOMW_SWAITCH.newFlag == 1">
 			<view class="f-header2 m-t f-header3">
 				<view class="tit-box">
 					<text class="tit">新品首发</text>
@@ -138,7 +138,7 @@
 		</view>
 	
 		<!-- 精品专区 -->
-		<view class="f-header2 m-t"  v-if="config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
+		<view class="f-header2 m-t"  v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
 			<view class="tit-box">
 				<text class="tit">精品专区</text>
 			</view>
@@ -148,7 +148,7 @@
 			</view>
 		</view>
 		
-		<view class="guess-section"  v-if="config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
+		<view class="guess-section"  v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
 			<view 
 				@click="navToDetailPage(item.productId)"
 				v-for="(item, index) in topics123[2]" :key="index"
@@ -162,7 +162,7 @@
 			</view>
 		</view>
 		<!-- 促销专区 -->
-		<view class="f-header2 m-t" v-if="config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
+		<view class="f-header2 m-t" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
 			<view class="tit-box">
 				<text class="tit">促销专区</text>
 			</view>
@@ -171,7 +171,7 @@
 				<text class="iconfont iconright"></text>
 			</view>
 		</view>
-		<view class="guess-section" v-if="config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
+		<view class="guess-section" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
 			<view 
 				@click="navToDetailPage(item.productId)"
 				v-for="(item, index) in topics123[0]" :key="index"
@@ -526,6 +526,18 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	page {
 		background: #F9FAFB;
 	}
+	/* #ifdef APP-PLUS || H5 */
+	.container{
+		min-height: calc(100vh - 188rpx);
+		background: #fff;
+	}
+	/* #endif */
+	/* #ifdef MP-WEIXIN */
+	.container{
+		min-height: calc(100vh - 88rpx);
+		background: #fff;
+	}
+	/* #endif */
 	.m-t{
 		margin-top: 16rpx;
 	}
