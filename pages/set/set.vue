@@ -9,15 +9,25 @@
 			<text class="cell-tip">{{cache}}</text>
 			<text class="cell-more iconfont iconright"></text>
 		</view> -->
-		<view class="list-cell b-b" @click="toAbout()" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b" @click="toPage('/pages/set/changePwd',true)" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">修改密码</text>
+			<text class="cell-more iconfont iconright"></text>
+		</view>
+		<view class="list-cell b-b" @click="toPage('/pages/set/changePhone',true)" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">修改绑定手机号</text>
+			<text class="cell-more iconfont iconright"></text>
+		</view>
+		<view class="list-cell b-b" @click="toAbout" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">关于{{config.MALL_APP_NAME}}</text>
 			<text class="cell-more iconfont iconright"></text>
 		</view>
+		<!-- #ifdef APP-PLUS -->
 		<view class="list-cell" @tap="updateV">
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip" v-if="version">当前版本 {{version}}</text>
 			<text class="cell-more iconfont iconright"></text>
 		</view>
+		<!-- #endif -->
 		<view class="list-cell log-out-btn" @click="loginOut" v-if="hasLogin">
 			<text class="cell-tit">退出登录</text>
 		</view>
@@ -48,7 +58,7 @@
 			// #endif
 		},
 		methods:{
-			...mapMutations(['setLogin']),
+			...mapMutations(['setLogin','setAfterLoginUrl']),
 			updateV(){
 				// #ifdef APP-PLUS
 				this.$checkUpdate(true);
@@ -59,7 +69,11 @@
 					url:"/pages/public/about"
 				})
 			},
-			toPage(url){
+			toPage(url,needLogin){
+				if(needLogin && !this.hasLogin){
+					this.setAfterLoginUrl(url);
+					url = "/pages/public/login"
+				} 
 				uni.navigateTo({
 					url:url
 				})

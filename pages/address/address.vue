@@ -14,7 +14,7 @@
 			<text class="iconfont iconbianji" @click.stop="toEdit(item.id)"></text>
 		</view>
 		<view class="dsaw1weq" v-if="dataList.length == 0 && noMore">
-			<image src="../../static/nomsg.png" class="emsdds" mode=""></image>
+			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/nomsg.png" class="emsdds" mode=""></image>
 			<view class="dsadwqtext">暂无收货地址，请点击新增地址</view>
 		</view>
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>

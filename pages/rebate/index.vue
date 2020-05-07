@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image src="../../static/fanli.png" mode="" class="banner"></image>
+		<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fanli.png" mode="" class="banner"></image>
 		<view class="block flex flex-column ">
 			<view class="block-title flex align-items justify-center">
 				<text class="smPoint one"></text><text class="bigPoint"></text> <text class="t">邀请流程</text><text class="bigPoint"></text><text class="smPoint two"></text>
@@ -120,15 +120,15 @@
 			return{
 				shareList:[
 					{
-						icon: require( "../../static/wxhy.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
 					{
-						icon: require("../../static/pyq.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
 						text: "朋友圈"
 					},
 					{
-						icon: require("../../static/fzlj.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
 						text: "复制链接"
 					},
 				],

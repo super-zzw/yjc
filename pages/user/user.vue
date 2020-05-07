@@ -4,19 +4,19 @@
 		<wxTabbar :showSearch="-1" :topbgk="topbgk"></wxTabbar>
 		<!-- #endif -->
 		<view class="user-section">
-			<image class="bg" src="/static/user-bg.png"></image>
+			<image class="bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/user-bg.png"></image>
 			<view class="user-section-asd">
 				<view class="user-info-box">
 					<view class="user-info-box-left">
 						<view class="portrait-box">
-							<!-- <image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image> -->
-							<image class="portrait" :src="userInfo.icon || '/static/missing-face.png'"></image>
+							<!-- <image class="portrait" :src="userInfo.portrait || 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/missing-face.png'"></image> -->
+							<image class="portrait" :src="userInfo.icon || 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/missing-face.png'"></image>
 						</view>
 						<view class="info-box" @tap="toUserInfo('/pages/userinfo/userinfo')">
 							<view class="username">{{userInfo.wusername || '游客'}} <text class="iconfont iconright"></text></view>
 							
 							<view class="user-star" v-if="hasLogin">
-								<image src="/static/star.png" mode="widthFix" v-for="item in userInfo.level" :key="item"></image>
+								<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/star.png" mode="widthFix" v-for="item in userInfo.level" :key="item"></image>
 							</view>
 						</view>
 					</view>
@@ -29,7 +29,7 @@
 		</view>
 		
 		<view class="cover-container" >
-			<image class="arc" src="/static/arc.png"></image>
+			<image class="arc" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/arc.png"></image>
 			
 			<view class="tj-sction" @tap="navTo('/pages/order/order?state=0')">
 				<view class="tj-sction-title">我的订单</view>

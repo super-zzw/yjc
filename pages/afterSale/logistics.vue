@@ -4,7 +4,7 @@
 			<view class="sbox-itme">
 				<text class="sbt-text">物流单号：</text>
 				<input class="sbt-input" type="text" v-model="orderNm" />
-				<!-- <image class="sbt-scan" src="/static/scan.png" mode="" @tap="sacnQrcode"></image> -->
+				<!-- <image class="sbt-scan" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/scan.png" mode="" @tap="sacnQrcode"></image> -->
 			</view>
 			<view class="sbox-itme">
 				<text class="sbt-text">物流公司：</text>

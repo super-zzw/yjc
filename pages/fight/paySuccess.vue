@@ -5,7 +5,7 @@
 		<text class="tit" v-if="this.fightData.group.length < this.fightData.minMember">你已成功参团</text>
 		<view class="fgGroup" v-if="this.fightData.group.length < this.fightData.minMember">
 			<view class="fgInfo">
-				<image src="../../static/ptz.png" class="ptImg" mode="widthFix"></image>
+				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" class="ptImg" mode="widthFix"></image>
 				<text class="ptText">还差{{this.fightData.minMember - this.fightData.group.length}}人拼成，剩{{trDate.h}}小时{{trDate.m}}分钟结束</text>
 			</view>
 			<view class="ptImgs">
@@ -55,15 +55,15 @@
 				trDate:null,
 				shareList:[
 					{
-						icon: require( "../../static/wxhy.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
 					{
-						icon: require("../../static/pyq.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
 						text: "朋友圈"
 					},
 					{
-						icon: require("../../static/fzlj.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
 						text: "复制链接"
 					},
 				],

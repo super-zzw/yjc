@@ -6,7 +6,7 @@
 		<!-- 空白页 -->
 		<view v-if="cartList.length == 0 && isShow" class="empty">
 			<view class="emptybox">
-				<image src="/static/emptyCart.png" mode="aspectFit"></image>
+				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/emptyCart.png" mode="aspectFit"></image>
 				<view v-if="hasLogin" class="empty-tips">
 					购物车是空哒～
 					<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
@@ -84,7 +84,7 @@
 			<view class="action-section">
 				<view class="checkbox">
 					<image 
-						:src="allChecked?'/static/selected.png':'/static/select.png'" 
+						:src="allChecked?'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/selected.png':'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/select.png'" 
 						mode="aspectFit"
 						@click="check('all')"
 					></image>

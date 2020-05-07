@@ -1,6 +1,6 @@
 <template>
 	<view class="sWrap">
-		<image src="/static/inviteBgk.png" class="aWrap-bgk" mode="widthFix"></image>
+		<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/inviteBgk.png" class="aWrap-bgk" mode="widthFix"></image>
 		<view class="sWrap-box">
 				<view class="sWrap-title">
 					<view class="sWrap-idot1"></view>
@@ -11,7 +11,7 @@
 				</view>
 				<view class="sWrap-buzhou">
 					<view class="sWrap-buzhou-item">
-						<image class="swbi-img" src="/static/b1.png" mode=""></image>
+						<image class="swbi-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/b1.png" mode=""></image>
 						<view class="swbi-tishi">
 							<text class="swbi-nm">1</text>
 							<view class="swbi-text">
@@ -20,7 +20,7 @@
 						</view>
 					</view>
 					<view class="sWrap-buzhou-item">
-						<image class="swbi-img" src="/static/b2.png" mode=""></image>
+						<image class="swbi-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/b2.png" mode=""></image>
 						<view class="swbi-tishi">
 							<text class="swbi-nm">2</text>
 							<view class="swbi-text">
@@ -30,7 +30,7 @@
 						</view>
 					</view>
 					<view class="sWrap-buzhou-item">
-						<image class="swbi-img" src="/static/b3.png" mode=""></image>
+						<image class="swbi-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/b3.png" mode=""></image>
 						<view class="swbi-tishi">
 							<text class="swbi-nm">3</text>
 							<view class="swbi-text">

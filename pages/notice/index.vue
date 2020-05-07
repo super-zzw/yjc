@@ -4,7 +4,7 @@
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
-						<image class="bot-left-img" src="/static/msg1.png" mode="widthFix"></image>
+						<image class="bot-left-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/msg1.png" mode="widthFix"></image>
 						<view class="bot-left-cen">
 							<view class="bot-left-cen1">在线客服</view>
 							<view class="bot-left-cen2">查看与客服沟通记录</view>
@@ -18,7 +18,7 @@
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
-						<image class="bot-left-img" src="/static/msg2.png" mode="widthFix"></image>
+						<image class="bot-left-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/msg2.png" mode="widthFix"></image>
 						<view class="bot-left-cen">
 							<view class="bot-left-cen1">服务通知</view>
 						</view>
@@ -35,7 +35,7 @@
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
-						<image class="bot-left-img" src="/static/msg3.png" mode="widthFix"></image>
+						<image class="bot-left-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/msg3.png" mode="widthFix"></image>
 						<view class="bot-left-cen">
 							<view class="bot-left-cen1">系统消息</view>
 						</view>

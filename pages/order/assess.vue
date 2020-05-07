@@ -29,7 +29,7 @@
 					<view class="add-imgbox">
 						<image class="add-img2" v-for="(iImg,Iindex) in item.pics" :key="Iindex" :src="iImg"></image>
 						<view v-if="item.pics.length < 3" class="add-img-items" @tap="addImg(index)">
-							<image class="add-img" src="/static/add.png" mode="widthFix"></image>
+							<image class="add-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/add.png" mode="widthFix"></image>
 						</view>
 					</view>
 				</view>

@@ -7,7 +7,7 @@
 				<view class="sirtl-text1">{{total}}</view>
 				<view class="sirtl-text2">累计获得奖励积分</view>
 			</view>
-			<image class="sir-gold" src="/static/gold.png" mode="widthFix"></image>
+			<image class="sir-gold" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/gold.png" mode="widthFix"></image>
 		</view>
 		<view class="sir-gang"></view>
 		<view class="sir-cont">

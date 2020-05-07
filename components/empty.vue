@@ -1,6 +1,6 @@
 <template>
 	<view class="empty-content">
-		<image class="empty-content-image" src="/static/empty.png" mode="aspectFit"></image>
+		<image class="empty-content-image" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/empty.png" mode="aspectFit"></image>
 		<view class="empty-text">{{desc}}</view>
 	</view>
 </template>

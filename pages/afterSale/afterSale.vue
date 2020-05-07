@@ -3,26 +3,26 @@
 		<view class="as-box">
 			<view class="as-item as-item1" @tap="refundgood">
 				<view class="asi-left">
-					<image class="asi-icon" src="/static/s1.png"></image>
+					<image class="asi-icon" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/s1.png"></image>
 					<view class="asi-text">
 						<view class="asi-text1">退货退款</view>
 						<view class="asi-text2">因质量、错发等问题需要退货退款</view>
 					</view>
 				</view>
 				<view class="asi-right">
-					<image src="/static/right.png" mode=""></image>
+					<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/right.png" mode=""></image>
 				</view>
 			</view>
 			<view class="as-item" @tap="refund">
 				<view class="asi-left">
-					<image class="asi-icon" src="/static/s2.png"></image>
+					<image class="asi-icon" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/s2.png"></image>
 					<view class="asi-text">
 						<view class="asi-text1">仅退款</view>
 						<view class="asi-text2">未收到货品</view>
 					</view>
 				</view>
 				<view class="asi-right">
-					<image src="/static/right.png" mode=""></image>
+					<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/right.png" mode=""></image>
 				</view>
 			</view>
 		</view>

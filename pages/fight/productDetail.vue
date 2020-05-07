@@ -79,7 +79,7 @@
 				</text>
 			</view> 
 			<view class="eva-box">
-				<image class="portrait" :src="comment.wuserIcon || '/static/defaultface.png'" mode="aspectFill"></image>
+				<image class="portrait" :src="comment.wuserIcon || 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/defaultface.png'" mode="aspectFill"></image>
 				<view class="right">
 					<text class="name">{{comment.wuserName}}</text>
 					<text class="con">{{comment.content}}</text>
@@ -149,7 +149,7 @@
 			<!-- 遮罩层 -->
 			<view class="mask"></view>
 			<view class="layer attr-content" @click.stop="stopPrevent">
-				<image src="../../static/deleteIcon.png" class="deletedIcon"  @click="toggleSpec"></image>
+				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/deleteIcon.png" class="deletedIcon"  @click="toggleSpec"></image>
 				<view class="a-t">
 					<image :src="stockInfo.pic"></image>
 					<view class="right">
@@ -261,15 +261,15 @@
 				creset:false,
 				shareList:[
 					{
-						icon: require( "../../static/wxhy.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
 					{
-						icon: require("../../static/pyq.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
 						text: "朋友圈"
 					},
 					{
-						icon: require("../../static/fzlj.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
 						text: "复制链接"
 					},
 				],

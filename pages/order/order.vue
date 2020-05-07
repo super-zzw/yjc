@@ -56,7 +56,7 @@
 							></text>
 						</view>
 						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember && item.status != 5">
-							<image src="../../static/ptz.png" mode="widthFix" class="igImg"></image>
+							<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" mode="widthFix" class="igImg"></image>
 							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
 						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x @tap="toDetail(item.id)">
@@ -226,15 +226,15 @@
 				],
 				shareList:[
 					{
-						icon: require( "../../static/wxhy.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
 					{
-						icon: require("../../static/pyq.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
 						text: "朋友圈"
 					},
 					{
-						icon: require("../../static/fzlj.png"),
+						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
 						text: "复制链接"
 					},
 				],

@@ -93,7 +93,7 @@
 				"enablePullDownRefresh": true
 			}
 		},{
-			"path": "pages/set/set",
+			"path": "pages/set/changePwd",
 			"style": {
 				"navigationBarTitleText": "设置",
 				"app-plus": {
@@ -105,8 +105,34 @@
 					}
 				}
 			}
+		},{
+			"path": "pages/set/changePhone",
+			"style": {
+				"navigationBarTitleText": "修改手机号",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					}
+				}
+			}
 		},
-
+		{
+			"path": "pages/set/set",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color":"#DBDBDB"
+						}
+					}
+				}
+			}
+		},
 		{
 			"path": "pages/userinfo/userinfo",
 			"style": {

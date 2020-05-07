@@ -127,7 +127,7 @@
 		font-family: rmttf;
 		font-weight: normal;
 		font-style: normal;
-		src: url('/static/font/Roboto-Medium.ttf') format('truetype');
+		src: url('https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/font/Roboto-Medium.ttf') format('truetype');
 	}
 	.nm-font{
 		font-family: "rmttf" !important;
