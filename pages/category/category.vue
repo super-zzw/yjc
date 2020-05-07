@@ -128,9 +128,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 				}).then(res => {
 					utils.setSesion(res.data)
 				}).catch(_ => {})
-			}
-		},
-		async onShow(){
+			};
 			await this.initData()
 			utils.setBadgeText(0,this.msgNms)
 			let that = this
@@ -141,9 +139,20 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 				that.$getMsgNms()
 			},800)
 		},
-		onHide() {
-			this.resetData()
-		},
+		// async onShow(){
+		// 	await this.initData()
+		// 	utils.setBadgeText(0,this.msgNms)
+		// 	let that = this
+		// 	setTimeout(() => {
+		// 		if(that.hasLogin){
+		// 			that.getCartNms();  //获取购物车数量
+		// 		}
+		// 		that.$getMsgNms()
+		// 	},800)
+		// },
+		// onHide() {
+		// 	this.resetData()
+		// },
 		computed:{
 			...mapState(['msgNms','hasLogin','paddingTop','config'])
 		},

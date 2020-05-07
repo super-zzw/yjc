@@ -12,7 +12,7 @@
 					<text class="icon iconfont iconweixin"></text>
 					<view class="con">
 						<text class="tit">微信支付</text>
-						<text>推荐使用微信支付</text>
+						<!-- <text>推荐使用微信支付</text> -->
 					</view>
 					<label class="radio">
 						<radio value="" color="#F23D3D" :checked='payType == 1' />
@@ -277,15 +277,24 @@ import {
 				
 			}
 		},
-		// // #ifdef APP-PLUS
-		// onBackPress(e){
-		// 	uni.navigateBack({
-		// 		delta:2
-		// 	})
-		// 	return true
-		// }
-		// // #endif
-		
+		onBackPress() {
+			let _res = true
+			uni.showModal({
+			    title: '提示',
+			    content: '确认要放弃付款？订单会保留一段时间，请尽快支付',
+				confirmText:'继续支付',
+				cancelText:'确认离开',
+				confirmColor:'#F23D3D',
+			    success: function (res) {
+			        if (!res.confirm) {
+						uni.redirectTo({
+							url:"/pages/order/order?state=1"
+						})
+			        }
+			    }
+			});
+			return true
+		}
 	}
 </script>
 
