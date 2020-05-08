@@ -1,5 +1,5 @@
 {
-    "name" : "辰悠优汇品",
+    "name" : "辰悠优品汇",
     "appid" : "__UNI__5D0627C",
     "description" : "",
     "versionName" : "1.0.0",
@@ -111,7 +111,7 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "wx0dffc4bfc45653d2",
+        "appid" : "wx869ea006d7b72f96",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
