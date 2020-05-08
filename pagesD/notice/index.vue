@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="notice-item" @tap="callService">
+		<view v-if="server == 1" class="notice-item" @tap="callService">
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
@@ -14,6 +14,20 @@
 				</view>
 			</view>
 		</view>
+		<button v-if="server == 2" open-type="contact" class="kefuBtn notice-item">
+			<view class="content">
+				<view class="bot b-t">
+					<view class="bot-left">
+						<image class="bot-left-img" src="/static/msg1.png" mode="widthFix"></image>
+						<view class="bot-left-cen">
+							<view class="bot-left-cen1">在线客服</view>
+							<view class="bot-left-cen2">查看与客服沟通记录</view>
+						</view>
+					</view>
+					<text class="more-icon iconfont iconright"></text>
+				</view>
+			</view>
+		</button>
 		<view class="notice-item" @tap="navTo('/pagesD/notice/msgList?type=1')">
 			<view class="content">
 				<view class="bot b-t">
@@ -63,7 +77,7 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin'])
+			...mapState(['hasLogin','server'])
 		},
 		onShow() {
 			if(this.hasLogin){

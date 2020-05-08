@@ -82,7 +82,8 @@
 				<view class="swb2f-btn1" v-if="order.status == 3" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1 recom" v-if="order.status == 3" @tap="toAssess">去评价</view>
 				<view class="swb2f-btn1" v-if="order.status == 4" @click="toDelivery">查看物流</view>
-				<view class="swb2f-btn1 recom" @tap="callService">联系客服</view>
+				<view v-if="server == 1" class="swb2f-btn1 recom" @tap="callService">联系客服</view>
+				<button v-if="server == 2" open-type="contact" class="kefuBtn swb2f-btn1 recom">联系客服</button>
 				<view class="swb2f-btn1" v-if="order.status == 5 && order.payType != 4" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
 			</view>
@@ -98,7 +99,8 @@
 				<view class="swb2f-btn1" v-if="order.status == 4" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1" v-if="order.status == 5" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5">售后进度</view>
-				<view class="swb2f-btn1 recom" @tap="callService">联系客服</view>
+				<view v-if="server == 1" class="swb2f-btn1 recom" @tap="callService">联系客服</view>
+				<button v-if="server == 2" open-type="contact" class="kefuBtn swb2f-btn1 recom">联系客服</button>
 			</view>
 		</view>
 		<view class="swrap-box3">
@@ -169,7 +171,7 @@ export default{
 		}
 	},
 	computed:{
-		...mapState(['userInfo','config'])
+		...mapState(['userInfo','config','server'])
 	},
 	methods:{
 		navToDetailPage(id){

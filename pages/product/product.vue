@@ -89,10 +89,14 @@
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom page-bottom-score" v-if="isScore == 'true'" @click="buy">去兑换</view>
 		<view class="page-bottom" v-else>
-			<navigator url="/pages/service/service" open-type="navigate" class="p-b-btn">
+			<navigator v-if="server == 1" url="/pages/service/service" open-type="navigate" class="p-b-btn">
 				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
 				<text>客服</text>
 			</navigator>
+			<button v-if="server == 2" open-type="contact" class="kefuBtn p-b-btn">
+				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
+				<text>客服</text>
+			</button>
 			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2">
 				<text class="iconfont icongouwuche1"></text>
 				<text>购物车</text>

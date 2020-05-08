@@ -50,7 +50,7 @@
 	@import  "/static/font/iconfont/iconfont.css";
 	/* #ifdef MP-WEIXIN */
 	.wxPage{
-		margin-top: 88rpx;
+		margin-top: 70rpx;
 	}
 	/* #endif */
 	uni-checkbox .uni-checkbox-input{

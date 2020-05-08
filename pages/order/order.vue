@@ -111,7 +111,8 @@
 							<button class="action-btn" v-if="item.status == 3" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
 							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
-							<button class="action-btn recom" @tap="callService">联系客服</button>
+							<button v-if="server == 1" class="action-btn recom" @tap="callService">联系客服</button>
+							<button v-if="server == 2" open-type="contact" class="kefuBtn action-btn recom">联系客服</button>
 							<!-- <button class="action-btn" v-if="item.status == 5 && item.payType != 4" @click="toDelivery(item.id)">查看物流</button> -->
 							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5 && item.payType != 4">售后进度</button>
 						</view>
@@ -128,7 +129,8 @@
 							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
 							<!-- <button class="action-btn" v-if="item.status == 5" @click="toDelivery(item.id)">查看物流</button> -->
 							<button class="action-btn recom" @tap="toAfterSale(item.applyType,item.applyId,item.id)" v-if="item.status == 5">售后进度</button>
-							<button class="action-btn recom" @tap="callService">联系客服</button>
+							<button v-if="server == 1" class="action-btn recom" @tap="callService">联系客服</button>
+							<button v-if="server == 2" open-type="contact" class="kefuBtn action-btn recom">联系客服</button>
 						</view>
 					</view>
 					 <view v-if="tabItem.orderList.length > 0 && tabItem.noMore" class="no_more">
@@ -161,7 +163,7 @@
 			Share
 		},
 		computed:{
-			...mapState(['userInfo'])
+			...mapState(['userInfo','server'])
 		},
 		onShareAppMessage(res) {
 			return utils.homeShare({

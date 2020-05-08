@@ -103,10 +103,14 @@
 		
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom">
-			<navigator url="/pages/service/service" open-type="navigate" class="p-b-btn">
+			<navigator v-if="server == 1" url="/pages/service/service" open-type="navigate" class="p-b-btn">
 				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
 				<text>客服</text>
 			</navigator>
+			<button v-if="server == 2" open-type="contact" class="kefuBtn p-b-btn">
+				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
+				<text>客服</text>
+			</button>
 			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2">
 				<text class="iconfont icongouwuche1"></text>
 				<text>购物车</text>
@@ -282,7 +286,7 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin','userInfo'])
+			...mapState(['hasLogin','userInfo','server'])
 		},
 		methods:{
 			...mapMutations(['setAfterLoginUrl','setOrder','setGroupProductId']),

@@ -6,6 +6,7 @@ Vue.use(Vuex)
 let _session = uni.getStorageSync('yzhloginSession')
 const store = new Vuex.Store({
 	state: {
+		server:1,  //1第三方客服，2，小程序自带客服，仅限小程序
 		hasLogin: !!_session,
 		userInfo:{},
 		afterLoginUrl:"",  //用于存储登录之后跳转的页面

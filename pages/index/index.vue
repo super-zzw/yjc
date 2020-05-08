@@ -339,7 +339,9 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 					apiName:"getBanner",
 					data:{type:0}
 				}).then(res => {
-					this.loadData(res.data)
+					if(res.data.length > 0){
+						this.loadData(res.data)
+					}
 				}).catch(_ => {})
 			},
 			//动态菜单
@@ -539,12 +541,12 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	/* #endif */
 	/* #ifdef MP-WEIXIN */
 	.container{
-		min-height: calc(100vh - 88rpx);
+		min-height: calc(100vh - 70rpx);
 		background: #fff;
 	}
 	/* #endif */
 	.m-t{
-		margin-top: 16rpx;
+		margin-top: 0;
 	}
 	.m-t2{
 		margin-top: 0;
@@ -785,7 +787,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	.f-header2{
 		display:flex;
 		align-items:center;
-		height: 90rpx;
+		height: 80rpx;
 		padding: 6rpx 30rpx 8rpx;
 		background: #fff;
 		image{

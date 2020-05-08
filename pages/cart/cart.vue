@@ -16,7 +16,7 @@
 					<view class="navigator" @click="navToLogin">去登录></view>
 				</view>
 			</view>
-			<view class="guess-section">
+			<view class="guess-section" v-if="topicsList.length > 0">
 				<view class="guess-section-top">
 					<view class="guess-section-top1"></view>
 					<view class="guess-section-top2">为你推荐</view>
@@ -81,7 +81,7 @@
 				</block>
 			</view>
 			<!-- 底部菜单栏 -->
-			<view class="action-section">
+			<view class="action-section" v-if="cartList.length > 0">
 				<view class="checkbox">
 					<image 
 						:src="allChecked?'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/selected.png':'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/select.png'" 
@@ -374,9 +374,19 @@
 </script>
 
 <style lang='scss' scoped>
+	/* #ifdef APP-PLUS || H5 */
 	.container{
-		min-height: calc(100vh - 100rpx);
+		min-height: calc(100vh - 188rpx);
+	}
+	/* #endif */
+	/* #ifdef MP-WEIXIN */
+	.container{
+		min-height: calc(100vh - 70rpx);
+	}
+	/* #endif */
+	.container{
 		box-sizing: border-box;
+		background-color: #F9FAFB;
 		.empty{
 			/* padding-bottom: 40rpx; */
 			.emptybox{

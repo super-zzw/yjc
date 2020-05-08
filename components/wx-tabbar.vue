@@ -56,7 +56,7 @@
 		color: #fff;
 		z-index: 99999;
 		color: #303133;
-		height: 88rpx;
+		height: 70rpx;
 		box-sizing: content-box;
 		background-color: #fff;
 		.ctbWarp2{

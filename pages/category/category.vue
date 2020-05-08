@@ -22,7 +22,7 @@
 							</view>
 							<view class="tl2t3" v-if="titem.skuName">
 								<text v-for="(val,key) in titem.skuMap" :key="key">
-									<text>{{key}}</text>:<text>{{val}};</text>;
+									<text>{{key}}</text>:<text>{{val}}</text>;
 								</text>
 							</view>
 							<view class="tl2t2">
@@ -418,7 +418,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 		height: calc(100vh - 188rpx);
 		/* #endif */
 		/* #ifdef  MP-WEIXIN */
-		height: calc(100vh - 88rpx);
+		height: calc(100vh - 70rpx);
 		/* #endif */
 		/* #ifdef APP-PLUS */
 		height: 100vh;
