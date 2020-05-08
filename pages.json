@@ -349,105 +349,6 @@
 				},
 				"enablePullDownRefresh": true
 			}
-		},{
-			"path": "pages/rebate/record",
-			"style": {
-				"navigationBarTitleText": "邀请记录",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/rebate/applyFor",
-			"style": {
-				"navigationBarTitleText": "提现申请",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/rebate/successToast",
-			"style": {
-				"navigationBarTitleText": "提现成功",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/rebate/failToast",
-			"style": {
-				"navigationBarTitleText": "提现失败",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				}
-			}
-		},
-		{
-			"path": "pages/rebate/rule",
-			"style": {
-				"navigationBarTitleText": "详细规则",
-				"app-plus": {
-					"bounce": "none",
-					"titleNView": {
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				}
-			}
 		}
 		, {
 			"path": "pages/address/addressManage",
@@ -502,55 +403,6 @@
 							"color":"#DBDBDB"
 						},
 						"autoBackButton":false
-					}
-				}
-			}
-		}
-		,{
-		    "path" : "pages/notice/index",
-		    "style" : {
-				"navigationBarTitleText": "消息",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					}
-				}
-			}
-		}
-		,{
-		    "path" : "pages/notice/msgList",
-		    "style" : {
-				"navigationBarTitleText": "消息列表",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					},
-					"pullToRefresh": {
-						"support": true,
-						"style": "circle",
-						"color": "#F23D3D",
-						"offset": "0"
-					}
-				},
-				"enablePullDownRefresh": true
-			}
-		}
-		,{
-		    "path" : "pages/notice/msgDetail",
-		    "style" : {
-				"navigationBarTitleText": "消息详情",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
 					}
 				}
 			}
@@ -776,63 +628,6 @@
 			}
 		}
         ,{
-            "path" : "pages/invite/invite",
-            "style" : {
-				"navigationBarTitleText": "邀请好友",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						},
-						"buttons": [{
-								"text": "记录",
-								"fontSize": "12",
-								"color": "#F23D3D",
-								"float": "right"
-							}
-						]
-					}
-				}
-			}
-        } ,{
-            "path" : "pages/rebate/index",
-            "style" : {
-				"navigationBarTitleText": "邀请返利",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						},
-						"buttons": [{
-								"text": "邀请记录",
-								"fontSize": "14px",
-								"width": "68px",
-								"color": "#909399",
-								"float": "right"
-							}
-						]
-					}
-				}
-			}
-        },
-		
-		{
-            "path" : "pages/invite/recorde",
-            "style" : {
-				"navigationBarTitleText": "邀请记录",
-				"app-plus":{
-					"bounce": "none",
-					"titleNView":{
-						"splitLine": {
-							"color":"#DBDBDB"
-						}
-					}
-				}
-			}
-        }
-        ,{
             "path" : "pages/article/article",
             "style" : {
             	"navigationBarTitleText": "内容详情",
@@ -896,90 +691,7 @@
 				"enablePullDownRefresh": true
 		    }
 		}
-        ,{
-            "path" : "pages/afterSale/onlyRefund",
-            "style": {
-            	"navigationBarTitleText": "填写信息",
-            	"app-plus":{
-            		"bounce": "none",
-            		"titleNView":{
-            			"splitLine": {
-            				"color":"#DBDBDB"
-            			}
-            		}
-            	}
-            }
-        },
-		{
-		    "path" : "pages/afterSale/onlyRefundPrgs",
-		    "style": {
-		    	"navigationBarTitleText": "售后进度",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			}
-		    		}
-		    	}
-		    }
-		},
-		{
-		    "path" : "pages/afterSale/reGoodfund",
-		    "style": {
-		    	"navigationBarTitleText": "填写信息",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			}
-		    		}
-		    	}
-		    }
-		},
-		{
-		    "path" : "pages/afterSale/reGoodfundPrgs",
-		    "style": {
-		    	"navigationBarTitleText": "售后进度",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			}
-		    		}
-		    	}
-		    }
-		},
-		{
-		    "path" : "pages/afterSale/afterSale",
-		    "style": {
-		    	"navigationBarTitleText": "售后服务",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			}
-		    		}
-		    	}
-		    }
-		},
-		{
-		    "path" : "pages/afterSale/applyOk",
-		    "style": {
-		    	"navigationBarTitleText": "申请结果",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			}
-		    		}
-		    	}
-		    }
-		},
+        ,
 		{
 		    "path" : "pages/public/about",
 		    "style": {
@@ -993,29 +705,7 @@
 		    		}
 		    	}
 		    }
-		},
-		{
-		    "path" : "pages/afterSale/logistics",
-		    "style": {
-		    	"navigationBarTitleText": "填写物流信息",
-		    	"app-plus":{
-		    		"bounce": "none",
-		    		"titleNView":{
-		    			"splitLine": {
-		    				"color":"#DBDBDB"
-		    			},
-						"buttons": [{
-								"text": "保存",
-								"fontSize": "15",
-								"color": "#F23D3D",
-								"float": "right"
-							}
-						]
-		    		}
-		    	}
-		    }
-		}
-        ,{
+		},{
             "path" : "pages/service/service",
             "style": {
             	"navigationBarTitleText": "",
@@ -1133,6 +823,356 @@
 			}
 		}
     ],
+	"subPackages":[
+		{
+			"root": "pagesA",
+			"pages":[
+				{
+				    "path" : "afterSale/onlyRefund",
+				    "style": {
+				    	"navigationBarTitleText": "填写信息",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+				    "path" : "afterSale/onlyRefundPrgs",
+				    "style": {
+				    	"navigationBarTitleText": "售后进度",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+				    "path" : "afterSale/reGoodfund",
+				    "style": {
+				    	"navigationBarTitleText": "填写信息",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+				    "path" : "afterSale/reGoodfundPrgs",
+				    "style": {
+				    	"navigationBarTitleText": "售后进度",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+				    "path" : "afterSale/afterSale",
+				    "style": {
+				    	"navigationBarTitleText": "售后服务",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+				    "path" : "afterSale/applyOk",
+				    "style": {
+				    	"navigationBarTitleText": "申请结果",
+				    	"app-plus":{
+				    		"bounce": "none",
+				    		"titleNView":{
+				    			"splitLine": {
+				    				"color":"#DBDBDB"
+				    			}
+				    		}
+				    	}
+				    }
+				},
+				{
+					"path" : "afterSale/logistics",
+					"style": {
+						"navigationBarTitleText": "填写物流信息",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								},
+								"buttons": [{
+										"text": "保存",
+										"fontSize": "15",
+										"color": "#F23D3D",
+										"float": "right"
+									}
+								]
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"root":"pagesB",
+			"pages":[
+				{
+				    "path" : "rebate/index",
+				    "style" : {
+						"navigationBarTitleText": "邀请返利",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								},
+								"buttons": [{
+										"text": "邀请记录",
+										"fontSize": "14px",
+										"width": "68px",
+										"color": "#909399",
+										"float": "right"
+									}
+								]
+							}
+						}
+					}
+				},{
+					"path": "rebate/record",
+					"style": {
+						"navigationBarTitleText": "邀请记录",
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": {
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						}
+					}
+				},
+				{
+					"path": "rebate/applyFor",
+					"style": {
+						"navigationBarTitleText": "提现申请",
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": {
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						}
+					}
+				},
+				{
+					"path": "rebate/successToast",
+					"style": {
+						"navigationBarTitleText": "提现成功",
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": {
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						}
+					}
+				},
+				{
+					"path": "rebate/failToast",
+					"style": {
+						"navigationBarTitleText": "提现失败",
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": {
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						}
+					}
+				},
+				{
+					"path": "rebate/rule",
+					"style": {
+						"navigationBarTitleText": "详细规则",
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": {
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"root":"pagesC",
+			"pages":[
+				{
+				    "path" : "invite/invite",
+				    "style" : {
+						"navigationBarTitleText": "邀请好友",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								},
+								"buttons": [{
+										"text": "记录",
+										"fontSize": "12",
+										"color": "#F23D3D",
+										"float": "right"
+									}
+								]
+							}
+						}
+					}
+				} ,
+				{
+				    "path" : "invite/recorde",
+				    "style" : {
+						"navigationBarTitleText": "邀请记录",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							}
+						}
+					}
+				}
+			]
+		},
+		{
+			"root":"pagesD",
+			"pages":[
+				{
+				    "path" : "notice/index",
+				    "style" : {
+						"navigationBarTitleText": "消息",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							}
+						}
+					}
+				}
+				,{
+				    "path" : "notice/msgList",
+				    "style" : {
+						"navigationBarTitleText": "消息列表",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
+							}
+						},
+						"enablePullDownRefresh": true
+					}
+				}
+				,{
+				    "path" : "notice/msgDetail",
+				    "style" : {
+						"navigationBarTitleText": "消息详情",
+						"app-plus":{
+							"bounce": "none",
+							"titleNView":{
+								"splitLine": {
+									"color":"#DBDBDB"
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": {
+		"pagesA/afterSale/afterSale": {
+			"network": "all",
+			"packages": ["pagesA"]
+		},
+		"pagesB/rebate/index": {
+			"network": "all",
+			"packages": ["pagesB"]
+		},
+		"pagesC/invite/invite": {
+			"network": "all",
+			"packages": ["pagesC"]
+		},
+		"pagesD/notice/index": {
+			"network": "all",
+			"packages": ["pagesD"]
+		}
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "辰悠优品汇",

@@ -1,7 +1,7 @@
 <template>
 	<view class="ctbWarp" :style="{background:showSearch == -1 ? topbgk : '#fff',paddingTop:paddingTop}">
 		<view class="ctbWarp2" :style="{width:width,height:height}">
-			<view class="mtb_side p-b-btn" @tap="toPath('/pages/notice/index')" :style="{color:showSearch == -1 ? '#fff' : '#303133'}">
+			<view class="mtb_side p-b-btn" @tap="toPath('/pagesD/notice/index')" :style="{color:showSearch == -1 ? '#fff' : '#303133'}">
 				<text class="iconfont iconxiaoxi1"></text>
 				<text class="p-b-btn-bg" v-if="msgNms > 0 && msgNms < 100">{{msgNms}}</text>
 				<text class="p-b-btn-bg" v-if="msgNms > 100">99+</text>

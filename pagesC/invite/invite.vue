@@ -158,7 +158,7 @@
 			// #endif
 			if(index == 0){
 				uni.navigateTo({
-					url:'/pages/invite/recorde'
+					url:'/pagesC/invite/recorde'
 				})
 			}
 		},

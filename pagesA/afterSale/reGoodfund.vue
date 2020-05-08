@@ -1,14 +1,22 @@
 <template>
 	<view class="sWrap">
 		<view class="sor-top">
-			<text class="text1">流程指引:</text>
-			<text>提交申请</text>
-			<text>>></text>
-			<text>客服受理</text>
-			<text>>></text>
-			<text>完成退款</text>
+			<view class="sor-top-item">
+				<text class="text1">流程指引:</text>
+				<text>提交申请</text>
+				<text>>></text>
+				<text>客服受理</text>
+				<text>>></text>
+			</view>
+			<view class="sor-top-item">
+				<text>寄回退货并填写单号</text>
+				<text>>></text>
+				<text>仓库收货</text>
+				<text>>></text>
+				<text>完成退款</text>
+			</view>
 		</view>
-		<picker mode="selector" :range="config.MALL_ORDER_REFUND" @change="bindPickerChange">
+		<picker mode="selector" :range="config.MALL_ORDER_RETURN" @change="bindPickerChange">
 			<view class="sor-cont">
 				<view class="sor-cleft">
 					<view class="sor-cleft-text1">申请类型：</view>
@@ -20,7 +28,7 @@
 			</view>
 		</picker>
 		<view class="sor-desc">
-			<textarea rows=4 class="sor-desc-area" v-model="desc" placeholder-style="color:#C0C4CC;font-size:28rpx;" placeholder="为尽快处理你的售后申请，请填写详细描述...(140字以内)" />
+			<textarea rows=4 class="sor-desc-area" v-model="desc" placeholder-style="color:#C0C4CC;font-size:28rpx;" placeholder="为尽快处理你的售后申请，请填写详细描述（10-300字）：" />
 		</view>
 		<view class="sor-items">
 			<view class="sor-item-tile">订单{{orderSn}}内的商品</view>
@@ -75,7 +83,7 @@ export default{
 	},
 	methods:{
 		bindPickerChange(e){
-			this.type = this.config.MALL_ORDER_REFUND[e.detail.value]
+			this.type = this.config.MALL_ORDER_RETURN[e.detail.value]
 		},
 		async getData(){
 			await this.$http({
@@ -97,12 +105,12 @@ export default{
 						description:this.desc,
 						orderId:this.orderId,
 						reason:this.type,
-						type :0
+						type :1
 					}
 				}).then(res => {
 					this.btnDisable = false;
 					uni.navigateTo({
-						url:"/pages/afterSale/applyOk"
+						url:"/pagesA/afterSale/applyOk"
 					})
 				}).catch(_ => {
 					this.btnDisable = false;
@@ -116,7 +124,7 @@ export default{
 		}
 	},
 	onLoad(opt) {
-		this.type = this.config.MALL_ORDER_REFUND[0]
+		this.type = this.config.MALL_ORDER_RETURN[0]
 		if(opt.id){
 			this.orderId = opt.id
 			this.getData()
@@ -131,12 +139,18 @@ export default{
 	background-color:#F9FAFB;
 	.sor-top{
 		background-color: #fff;
-		display: flex;
-		justify-content: space-between;
 		color: #303133;
 		font-size: 28rpx;
 		padding: 36rpx 32rpx;
+		padding-bottom: 10rpx;
 		margin-bottom: 20rpx;
+		.sor-top-item{
+			display: flex;
+			margin-bottom: 20rpx;
+			text{
+				margin-right: 20rpx;
+			}
+		}
 		.text1{
 			color: #606266;
 		}

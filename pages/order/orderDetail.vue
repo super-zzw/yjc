@@ -287,7 +287,7 @@ export default{
 		//售后
 		afterSale(){
 			uni.navigateTo({
-				url:`/pages/afterSale/afterSale?id=${this.orderId}`
+				url:`/pagesA/afterSale/afterSale?id=${this.orderId}`
 			})
 		},
 		//复制订单号

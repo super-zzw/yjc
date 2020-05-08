@@ -39,12 +39,12 @@
 		methods: {
 			refund(){
 				uni.navigateTo({
-					url:"/pages/afterSale/onlyRefund?id=" + this.orderId
+					url:"/pagesA/afterSale/onlyRefund?id=" + this.orderId
 				})
 			},
 			refundgood(){
 				uni.navigateTo({
-					url:"/pages/afterSale/reGoodfund?id=" + this.orderId
+					url:"/pagesA/afterSale/reGoodfund?id=" + this.orderId
 				})
 			}
 		},

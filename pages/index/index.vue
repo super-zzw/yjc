@@ -520,7 +520,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				})
 			} else if (index === 0) {
 				uni.navigateTo({
-					url: '/pages/notice/index'
+					url: '/pagesD/notice/index'
 				})
 			}
 		}

@@ -274,12 +274,12 @@
 				if(type == 0){
 					//仅退款
 					uni.navigateTo({
-						url: `/pages/afterSale/onlyRefundPrgs?prgsId=${prgsId}&orderId=${orderId}`
+						url: `/pagesA/afterSale/onlyRefundPrgs?prgsId=${prgsId}&orderId=${orderId}`
 					})
 				}else{
 					//退货退款
 					uni.navigateTo({
-						url: `/pages/afterSale/reGoodfundPrgs?prgsId=${prgsId}&orderId=${orderId}`
+						url: `/pagesA/afterSale/reGoodfundPrgs?prgsId=${prgsId}&orderId=${orderId}`
 					})
 				}
 				
@@ -293,7 +293,7 @@
 			//售后
 			afterSale(id){
 				uni.navigateTo({
-					url:`/pages/afterSale/afterSale?id=${id}`
+					url:`/pagesA/afterSale/afterSale?id=${id}`
 				})
 			},
 			//确定确认收货

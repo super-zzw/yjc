@@ -77,10 +77,10 @@
 				<view class="" @tap="navTo('/pages/integral/record')">
 					<list-cell iconfont="iconfont iconduihuan" iconColor="#F7CA20" title="积分兑换记录"  tips=" "></list-cell>
 				</view>
-				<view class="" @tap="navTo('/pages/invite/invite')">
+				<view class="" @tap="navTo('/pagesC/invite/invite')">
 					<list-cell iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
 				</view>
-				<view class="" @tap="navTo('/pages/rebate/index',true)">
+				<view class="" @tap="navTo('/pagesB/rebate/index',true)">
 					<list-cell class="last-list" iconfont="iconfont iconyaoqingfanliicon-gerenye" iconColor="#ff488f" title="邀请返利"  tips=" "></list-cell>
 				</view>
 			</view>
@@ -210,7 +210,7 @@
 			// #endif
 			if (index === 0) {
 				uni.navigateTo({
-					url: '/pages/notice/index'
+					url: '/pagesD/notice/index'
 				})
 			}else if(index === 1){
 				uni.navigateTo({

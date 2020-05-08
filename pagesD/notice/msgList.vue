@@ -49,7 +49,7 @@ export default{
 		},
 		msgDetail(id){
 			uni.navigateTo({
-				url:"/pages/notice/msgDetail?id=" + id
+				url:"/pagesD/notice/msgDetail?id=" + id
 			})
 		}
 	},

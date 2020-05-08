@@ -1,16 +1,16 @@
 <template>
 	<view class="sWrap">
 		<view class="rgp-box1">
-			<view class="rgp1-order">售后单号：{{applySn}}（仅退款）</view>
+			<view class="rgp1-order">售后单号：{{applySn}}（退货退款）</view>
 			<view class="rgp1-liuc">
 				<view class="rgp1l-title">退款流程</view>
 				<view class="rgp1l-cont" v-if="applyStatus == -1">
 					<view class="" v-for="(item,index) in prgs" :key="index">
-						<view class="rgp1l-cont-item" v-if="item.status != 3 || item.status != 4">
+						<view class="rgp1l-cont-item" v-if="item.status != 1 || item.status != 2 || item.status != 3 || item.status != 4">
 							<view class="rgp1l-cont-itembox">
 								<view class="rgp1l-cont-itembox2">
 									<view class="rgp1lcit-num" v-if="index == 0" :class="{ractive:item.status > applyStatus}">{{index + 1}}</view>
-									<view class="rgp1lcit-num" v-else :class="{ractive:item.status > applyStatus}">{{index -2}}</view>
+									<view class="rgp1lcit-num" v-else :class="{ractive:item.status > applyStatus}">{{index - 4}}</view>
 									<view class="rgp1lcit-text">{{item.cont}}</view>
 								</view>
 							</view>
@@ -26,6 +26,23 @@
 									<view class="rgp1lcit-num" v-if="index == 0" :class="{ractive:item.status > applyStatus}">{{index + 1}}</view>
 									<view class="rgp1lcit-num" v-else :class="{ractive:item.status > applyStatus}">{{index}}</view>
 									<view class="rgp1lcit-text">{{item.cont}}</view>
+								</view>
+								<view class="" v-if="applyStatus == 1 && item.status == 1">
+									<view class="rgp1lcit-time2" @tap="logistics">填写物流单号</view>
+								</view>
+								<view class="rgp1lcit-text-sub" v-if="applyStatus == 2 && item.status == 1">
+									<view class="rgp1lcit-text-sub1">
+										<view class="">{{deliveryCompany}}</view>
+										<view class="">{{deliverySn}}</view>
+									</view>
+									<view class="rgp1lcit-time2 rgp1lcit-text-sub2" @tap="logistics">修改</view>
+								</view>
+								<!-- 商家已收货 -->
+								<view class="rgp1lcit-text-sub"  v-if="applyStatus >= 3 && item.status == 1">
+									<view class="rgp1lcit-text-sub1">
+										<view class="">{{deliveryCompany}}</view>
+										<view class="">{{deliverySn}}</view>
+									</view>
 								</view>
 							</view>
 							<image v-if="index != prgs.length - 1" class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
@@ -80,7 +97,6 @@ export default{
 		return {
 			orderId:"",  //订单id
 			prgsId:"",  //售后id
-			
 			prgs:[
 				{
 					cont:"提交售后申请",
@@ -89,6 +105,14 @@ export default{
 				{
 					cont:"售后拒绝",
 					status:-1
+				},
+				{
+					cont:"商品待退回",
+					status:1
+				},
+				{
+					cont:"商家待收货",
+					status:2
 				},
 				{
 					cont:"待退款",
@@ -107,10 +131,11 @@ export default{
 			total:"",
 			orderSn:"",
 			applySn:"",  //售后单号
-			
 			applyStatus:"",  //售后状态
 			desc:"",
 			type:"",  //售后原因
+			deliverySn:"",//退货单号
+			deliveryCompany:"",  //退货公司
 		}
 	},
 	methods:{
@@ -133,17 +158,21 @@ export default{
 				this.type = res.data.reason
 				this.desc = res.data.description
 				this.applyStatus = res.data.status
+				this.deliveryCompany = res.data.deliveryCompany
+				this.deliverySn = res.data.deliverySn
 			}).catch(_ => {})
 		},
 		logistics(id){
 			uni.navigateTo({
-				url:"/pages/afterSale/logistics"
+				url:"/pagesA/afterSale/logistics?id=" + this.prgsId
 			})
 		}
 	},
 	onLoad(opt) {
 		this.prgsId = opt.prgsId
 		this.orderId = opt.orderId
+	},
+	onShow() {
 		this.getData()
 		this.getPrgs()
 	}
@@ -154,6 +183,19 @@ export default{
 	.sWrap{
 		min-height: calc(100vh - 88rpx);
 		background-color: #F9FAFB;
+		.rgp1lcit-text-sub{
+			display: flex;
+			align-items: center;
+			color: #ccc;
+		}
+		.rgp1lcit-text-sub1{
+			font-size: 20rpx;
+			text-align: right;
+			margin-right: 10rpx;
+		}
+		.rgp1lcit-text-sub2{
+			width: fit-content;
+		}
 		.rgp-box1{
 			background-color: #fff;
 			padding: 32rpx;

@@ -14,7 +14,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="notice-item" @tap="navTo('/pages/notice/msgList?type=1')">
+		<view class="notice-item" @tap="navTo('/pagesD/notice/msgList?type=1')">
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
@@ -31,7 +31,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="notice-item" @tap="navTo('/pages/notice/msgList?type=2')">
+		<view class="notice-item" @tap="navTo('/pagesD/notice/msgList?type=2')">
 			<view class="content">
 				<view class="bot b-t">
 					<view class="bot-left">
