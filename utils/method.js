@@ -160,25 +160,48 @@ export default{
 		};
 	},
 	wxShare({name,type,gid,path="pages/fight/productDetail"}){
-		uni.share({
-			provider: "weixin",
-			scene: name,
-			type:5,  //5是小程序
-			title: `${store.state.config.MALL_APP_NAME}汇聚了海内外优质商品，快来嗨购吧！`,
-			imageUrl: store.state.config.MALL_IMG_DEFAULT.groupShare,
-			miniProgram:{  //小程序的配置信息
-				id: 'gh_a6c9030a00ac', // 公众开发平台原始ID//辰悠++优品汇
-				path: path+'?id='+gid, 
-				type: 2,  //0-正式版； 1-测试版； 2-体验版
-				webUrl: 'http://web.vyunmall.com',  //辰悠++优品汇
-			},
-			success(res) { 
-				console.log(res);
-			},
-			fail(err){
-				console.log(err);
-			}
-		})
+		//分享到小程序
+		if(store.state.aboutShare == 1){
+			uni.share({
+				provider: "weixin",
+				scene: name,
+				type:5,  //5是小程序
+				title: `${store.state.config.MALL_APP_NAME}汇聚了海内外优质商品，快来嗨购吧！`,
+				imageUrl: store.state.config.MALL_IMG_DEFAULT.groupShare,
+				miniProgram:{  //小程序的配置信息
+					id: 'gh_a6c9030a00ac', // 公众开发平台原始ID//辰悠++优品汇
+					path: path+'?id='+gid, 
+					type: 2,  //0-正式版； 1-测试版； 2-体验版
+					webUrl: 'http://web.vyunmall.com',  //辰悠++优品汇
+				},
+				success(res) { 
+					console.log(res);
+				},
+				fail(err){
+					console.log(err);
+				}
+			})
+		}
+		//分享到注册
+		if(store.state.aboutShare == 2){
+			let _self = this;
+			uni.share({
+				provider: "weixin",
+				scene: name,
+				type:0,
+				title: `${store.config.MALL_APP_NAME}汇聚了海内外优质商品`,
+				imageUrl: _self.config.MALL_IMG_DEFAULT.groupShare,
+				summary: "快来嗨购吧！",
+				href: `http://web.vyunmall.com/register.html?inviteCode=${code}&id=${0}`,
+				success(res) {
+					console.log(res);
+				},
+				fail(err){
+					console.log(err);
+				}
+			})
+		}
+		
 	},
 	setClip({code,id}){
 		uni.setClipboardData({
@@ -186,7 +209,7 @@ export default{
 			success(res) {
 				uni.hideToast();
 				uni.showToast({
-					title: "复制成功，请前往浏览器下载",
+					title: "复制成功，请前往浏览器打开",
 					icon: "none"
 				})
 			}

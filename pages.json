@@ -764,16 +764,16 @@
 							"color":"#DBDBDB"
 						},
 						"type": "transparent"
-						// ,
-						// "buttons": [{
-						// 		"fontSrc": "/static/font/iconfont/iconfont.ttf",
-						// 		"text": "\ue63c",
-						// 		"fontSize": "16",
-						// 		"color": "#303133",
-						// 		"float": "right",
-						// 		"background": "rgba(0,0,0,0.5)"
-						// 	}
-						// ]
+						,
+						"buttons": [{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue63c",
+								"fontSize": "16",
+								"color": "#303133",
+								"float": "right",
+								"background": "rgba(0,0,0,0.5)"
+							}
+						]
 					}
 				}
 			}
