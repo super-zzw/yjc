@@ -19,4 +19,4 @@ Im ++ Lucky注册地址[](http://web.youmall.vip/register.html)
 app有对应的小程序则分享到小程序（method.js里面的wxShare方法），没有小程序分享到h5页面(pagesB/reate/index里面的appShare方法)
 其中邀请返利分享到注册页面，拼团分享到下载页面
 9，版本号同步
-10，logo更换
+10，APP的logo和项目内的logo由后台替换
