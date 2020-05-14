@@ -27,7 +27,7 @@
 					<text class="iconfont iconfuzhi gbsc"></text>
 				</view>
 				<view class="price-box">
-					消耗积分
+					消耗{{config.MALL_POINT_TITLE}}
 					<text class="price">{{item.payAmount}}</text>
 				</view>
 			</view>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import empty from "@/components/empty";
 import utils from "@/utils/method.js"
 export default{
@@ -60,6 +61,9 @@ export default{
 		dealTime(val){
 			return utils.unixToDatetime(val) || ""
 		}
+	},
+	computed:{
+		...mapState(['config'])
 	},
 	onLoad() {
 		this.getData()

@@ -1,5 +1,6 @@
 <template>
 	<view class="container wxPage" :style="{paddingTop:paddingTop}">
+		<tabBar :current="2"></tabBar>
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
@@ -9,7 +10,8 @@
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/emptyCart.png" mode="aspectFit"></image>
 				<view v-if="hasLogin" class="empty-tips">
 					购物车是空哒～
-					<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+					<!-- <navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator> -->
+					<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="reLaunch">随便逛逛></navigator>
 				</view>
 				<view v-else class="empty-tips">
 					购物车是空哒
@@ -112,12 +114,14 @@
 	} from 'vuex';
 	import uniNumberBox from '@/components/uni-number-box.vue'
 	import utils from '@/utils/method.js'
+	import tabBar from "@/components/tab-bar.vue"
 	export default {
 		onShareAppMessage(){
 			return utils.homeShare({})
 		},
 		components: {
-			uniNumberBox
+			uniNumberBox,
+			tabBar
 		},
 		data() {
 			return {
@@ -150,7 +154,7 @@
 			...mapState(['hasLogin','utils','msgNms','paddingTop'])
 		},
 		methods: {
-			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab']),
+			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab','setCartNms']),
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -160,7 +164,9 @@
 						  index: 2,
 						  text: String(res.data)
 						})
+						this.setCartNms(res.data)
 					}else{
+						this.setCartNms(0)
 						uni.removeTabBarBadge({
 							index: 2,
 						})
@@ -310,7 +316,10 @@
 				await this.$http({
 					apiName:"clearCart",
 					type:"POST"
-				}).then( _ => {}).catch( _ => {})
+				}).then( _ => {
+					this.setCartNms(0);
+					this.getTj()
+				}).catch( _ => {})
 				uni.hideLoading();
 			},
 			//计算总价
@@ -581,9 +590,7 @@
 	}
 	/* 底部栏 */
 	.action-section{
-		/* #ifdef H5 */
 		margin-bottom:100rpx;
-		/* #endif */
 		position:fixed;
 		left: 30rpx;
 		bottom:30rpx;

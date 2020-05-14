@@ -11,8 +11,8 @@
 			this.$store.commit('setPaddingTop',menuButton.top + 'px');
 			// #endif
 		},
-		onShow: function() {
-			this.$getConfig()
+		async onShow() {
+			await this.$getConfig()
 			// console.log('App Show')
 			// #ifdef APP-PLUS
 			var args= plus.runtime.arguments;

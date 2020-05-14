@@ -250,7 +250,7 @@
 					font-size: 30rpx;
 				}
 				.stext{
-					min-width: 160rpx;
+					min-width: 200rpx;
 					text-align: center;
 					font-size: 24rpx;
 					color: #F23D3D;

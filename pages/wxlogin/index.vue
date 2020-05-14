@@ -14,7 +14,7 @@
 				获得你的的公开信息（昵称、头像、地区及性别）
 			</view>
 			<button class="w1d4 btn btn1" open-type="getUserInfo" lang="zh_CN" @getuserinfo="onGotUserInfo()">授权登录</button>
-			<view class="w1d4 btn2">
+			<view class="w1d4 btn2" @tap="toHome">
 				暂不登录
 			</view>
 		</view>
@@ -56,6 +56,9 @@
 			cancel(){
 				this.showModal = false;
 			},
+			toHome(){
+				uni.navigateBack()
+			},
 			async getPhoneNumber (e) {
 				let _self = this;
 				uni.showLoading({
@@ -87,12 +90,17 @@
 						_self.showModal=false
 					})
 				}else{
+					_self.showModal=false
 					uni.hideLoading()
+					uni.showToast({
+						icon: 'none',
+						title: "授权失败",
+						duration: 1500
+					});
 				}
 				
 			 },
 			async onGotUserInfo() {
-				this.showModal = true;
 				let _self = this;
 				uni.showLoading({
 				    title: '授权请求中...'
@@ -102,6 +110,7 @@
 					this.jsCode = jscode;
 					this.showModal = true;
 				}else{
+					this.showModal = false;
 					uni.showToast({
 						icon: 'none',
 						title: "授权失败",

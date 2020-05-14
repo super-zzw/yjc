@@ -108,22 +108,6 @@
 			this.page ++;
 			this.getAddr()
 		},
-		// onBackPress(e){
-		// 	if(this.source == 2){
-		// 		uni.switchTab({
-		// 			url:"/pages/user/user"
-		// 		})
-		// 	}else if(this.source == 1){  //直接购买或者积分兑换的来源
-		// 		uni.redirectTo({
-		// 			url:"/pages/order/createOrder?score=" + this.score
-		// 		})
-		// 	}else if(this.source == 3){  //购物车来源
-		// 		uni.redirectTo({
-		// 			url:"/pages/order/createOrder?cart=1"
-		// 		})
-		// 	}
-		// 	return true
-		// }
 	}
 </script>
 

@@ -8,23 +8,23 @@ export default{
 			  provider: 'weixin',
 			  success: function (res) {
 				if (res.code) {
-					resolve(res.code);
-				  //   uni.getUserInfo({
-				  //   	provider: 'weixin',
-				  //   	success: function(infoRes) {
-						// 	let result = {}
-						// 	Object.assign(result,infoRes.userInfo,{jsCode:res.code});
-						// 	resolve(result);
-				  //   	},
-				  //   	fail(res) {
-						// 	resolve(false)
-						// }
-				  //   });
+					// resolve(res.code);
+				    uni.getUserInfo({
+				    	provider: 'weixin',
+				    	success: function(infoRes) {
+							resolve(res.code);
+				    	},
+				    	fail(res) {
+							resolve(false)
+						}
+				    });
 				}else{
 					resolve(false)
 				}
 			  },
-			  fail:function(res){resolve(false)}
+			  fail:function(res){
+				  resolve(false)
+				}
 			})
 		})
 	},
@@ -68,7 +68,8 @@ export default{
 	//登录之后的跳转
 	afterLoginJump(){
 		if(store.state.afterLoginIsTab){
-			uni.switchTab({
+			// uni.switchTab({
+			uni.reLaunch({
 				url:store.state.afterLoginUrl || '/pages/index/index'
 			})
 		}else{
@@ -77,7 +78,8 @@ export default{
 					url:store.state.afterLoginUrl
 				})
 			}else{
-				uni.switchTab({
+				// uni.switchTab({
+				uni.reLaunch({
 					url:'/pages/index/index'
 				})
 			}

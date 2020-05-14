@@ -37,14 +37,18 @@ export default{
 	deleteCartGood:"/oms/delete/cart/product",  //删除购物车某个商品
 	clearCart:"/oms/remove/cart",  //清空购物车
 	
+	changePwdCode:"/app/pwd/sendAuthCode",  //修改密码验证码
+	changePwd:"/ums/changePassword",  //修改登录密码
+	changePhone:"/ums/changePhone",  //修改手机号
 	getUserInfo:"/ums/getUserInfo",  //获取用户信息
 	logOut:"/ums/logout",  //退出登录
 	refreshSession:"/ums/refreshSession",  //刷新session
 	getCollect:"/ums/get/productCoolect",  //获取收藏列表
 	deleteCollect:"/ums/delete/productCoolect",  //删除某个收藏
-	getScore:"/ums/get/integrationHistory",  //获取用户积分列表
+	getScore:"/ums/get/integrationHistory",  //获取用户积++分列表
 	siginCount:"/ums/get/continuousSignInDay",  //获取签到次数
 	setSigin:"/ums/integration",  //签到
+	siginRule:"/ums/get/integration/rule",  //签到规则
 	uploadImg:"/app/img",  //上传图片
 	saveUserInfo:"/ums/update/wuser/info",  //保存用户信息
 	getOrderList:"/oms/get/orderList",  //获取订单列表
@@ -57,7 +61,7 @@ export default{
 	getInvitePoster:"/ums/getInviteImage",  //获取分享海报
 	getInvite:"/ums/get/inviteList",  //获取邀请列表
 	getInviteInfo: "/ums/inviteinfo" , // 获取我的邀请记录
-	scoreExList:"/oms/get/exchangeHistory",  //积分兑换列表
+	scoreExList:"/oms/get/exchangeHistory",  //积++分兑换列表
 	deleteOrder:"/ums/delete/myOrder",  //删除订单
 	reOrder:"/oms/add/orderReturnApply",  //退单
 	getPrgs:"/oms/get/orderReturnApplyInfo",  //获取售后详情

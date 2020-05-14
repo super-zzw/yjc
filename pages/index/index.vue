@@ -1,10 +1,11 @@
 <template>
 	<view class="container wxPage"  :style="{paddingTop:paddingTop}">
+		<tabBar :current="0"></tabBar>
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
-		<!-- 头部轮播 -->
-		<view class="carousel-section" v-if="carouselList.length > 0">
+		<!-- 轮播 -->
+		<view class="carousel-section" v-if="carouselList.length > 0 && config && config.MALL_HOMW_SWAITCH.bannerFlag == 1">
 			<!-- 背景色区域 -->
 			<view class="titleNview-background" :style="{backgroundColor:titleNViewBackground}"></view>
 			<swiper class="carousel" circular @change="swiperChange">
@@ -20,7 +21,7 @@
 			</view>
 		</view>
 		<!-- 分类 -->
-		<view class="cate-section" v-if="navs.length > 0">
+		<view class="cate-section" v-if="navs.length > 0 && config && config.MALL_HOMW_SWAITCH.navFlag == 1">
 			<swiper class="swiper-nav" indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="navs.length > 2" :autoplay="false" :interval="2000" :duration="500">
 				<swiper-item class="swiper-nav-item" v-for="(item0,index0) in navs" :key="index0">
 					<view class="cate-item" v-for="(item1,index1) in item0" :key="index1"  @tap="pageJump(item1.jumpType,item1.jumpId)">
@@ -31,7 +32,7 @@
 			</swiper>
 		</view>
 		<!-- 滚动广告 -->
-		<view class="ad-1" v-if="notices.length > 0">
+		<view class="ad-1" v-if="notices.length > 0 && config && config.MALL_HOMW_SWAITCH.noticeFlag == 1">
 			<div class="ad-1-box">
 				<image class="ad-1-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ad.png" mode="widthFix"></image>
 				<swiper class="ad-1-swiper" :vertical="true" :indicator-dots="false" :autoplay="true" :interval="2000" :duration="500">
@@ -43,9 +44,9 @@
 		</view>
 		<!-- 主题推荐 -->
 		<view v-if="tipics.length > 0 && config && config.MALL_HOMW_SWAITCH.themeFlag == 1">
-			<view class="f-header2 m-t m-t2">
+			<view class="f-header2 m-t m-t2 f-header3">
 				<view class="tit-box">
-					<text class="tit">主题推荐</text>
+					<text class="tit">{{config.PROMOTION_TITLE.subjectTitle}}</text>
 				</view>
 				<view class="tit-box2" @tap="toMore()">
 					更多
@@ -74,57 +75,55 @@
 		</view>
 		
 		<!-- 超值拼团 -->
-		<view class="seckill-section m-t" v-if="fightList.length > 0 && config && config.MALL_HOMW_SWAITCH.groupFlag == 1">
-			<view class="f-header2 m-t f-header3">
+		<view class="item-module" v-if="fightList.length > 0 && config && config.MALL_HOMW_SWAITCH.groupFlag == 1">
+			<view class="f-header2 m-t" >
 				<view class="tit-box">
-					<text class="tit">超值拼团</text>
+					<text class="tit">{{config.PROMOTION_TITLE.grouponTitle}}</text>
 				</view>
 				<view class="tit-box2" @tap="pageJump(9)">
 					更多
 					<text class="iconfont iconright"></text>
 				</view>
 			</view>
-			<scroll-view class="floor-list" scroll-x>
-				<view class="scoll-wrapper">
-					<view 
-						@click="fightDetailPage(item.id)"
-						v-for="(item, index) in fightList" :key="index"
-						class="floor-item floor-item2"
-					>
-						<image mode="" class="floor-item-img" :src="item.picUrl"></image>
-						
-						<text class="price nm-font price12">
-							<text class="price1">¥{{item.minGroupPrice}}</text>
-							<text class="price2">¥{{item.minPromotionPrice}}</text>
-						</text>
-						<text class="title clamp">{{item.title}}</text>
-						<view class="fTextBox" v-if="item.status == 0">
-							<text class="fText1 nm-font">{{item.startDate}}</text>开始
-						</view>
-						<view class="fTextBox" v-if="item.status == 1 && creset">
-							<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
-							<text class="fText2">后结束</text>
-						</view>
-						<view class="fTextBox" v-if="item.status == 2">
-							<text class="fText2">拼团已结束</text>
-						</view>
+			<view class="guess-section" :class="config.PROMOTION_TITLE.grouponStyle == 1 ? 'guess-section2' : ''">
+				<view 
+					@click="fightDetailPage(item.id)"
+					v-for="(item, index) in fightList" :key="index"
+					class="guess-item guess-item2"
+				>
+					<image mode="" class="image-wrapper" :src="item.picUrl"></image>
+					
+					<text class="price nm-font price12">
+						<text class="price1">¥{{item.minGroupPrice}}</text>
+						<text class="price2">¥{{item.minPromotionPrice}}</text>
+					</text>
+					<text class="title clamp">{{item.title}}</text>
+					<view class="fTextBox" v-if="item.status == 0">
+						<text class="fText1 nm-font">{{item.startDate}}</text>开始
+					</view>
+					<view class="fTextBox" v-if="item.status == 1 && creset">
+						<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
+						<text class="fText2">后结束</text>
+					</view>
+					<view class="fTextBox" v-if="item.status == 2">
+						<text class="fText2">拼团已结束</text>
 					</view>
 				</view>
-			</scroll-view>
+			</view>
 		</view>
 		
 		<!-- 新品首发 -->
 		<view class="item-module" v-if="topics123[1].length > 0 && config && config.MALL_HOMW_SWAITCH.newFlag == 1">
 			<view class="f-header2 m-t" >
 				<view class="tit-box">
-					<text class="tit">新品首发</text>
+					<text class="tit">{{config.PROMOTION_TITLE.newTitle}}</text>
 				</view>
 				<view class="tit-box2" @tap="pageJump(1)">
 					更多
 					<text class="iconfont iconright"></text>
 				</view>
 			</view>
-			<view class="guess-section guess-section2">
+			<view class="guess-section" :class="config.PROMOTION_TITLE.newStyle == 1 ? 'guess-section2' : ''">
 				<view 
 					@click="navToDetailPage(item.productId)"
 					v-for="(item, index) in topics123[1]" :key="index"
@@ -144,14 +143,14 @@
 		<view class="item-module" v-if="topics123[2].length > 0 && config && config.MALL_HOMW_SWAITCH.boutiqueFlag == 1">
 			<view class="f-header2 m-t" >
 				<view class="tit-box">
-					<text class="tit">精品专区</text>
+					<text class="tit">{{config.PROMOTION_TITLE.boutiqueTitle}}</text>
 				</view>
 				<view class="tit-box2" @tap="pageJump(2)">
 					更多
 					<text class="iconfont iconright"></text>
 				</view>
 			</view>
-			<view class="guess-section guess-section2">
+			<view class="guess-section" :class="config.PROMOTION_TITLE.boutiqueStyle == 1 ? 'guess-section2' : ''">
 				<view 
 					@click="navToDetailPage(item.productId)"
 					v-for="(item, index) in topics123[2]" :key="index"
@@ -170,14 +169,14 @@
 		<view  class="item-module" v-if="topics123[0].length > 0 && config && config.MALL_HOMW_SWAITCH.promotionFlag == 1">
 			<view class="f-header2 m-t" >
 				<view class="tit-box">
-					<text class="tit">促销专区</text>
+					<text class="tit">{{config.PROMOTION_TITLE.promotionTitle}}</text>
 				</view>
 				<view class="tit-box2" @tap="pageJump(3,1)">
 					更多
 					<text class="iconfont iconright"></text>
 				</view>
 			</view>
-			<view class="guess-section">
+			<view class="guess-section" :class="config.PROMOTION_TITLE.promotionStyle == 1 ? 'guess-section2' : ''">
 				<view 
 					@click="navToDetailPage(item.productId)"
 					v-for="(item, index) in topics123[0]" :key="index"
@@ -201,12 +200,14 @@ import {
 } from 'vuex';
 import utils from '@/utils/method.js'
 import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
+import tabBar from "@/components/tab-bar.vue"
 	export default {
 		onShareAppMessage (){
 			return utils.homeShare({})
 		},
 		components: {
-			uniCountdown
+			uniCountdown,
+			tabBar
 		},
 		data() {
 			return {
@@ -236,7 +237,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			},800)
 		},
 		async onLoad(opt) {
-			// #ifdef APP-PLUS 
+			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){
 				this.$checkUpdate();
 				await this.initData();
@@ -264,7 +265,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			}
 		},
 		methods: {
-			...mapMutations(['setUserInfo','setAfterLoginUrl']),
+			...mapMutations(['setUserInfo','setAfterLoginUrl','setHasScore','setHasSigin','setCartNms']),
 			timeUp(){
 				console.log("计时结束");
 				this.creset = false;
@@ -308,7 +309,9 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 						  index: 2,
 						  text: String(res.data)
 						})
+						this.setCartNms(res.data)
 					}else{
+						this.setCartNms(0)
 						uni.removeTabBarBadge({
 							index: 2,
 						})
@@ -352,6 +355,14 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 					if(res.data.length){
 						for(var i=0;i<res.data.length;i+=5){
 						    this.navs.push(res.data.slice(i,i+5));
+						}
+						for(var j = 0 ; j < res.data.length; j ++){
+							if(res.data[j].jumpType == 4){
+								this.setHasScore(1)
+							}
+							if(res.data[j].jumpType == 5){
+								this.setHasSigin(1)
+							}
 						}
 					}
 				}).catch(_ => {})
@@ -426,7 +437,7 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				})  
 			}, 
 			//模块跳转
-			//type：1新品首发，2精品推荐，3促销专区，4积分兑换，5今日签到，6商品详情，7专题详情 8文章,9超值拼团
+			//type：1新品首发，2精品推荐，3促销专区，4积++分兑换，5今日签到，6商品详情，7专题详情 8文章,9超值拼团
 			pageJump(typeId,dataId){
 				switch(Number(typeId)){
 					case 1:
@@ -470,6 +481,11 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 					case 9:
 						uni.navigateTo({
 							url:"/pages/fight/list"
+						})
+						break;
+					case 10:
+						uni.navigateTo({
+							url:"/pages/product/list?categoryid=" + dataId
 						})
 						break;
 					default:
@@ -533,9 +549,12 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	page {
 		background: #F9FAFB;
 	}
+	.container{
+		padding-bottom: 100rpx;
+	}
 	/* #ifdef APP-PLUS || H5 */
 	.container{
-		min-height: calc(100vh - 188rpx);
+		min-height: calc(100vh - 88rpx);
 		background: #fff;
 	}
 	/* #endif */
@@ -711,84 +730,11 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 			}
 		}
 	}
-	/* 超值拼团 */
-	
-	.seckill-section{
-		padding: 4rpx 30rpx 24rpx;
-		background: #fff;
-		.floor-list{
-			white-space: nowrap;
-			width: 100%;
-		}
-		.scoll-wrapper{
-			display:flex;
-			align-items: flex-start;
-			padding-bottom: 40rpx;
-		}
-		.floor-item2{
-			margin-right: 20rpx;
-			font-size: 30rpx;
-			color: $font-color-dark;
-			line-height: 1.8;
-			overflow: hidden;
-			box-sizing: border-box;
-			box-shadow: 0 0 20rpx 0 rgba(0,0,0,.13);
-			border-radius: 20rpx;
-			border: 2rpx solid rgba(0,0,0,.13);
-			overflow: hidden;
-			flex: 1 0 48%;
-			.floor-item-img{
-				width: 100%;
-				border-radius: 6rpx;
-				height: 330rpx;
-			}
-			.title{
-				color: #303133;
-				font-size: 30rpx;
-				overflow: hidden;
-				text-overflow:ellipsis;
-				white-space: nowrap;
-				padding: 0 20rpx;
-				line-height: 40rpx;
-			}
-			.price{
-				color: #F23D3D;
-				font-size: 30rpx;
-				display: block;
-				padding: 0 20rpx 16rpx;
-				.price2{
-					text-decoration: line-through;
-					color: #909399;
-					font-size: 26rpx;
-					margin-left: 20rpx;
-				}
-			}
-			.price12{
-				line-height: 40rpx;
-				padding-bottom: 0;
-			}
-			.title2{
-				padding-bottom: 20rpx;
-			}
-			.fTextBox{
-				padding: 0 20rpx 20rpx;
-				font-size: 28rpx;
-				.fText1{
-					color: #F23D3D;
-					font-weight: bold;
-				}
-				.fText2{
-					color: #909399;
-				}
-			}
-		}
-	}
-	// 主题推荐
 	.f-header2{
 		display:flex;
 		align-items:center;
 		height: 80rpx;
-		padding: 6rpx 30rpx 8rpx;
+		padding: 6rpx 0 8rpx;
 		background: #fff;
 		image{
 			flex-shrink: 0;
@@ -814,8 +760,8 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	}
 	// 超值拼团
 	.f-header3{
-		padding-left: 0;
-		padding-right: 0;
+		padding-left: 30rpx;
+		padding-right: 30rpx;
 	}
 	/* 主题推荐 */
 	.group-section2{
@@ -888,29 +834,60 @@ import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 				&:nth-child(2n+1){
 					margin-right: 4%;
 				}
-			}
-			.image-wrapper{
-				width: 100%;
-				height: 330rpx;
-				border-radius: 3px;
-				overflow: hidden;
-				image{
+				.image-wrapper{
 					width: 100%;
-					height: 100%;
-					opacity: 1;
+					height: 330rpx;
+					border-radius: 3px;
+					overflow: hidden;
+					image{
+						width: 100%;
+						height: 100%;
+						opacity: 1;
+					}
+				}
+				.title{
+					font-size: 30rpx;
+					color: $font-color-dark;
+					line-height: 60rpx;
+					padding: 0 20rpx;
+				}
+				.price{
+					padding: 0 20rpx 16rpx;
+					font-size: $font-lg;
+					color: $uni-color-primary;
+					line-height: 1;
 				}
 			}
-			.title{
-				font-size: 30rpx;
-				color: $font-color-dark;
-				line-height: 60rpx;
-				padding: 0 20rpx;
-			}
-			.price{
-				padding: 0 20rpx 16rpx;
-				font-size: $font-lg;
-				color: $uni-color-primary;
-				line-height: 1;
+			.guess-item2{
+				.price{
+					color: #F23D3D;
+					font-size: 30rpx;
+					display: block;
+					.price2{
+						text-decoration: line-through;
+						color: #909399;
+						font-size: 26rpx;
+						margin-left: 20rpx;
+					}
+				}
+				.price12{
+					line-height: 40rpx;
+					padding-bottom: 0;
+				}
+				.title2{
+					padding-bottom: 20rpx;
+				}
+				.fTextBox{
+					padding: 0 20rpx 20rpx;
+					font-size: 28rpx;
+					.fText1{
+						color: #F23D3D;
+						font-weight: bold;
+					}
+					.fText2{
+						color: #909399;
+					}
+				}
 			}
 		}
 		.guess-section2{

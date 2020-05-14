@@ -100,7 +100,8 @@
 						title:"退出成功"
 					})
 					setTimeout(_ => {
-						uni.switchTab({
+						// uni.switchTab({
+						uni.reLaunch({
 							url:"/pages/index/index"
 						})
 					},2000)
@@ -155,7 +156,8 @@
 			
 		},
 		onBackPress(e){
-			uni.switchTab({
+			// uni.switchTab({
+			uni.reLaunch({
 				url:"/pages/user/user"
 			})
 			return true

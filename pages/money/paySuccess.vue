@@ -6,7 +6,8 @@
 		<text class="tit" v-if="isDh == 2">提交成功</text>
 		<view class="btn-group">
 			<navigator open-type="redirect" url="/pages/order/order?state=0" class="mix-btn">查看订单</navigator>
-			<navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
+			<!-- <navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator> -->
+			<navigator open-type="reLaunch" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
 		</view>
 	</view>
 </template>
@@ -19,7 +20,24 @@
 			}
 		},
 		methods: {
-			
+			getCartNms(){
+				this.$http({
+					apiName:"getCartNms"
+				}).then(res => {
+					if(res.data > 0){
+						uni.setTabBarBadge({
+						  index: 2,
+						  text: String(res.data)
+						})
+						this.setCartNms(res.data)
+					}else{
+						this.setCartNms(0)
+						uni.removeTabBarBadge({
+							index: 2,
+						})
+					}
+				}).catch(_ => {})
+			},
 		},
 		onLoad(opt) {
 			this.isDh = opt.isDh
@@ -28,9 +46,11 @@
 					title:"兑换成功"
 				})
 			}
+			this.getCartNms()
 		},
 		onBackPress(e){
-			uni.switchTab({
+			// uni.switchTab({
+			uni.reLaunch({
 				url:"/pages/order/order"
 			})
 			return true

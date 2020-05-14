@@ -12,7 +12,7 @@
 					<text class="icon iconfont iconweixin"></text>
 					<view class="con">
 						<text class="tit">微信支付</text>
-						<!-- <text>推荐使用微信支付</text> -->
+						<text v-if="item.payDefault == 1">推荐使用微信支付</text>
 					</view>
 					<label class="radio">
 						<radio value="" color="#F23D3D" :checked='payType == 1' />
@@ -24,6 +24,7 @@
 					<text class="icon iconfont iconzhifubao"></text>
 					<view class="con">
 						<text class="tit">支付宝支付</text>
+						<text v-if="item.payDefault == 1">推荐使用支付宝支付</text>
 					</view>
 					<label class="radio">
 						<radio value="" color="#F23D3D" :checked='payType == 2' />
@@ -141,7 +142,7 @@ import {
 				// // #ifdef H5
 				// _wxPayType = "H5";
 				// // #endif
-				// #ifdef MP-WEIXIN
+				// #ifdef MP-WEIXIN || H5
 				_wxPayType = "JSAPI";
 				// #endif
 				var that = this;
@@ -221,7 +222,7 @@ import {
 					});
 					// #endif
 					
-					// #ifdef MP-WEIXIN
+					// #ifdef MP-WEIXIN || H5
 					let obj2 = {
 						nonceStr: res.data.nonceStr,
 						timeStamp: res.data.timeStamp,

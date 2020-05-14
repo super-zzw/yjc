@@ -18,7 +18,8 @@
 				})
 			},
 			toTab(url){
-				uni.switchTab({
+				// uni.switchTab({
+				uni.reLaunch({
 					url:url
 				})
 			}

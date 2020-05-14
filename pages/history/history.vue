@@ -22,7 +22,7 @@
 							{{item.minPrice}}
 						</view>
 						<view class="s-info2 nm-font" v-else>
-							积分
+							{{config.MALL_POINT_TITLE}}
 							{{item.minPoints}}
 						</view>
 						<view class="s-info3">{{item.createTime | dealTime}}</view>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	import utils from '@/utils/method.js'
 	export default {
 		data() {
@@ -47,11 +48,14 @@
 				size:8,
 				dataLoading:false,  //是否是在加载数据
 				noMore:false,
-				dataList:[],  //productType:1普通商品，0积分商品
+				dataList:[],  //productType:1普通商品，0积++分商品
 			}
 		},
 		async onLoad() {
 			await this.getData()
+		},
+		computed:{
+			...mapState(['config'])
 		},
 		filters:{
 			dealTime(val){

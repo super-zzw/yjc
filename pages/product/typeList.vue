@@ -12,7 +12,7 @@
 					</view>
 					<text class="title clamp">{{item.title}}</text>
 					<view class="price-box">
-						<text class="nm-font" v-if="isCore">积分：{{item.minPoints}}</text>
+						<text class="nm-font" v-if="isCore">{{config.MALL_POINT_TITLE}}：{{item.minPoints}}</text>
 						<text class="price nm-font" v-else>{{item.minPrice}}</text>
 						<text v-if="isCore">已兑换 {{item.totalSale}}</text>
 						<text v-else>已售 {{item.totalSale}}</text>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -83,6 +84,9 @@
 					title:"可兑换商品"
 				})
 			}
+		},
+		computed:{
+			...mapState(['config'])
 		},
 		methods: {
 			navToDetailPage(id,scoreId){
@@ -135,13 +139,13 @@
 				var _title = "商品列表"
 				switch(Number(this.typeId)){
 					case 1:
-						_title = "促销专区"
+						_title = this.config.PROMOTION_TITLE.promotionTitle
 						break;
 					case 2:
-						_title = "新品首发"
+						_title = this.config.PROMOTION_TITLE.newTitle
 						break;
 					case 3:
-						_title = "精品专区"
+						_title = this.config.PROMOTION_TITLE.boutiqueTitle
 						break;
 					case 4:
 						_title = "推荐商品"

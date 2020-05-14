@@ -17,7 +17,7 @@
 		<view class="introduce-section">
 			<text class="title">{{title}}</text>
 			<view class="price-box" v-if="isScore == 'true'">
-				<text class="price nm-font">{{exchangePoints}}积分</text>
+				<text class="price nm-font">{{exchangePoints}}{{config.MALL_POINT_TITLE}}</text>
 			</view>
 			<view class="price-box" v-else>
 				<text class="price-tip">¥</text>
@@ -30,11 +30,12 @@
 				<text>浏览量: {{views}}</text>
 			</view>
 		</view>
-		
+		<view class="share-section share-section2" v-if="sevenReturnApply == 1">正品保证·支持7天无理由退换货</view>
+		<view class="share-section share-section2" v-if="sevenReturnApply == 2">正品保证·不支持7天无理由退换货</view>
 		<!--  分享 -->
 		<view class="share-section" v-if="!(isScore == 'true')">
 			<text class="iconfont iconjifen"></text>
-			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint || '0'}}积分</text>
+			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint || '0'}}{{config.MALL_POINT_TITLE}}</text>
 			
 		</view>
 		
@@ -97,7 +98,8 @@
 				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
 				<text>客服</text>
 			</button>
-			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2">
+			<!-- <navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2"> -->
+			<navigator url="/pages/cart/cart" open-type="reLaunch" class="p-b-btn p-b-btn2">
 				<text class="iconfont icongouwuche1"></text>
 				<text>购物车</text>
 				<text class="p-b-btn-bg" v-if="cartNms > 0 && cartNms < 100">{{cartNms}}</text>
@@ -199,7 +201,7 @@
 		data() {
 			return {
 				exchangePoints:0,
-				isScore:false,  //是否为积分兑换
+				isScore:false,  //是否为积++分兑换
 				stockInfo:{},// 规格界面详情
 				productId:"",  //商品id
 				imgList: [],  //轮播图列表
@@ -209,7 +211,7 @@
 				sale:0,  //销量
 				stock:999999,  //库存
 				views:0,  //浏览量
-				giftPoint:0,  //购买商品奖励积分
+				giftPoint:0,  //购买商品奖励积++分
 				commentNum:0,  //评论数量
 				commentList:null,  //默认评论
 				desc: "",  //详情描述
@@ -239,6 +241,7 @@
 					},
 				],
 				clickType:"", // 点击的类型
+				sevenReturnApply:"",  //7天的保证
 			};
 		},
 		async onLoad(options){
@@ -251,7 +254,7 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin']),
+			...mapState(['hasLogin','server','config']),
 			indicatorDots(){
 				return this.imgList.length > 1
 			}
@@ -344,6 +347,7 @@
 					this.giftPoint = res.data.product.giftPoint
 					this.desc = res.data.product.descriptionHtml.replace(/\<img/gi, '<img class="cont_img2" ');
 					this.exchangePoints = res.data.product.minPoints
+					this.sevenReturnApply = res.data.product.sevenReturnApply
 					this.collectionFlag = res.data.collectionFlag
 					this.collectionId = res.data.collectionId
 					//处理评论
@@ -732,7 +736,10 @@
 			color: $uni-color-primary;
 		}
 	}
-	
+	.share-section2{
+		border-bottom: 2rpx solid #dcdce3;
+		font-size: 28rpx;
+	}
 	.c-list{
 		font-size: $font-sm + 2rpx;
 		color: $font-color-base;

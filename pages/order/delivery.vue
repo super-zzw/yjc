@@ -1,36 +1,62 @@
 <template>
 	<view class="sWrap">
-		<view class="rgp-box1">
-			<view class="rgp1-order rgp1-order2">订单编号：{{orderSn}}</view>
-			<view class="rgp1-order rgp1-order2">物流公司：{{deliveryCompany}}</view>
-			<view class="rgp1-order">快递单号：{{deliverySn}}</view>
-			<view class="rgp1-liuc">
-				<view class="rgp1l-title">物流进度</view>
-				<view class="rgp1l-cont" v-if="!loadData && prgs.length > 0">
-					<view class="" v-for="(item,index) in prgs" :key="index">
-						<view class="rgp1l-cont-item">
-							<view class="rgp1l-cont-itembox">
-								<view class="rgp1l-cont-itembox2">
-									<view class="rgp1lcit-num">{{prgs.length - index}}</view>
-									<view class="rgp1lcit-text">{{item.time}}</view>
+		<view class="rpg-title">订单编号：{{orderSn}}</view>
+		<view class="" v-if="!loadData && prgs.length > 0">
+			<view class="rgp-box1" v-for="(item,index) in prgs" :key="index">
+				<view class="box-line"></view>
+				<view class="">
+					<view class="swb2-item" v-for="(good,gIndex) in item.orderItems" :key="gIndex">
+						<view class="swb2-item1">
+							<image class="swb2-item-img" :src="good.picUrl" mode=""></image>
+						</view>
+						<view class="swb2-item3">
+							<view class="swb2-item2">
+								<view class="swb2-item2-title">{{good.productName}}</view>
+								<view class="swb2-item2-cont">
+									<text class="swb2-item2-text1" v-if="payType != 3">￥{{good.promotionPrice}}</text>
+									<text class="swb2-item2-text2">
+										<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
+									</text>
 								</view>
 							</view>
-							<view class="rgp1l-cont-itemboxtype2">
-								<image class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
-								<view class="rgp1lcit-text2">{{item.context}}</view>
-							</view>
+							<view class="swb2-item4">{{good.productQuantity}}件</view>
 						</view>
-						<view class="rgp1l-cont-item" v-if="prgs.length - 1 == index">
-							<view class="rgp1l-cont-itembox">
-								<view class="rgp1l-cont-itembox2">
-									<view class="rgp1lcit-num"></view>
+					</view>
+				</view>
+				<view class="rgp1-order rgp1-order2">物流公司：{{item.deliveryCompany}}</view>
+				<view class="rgp1-order">快递单号：{{item.deliverySn}}</view>
+				<view class="rgp1-liuc">
+					<view class="rgp1l-title">物流进度：</view>
+					<view class="rgp1l-cont" v-if="item.result.length > 0">
+						<view class="" v-for="(item2,index2) in item.result" :key="index2">
+							<view class="rgp1l-cont-item">
+								<view class="rgp1l-cont-itembox">
+									<view class="rgp1l-cont-itembox2">
+										<view class="rgp1lcit-num">{{item.result.length - index2}}</view>
+										<view class="rgp1lcit-text">{{item2.time}}</view>
+									</view>
+								</view>
+								<view class="rgp1l-cont-itemboxtype2">
+									<image class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
+									<view class="rgp1lcit-text2">{{item2.context}}</view>
+								</view>
+							</view>
+							<view class="rgp1l-cont-item" v-if="item.result.length - 1 == index2">
+								<view class="rgp1l-cont-itembox">
+									<view class="rgp1l-cont-itembox2">
+										<view class="rgp1lcit-num"></view>
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
+					<view class="rgp1l-title" v-else>{{item.msg}}</view>
 				</view>
-				<view class="rgp1l-title" v-else>{{prgs}}</view>
+				
 			</view>
+		</view>
+		<view class="rpg-title rpg-title2" v-else>
+			{{prgs}}
 		</view>
 	</view>
 </template>
@@ -41,11 +67,10 @@ export default{
 	data(){
 		return {
 			orderId:"",  //订单id
-			prgs:"查询中，请稍后...",
+			prgs:"物流查询中...",
 			loadData:true,
-			deliveryCompany:"",
-			deliverySn:"",
-			orderSn:""
+			orderSn:"",
+			payType:""
 		}
 	},
 	methods:{
@@ -54,9 +79,8 @@ export default{
 				apiName:"getOrderDetail",
 				data:{orderId:this.orderId}
 			}).then(res => {
-				this.deliveryCompany = res.data.order.deliveryCompany
-				this.orderSn = res.data.order.orderSn
-				this.deliverySn = res.data.order.deliverySn
+				this.orderSn = res.data.order.orderSn;
+				this.payType = res.data.order.payType
 			}).catch(_ => {})
 		},
 		async getPrgs(){
@@ -64,11 +88,20 @@ export default{
 				apiName:"getGoodDeliver",
 				data:{orderId:this.orderId}
 			}).then(res => {
-				if(!res.data || res.data.length == 0){
+				if(res.data.length == 0){
 					this.prgs = "暂无物流信息"
 				}else{
 					this.prgs = res.data
 					this.loadData = false
+					this.prgs.map(item => {
+						if(item.result){
+							item["result"] = JSON.parse(item.result)
+						}else{
+							item["result"] = []
+							item["msg"] = "暂无物流信息"
+						}
+						
+					})
 				}
 			}).catch(_ => {
 				this.prgs = "物流查询失败，请稍后再试"
@@ -87,14 +120,80 @@ export default{
 	.sWrap{
 		min-height: calc(100vh - 88rpx);
 		background-color: #fff;
+		.rpg-title{
+			padding-left: 32rpx;
+			padding-right: 32rpx;
+			color: #000;
+			font-size: 28rpx;
+			font-weight: bold;
+		}
+		.rpg-title2{
+			font-weight: normal;
+		}
 		.rgp-box1{
 			background-color: #fff;
 			padding: 32rpx;
+			padding-top: 0;
+			.box-line{
+				height: 2rpx;
+				background-color: #DBDBDB;
+				margin-top: 30rpx;
+			}
+			.swb2-item{
+				padding-top: 20rpx;
+				padding-bottom: 20rpx;
+				border-bottom: 2rpx solid #DBDBDB;
+				display: flex;
+				.swb2-item1{
+					width: 120rpx;
+					height: 120rpx;
+					border-radius: 8rpx;
+					background: #C0C4CC;
+					margin-right: 20rpx;
+					.swb2-item-img{
+						width: 120rpx;
+						height: 120rpx;
+						border-radius: 8rpx;
+					}
+				}
+				.swb2-item3{
+					flex: 1;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.swb2-item2{
+						.swb2-item2-title{
+							color: #303133;
+							font-size: 26rpx;
+						}
+						.swb2-item2-cont{
+							margin-top: 6rpx;
+							.swb2-item2-text1{
+								color: #F23D3D;
+								font-size: 28rpx;
+								margin-right: 20rpx;
+							}
+							.swb2-item2-text2{
+								color: #909399;
+								font-size: 24rpx;
+							}
+						}
+					}
+					.swb2-item4{
+						width: 30%;
+						color: #909399;
+						font-size: 26rpx;
+						text-align: right;
+					}
+				}
+			}
+			.swb2-item:last-child{
+				border-bottom: none;
+			}
 			.rgp1-order{
-				padding-bottom: 24rpx;
+				padding-bottom: 10rpx;
 				color: #606266;
 				font-size: 28rpx;
-				border-bottom: 2rpx solid #DBDBDB;
 			}
 			.rgp1-order2{
 				border-bottom: none;
@@ -102,9 +201,9 @@ export default{
 			}
 			.rgp1-liuc{
 				.rgp1l-title{
-					margin-top: 24rpx;
-					margin-bottom: 24rpx;
-					color: #303133;
+					// margin-top: 6rpx;
+					margin-bottom: 10rpx;
+					color: #606266;
 					font-size: 28rpx;
 				}
 				.rgp1l-cont{

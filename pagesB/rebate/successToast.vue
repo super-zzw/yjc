@@ -16,7 +16,8 @@
 		},
 		methods:{
 			backIndex(){
-				uni.switchTab({
+				// uni.switchTab({
+				uni.reLaunch({
 					url: '../index/index'
 				})
 			}

@@ -214,7 +214,7 @@
 					border: 2rpx solid #F23D3D;
 					border-radius: 30rpx;
 					font-size: 24rpx;
-					min-width: 160rpx;
+					min-width: 200rpx;
 					margin: 0;
 					text-align: center;
 					padding: 10rpx 16rpx;

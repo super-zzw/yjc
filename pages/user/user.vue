@@ -1,5 +1,6 @@
 <template>  
     <view class="container">  
+		<tabBar :current="3"></tabBar>
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar :showSearch="-1" :topbgk="topbgk"></wxTabbar>
 		<!-- #endif -->
@@ -20,7 +21,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="signIn" v-if="hasLogin" @tap="navTo(`/pages/integral/integral`)">每日签到</view>
+					<view class="signIn"  v-if="hasLogin && hasSigin" @tap="navTo(`/pages/integral/integral`)">每日签到</view>
 				</view>
 <!-- 				<view class="user-more" >
 					
@@ -68,14 +69,14 @@
 				<view class="" @tap="navTo('/pages/history/history')">
 					<list-cell iconfont="iconfont iconlishi" iconColor="#5DBA8F" title="浏览历史"  tips=" "></list-cell>
 				</view>
-				<view class="" @tap="navTo('/pages/integral/integral')">
-					<list-cell iconfont="iconfont iconjifen" iconColor="#EE883B" title="我的积分"  tips=" "></list-cell>
+				<view class="" @tap="navTo('/pages/integral/integral')" v-if="hasScore">
+					<list-cell iconfont="iconfont iconjifen" iconColor="#EE883B" :title="'我的' + config.MALL_POINT_TITLE"  tips=" "></list-cell>
 				</view>
 				<view class="" @tap="navTo('/pages/order/myAssess')">
 					<list-cell iconfont="iconfont iconpingjia" iconColor="#F852C3" title="我的评价"  tips=" "></list-cell>
 				</view>
-				<view class="" @tap="navTo('/pages/integral/record')">
-					<list-cell iconfont="iconfont iconduihuan" iconColor="#F7CA20" title="积分兑换记录"  tips=" "></list-cell>
+				<view class="" @tap="navTo('/pages/integral/record')" v-if="hasScore">
+					<list-cell iconfont="iconfont iconduihuan" iconColor="#F7CA20" :title="config.MALL_POINT_TITLE + '兑换记录'"  tips=" "></list-cell>
 				</view>
 				<view class="" @tap="navTo('/pagesC/invite/invite')">
 					<list-cell iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
@@ -94,12 +95,14 @@
         mapState,mapMutations
     } from 'vuex';
 	import utils from 'utils/method.js'
+	import tabBar from "@/components/tab-bar.vue"
     export default {
 		onShareAppMessage(){
 			return utils.homeShare({})
 		},
 		components: {
-			listCell
+			listCell,
+			tabBar
 		},
 		data(){
 			return {
@@ -114,10 +117,10 @@
 			utils.setBadgeText(0,this.msgNms)
 		},
         computed: {
-			...mapState(['hasLogin','userInfo','msgNms']),
+			...mapState(['hasLogin','userInfo','msgNms','hasScore','hasSigin','config']),
 		},
         methods: {
-			...mapMutations(['setUserInfo','setAfterLoginUrl','setAfterLoginIsTab']),
+			...mapMutations(['setUserInfo','setAfterLoginUrl','setAfterLoginIsTab','setCartNms']),
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -127,7 +130,9 @@
 						  index: 2,
 						  text: String(res.data)
 						})
+						this.setCartNms(res.data)
 					}else{
+						this.setCartNms(0)
 						uni.removeTabBarBadge({
 							index: 2,
 						})
@@ -247,6 +252,7 @@
 		min-height: calc(100vh - 0);
 		background: #F9FAFB;
 		box-sizing: border-box;
+		padding-bottom: 100rpx;
 	}
 	.user-section{
 		height: 420rpx;

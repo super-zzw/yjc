@@ -69,7 +69,7 @@
 			</view>
 			<view class="swb-total">
 				<text class="swb-total-text1" v-if="order.payType != 3">订单总价：</text>
-				<text class="swb-total-text2" v-if="order.payType == 3">消耗{{order.payAmount}}积分</text>
+				<text class="swb-total-text2" v-if="order.payType == 3">消耗{{order.payAmount}}{{config.MALL_POINT_TITLE}}</text>
 				<text class="swb-total-text2" v-else>￥{{order.payAmount}}</text>
 			</view>
 			<view class="swb2-foot" v-if="order.orderType != 2">
@@ -85,7 +85,7 @@
 				<view v-if="server == 1" class="swb2f-btn1 recom" @tap="callService">联系客服</view>
 				<button v-if="server == 2" open-type="contact" class="kefuBtn swb2f-btn1 recom">联系客服</button>
 				<view class="swb2f-btn1" v-if="order.status == 5 && order.payType != 4" @click="toDelivery">查看物流</view>
-				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
+				<view class="swb2f-btn1 recom" @tap="toAfterSale" v-if="order.status == 5 && order.payType != 4">售后进度</view>
 			</view>
 			<view class="swb2-foot" v-else>
 				<view class="swb2f-btn1" v-if="order.status == 0 && order.payType != 4" @click="cancelOrder">取消订单</view>
@@ -98,7 +98,7 @@
 				<view class="swb2f-btn1 recom" v-if="order.status == 3" @tap="toAssess">去评价</view>
 				<view class="swb2f-btn1" v-if="order.status == 4" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1" v-if="order.status == 5" @click="toDelivery">查看物流</view>
-				<view class="swb2f-btn1 recom" @tap="afterSale" v-if="order.status == 5">售后进度</view>
+				<view class="swb2f-btn1 recom" @tap="toAfterSale" v-if="order.status == 5">售后进度</view>
 				<view v-if="server == 1" class="swb2f-btn1 recom" @tap="callService">联系客服</view>
 				<button v-if="server == 2" open-type="contact" class="kefuBtn swb2f-btn1 recom">联系客服</button>
 			</view>
@@ -108,16 +108,22 @@
 			<view class="swrap-box3-cont">
 				<view class="swrap-box3-item">订单编号：{{order.orderSn}}</view>
 				<view class="swrap-box3-item">创建时间：{{order.createTime | dealTime}}</view>
-				<!-- 支付方式0未支付，1支付宝，2微信，3积分 -->
+				<!-- 支付方式0未支付，1支付宝，2微信，3积++分 -->
 				<view class="swrap-box3-item">
 					<text v-if="order.payType == 1">支付方式：支付宝</text>
 					<text v-if="order.payType == 2">支付方式：微信支付</text>
-					<text v-if="order.payType == 3">支付方式：积分兑换</text>
+					<text v-if="order.payType == 3">支付方式：{{config.MALL_POINT_TITLE}}兑换</text>
 				</view>
-				<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流公司：{{order.deliveryCompany || "暂无数据"}}</view>
-				<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流单号：
-					<text class="swrap-box3-text1">{{order.deliverySn || "暂无数据"}}</text>
-					<text class="iconfont iconfuzhi" @tap="copyOrderSn(order.deliverySn)"></text>
+				<!-- 多条物流 -->
+				<view class="" v-if="order.deliveryType == 2">
+					<view class="swrap-box3-item">该订单下有多个物流信息，请点击查看物流查询</view>
+				</view>
+				<view class="" v-else>
+					<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流公司：{{order.deliveryCompany || "暂无数据"}}</view>
+					<view class="swrap-box3-item" v-if="order.status == 2 || order.status == 3 ||order.status == 4 ||order.status == 5">物流单号：
+						<text class="swrap-box3-text1">{{order.deliverySn || "暂无数据"}}</text>
+						<text class="iconfont iconfuzhi" @tap="copyOrderSn(order.deliverySn)"></text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -291,6 +297,21 @@ export default{
 			uni.navigateTo({
 				url:`/pagesA/afterSale/afterSale?id=${this.orderId}`
 			})
+		},
+		//售后进度type：0=仅退款 1=退货退款
+		toAfterSale(type,prgsId,orderId){
+			if(this.order.applyType == 0){
+				//仅退款
+				uni.navigateTo({
+					url: `/pagesA/afterSale/onlyRefundPrgs?prgsId=${this.order.applyId}&orderId=${this.orderId}`
+				})
+			}else{
+				//退货退款
+				uni.navigateTo({
+					url: `/pagesA/afterSale/reGoodfundPrgs?prgsId=${this.order.applyId}&orderId=${this.orderId}`
+				})
+			}
+			
 		},
 		//复制订单号
 		copyOrderSn(order) {
@@ -484,7 +505,8 @@ export default{
 			border-top: 20rpx solid #F9FAFB;
 			padding: 32rpx;
 			.swb2-item{
-				padding-bottom: 30rpx;
+				padding-top: 20rpx;
+				padding-bottom: 20rpx;
 				border-bottom: 2rpx solid #DBDBDB;
 				display: flex;
 				.swb2-item1{
@@ -507,13 +529,13 @@ export default{
 					.swb2-item2{
 						.swb2-item2-title{
 							color: #303133;
-							font-size: 30rpx;
+							font-size: 26rpx;
 						}
 						.swb2-item2-cont{
-							margin-top: 24rpx;
+							margin-top: 6rpx;
 							.swb2-item2-text1{
 								color: #F23D3D;
-								font-size: 32rpx;
+								font-size: 28rpx;
 								margin-right: 20rpx;
 							}
 							.swb2-item2-text2{

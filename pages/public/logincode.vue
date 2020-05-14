@@ -74,7 +74,8 @@
 		},
 		methods: {
 			toIndex(){
-				uni.switchTab({
+				// uni.switchTab({
+				uni.reLaunch({
 					url:'/pages/index/index'
 				})
 			},

@@ -1,5 +1,6 @@
 <template>
 	<view >
+		<tabBar :current="1"></tabBar>
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
@@ -89,12 +90,14 @@
 import { mapState,mapMutations } from 'vuex';
 import utils from '@/utils/method.js'
 import uniNumberBox from '@/components/uni-number-box.vue'
+import tabBar from "@/components/tab-bar.vue"
 	export default {
 		onShareAppMessage (){
 			return utils.homeShare({})
 		},
 		components: {
-			uniNumberBox
+			uniNumberBox,
+			tabBar
 		},
 		data() {
 			return {
@@ -157,7 +160,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 			...mapState(['msgNms','hasLogin','paddingTop','config'])
 		},
 		methods: {
-			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab']),
+			...mapMutations(['setAfterLoginUrl','setAfterLoginIsTab','setCartNms']),
 			getMore(){
 				this.t2page ++;
 				this.getT2Data()
@@ -266,7 +269,9 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 						  index: 2,
 						  text: String(res.data)
 						})
+						this.setCartNms(res.data)
 					}else{
+						this.setCartNms(0)
 						uni.removeTabBarBadge({
 							index: 2,
 						})
@@ -367,7 +372,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 					let view = uni.createSelectorQuery().select("#main-" + item.id);
 					view.fields({size: true}, data => {
 						item.top = h;
-						h += data.height;
+						data && (h += data.height);
 						item.bottom = h;
 					}).exec();
 				})
@@ -419,6 +424,7 @@ import uniNumberBox from '@/components/uni-number-box.vue'
 		/* #endif */
 		/* #ifdef  MP-WEIXIN */
 		height: calc(100vh - 70rpx);
+		padding-bottom: 100rpx;
 		/* #endif */
 		/* #ifdef APP-PLUS */
 		height: 100vh;

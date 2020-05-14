@@ -23,7 +23,9 @@
 			<view v-for="(item2,index2) of noqiandao2" :key="item2.lable" class="s-box2-item">
 				<view class="s2-item-top">
 					<view class="s2-item-right"></view>
-					<text class="i2">+20</text>
+					<text class="i2">
+						<text v-if="ruleList[index2 + qiandao2.length]">+{{ruleList[index2 + qiandao2.length].point}}</text>
+					</text>
 					<!-- <text class="iconfont iconshenglvehao i2"></text> -->
 				</view>
 				<!-- <view class="s2-item-boo" v-if="qiandao == 0">第{{item2 + qiandao + 1}}天</view> -->
@@ -38,7 +40,7 @@
 				<view class="s-box3-text">{{userInfo.wusername}}</view>
 			</view>
 			<view class="s-box3-right">
-				<text class="s-box3-text2">总积分：</text>
+				<text class="s-box3-text2">总{{config.MALL_POINT_TITLE}}：</text>
 				<text class="s-box3-text3">{{userInfo.integration}}</text>
 			</view>
 		</view>
@@ -79,13 +81,18 @@
 				size:16,
 				dataLoading:false,  //是否是在加载数据
 				noMore:false,
+				ruleList:[]
 			}
 		},
 		computed: {
-			...mapState(['userInfo']),
+			...mapState(['userInfo','config']),
 		},
 		onLoad() {
-			this.initData()
+			this.initData();
+			this.getRule();
+			uni.setNavigationBarTitle({
+				title:this.config.MALL_POINT_TITLE
+			})
 		},
 		filters:{
 			dealTime(val){
@@ -100,6 +107,14 @@
 				this.getList()
 				this.getSigin()
 				uni.hideLoading()
+			},
+			//获取签到规则
+			async getRule(){
+				await this.$http({
+					apiName:"siginRule"
+				}).then(res => {
+					this.ruleList = res.data
+				}).catch(_ => {})
 			},
 			//获取用户信息
 			async getUserInfo(){

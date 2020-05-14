@@ -238,7 +238,7 @@
 				var that = this
 				uni.showModal({
 				    title: '提示',
-				    content: '确定兑换积分兑换该商品？',
+				    content: '确定消耗' + this.config.MALL_POINT_TITLE + '兑换该商品？',
 				    success: function (res) {
 				        if (res.confirm) {
 				           that.submit()

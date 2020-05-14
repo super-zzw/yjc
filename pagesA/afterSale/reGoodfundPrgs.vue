@@ -281,6 +281,7 @@ export default{
 			padding: 32rpx;
 			margin-top: 20rpx;
 			background-color: #fff;
+			word-wrap:break-word;
 			.rgpb3-text1{
 				color: #303133;
 			}

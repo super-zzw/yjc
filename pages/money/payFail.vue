@@ -5,7 +5,8 @@
 		
 		<view class="btn-group">
 			<navigator url="/pages/order/order?state=0" open-type="redirect" class="mix-btn">重新支付</navigator>
-			<navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator>
+			<!-- <navigator url="/pages/index/index" open-type="switchTab" class="mix-btn hollow">返回首页</navigator> -->
+			<navigator url="/pages/index/index" open-type="reLaunch" class="mix-btn hollow">返回首页</navigator>
 		</view>
 	</view>
 </template>
@@ -21,7 +22,8 @@
 			
 		},
 		onBackPress(e){
-			uni.switchTab({
+			// uni.switchTab({
+			uni.reLaunch({
 				url:"/pages/order/order"
 			})
 			return true

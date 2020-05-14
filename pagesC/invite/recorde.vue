@@ -5,7 +5,7 @@
 				<view class="sirtl-text1">{{nums}}</view>
 				<view class="sirtl-text2">已邀请好友</view>
 				<view class="sirtl-text1">{{total}}</view>
-				<view class="sirtl-text2">累计获得奖励积分</view>
+				<view class="sirtl-text2">累计获得奖励{{config.MALL_POINT_TITLE}}</view>
 			</view>
 			<image class="sir-gold" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/gold.png" mode="widthFix"></image>
 		</view>
@@ -15,7 +15,7 @@
 				<view class="sir-title">
 					<view class="sirt-cell1">我的好友</view>
 					<view class="sirt-cell1">注册时间</view>
-					<view class="sirt-cell3">奖励积分</view>
+					<view class="sirt-cell3">奖励{{config.MALL_POINT_TITLE}}</view>
 				</view>
 				<view class="sir-title sir-items" v-for="(item,index) in dataList" :key="index">
 					<view class="sirt-cell1 sirt-cell0">{{item.phone}}</view>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import utils from '@/utils/method.js'
 export default{
 	data(){
@@ -39,6 +40,9 @@ export default{
 			total:0,
 			dataList:[]
 		}
+	},
+	computed:{
+		...mapState(['config'])
 	},
 	methods:{
 		async getData(){

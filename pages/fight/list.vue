@@ -50,6 +50,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	import utils from '@/utils/method.js'
 	import uniCountdown from "@/components/linnian-CountDown/uni-countdown.vue"
 	export default {
@@ -85,7 +86,13 @@
 			this.getData()
 		},
 		onLoad(opt){
-			this.initData()
+			this.initData();
+			uni.setNavigationBarTitle({
+				title:this.config.PROMOTION_TITLE.grouponTitle
+			})
+		},
+		computed:{
+			...mapState(['config'])
 		},
 		methods: {
 			navToDetailPage(id){

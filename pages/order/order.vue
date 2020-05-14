@@ -91,11 +91,11 @@
 							共
 							<text class="num">{{item.itemList.length}}</text>
 							件商品 
-							<text class="price1" v-if="item.payType == 3">消耗{{item.payAmount}}积分</text>
+							<text class="price1" v-if="item.payType == 3">消耗{{item.payAmount}}{{config.MALL_POINT_TITLE}}</text>
 							<text class="price1" v-else>￥{{item.payAmount}}</text>
 						</view>
 						<view class="action-box b-t" v-if="item.payType == 3">
-							<text class="b-t2">积分兑换订单</text>
+							<text class="b-t2">{{config.MALL_POINT_TITLE}}换订单</text>
 						</view>
 						<view class="action-box b-t" v-if="item.payType == 4">
 							<text class="b-t2">货到付款订单</text>
@@ -163,7 +163,7 @@
 			Share
 		},
 		computed:{
-			...mapState(['userInfo','server'])
+			...mapState(['userInfo','server','config'])
 		},
 		onShareAppMessage(res) {
 			return utils.homeShare({
@@ -511,7 +511,8 @@
 			})
 		},
 		onBackPress(e){
-			uni.switchTab({
+			// uni.switchTab({
+			uni.reLaunch({
 				url:"/pages/user/user"
 			})
 			return true

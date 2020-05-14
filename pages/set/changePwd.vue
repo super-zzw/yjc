@@ -23,13 +23,13 @@
 			<view class="sItem">
 				<view class="slabel">重置登录密码</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="pwd" placeholder="请输入新密码"/>
+					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="newPwd" placeholder="请输入新密码"/>
 				</view>
 			</view>
 			<view class="sItem">
 				<view class="slabel">确认密码</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="repwd" placeholder="请再次输入新密码"/>
+					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="newPwdRe" placeholder="请再次输入新密码"/>
 				</view>
 			</view>
 		</view>
@@ -45,7 +45,8 @@
 				phone:"",
 				code:"",
 				pwd:"",
-				repwd:"",
+				newPwd:"",
+				newPwdRe:"",
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
@@ -56,6 +57,10 @@
 		methods:{
 			async register(){
 				let _data = [
+					{
+						data:this.pwd,
+						info:'当前密码不能为空'
+					},
 					{
 						data:this.phone.trim(),
 						info:'手机号不能为空'
@@ -69,37 +74,47 @@
 						info:'验证码不能为空'
 					},
 					{
-						data:this.pwd,
-						info:'密码不能为空'
+						data:this.newPwd,
+						info:'请输入新密码'
 					},
 					{
-						data:this.repwd,
-						info:'请再次输入密码'
+						data:this.newPwdRe,
+						info:'请再次输入新密码'
 					},
 					{
-						data:(this.pwd == this.repwd) ? "1" : "",
-						info:'两次输入密码不一致'
+						data:(this.newPwd == this.newPwdRe) ? "1" : "",
+						info:'两次输入的新密码不一致'
 					}
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
 					this.confirmBtnDisable = true;
 					await this.$http({
-						apiName:"resetPwd",
+						apiName:"changePwd",
 						type:"POST",
 						data:{
-							newPassword:utils.md5(this.pwd),
+							oldPassword:utils.md5(this.pwd),
+							newPassword:utils.md5(this.newPwd),
 							phoneNumber:this.phone,
-							sourceType:1,  //0pc,1app,2公众号，3小程序
 							authCode:this.code,
+							// #ifdef APP-PLUS
+							sourceType:1,  //0pc,1app,2公众号，3小程序
+							// #endif
+							// #ifdef H5
+							sourceType:2,  //0pc,1app,2公众号，3小程序
+							// #endif
+							// #ifdef MP-WEIXIN
+							sourceType:3,  //0pc,1app,2公众号，3小程序
+							// #endif
 						}
 					}).then(res => {
 						uni.showToast({
-							title:"修改成功，请重新登录"
+							title:"修改成功"
 						})
+						utils.rmData()
 						setTimeout(_ => {
 							this.confirmBtnDisable = false;
-							uni.navigateTo({
+							uni.reLaunch({
 							    url: '/pages/public/login'
 							});
 						},2000)
@@ -119,6 +134,10 @@
 				})
 				let _data = [
 					{
+						data:this.pwd,
+						info:'当前密码不能为空'
+					},
+					{
 						data:this.phone.trim(),
 						info:'手机号不能为空'
 					},
@@ -132,9 +151,10 @@
 					this.coding = true;
 					this.countDown();
 					await this.$http({
-						apiName:"getCode",
+						apiName:"changePwdCode",
 						type:"POST",
 						data:{
+							password:utils.md5(this.pwd),
 							phoneNumber:this.phone,
 						}
 					}).then(res => {
@@ -220,7 +240,7 @@
 					border: 2rpx solid #F23D3D;
 					border-radius: 30rpx;
 					font-size: 24rpx;
-					min-width: 160rpx;
+					min-width: 200rpx;
 					margin: 0;
 					text-align: center;
 					padding: 10rpx 16rpx;

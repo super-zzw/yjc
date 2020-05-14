@@ -18,8 +18,20 @@ const store = new Vuex.Store({
 		config:null,
 		groupProductId:"",
 		iCode:"",
+		hasScore:-1,  //积++分模块
+		hasSigin:-1,  //签到模块
+		cartNms:0,  //购物车数量
 	},
 	mutations: {
+		setCartNms(state,data){
+			state.cartNms = data
+		},
+		setHasScore(state,data){
+			state.hasScore = data
+		},
+		setHasSigin(state,data){
+			state.hasSigin = data
+		},
 		setICode(state,data){
 			state.iCode = data
 		},

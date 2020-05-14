@@ -64,7 +64,7 @@
 		<!-- 金额明细 -->
 		<view class="yt-list">
 			<view class="yt-list-cell b-b" v-if="isScore">
-				<text class="cell-tit clamp">消耗积分</text>
+				<text class="cell-tit clamp">消耗{{config.MALL_POINT_TITLE}}</text>
 				<text class="cell-tip">{{totalScore}}</text>
 			</view>
 			<view class="yt-list-cell b-b" v-else>
@@ -73,7 +73,7 @@
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip" v-if="isScore">积分兑换免运费</text>
+				<text class="cell-tip" v-if="isScore">{{config.MALL_POINT_TITLE}}兑换免运费</text>
 				<text class="cell-tip" v-else>{{fee}}</text>
 			</view>
 			<view class="yt-list-cell desc-cell">
@@ -162,7 +162,7 @@
 			}
 		},
 		computed:{
-			...mapState(['order','selectAddr'])
+			...mapState(['order','selectAddr','config'])
 		},
 		methods: {
 			...mapMutations(['setSelectAddr']),
@@ -266,7 +266,7 @@
 				var that = this
 				uni.showModal({
 				    title: '提示',
-				    content: '确定兑换积分兑换该商品？',
+				    content: '确定兑换' + this.config.MALL_POINT_TITLE + '兑换该商品？',
 				    success: function (res) {
 				        if (res.confirm) {
 				           that.submit()
@@ -322,7 +322,8 @@
 		},
 		onBackPress(e){
 			if(this.cart == 1){
-				uni.switchTab({
+				// uni.switchTab({
+				uni.reLaunch({
 					url:'/pages/cart/cart'
 				})
 				return true
