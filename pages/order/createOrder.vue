@@ -322,8 +322,8 @@
 		},
 		onBackPress(e){
 			if(this.cart == 1){
-				// uni.switchTab({
-				uni.reLaunch({
+				uni.switchTab({
+				// uni.reLaunch({
 					url:'/pages/cart/cart'
 				})
 				return true

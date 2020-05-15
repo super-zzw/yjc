@@ -62,8 +62,8 @@
 		methods: {
 			// ...mapMutations(['login']),
 			toIndex(){
-				// uni.switchTab({
-				uni.reLaunch({
+				uni.switchTab({
+				// uni.reLaunch({
 					url:'/pages/index/index'
 				})
 			},

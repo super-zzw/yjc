@@ -1,6 +1,6 @@
 <template>
 	<view class="container wxPage" :style="{paddingTop:paddingTop}">
-		<tabBar :current="2"></tabBar>
+		<!-- <tabBar :current="2"></tabBar> -->
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
@@ -10,8 +10,8 @@
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/emptyCart.png" mode="aspectFit"></image>
 				<view v-if="hasLogin" class="empty-tips">
 					购物车是空哒～
-					<!-- <navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator> -->
-					<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="reLaunch">随便逛逛></navigator>
+					<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+					<!-- <navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="reLaunch">随便逛逛></navigator> -->
 				</view>
 				<view v-else class="empty-tips">
 					购物车是空哒
@@ -318,7 +318,10 @@
 					type:"POST"
 				}).then( _ => {
 					this.setCartNms(0);
-					this.getTj()
+					this.getTj();
+					uni.removeTabBarBadge({
+						index: 2,
+					})
 				}).catch( _ => {})
 				uni.hideLoading();
 			},
@@ -383,16 +386,17 @@
 </script>
 
 <style lang='scss' scoped>
-	/* #ifdef APP-PLUS || H5 */
 	.container{
+		/* #ifdef H5 */
 		min-height: calc(100vh - 188rpx);
-	}
-	/* #endif */
-	/* #ifdef MP-WEIXIN */
-	.container{
+		/* #endif */
+		/* #ifdef APP-PLUS || MP-WEIXIN */
+		min-height: calc(100vh - 88rpx);
+		/* #endif */
+		/* #ifdef MP-WEIXIN */
 		min-height: calc(100vh - 70rpx);
+		/* #endif */
 	}
-	/* #endif */
 	.container{
 		box-sizing: border-box;
 		background-color: #F9FAFB;
@@ -590,7 +594,9 @@
 	}
 	/* 底部栏 */
 	.action-section{
-		margin-bottom:100rpx;
+		/* #ifdef H5 */
+		margin-bottom: 100rpx;
+		/* #endif */
 		position:fixed;
 		left: 30rpx;
 		bottom:30rpx;

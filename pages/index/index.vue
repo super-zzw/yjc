@@ -1,6 +1,6 @@
 <template>
 	<view class="container wxPage"  :style="{paddingTop:paddingTop}">
-		<tabBar :current="0"></tabBar>
+		<!-- <tabBar :current="0"></tabBar> -->
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
@@ -550,20 +550,9 @@ import tabBar from "@/components/tab-bar.vue"
 		background: #F9FAFB;
 	}
 	.container{
-		padding-bottom: 100rpx;
-	}
-	/* #ifdef APP-PLUS || H5 */
-	.container{
 		min-height: calc(100vh - 88rpx);
 		background: #fff;
 	}
-	/* #endif */
-	/* #ifdef MP-WEIXIN */
-	.container{
-		min-height: calc(100vh - 70rpx);
-		background: #fff;
-	}
-	/* #endif */
 	.m-t{
 		margin-top: 0;
 	}

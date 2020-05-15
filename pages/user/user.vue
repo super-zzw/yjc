@@ -1,6 +1,6 @@
 <template>  
     <view class="container">  
-		<tabBar :current="3"></tabBar>
+		<!-- <tabBar :current="3"></tabBar> -->
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar :showSearch="-1" :topbgk="topbgk"></wxTabbar>
 		<!-- #endif -->
@@ -252,7 +252,6 @@
 		min-height: calc(100vh - 0);
 		background: #F9FAFB;
 		box-sizing: border-box;
-		padding-bottom: 100rpx;
 	}
 	.user-section{
 		height: 420rpx;

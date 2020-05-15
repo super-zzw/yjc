@@ -98,8 +98,8 @@
 				<text class="iconfont iconkefu" style="font-weight: bold;"></text>
 				<text>客服</text>
 			</button>
-			<!-- <navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2"> -->
-			<navigator url="/pages/cart/cart" open-type="reLaunch" class="p-b-btn p-b-btn2">
+			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn p-b-btn2">
+			<!-- <navigator url="/pages/cart/cart" open-type="reLaunch" class="p-b-btn p-b-btn2"> -->
 				<text class="iconfont icongouwuche1"></text>
 				<text>购物车</text>
 				<text class="p-b-btn-bg" v-if="cartNms > 0 && cartNms < 100">{{cartNms}}</text>

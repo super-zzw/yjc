@@ -511,8 +511,8 @@
 			})
 		},
 		onBackPress(e){
-			// uni.switchTab({
-			uni.reLaunch({
+			uni.switchTab({
+			// uni.reLaunch({
 				url:"/pages/user/user"
 			})
 			return true

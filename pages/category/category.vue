@@ -1,6 +1,6 @@
 <template>
 	<view >
-		<tabBar :current="1"></tabBar>
+		<!-- <tabBar :current="1"></tabBar> -->
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar></wxTabbar>
 		<!-- #endif -->
@@ -293,7 +293,7 @@ import tabBar from "@/components/tab-bar.vue"
 				await this.getBanner()
 				setTimeout(()=>{
 					this.calcSize()
-				},1000)
+				},2000)
 				uni.hideLoading()
 			},
 			async getData(){
@@ -424,7 +424,6 @@ import tabBar from "@/components/tab-bar.vue"
 		/* #endif */
 		/* #ifdef  MP-WEIXIN */
 		height: calc(100vh - 70rpx);
-		padding-bottom: 100rpx;
 		/* #endif */
 		/* #ifdef APP-PLUS */
 		height: 100vh;
@@ -495,7 +494,7 @@ import tabBar from "@/components/tab-bar.vue"
 		background-color: #f0efef;
 		.lastItem{
 			/* #ifdef MP-WEIXIN */
-			height: calc(100vh - 130rpx);
+			height: calc(100vh - 110rpx);
 			/* #endif */
 			/* #ifdef H5 */
 			height: calc(100vh - 180rpx);

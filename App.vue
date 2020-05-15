@@ -4,15 +4,15 @@
 	export default {
 		methods: {
 		},
-		onLaunch() {
+		async onLaunch() {
+			await this.$getConfig()
 			// this.$getMsgNms()
 			// #ifdef MP-WEIXIN
 			let menuButton = uni.getMenuButtonBoundingClientRect();
 			this.$store.commit('setPaddingTop',menuButton.top + 'px');
 			// #endif
 		},
-		async onShow() {
-			await this.$getConfig()
+		onShow() {
 			// console.log('App Show')
 			// #ifdef APP-PLUS
 			var args= plus.runtime.arguments;

@@ -22,8 +22,8 @@
 		</view>
 		<view class="btn-group">
 			<view  class="mix-btn" @tap="share">邀请好友参团</view>
-			<!-- <navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator> -->
-			<navigator open-type="reLaunch" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
+			<navigator open-type="switchTab" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator>
+			<!-- <navigator open-type="reLaunch" url="/pages/index/index" class="mix-btn hollow">返回首页</navigator> -->
 		</view>
 		<share
 			ref="share" 
@@ -138,7 +138,6 @@
 			this.getDetail()
 		},
 		onBackPress(e){
-			// uni.switchTab({
 			uni.reLaunch({
 				url:"/pages/order/order"
 			})

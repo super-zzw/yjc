@@ -30,8 +30,8 @@
 		methods: {
 			agree(){
 				uni.setStorageSync("agree_key",1);
-				// uni.switchTab({
-				uni.reLaunch({
+				uni.switchTab({
+				// uni.reLaunch({
 					url:"/pages/index/index"
 				})
 			}

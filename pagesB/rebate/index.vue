@@ -178,7 +178,7 @@
 					title: `${this.config.MALL_APP_NAME}汇聚了海内外优质商品`,
 					imageUrl: _self.config.MALL_IMG_DEFAULT.groupShare,
 					summary: "快来嗨购吧！",
-					href: `http://web.vyunmall.com/register.html?inviteCode=${code}&id=${0}`,
+					href: `${this.config.MALL_WEB_URL}/register.html?inviteCode=${code}&id=${0}`,
 					success(res) {
 						console.log(res);
 					},

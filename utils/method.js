@@ -68,8 +68,8 @@ export default{
 	//登录之后的跳转
 	afterLoginJump(){
 		if(store.state.afterLoginIsTab){
-			// uni.switchTab({
-			uni.reLaunch({
+			uni.switchTab({
+			// uni.reLaunch({
 				url:store.state.afterLoginUrl || '/pages/index/index'
 			})
 		}else{
@@ -78,8 +78,8 @@ export default{
 					url:store.state.afterLoginUrl
 				})
 			}else{
-				// uni.switchTab({
-				uni.reLaunch({
+				uni.switchTab({
+				// uni.reLaunch({
 					url:'/pages/index/index'
 				})
 			}
@@ -172,7 +172,7 @@ export default{
 					id: 'gh_a6c9030a00ac', // 公众开发平台原始ID//辰悠++优品汇
 					path: path+'?id='+gid, 
 					type: 2,  //0-正式版； 1-测试版； 2-体验版
-					webUrl: 'http://web.vyunmall.com',  //辰悠++优品汇
+					webUrl: store.config.MALL_WEB_URL,  //辰悠++优品汇
 				},
 				success(res) { 
 					console.log(res);
@@ -192,7 +192,7 @@ export default{
 				title: `${store.config.MALL_APP_NAME}汇聚了海内外优质商品`,
 				imageUrl: _self.config.MALL_IMG_DEFAULT.groupShare,
 				summary: "快来嗨购吧！",
-				href: `http://web.vyunmall.com/register.html?inviteCode=${code}&id=${0}`,
+				href: `${store.config.MALL_WEB_URL}/register.html?inviteCode=${code}&id=${0}`,
 				success(res) {
 					console.log(res);
 				},
