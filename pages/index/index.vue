@@ -102,8 +102,8 @@
 						<text class="fText1 nm-font">{{item.startDate}}</text>开始
 					</view>
 					<view class="fTextBox" v-if="item.status == 1 && creset">
-						<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
-						<text class="fText2">后结束</text>
+						<uni-countdown color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :day="item.day" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
+						<text class="fText2">结束</text>
 					</view>
 					<view class="fTextBox" v-if="item.status == 2">
 						<text class="fText2">拼团已结束</text>
@@ -252,7 +252,7 @@ import tabBar from "@/components/tab-bar.vue"
 			
 			// #endif
 			
-			// #ifndef APP-PLUS
+			// #ifdef MP-WEIXIN
 			await this.initData();
 			if(opt.inviteCode){
 				this.$store.commit('setICode',opt.inviteCode)
@@ -286,6 +286,7 @@ import tabBar from "@/components/tab-bar.vue"
 							var etime = item.endTime - this.currentTime;
 							if(etime > 0){
 								let _trDate = utils.transToDate(etime);
+								item["day"] = _trDate.d;
 								item["hour"] = _trDate.h;
 								item["minute"] = _trDate.m;
 								item["second"] = _trDate.s;
@@ -875,6 +876,7 @@ import tabBar from "@/components/tab-bar.vue"
 					}
 					.fText2{
 						color: #909399;
+						margin-left: 2rpx;
 					}
 				}
 			}

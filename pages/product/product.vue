@@ -110,9 +110,10 @@
 				<text>收藏</text>
 			</view>
 			
-			<view class="action-btn-group">
+			<view class="action-btn-group" v-if="title" :class="productType == 3 ? 'action-btn-group-xn' : ''">
 				<button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">立即购买</button>
-				<button type="primary" class=" action-btn no-border add-cart-btn" @tap="addCart">加入购物车</button>
+				<!-- 非虚拟商品可以加入购物车 -->
+				<button type="primary" v-if="productType != 3" class=" action-btn no-border add-cart-btn" @tap="addCart">加入购物车</button>
 			</view>
 		</view>
 		
@@ -195,7 +196,7 @@
 		},
 		onShareAppMessage(res) {
 			return utils.homeShare({
-				path: "/pages/fight/productDetail?id=" + this.productId
+				path: "/pages/product/product?id=" + this.productId
 			})
 		},
 		data() {
@@ -242,6 +243,7 @@
 				],
 				clickType:"", // 点击的类型
 				sevenReturnApply:"",  //7天的保证
+				productType:"",  //3虚拟商品
 			};
 		},
 		async onLoad(options){
@@ -348,6 +350,7 @@
 					this.desc = res.data.product.descriptionHtml.replace(/\<img/gi, '<img class="cont_img2" ');
 					this.exchangePoints = res.data.product.minPoints
 					this.sevenReturnApply = res.data.product.sevenReturnApply
+					this.productType = res.data.product.productType
 					this.collectionFlag = res.data.collectionFlag
 					this.collectionId = res.data.collectionId
 					//处理评论
@@ -362,7 +365,15 @@
 					
 					this.picUrl = res.data.product.picUrl
 					this.setSpec(res.data.specificationList)
-				}).catch(_ => {})
+				}).catch(_ => {
+					if(_ == '商品不存在'){
+						setTimeout( __ => {
+							uni.switchTab({
+								url:"/pages/index/index"
+							})
+						},1000)
+					}
+				})
 			},
 			//根据返回信息设置规格展示
 			setSpec(list){
@@ -548,7 +559,8 @@
 					picUrl:this.picUrl,
 					specSelected:this.specSelected,
 					price:this.stockInfo.promotionPrice,
-					exchangePoints:this.exchangePoints || 0
+					exchangePoints:this.exchangePoints || 0,
+					productType:this.productType
 				})
 				uni.navigateTo({
 					url: `/pages/order/createOrder?score=${this.isScore}`
@@ -1148,6 +1160,15 @@
 			}
 			.action-btn::after{
 				display: none;
+			}
+		}
+		.action-btn-group-xn{
+			flex: 1;
+			padding-right: 20rpx;
+			display: flex;
+			justify-content: flex-end;
+			.buy-now-btn{
+				margin-right: 0;
 			}
 		}
 	}

@@ -28,7 +28,7 @@
 						<text class="fText1 nm-font">{{item.startDate}}</text>开始
 					</view>
 					<view class="fTextBox" v-if="item.status == 1 && creset">
-						<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
+						<uni-countdown color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" splitorColor="#F23D3D" :day="item.day" :hour="item.hour" :minute="item.minute" :second="item.second" @timeup="timeUp"> </uni-countdown>
 						<text class="fText2">后结束</text>
 					</view>
 					<view class="fTextBox" v-if="item.status == 2">
@@ -135,6 +135,7 @@
 							var etime = item.endTime - this.currentTime;
 							if(etime > 0){
 								let _trDate = utils.transToDate(etime);
+								item["day"] = _trDate.d;
 								item["hour"] = _trDate.h;
 								item["minute"] = _trDate.m;
 								item["second"] = _trDate.s;

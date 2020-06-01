@@ -19,3 +19,4 @@ Im ++ Lucky注册地址[](http://web.youmall.vip/register.html)
 8，store/index.js：分享类型aboutShare
 9，版本号同步
 10，APP的logo
+11，manifest.json里面的h5的domain配置

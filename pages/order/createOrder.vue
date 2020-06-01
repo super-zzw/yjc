@@ -76,9 +76,13 @@
 				<text class="cell-tip" v-if="isScore">{{config.MALL_POINT_TITLE}}兑换免运费</text>
 				<text class="cell-tip" v-else>{{fee}}</text>
 			</view>
-			<view class="yt-list-cell desc-cell">
+			<view class="yt-list-cell desc-cell b-b">
 				<text class="cell-tit clamp">备注</text>
 				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
+			</view>
+			<view class="yt-list-cell desc-cell" v-if="order.productType == 3">
+				<text class="cell-tit clamp">提示：</text>
+				<input class="desc" type="text" value="虚拟商品付款后请联系客服获取相关信息" disabled/>
 			</view>
 		</view>
 		
@@ -144,6 +148,10 @@
 			// 	}
 			// }
 		},
+		onUnload() {
+			this.$store.commit('setOrder',[])
+			// this.setOrder([])
+		},
 		async onShow(){
 			this.total = 0;
 			if(!this.selectAddr){
@@ -162,7 +170,7 @@
 			}
 		},
 		computed:{
-			...mapState(['order','selectAddr','config'])
+			...mapState(['order','selectAddr','config','setOrder'])
 		},
 		methods: {
 			...mapMutations(['setSelectAddr']),

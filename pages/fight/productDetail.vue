@@ -19,7 +19,7 @@
 				<text class="fText1 nm-font">{{startDate}}</text>开始
 			</view>
 			<view class="countBox" v-if="fightData.status == 1 && creset">
-				<uni-countdown :show-day="false" color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" :hour="trDate.h" :minute="trDate.m" :second="trDate.s" @timeup="timeUp"> </uni-countdown>
+				<uni-countdown color="#FFFFFF" background-color="#F23D3D" border-color="#F23D3D" :day="trDate.d" :hour="trDate.h" :minute="trDate.m" :second="trDate.s" @timeup="timeUp"> </uni-countdown>
 				<text class="fText2">后结束</text>
 				<text class="countBoxt2">{{fightData.minMember}}人起团</text>
 			</view>
@@ -280,6 +280,7 @@
 					},
 				],
 				sevenReturnApply:"",  //7天的保证
+				productType:"",  //3虚拟商品
 			};
 		},
 		async onLoad(options){
@@ -388,6 +389,7 @@
 					this.desc = res.data.product.descriptionHtml.replace(/\<img/gi, '<img class="cont_img2" ');
 					this.exchangePoints = res.data.product.minPoints
 					this.sevenReturnApply = res.data.product.sevenReturnApply
+					this.productType = res.data.product.productType
 					this.collectionFlag = res.data.collectionFlag
 					this.collectionId = res.data.collectionId
 					//处理评论
@@ -518,7 +520,7 @@
 			//购买
 			buy(type){
 				if(!this.hasLogin){
-					this.setAfterLoginUrl(`/pages/product/product?id=${this.groupId}`)
+					this.setAfterLoginUrl(`/pages/fight/productDetail?id=${this.groupId}`)
 					// #ifdef MP-WEIXIN
 					uni.navigateTo({
 						url: '/pages/wxlogin/index'
@@ -546,6 +548,7 @@
 						exchangePoints:this.exchangePoints || 0,
 						group:this.fightData.group,  //已拼团信息
 						groupTotal:this.fightData.minMember,  //拼团总人数
+						productType:this.productType
 					})
 					this.setGroupProductId(this.groupId);
 					if(type == 1){  //普通购买
@@ -563,7 +566,7 @@
 			},
 			//未登录跳转
 			toLogin(){
-				this.setAfterLoginUrl('/pages/product/product?id=' + this.productId);
+				this.setAfterLoginUrl('/pages/fight/productDetail=' + this.productId);
 				// #ifdef MP-WEIXIN
 				uni.navigateTo({
 					url: '/pages/wxlogin/index'

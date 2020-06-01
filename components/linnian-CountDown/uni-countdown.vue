@@ -1,7 +1,7 @@
 <template>
 	<view class="uni-countdown">
 		<view v-if="showDay" class="uni-countdown__number" :style="{borderColor:borderColor, color:color, background:backgroundColor}">{{d}}</view>
-		<view v-if="showDay" class="uni-countdown__splitor" :style="{color:splitorColor}">天</view>
+		<view v-if="showDay" class="uni-countdown__splitor" :style="{color:splitorColor}">{{showColon ? ':' : '天'}}</view>
 		<view class="uni-countdown__number" :style="{borderColor:borderColor, color:color, background:backgroundColor}">{{h}}</view>
 		<view class="uni-countdown__splitor" :style="{color:splitorColor}">{{showColon ? ':' : '时'}}</view>
 		<view class="uni-countdown__number" :style="{borderColor:borderColor, color:color, background:backgroundColor}">{{i}}</view>
@@ -109,11 +109,11 @@
 				let seconds = this.seconds
 				let [day, hour, minute, second] = [0, 0, 0, 0]
 				if (seconds > 0) {
-					// day = Math.floor(seconds / (60 * 60 * 24))
-					// hour = Math.floor(seconds / (60 * 60)) - (day * 24)
+					day = Math.floor(seconds / (60 * 60 * 24))
+					hour = Math.floor(seconds / (60 * 60)) - (day * 24)
 					//需要把天计算到小时上
-					day = 0;
-					hour = Math.floor(seconds / (60 * 60))
+					// day = 0;
+					// hour = Math.floor(seconds / (60 * 60))
 					minute = Math.floor(seconds / 60) - (day * 24 * 60) - (hour * 60)
 					second = Math.floor(seconds) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
 				} else {
@@ -160,7 +160,7 @@
 			justify-content: center;
 			height: 38rpx;
 			border-radius: $uni-border-radius-base;
-			margin: 0 5upx;
+			margin: 0 2upx;
 			border: 1px solid #000000;
 			font-size: 26rpx;
 			padding: 0 4rpx;

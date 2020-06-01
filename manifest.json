@@ -2,8 +2,8 @@
     "name" : "辰悠优品汇",
     "appid" : "__UNI__5D0627C",
     "description" : "",
-    "versionName" : "1.2.5",
-    "versionCode" : 125,
+    "versionName" : "1.2.6",
+    "versionCode" : 126,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -120,9 +120,23 @@
     },
     "h5" : {
         "title" : "辰悠优品汇",
-        "domain" : "prd.gzcyou.com",
+        "domain" : "wap.vyunmall.com",
         "router" : {
             "mode" : "history"
+        },
+        //公众号代理访问
+        "devServer" : {
+            //前端或者后台IP反向代理开启
+            "disableHostCheck" : true
         }
     }
 }
+//接口跨域处理
+// ,
+// "proxy": {
+// 	"/api": {
+// 		"target": "http://192.168.1.25:9502",
+// 		"changeOrigin": true
+// 	}
+// }
+

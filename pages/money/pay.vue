@@ -19,7 +19,8 @@
 						</radio>
 					</label>
 				</view>
-				<!-- #ifndef MP-WEIXIN -->
+				<!-- 小程序和微信h5没有支付宝支付 -->
+				<!-- #ifndef MP-WEIXIN || H5 -->
 				<view class="type-item b-b" @click="changePayType(2)"  v-if="item.payType === 1">
 					<text class="icon iconfont iconzhifubao"></text>
 					<view class="con">
@@ -53,6 +54,7 @@
 </template>
 
 <script>
+import utils from '../../utils/method.js'
 import {
 	   mapMutations
     } from 'vuex';
@@ -71,11 +73,30 @@ import {
 		computed: {
 		
 		},
-		onLoad(opt) {
+		async onLoad(opt) {
+			//公众号中进入授权
+			// #ifdef H5
+			//判断微信浏览器
+			var that = this;
+			if(utils.isWxBrowser()){
+				uni.showLoading({
+					title:"授权中...",
+					mask:true
+				})
+				await this.wxJsdkLogin();
+				uni.hideLoading()
+			}else{
+				uni.showModal({
+					title:"提示",
+					content:"请使用微信打开进行支付",
+					showCancel:false
+				})
+			}
+			// #endif
 			this.money = opt.money;
 			this.orderId = opt.orderid;  //
 			this.group = opt.group;  //拼团订单
-			this.getPayType()
+			this.getPayType();
 		},
 
 		methods: {
@@ -134,63 +155,87 @@ import {
 					
 				})
 			},
-			 async wxPay(){	
+			async wxJsdkLogin(jweixin,_appid){
+				//授权配置
+				if(!uni.getStorageSync("wxJsdkLogin")){
+					utils.configWeiXin((jweixin,_appid) => {
+						try{
+							utils.wxJsdkAuthorize(_appid)
+						}catch(e){
+							console.log("授权失败:",e)
+						}
+					})
+				}else{
+					return
+				}
+			},
+			async wxPay(){
 				var _wxPayType = "APP";
 				// #ifdef APP-PLUS
 				_wxPayType = "APP";
 				// #endif
-				// // #ifdef H5
-				// _wxPayType = "H5";
-				// // #endif
-				// #ifdef MP-WEIXIN || H5
+				// #ifdef MP-WEIXIN
 				_wxPayType = "JSAPI";
 				// #endif
+				// #ifdef H5
+				_wxPayType = "WEB";
+				// #endif
 				var that = this;
+				
 				await this.$http({
 					apiName:"wxPay",
 					type:"POST",
 					data:{
 						orderNo:this.orderId,
-						wxPayType:_wxPayType
+						wxPayType:_wxPayType,
 					}
 				}).then(res => {
-					
-					// console.log(obj)
-					// // #ifdef H5
-					// //h5支付放弃
-					// //判断微信浏览器
-					// var ua = window.navigator.userAgent.toLowerCase();
-					// if (ua.match(/MicroMessenger/i) == "micromessenger") {
-					// 	//微信浏览器
-					// 	function onBridgeReady(){
-					// 	   WeixinJSBridge.invoke(
-					// 	      'getBrandWCPayRequest', obj,
-					// 	      function(res){
-					// 			  console.log(111,res)
-					// 			if(res.err_msg == "get_brand_wcpay_request:ok" ){
-					// 				// 使用以上方式判断前端返回,微信团队郑重提示：
-					// 	            //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-					// 	      } 
-					// 	   }); 
-					// 	}
-					// 	if (typeof WeixinJSBridge == "undefined"){
-					// 	   if( document.addEventListener ){
-					// 	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-					// 	   }else if (document.attachEvent){
-					// 	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
-					// 	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-					// 	   }
-					// 	}else{
-					// 	   onBridgeReady();
-					// 	}
-						
-						
-					// }else{
-					// 	//其他浏览器
-					// 	location.href = res.url;
-					// }
-					// // #endif
-					
+					//判断是否是公众号
+					// #ifdef H5
+					//判断微信浏览器
+					if(utils.isWxBrowser()){
+						let obj = {
+							appId: res.data.appId,  //示例wxd678efh567hg6787
+							timeStamp: res.data.timeStamp,  //时间戳
+							nonceStr: res.data.nonceStr,  //示例1900000109	
+							package: res.data.packageValue, // 固定值
+							signType:res.data.signType,
+							paySign:res.data.paySign,
+						}
+						let callback_succ_func = function(){
+							that.setSelectAddr(null);  //支付成功后清除选中的地址（测试要求的）
+							uni.redirectTo({
+								url:"/pages/money/paySuccess"
+							})
+						};
+						let callback_error_func = function(){
+							uni.redirectTo({
+								url:"/pages/money/payFail"
+							})
+						};
+						//方法一：使用WeixinJSBridge支付
+						utils.wxJsPay(obj,callback_succ_func,callback_error_func)
+						//方法二：使用jssdk支付
+						// jweixin.chooseWXPay({
+						// 	...obj,
+						// 	success: () => {
+						// 		callback_succ_func()
+						// 	},
+						// 	fail: err => {
+						// 		callback_error_func()
+						// 	},
+						// 	cancel: err => {
+						// 		callback_error_func()
+						// 	}
+						// });
+					}else{
+						uni.showModal({
+							title:"提示",
+							content:"请使用微信打开进行支付",
+							showCancel:false
+						})
+					}
+					// #endif
 					
 					// #ifdef APP-PLUS
 					let obj1 = {
@@ -222,7 +267,7 @@ import {
 					});
 					// #endif
 					
-					// #ifdef MP-WEIXIN || H5
+					// #ifdef MP-WEIXIN
 					let obj2 = {
 						nonceStr: res.data.nonceStr,
 						timeStamp: res.data.timeStamp,

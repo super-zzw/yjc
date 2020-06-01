@@ -375,7 +375,7 @@ export default{
 		dealTimep(val,currentTime){
 			if(val){
 				let _str = utils.transToDate(val.endTime - currentTime);
-				return _str.h + "小时" + _str.m + "分钟"
+				return _str.d + "天" + _str.h + "小时" + _str.m + "分钟"
 			}else{
 				return ""
 			}

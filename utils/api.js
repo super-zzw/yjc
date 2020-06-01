@@ -107,4 +107,7 @@ export default{
 	getMyRebateList: "/ums/get/rebateList", // 获取我的返利记录
 	withdraw: "/ums/withdraw" , //提现申请
 	
+	//公众号
+	wxJsdkConfig:"/app/jsconfig",  //获取公众号配置
+	wxJsdkLogin:"/ums/web/bindOpenId",  //公众号授权登录post
 }

@@ -6,7 +6,7 @@
 		<view class="fgGroup" v-if="this.fightData.group.length < this.fightData.minMember">
 			<view class="fgInfo">
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" class="ptImg" mode="widthFix"></image>
-				<text class="ptText">还差{{this.fightData.minMember - this.fightData.group.length}}人拼成，剩{{trDate.h}}小时{{trDate.m}}分钟结束</text>
+				<text class="ptText">还差{{this.fightData.minMember - this.fightData.group.length}}人拼成，剩{{trDate.d}}天{{trDate.h}}小时{{trDate.m}}分钟结束</text>
 			</view>
 			<view class="ptImgs">
 				<view class="fpNumstImg" v-for="(imgItem,imgIndex) in fightData.group" :key="imgIndex">
