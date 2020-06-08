@@ -1,4 +1,4 @@
-imShop 		IM++商城，仅限APP(废弃)
+imShop 		IM++商城，仅限APP(本地分支已删除)
 zhiMaiHui	智+迈+汇，仅限小程序
 master		辰悠++优品汇，仅限APP+小程序；Im ++Lucky，仅限APP
 master1		Im Lucky
