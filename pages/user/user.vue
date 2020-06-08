@@ -4,7 +4,7 @@
 		<!-- #ifdef MP-WEIXIN -->
 		<wxTabbar :showSearch="-1" :topbgk="topbgk"></wxTabbar>
 		<!-- #endif -->
-		<view class="user-section">
+		<view class="user-section" v-if="config">
 			<image class="bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/user-bg.png"></image>
 			<view class="user-section-asd">
 				<view class="user-info-box">
@@ -60,37 +60,68 @@
 			</view>
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
-				<view class="" @tap="navTo('/pages/address/address?source=2')">
-					<list-cell iconfont="iconfont icondizhi" iconColor="#5ECDA2" title="地址管理" tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/address/address?source=2')">
+					<text class="iconfont icondizhi"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">地址管理</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pages/collect/collect')">
-					<list-cell iconfont="iconfont iconshoucang2" iconColor="#53B4EF" title="我的收藏"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/collect/collect')">
+					<text class="iconfont iconshoucang2"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">我的收藏</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pages/history/history')">
-					<list-cell iconfont="iconfont iconlishi" iconColor="#5DBA8F" title="浏览历史"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/history/history')">
+					<text class="iconfont iconlishi"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">浏览历史</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pages/integral/integral')" v-if="hasScore">
-					<list-cell iconfont="iconfont iconjifen" iconColor="#EE883B" :title="'我的' + config.MALL_POINT_TITLE"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/integral/integral')" v-if="hasScore">
+					<text class="iconfont iconjifen"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">我的{{config.MALL_POINT_TITLE}}</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pages/order/myAssess')">
-					<list-cell iconfont="iconfont iconpingjia" iconColor="#F852C3" title="我的评价"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/order/myAssess')">
+					<text class="iconfont iconpingjia"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">我的评价</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pages/integral/record')" v-if="hasScore">
-					<list-cell iconfont="iconfont iconduihuan" iconColor="#F7CA20" :title="config.MALL_POINT_TITLE + '兑换记录'"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pages/integral/record')" v-if="hasScore">
+					<text class="iconfont iconduihuan"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">{{config.MALL_POINT_TITLE}}兑换记录</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pagesC/invite/invite')">
-					<list-cell iconfont="iconfont iconyaoqinghaoyou" iconColor="#9689F7" title="邀请好友"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pagesC/invite/invite')">
+					<text class="iconfont iconyaoqinghaoyou"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">邀请好友</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
-				<view class="" @tap="navTo('/pagesB/rebate/index',true)">
-					<list-cell class="last-list" iconfont="iconfont iconyaoqingfanliicon-gerenye" iconColor="#ff488f" title="邀请返利"  tips=" "></list-cell>
+				<view class="hsitem" @tap="navTo('/pagesB/rebate/index',true)">
+					<text class="iconfont iconyaoqingfanliicon-gerenye"></text>
+					<view class="itemBox">
+						<text class="itemBoxText">邀请返利</text>
+						<text class="iconfont iconright"></text>
+					</view>
 				</view>
 			</view>
 			<!-- <view class="submit" v-if="hasLogin" @tap="loginOut">退出登录</view> -->
 		</view>
     </view>  
 </template>  
-<script>  
-	import listCell from '@/components/mix-list-cell';
+<script> 
     import {  
         mapState,mapMutations
     } from 'vuex';
@@ -101,7 +132,6 @@
 			return utils.homeShare({})
 		},
 		components: {
-			listCell,
 			tabBar
 		},
 		data(){
@@ -440,33 +470,62 @@
 		}
 	}
 	.history-section{
-		padding: 30rpx 0 0;
 		margin-top: 20rpx;
 		background: #fff;
 		border-radius:10rpx;
-		.sec-header{
-			display:flex;
+		.hsitem{
+			display: flex;
+			justify-content: space-between;
+			padding-left: 30rpx;
 			align-items: center;
-			font-size: $font-base;
-			color: $font-color-dark;
-			line-height: 40rpx;
-			margin-left: 30rpx;
-		}
-		.h-list{
-			white-space: nowrap;
-			padding: 30rpx 30rpx 0;
-			image{
-				display:inline-block;
-				width: 160rpx;
-				height: 160rpx;
-				margin-right: 20rpx;
-				border-radius: 10rpx;
+			.iconfont{
+				font-size: 38rpx;
+			}
+			.itemBox{
+				flex: 1;
+				display: flex;
+				justify-content: space-between;
+				margin-left:20rpx;
+				padding-right: 30rpx;
+				border-bottom: 2rpx solid #eef1f5;
+				padding-bottom: 30rpx;
+				padding-top: 30rpx;
+				.itemBoxText{
+					font-size: 28rpx;
+					color: #303133;
+				}
+				.iconright{
+					font-size: 24rpx;
+					color: #C0C4CC;
+				}
 			}
 		}
-		.last-list{
-			/deep/ .mix-list-cell:after{
-				border-bottom: none;
-			}
+		.hsitem:last-child .itemBox{
+			border: none;
+		}
+		.icondizhi{
+			color: #5ECDA2;
+		}
+		.iconshoucang2{
+			color: #53B4EF;
+		}
+		.iconlishi{
+			color: #5DBA8F;
+		}
+		.iconjifen{
+			color: #EE883B;
+		}
+		.iconpingjia{
+			color: #F852C3;
+		}
+		.iconduihuan{
+			color: #F7CA20;
+		}
+		.iconyaoqinghaoyou{
+			color: #9689F7;
+		}
+		.iconyaoqingfanliicon-gerenye{
+			color: #ff488f;
 		}
 	}
 	.submit{
