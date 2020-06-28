@@ -42,7 +42,8 @@
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>"
                 ],
-                "schemes" : [ "youmall" ]
+                "schemes" : [ "youmall" ],
+                "abiFilters" : [ "armeabi-v7a", "x86" ]
             },
             "ios" : {
                 "urltypes" : [
