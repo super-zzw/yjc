@@ -58,11 +58,11 @@
             /* ios打包配置 */
             "sdkConfigs" : {
                 "payment" : {
-                    "alipay" : {},
                     "weixin" : {
                         "appid" : "wx3e2043f6604d1b94",
                         "UniversalLinks" : "https://www.vyunmall.com/ulinks"
-                    }
+                    },
+                    "alipay" : {}
                 },
                 "ad" : {},
                 "share" : {
@@ -128,7 +128,13 @@
         //公众号代理访问
         "devServer" : {
             //前端或者后台IP反向代理开启
-            "disableHostCheck" : true
+            "disableHostCheck" : true,
+            "proxy" : {
+                "/api" : {
+                    "target" : "http://cymall-api.dev.gzcyou.com/api",
+                    "changeOrigin" : true
+                }
+            }
         }
     }
 }
@@ -139,5 +145,5 @@
 // 		"target": "http://192.168.1.25:9502",
 // 		"changeOrigin": true
 // 	}
-// }
+// },
 

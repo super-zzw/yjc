@@ -1,13 +1,13 @@
 import Api from './api.js'
 import store from '../store'
 import utils from "./method.js"
-var test = false;
+var test =false ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
-	_baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强
+	// _baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强0
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
-	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
+	_baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 } else {
 	// _baseUrl = 'http://api.youmall.vip/api';  //i&m商，只对app，微信支付：wx4c4af1149bf6832e
 	_baseUrl = 'https://api.vyunmall.com/api';  //辰悠++优品汇，只对app和小程序，微信支付：wx3e2043f6604d1b94，小程序appid wx869ea006d7b72f96
@@ -68,7 +68,7 @@ export function http(opt){
 						duration: 2000
 					});
 					reject('请求失败,请稍后重试01')
-					utils.rmData()
+					// utils.rmData()
 					// uni.hideLoading()
 					// uni.showToast({
 					// 	icon: 'none',

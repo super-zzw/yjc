@@ -523,9 +523,11 @@ import tabBar from "@/components/tab-bar.vue"
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {
+			console.log(e)
 			const index = e.index;
 			// #ifdef APP-PLUS
 			const pages = getCurrentPages();
+			
 			const page = pages[pages.length - 1];
 			const currentWebview = page.$getAppWebview();
 			currentWebview.hideTitleNViewButtonRedDot({
