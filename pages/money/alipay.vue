@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view v-if="!isPay">
+		<view >
 			<div class="J-weixin-tip weixin-tip" >
 			    <div class="weixin-tip-content">
 			        请在菜单中选择在浏览器中打开,<br/>
@@ -9,14 +9,7 @@
 			</div>
 			<div class="J-weixin-tip-img weixin-tip-img"></div>
 		</view>
-	   <!-- <view v-if="isPay" class="success-tip">
-			<view >
-				支付成功,<br/>
-				{{second}}秒后跳转...
-			</view>
-			
-		</view> -->
-		
+	  
 	</view>
 </template>
 
@@ -26,10 +19,10 @@
 		data() {
 			return {
 				orderId:'',
-				timer:null,
+			
 				isPay:false,
-				second:3,
-				timer1:null,
+			
+			
 				flag:0
 			}
 		},
@@ -59,15 +52,10 @@
 			        }
 			    }
 				
-				// this.checkStatus()
+				
 		},
 		async onShow() {
-			// this.timer1=setInterval(()=>{
-			// 	 if(this.isPay){
-			// 		 clearInterval(this.timer1)
-			// 		 this.successTip()
-			// 	 }
-			//  },1000)
+		
 			this.flag=this.flag+1
 			if(this.flag>1){
 					await this.checkStatus()
@@ -75,70 +63,37 @@
 		
 			
 		},
-		// watch:{
-		// 	isPay(){
-		// 		if(this.isPay){
-		// 						 this.successTip()
-		// 		}					
-		// 	}
-		// },
 		methods: {
 		
 			checkStatus(){
-				// this.timer=setInterval(()=>{
+			
 					this.$http({
 						apiName:"getOrderDetail",
 						data:{orderId:this.orderId}
 					}).then(res => {
 						if(res.data.order.status>0){
-						// 	clearInterval(this.timer)
+					
 							this.isPay=true
-							uni.showToast({
-								title:'已完成支付',
+							// uni.showToast({
+							// 	title:'已完成支付',
 								
-							})
+							// })
 							uni.redirectTo({
 								url:'/pages/money/paySuccess'
 							})
 							// if()
 						}else{
-							// uni.showModal({
-							// 	content:'未完成支付',
-							// 	confirmText:'继续支付',
-							// 	cancelText:'取消支付',
-							// 	success:(res)=>{
-							// 		if(res.cancel){
-							// 			uni.redirectTo({
-							// 				url:'/pages/order/order?state=0'
-							// 			})
-							// 		}
-							// 	}
-							// })
+							
 							uni.redirectTo({
 											url:'/pages/money/payFail'
 										})
-							// uni.showModal({
-							// 	title:'未完成支付',
-								
-							// })
-							
+						
 						}
 						
 					}).catch(_ => {})
-				// },5000)
+				
 			},
-			// successTip(){
-			// 	var timer2=setInterval(()=>{
-			// 		this.second--
-			// 		if(this.second==0){
-			// 			clearInterval(timer2)
-			// 						  uni.redirectTo({
-			// 						  	url: "/pages/money/paySuccess"
-			// 						  })
-			// 		}
-			// 	},1000)
-			 
-			// }
+			
 			
 		}
 	}
