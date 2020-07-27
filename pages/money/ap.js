@@ -102,7 +102,6 @@ a.encode = function(f) {
 b.pay = function(d,id) {
 	// console.log(d)
 	var c = encodeURIComponent(a.encode(d));
-	
 	location.replace(window.location.origin + '/pages/money/alipay?goto=' + c+'&orderId='+id)
 };
 b.decode = function(c) {

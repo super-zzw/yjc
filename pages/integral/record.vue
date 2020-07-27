@@ -19,15 +19,15 @@
 							规格：<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
 							；<text>数量：{{item.productQuantity}}</text>
 						</text>
-						<!-- <text class="price">{{item.minPrice}}</text> -->
+						<text class="price">{{item.minPrice}}</text>
 					</view>
 				</view>
-				<view class="good-box-sn">
+				<!-- <view class="good-box-sn">
 					订单编号：{{item.orderSn}}
 					<text class="iconfont iconfuzhi gbsc"></text>
-				</view>
+				</view> -->
 				<view class="price-box">
-					消耗{{config.MALL_POINT_TITLE}}
+					{{config.MALL_POINT_TITLE}}:
 					<text class="price">{{item.payAmount}}</text>
 				</view>
 			</view>
@@ -51,7 +51,9 @@ export default{
 	},
 	data(){
 		return{
-			dataList:[],
+			dataList:[
+				
+			],
 			page:1,
 			size:8,
 			noMore:false,
@@ -159,19 +161,19 @@ export default{
 			}
 			.del-btn{
 				padding: 10rpx 0 10rpx 36rpx;
-				font-size: $font-lg;
+				font-size:40rpx;
 				color: $font-color-light;
 				position: relative;
-				&:after{
-					content: '';
-					width: 0;
-					height: 30rpx;
-					border-left: 1px solid $border-color-dark;
-					position: absolute;
-					left: 20rpx;
-					top: 50%;
-					transform: translateY(-50%);
-				}
+				// &:after{
+				// 	content: '';
+				// 	width: 0;
+				// 	height: 30rpx;
+				// 	border-left: 1px solid $border-color-dark;
+				// 	position: absolute;
+				// 	left: 20rpx;
+				// 	top: 50%;
+				// 	transform: translateY(-50%);
+				// }
 			}
 		}
 		/* 多条商品 */
@@ -244,15 +246,16 @@ export default{
 			justify-content: flex-end;
 			align-items: baseline;
 			padding: 20rpx 30rpx;
-			font-size: $font-sm + 2rpx;
-			color: $font-color-light;
+			font-size:28rpx;
+			color: #303133;
 			.num{
 				margin: 0 8rpx;
 				color: $font-color-dark;
 			}
 			.price{
 				font-size: $font-lg;
-				color: $font-color-dark;
+				color: #F23D3D;
+				font-weight: 600;
 				&:before{
 					content: '';
 					font-size: $font-sm;

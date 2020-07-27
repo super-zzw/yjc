@@ -16,7 +16,8 @@
         },
         "modules" : {
             "Payment" : {},
-            "Share" : {}
+            "Share" : {},
+            "OAuth" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -69,6 +70,13 @@
                     "weixin" : {
                         "appid" : "wx3e2043f6604d1b94",
                         "UniversalLinks" : "https://www.vyunmall.com/ulinks"
+                    }
+                },
+                "oauth" : {
+                    "weixin" : {
+                        "appid" : "wx3e2043f6604d1b94",
+                        "appsecret" : "2565166002bbd79b25157ec5c24e0d2f",
+                        "UniversalLinks" : ""
                     }
                 }
             },

@@ -60,6 +60,16 @@
 				<text class="no_more_side"></text>
 			</view>
 		</view>
+		<view class="s-box5">
+			<navigator url="" hover-class="none" class="nav">
+				<text class="iconfont iconjifenzhongxin"></text>
+				<text class="txt">积分中心</text>
+			</navigator>
+			<navigator url="./record" hover-class="none" class="nav">
+				<text class="iconfont iconduihuanjilu"></text>
+				<text class="txt">兑换记录</text>
+			</navigator>
+		</view>
 	</view>
 </template>
 
@@ -90,9 +100,9 @@
 		onLoad() {
 			this.initData();
 			this.getRule();
-			uni.setNavigationBarTitle({
-				title:this.config.MALL_POINT_TITLE
-			})
+			// uni.setNavigationBarTitle({
+			// 	title:this.config.MALL_POINT_TITLE
+			// })
 		},
 		filters:{
 			dealTime(val){
@@ -365,6 +375,8 @@
 		padding-right: 32rpx;
 		box-sizing: border-box;
 		background: #fff;
+		height: 560rpx;
+		overflow: scroll;
 		.s-box4-item{
 			display: flex;
 			justify-content: space-between;
@@ -388,6 +400,34 @@
 				color: #F23D3D;
 				font-size: 32rpx;
 				font-weight: bold;
+			}
+		}
+	}
+	.s-box5{
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: 100rpx;
+		display: flex;
+		justify-content: space-around;
+		border-top: 2rpx solid #DBDBDB;
+		background: #FAFAFA;
+		.nav{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			.iconfont{
+				font-size: 48rpx;
+				// color: #909399;
+			}
+			.txt{
+				font-size:24rpx;
+				font-family:PingFangSC-Regular,PingFang SC;
+				font-weight:400;
+				color:rgba(144,147,153,1);
+				line-height:34rpx;
 			}
 		}
 	}

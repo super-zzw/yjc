@@ -39,8 +39,9 @@ Vue.prototype.$getConfig = getConfig;
 Vue.prototype.$api = {prePage};
 
 import wxTabbar from '@/components/wx-tabbar.vue'
+import datePicker from '@/components/datePicker.vue'
 Vue.component('wxTabbar',wxTabbar)
-
+Vue.component('datePicker',datePicker)
 App.mpType = 'app'
 
 const app = new Vue({

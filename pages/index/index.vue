@@ -239,7 +239,9 @@ import tabBar from "@/components/tab-bar.vue"
 		async onLoad(opt) {
 			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){
+				// #ifdef APP-PLUS
 				this.$checkUpdate();
+				// #endif
 				await this.initData();
 				if(opt.inviteCode){
 					this.$store.commit('setICode',opt.inviteCode)

@@ -245,5 +245,23 @@
 
 	.placeholder {
 		color: #999999;
+		text-align:center
 	}
+	.placeholder1 {
+		color: #999999;
+		
+	}
+	.mask{
+			 position: fixed;
+			  top: 0;
+			  left: 0;
+			  width: 100vw;
+			  height: 100vh;
+			  background:rgba(52,52,52,0.7);
+			  z-index: 100;
+		}
+	/* .placeholderClass{
+		color:#aaa;
+		text-align:center
+	} */
 </style>

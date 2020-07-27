@@ -1,5 +1,5 @@
 <template>
-	<view class="empty-content">
+	<view class="empty-content" :style="{height:height}">
 		<image class="empty-content-image" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/empty.png" mode="aspectFit"></image>
 		<view class="empty-text">{{desc}}</view>
 	</view>
@@ -12,6 +12,10 @@
 				type: String,
 				default: '暂无数据'
 			},
+			height:{
+				type:String,
+				default:'100vh'
+			}
 		},
 
 		data() {
@@ -29,11 +33,11 @@
 		justify-content: center;
 		flex-direction: column;
 		
-		position: fixed;
-		left: 0;
-		top: 0;
-		right: 0;
-		bottom: 0;
+		// position: fixed;
+		// left: 0;
+		// top: 0;
+		// right: 0;
+		// bottom: 0;
 		background: $page-color-base;
 		padding-bottom: 120rpx;
 

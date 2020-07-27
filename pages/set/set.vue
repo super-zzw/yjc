@@ -1,31 +1,47 @@
 <template>
 	<view class="container">
-		<!-- <view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">个人资料</text>
-			<text class="cell-more iconfont iconright"></text>
-		</view> -->
-		<!-- <view class="list-cell b-b m-t" @click="clearCache" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<view class="list-cell b-b " @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">收货地址</text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">绑定微信</text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">支付密码</text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<view class="list-cell b-b m-t" @click="clearCache" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">清除缓存</text>
 			<text class="cell-tip">{{cache}}</text>
-			<text class="cell-more iconfont iconright"></text>
-		</view> -->
-		<view class="list-cell b-b" @click="toPage('/pages/set/changePwd',true)" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<view class="list-cell b-b " @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+			<text class="cell-tit">关于 优之汇商城</text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
+		<!-- <view class="list-cell b-b" @click="toPage('/pages/set/changePwd',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">修改密码</text>
-			<text class="cell-more iconfont iconright"></text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
 		<view class="list-cell b-b" @click="toPage('/pages/set/changePhone',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">修改绑定手机号</text>
-			<text class="cell-more iconfont iconright"></text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
 		<view class="list-cell b-b" @click="toAbout" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">关于{{config.MALL_APP_NAME}}</text>
-			<text class="cell-more iconfont iconright"></text>
-		</view>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view> -->
 		<!-- #ifdef APP-PLUS -->
 		<view class="list-cell" @tap="updateV">
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip" v-if="version">当前版本 {{version}}</text>
-			<text class="cell-more iconfont iconright"></text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
 		<!-- #endif -->
 		<view class="list-cell log-out-btn" @click="loginOut" v-if="hasLogin">

@@ -36,88 +36,87 @@
 				<view class="tj-sction-title">我的订单</view>
 				<view class="tj-sction-icon">
 					查看全部
-					<text class="iconfont iconright"></text>
+					<text class="iconfont iconchakanquanbu"></text>
 				</view>
 			</view>
 			<!-- 订单 -->
 			<view class="order-section">
 				<view class="order-item" @click="navTo('/pages/order/order?state=1')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="iconfont icondaifukuan2 icon1"></text>
+					
+					<image src="../../static/user/daifukuan.png" mode="" class="icon"></image>
 					<text>待付款</text>
 				</view>
 				<view class="order-item" @click="navTo('/pages/order/order?state=2')"  hover-class="common-hover" :hover-stay-time="50">
-					<text class="iconfont iconfahuo icon2"></text>
+					<image src="../../static/user/daifahuo.png" mode="" class="icon"></image>
 					<text>待发货</text>
 				</view>
 				<view class="order-item" @click="navTo('/pages/order/order?state=3')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="iconfont iconyunshu icon3"></text>
-					<text>待收货</text>
+					<image src="../../static/user/yifahuo.png" mode="" class="icon"></image>
+					<text>已发货</text>
 				</view>
 				<view class="order-item" @click="navTo('/pages/order/order?state=4')" hover-class="common-hover"  :hover-stay-time="50">
-					<text class="iconfont icontuikuan icon4"></text>
+					<image src="../../static/user/shouhou.png" mode="" class="icon"></image>
 					<text>退款/售后</text>
 				</view>
 			</view>
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
 				<view class="hsitem" @tap="navTo('/pages/address/address?source=2')">
-					<text class="iconfont icondizhi"></text>
-					<view class="itemBox">
+					<!-- <text class="iconfont icondizhi"></text> -->
+					<image src="../../static/user/address.png" class="icon"></image>
 						<text class="itemBoxText">地址管理</text>
-						<text class="iconfont iconright"></text>
-					</view>
+						
+					
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/collect/collect')">
-					<text class="iconfont iconshoucang2"></text>
-					<view class="itemBox">
+						<image src="../../static/user/collect.png" class="icon"></image>
 						<text class="itemBoxText">我的收藏</text>
-						<text class="iconfont iconright"></text>
-					</view>
+						
+					
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/history/history')">
-					<text class="iconfont iconlishi"></text>
-					<view class="itemBox">
+					<image src="../../static/user/history.png" class="icon"></image>
 						<text class="itemBoxText">浏览历史</text>
-						<text class="iconfont iconright"></text>
-					</view>
+						
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/integral/integral')" v-if="hasScore">
-					<text class="iconfont iconjifen"></text>
-					<view class="itemBox">
+					<image src="../../static/user/integral.png" class="icon"></image>
 						<text class="itemBoxText">我的{{config.MALL_POINT_TITLE}}</text>
-						<text class="iconfont iconright"></text>
-					</view>
+						
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/order/myAssess')">
-					<text class="iconfont iconpingjia"></text>
-					<view class="itemBox">
+				  <image src="../../static/user/myAssess.png" class="icon"></image>
 						<text class="itemBoxText">我的评价</text>
-						<text class="iconfont iconright"></text>
-					</view>
+						
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/integral/record')" v-if="hasScore">
-					<text class="iconfont iconduihuan"></text>
-					<view class="itemBox">
-						<text class="itemBoxText">{{config.MALL_POINT_TITLE}}兑换记录</text>
-						<text class="iconfont iconright"></text>
-					</view>
+					 <image src="../../static/user/invite.png" class="icon"></image>
+						<text class="itemBoxText">邀请好友</text>
+						
 				</view>
 				<view class="hsitem" @tap="navTo('/pagesC/invite/invite')">
-					<text class="iconfont iconyaoqinghaoyou"></text>
-					<view class="itemBox">
-						<text class="itemBoxText">邀请好友</text>
-						<text class="iconfont iconright"></text>
-					</view>
-				</view>
-				<view class="hsitem" @tap="navTo('/pagesB/rebate/index',true)">
-					<text class="iconfont iconyaoqingfanliicon-gerenye"></text>
-					<view class="itemBox">
+					 <image src="../../static/user/yaoqingfanli.png" class="icon"></image>
 						<text class="itemBoxText">邀请返利</text>
-						<text class="iconfont iconright"></text>
-					</view>
+					
+					
+				</view>
+				<view class="hsitem" @tap="navTo('/pages/coupons/index',true)">
+			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
+						<text class="itemBoxText">优惠券</text>
+					
+				</view>
+				<view class="hsitem" @tap="navTo('/pagesE/distribution/index',true)">
+				    <image src="../../static/user/fenxiao.png" class="icon"></image>
+						<text class="itemBoxText">分销中心</text>
+					
+				</view>
+				<view class="hsitem" @tap="navTo('/pagesF/myStore/index',true)">
+				    <image src="../../static/user/chuzhi.png" class="icon"></image>
+						<text class="itemBoxText">我的储值</text>
+					
 				</view>
 			</view>
-			<!-- <view class="submit" v-if="hasLogin" @tap="loginOut">退出登录</view> -->
+			<view class="submit" v-if="hasLogin" @tap="loginOut">退出登录</view>
 		</view>
     </view>  
 </template>  
@@ -145,6 +144,7 @@
 				this.getCartNms();  //获取购物车数量
 			}
 			utils.setBadgeText(0,this.msgNms)
+			console.log(uni.getStorageSync('wxInfo'))
 		},
         computed: {
 			...mapState(['hasLogin','userInfo','msgNms','hasScore','hasSigin','config']),
@@ -284,8 +284,8 @@
 		box-sizing: border-box;
 	}
 	.user-section{
-		height: 420rpx;
-		padding: 180rpx 32rpx 0 56rpx;
+		height: 300rpx;
+		padding: 80rpx 32rpx 0 56rpx;
 		padding-bottom: 80rpx;
 		position:relative;
 		box-sizing: border-box;
@@ -433,6 +433,10 @@
 			align-items: center;
 			font-size: 24rpx;
 			color: #C0C4CC;
+			.iconchakanquanbu{
+				font-size: 10rpx;
+				margin-left: 10rpx;
+			}
 		}
 	}
 	.order-section{
@@ -447,58 +451,65 @@
 			font-size: $font-sm;
 			color: $font-color-dark;
 		}
-		.iconfont{
+		.icon{
+			margin-bottom: 10rpx;
+			height: 60rpx;
+			width: 60rpx;
+		}
+		/* .iconfont{
 			color: #f23d3d;
 			margin-bottom: 20rpx;
 			height: 50rpx;
 		}
 		.iconfont,
 		.icon1{
-			font-size: 50rpx;
+			font-size: 60rpx;
 		}
 		.icon2{
-			font-size: 42rpx;
+			font-size: 60rpx;
 		}
 		.icon3{
-			font-size: 54rpx;
+			font-size: 60rpx;
 		}
 		.icon4{
-			font-size: 48rpx;
+			font-size: 60rpx;
 		}
 		.icon-shouhoutuikuan{
 			font-size:44rpx;
-		}
+		} */
 	}
 	.history-section{
 		margin-top: 20rpx;
 		background: #fff;
 		border-radius:10rpx;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding: 20rpx 0;
 		.hsitem{
 			display: flex;
-			justify-content: space-between;
-			padding-left: 30rpx;
-			align-items: center;
-			.iconfont{
-				font-size: 38rpx;
+			width: 170rpx;
+			height: 150rpx;
+		    align-items: center;
+			margin-right: 2rpx;
+			.icon{
+				width: 56rpx;
+				height: 56rpx;
+				margin-bottom: 12rpx;
 			}
-			.itemBox{
-				flex: 1;
+			
+				/* flex: 1; */
 				display: flex;
-				justify-content: space-between;
-				margin-left:20rpx;
-				padding-right: 30rpx;
-				border-bottom: 2rpx solid #eef1f5;
-				padding-bottom: 30rpx;
-				padding-top: 30rpx;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
 				.itemBoxText{
 					font-size: 28rpx;
-					color: #303133;
+					color: #4A4B4C;
 				}
-				.iconright{
-					font-size: 24rpx;
-					color: #C0C4CC;
-				}
-			}
+				
+			
+			
 		}
 		.hsitem:last-child .itemBox{
 			border: none;
@@ -529,11 +540,11 @@
 		}
 	}
 	.submit{
-		margin-top: 16rpx;
+		margin-top: 40rpx;
 		border: 2rpx solid #F23D3D;
-		border-radius: 10rpx;
+		border-radius: 40rpx;
 		text-align: center;
-		line-height: 64rpx;
+		line-height: 80rpx;
 		color: #F23D3D;
 		font-size: 28rpx;
 	}
