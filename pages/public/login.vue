@@ -58,7 +58,7 @@
 							placeholder="请输入验证码"
 							placeholder-class="input-empty"
 							maxlength="6"
-							v-model="password"
+							v-model="code"
 							@confirm="toLogin"
 						/>
 					</view>
@@ -86,7 +86,7 @@
 			<text class="rscen">|</text>
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
-		<view class="wxLogin">
+		<view class="wxLogin"  @click="oAuth" >
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
@@ -103,6 +103,7 @@
 			return {
 				mobile: '',
 				password: '',
+				code:'',
 				logining: false,
 				tab:1
 			}
@@ -131,20 +132,39 @@
 					return
 				}
 				this.logining = true;
-				let _data = [
-					{
-						data:this.mobile.trim(),
-						info:'手机号不能为空'
-					},
-					{
-						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-						info:'手机号格式不正确'
-					},
-					{
-						data:this.password,
-						info:'密码不能为空'
-					},
-				]
+				let _data
+				if(this.tab==1){
+					_data = [
+						{
+							data:this.mobile.trim(),
+							info:'手机号不能为空'
+						},
+						{
+							data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+							info:'手机号格式不正确'
+						},
+						{
+							data:this.password,
+							info:'密码不能为空'
+						},
+					]
+				}else{
+					_data = [
+						{
+							data:this.mobile.trim(),
+							info:'手机号不能为空'
+						},
+						{
+							data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+							info:'手机号格式不正确'
+						},
+						{
+							data:this.code,
+							info:'验证码不能为空'
+						},
+					]
+				}
+				
 				let jres = await utils.judgeData(_data)
 				if(jres){
 					await this.$http({
@@ -173,11 +193,8 @@
 								console.log(info.userInfo)
 								// this.$store.commit('setLogin',true)
 								// uni.setStorageSync('wxInfo',info.userInfo)
-								uni.navigateTo({
-									url:'/pages/user/user'
-								})
-									
 								
+									
 								// utils.setSesion(info.userInfo)
 								// utils.afterLoginJump()
 							}

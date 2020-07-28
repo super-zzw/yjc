@@ -18,21 +18,9 @@
 				<view class="slabel">确认支付密码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" maxlength="6" type="password" v-model="checkPassword" placeholder="请再次输入支付密码"/>
-					
 				</view>
 			</view>
-			<!-- <view class="sItem">
-				<view class="slabel">重置登录密码</view>
-				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="newPwd" placeholder="请输入新密码"/>
-				</view>
-			</view>
-			<view class="sItem">
-				<view class="slabel">确认密码</view>
-				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="newPwdRe" placeholder="请再次输入新密码"/>
-				</view>
-			</view> -->
+		
 		</view>
 		<button class="btn" :disabled="confirmBtnDisable" :loading="confirmBtnDisable" @tap="register" >完成</button>
 	</view>
@@ -40,6 +28,7 @@
 
 <script>
 	import utils from 'utils/method.js'
+		import {mapState} from 'vuex'
 	export default{
 		data(){
 			return {
@@ -53,6 +42,12 @@
 				codeText:"获取验证码",
 				confirmBtnDisable: false
 			}
+		},
+		computed:{
+			...mapState(['userInfo'])
+		},
+		onLoad() {
+			console.log(this.userInfo)
 		},
 		methods:{
 			async register(){
@@ -79,32 +74,32 @@
 				if(jres){
 					this.confirmBtnDisable = true;
 					await this.$http({
-						apiName:"changePwd",
+						apiName:"bindPayPwd",
 						type:"POST",
 						data:{
-							oldPassword:utils.md5(this.pwd),
-							newPassword:utils.md5(this.newPwd),
-							phoneNumber:this.phone,
+							// oldPassword:utils.md5(this.pwd),
+							// newPassword:utils.md5(this.newPwd),
+							tradepwd:utils.md5(this.password),
 							authCode:this.code,
-							// #ifdef APP-PLUS
-							sourceType:1,  //0pc,1app,2公众号，3小程序
-							// #endif
-							// #ifdef H5
-							sourceType:2,  //0pc,1app,2公众号，3小程序
-							// #endif
-							// #ifdef MP-WEIXIN
-							sourceType:3,  //0pc,1app,2公众号，3小程序
-							// #endif
+							// // #ifdef APP-PLUS
+							// sourceType:1,  //0pc,1app,2公众号，3小程序
+							// // #endif
+							// // #ifdef H5
+							// sourceType:2,  //0pc,1app,2公众号，3小程序
+							// // #endif
+							// // #ifdef MP-WEIXIN
+							// sourceType:3,  //0pc,1app,2公众号，3小程序
+							// // #endif
 						}
 					}).then(res => {
 						uni.showToast({
-							title:"修改成功"
+							title:"设置成功"
 						})
 						utils.rmData()
 						setTimeout(_ => {
 							this.confirmBtnDisable = false;
 							uni.reLaunch({
-							    url: '/pages/public/login'
+							    url: '/pages/user/user'
 							});
 						},2000)
 					}).catch(_ => {
@@ -121,40 +116,52 @@
 					title:"获取验证码...",
 					mask:true
 				})
-				let _data = [
-					{
-						data:this.pwd,
-						info:'当前密码不能为空'
-					},
-					{
-						data:this.phone.trim(),
-						info:'手机号不能为空'
-					},
-					{
-						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone.trim()) ? "1" : "",
-						info:'手机号格式不正确'
+				await this.$http({
+					apiName:'getCode',
+					type:'POST',
+					data:{
+						phoneNumber:this.userInfo.phone
 					}
-				]
-				let jres = await utils.judgeData(_data)
-				if(jres){
-					this.coding = true;
-					this.countDown();
-					await this.$http({
-						apiName:"changePwdCode",
-						type:"POST",
-						data:{
-							password:utils.md5(this.pwd),
-							phoneNumber:this.phone,
-						}
-					}).then(res => {
-						uni.hideLoading();
-					}).catch(_ => {
-						this.clearCountDown();
-						uni.hideLoading();
-					})
-				}else{
-					uni.hideLoading()
-				}
+				}).then(res=>{
+					
+				}).catch(err=>{
+					
+				})
+				uni.hideLoading()
+				// let _data = [
+				// 	{
+				// 		data:this.pwd,
+				// 		info:'当前密码不能为空'
+				// 	},
+				// 	{
+				// 		data:this.phone.trim(),
+				// 		info:'手机号不能为空'
+				// 	},
+				// 	{
+				// 		data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone.trim()) ? "1" : "",
+				// 		info:'手机号格式不正确'
+				// 	}
+				// ]
+				// let jres = await utils.judgeData(_data)
+				// if(jres){
+				// 	this.coding = true;
+				// 	this.countDown();
+				// 	await this.$http({
+				// 		apiName:"changePwdCode",
+				// 		type:"POST",
+				// 		data:{
+				// 			password:utils.md5(this.pwd),
+				// 			phoneNumber:this.phone,
+				// 		}
+				// 	}).then(res => {
+				// 		uni.hideLoading();
+				// 	}).catch(_ => {
+				// 		this.clearCountDown();
+				// 		uni.hideLoading();
+				// 	})
+				// }else{
+				// 	uni.hideLoading()
+				// }
 				
 			},
 			countDown(){

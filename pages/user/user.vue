@@ -89,12 +89,12 @@
 						<text class="itemBoxText">我的评价</text>
 						
 				</view>
-				<view class="hsitem" @tap="navTo('/pages/integral/record')" v-if="hasScore">
+				<view class="hsitem" @tap="navTo('/pagesC/invite/invite')" v-if="hasScore">
 					 <image src="../../static/user/invite.png" class="icon"></image>
 						<text class="itemBoxText">邀请好友</text>
 						
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesC/invite/invite')">
+				<view class="hsitem" @tap="navTo('/pagesB/rebate/index')">
 					 <image src="../../static/user/yaoqingfanli.png" class="icon"></image>
 						<text class="itemBoxText">邀请返利</text>
 					
@@ -142,6 +142,7 @@
 			if(this.hasLogin){
 				await this.getUserInfo()
 				this.getCartNms();  //获取购物车数量
+				console.log(this.userInfo)
 			}
 			utils.setBadgeText(0,this.msgNms)
 			console.log(uni.getStorageSync('wxInfo'))
@@ -177,17 +178,17 @@
 					this.setUserInfo(res.data)
 				}).catch(_ => {})
 			},
-			// //退出登录
-			// async loginOut(){
-			// 	await this.$http({
-			// 		apiName:"logOut"
-			// 	}).then(res => {
-			// 		utils.rmData()
-			// 		uni.showToast({
-			// 			title:"退出成功"
-			// 		})
-			// 	}).catch(_ => {})
-			// },
+			//退出登录
+			async loginOut(){
+				await this.$http({
+					apiName:"logOut"
+				}).then(res => {
+					utils.rmData()
+					uni.showToast({
+						title:"退出成功"
+					})
+				}).catch(_ => {})
+			},
 			/**
 			 * 统一跳转接口,拦截未登录路由
 			 * navigator标签现在默认没有转场动画，所以用view
@@ -284,8 +285,8 @@
 		box-sizing: border-box;
 	}
 	.user-section{
-		height: 300rpx;
-		padding: 80rpx 32rpx 0 56rpx;
+	height: 420rpx;
+			padding: 180rpx 32rpx 0 56rpx;
 		padding-bottom: 80rpx;
 		position:relative;
 		box-sizing: border-box;

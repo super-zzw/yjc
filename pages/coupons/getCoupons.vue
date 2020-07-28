@@ -1,21 +1,21 @@
 <template>
 	<view class="container">
 		
-		<view class="card-item">
+		<view class="card-item" v-for="item in datalist" :key="item.id">
 			<view class="fengmian">
 				<view class="content">
-					￥<text>1299</text>
+					￥<text>{{item.amount}}</text>
 				</view>
 				
 			</view>
 			<view class="main">
-				<text class="title">全场通用文文文文文字最全场通用文文文文文字最</text>
+				<text class="title">{{item.title}}</text>
 				<view class="info">
-					<text class="txt">订单满3000使用</text>
-					<text class="btn btn1" v-if="status==0">领取</text>
-					<!-- <text class="btn btn2">已领取</text> -->
+					<text class="txt">{{item.minConsumption|useMethod}}</text>
+					<text class="btn btn1" v-if="!item.wuserFlag" @tap="recieve(item.id)">领取</text>
+					<text class="btn btn2" v-else>已领取</text>
 				</view>
-				<text class="date">2020.06.06 至 2020.12.05 有效</text>
+				<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 			</view>
 			
 		</view>
@@ -24,11 +24,66 @@
 </template>
 
 <script>
+	import utils from '@/utils/method.js'
 	export default {
 		data() {
 			return {
-				status:0
+				status:0,
+				datalist:[]
 			};
+		},
+		filters:{
+			useMethod(data){
+				if(data==-1){
+					return '无条件使用'
+				}else{
+					return '订单满'+data+'使用'
+				}
+			},
+			date(data){
+				return utils.unixToDatetime(data,9)
+			}
+		},
+		onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			this.getAllCoupon()
+			uni.hideLoading()
+		},
+		methods:{
+			async getAllCoupon(){
+				await this.$http({
+					apiName:'getAllCoupon',
+
+				}).then(res=>{
+					this.datalist=res.data.list
+				}).catch(err=>{})
+			},
+			async recieve(id){
+				uni.showLoading({
+					title:'领取中'
+				})
+				await this.$http({
+					apiName:'getAllCoupon',
+					type:'POST',
+					data:{
+						couponId:id
+					}
+					
+				}).then(res=>{
+					uni.showToast({
+						title:'领取成功',
+						 mask:'none'
+					})
+				}).catch(err=>{
+					uni.showToast({
+						title:'领取失败',
+					    mask:'none'
+					})
+				})
+				uni.hideLoading()
+			}
 		}
 	}
 </script>

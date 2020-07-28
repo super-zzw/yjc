@@ -50,7 +50,11 @@
 			}
 		},
 		computed:{
-			...mapState(['config'])
+			...mapState(['config','userInfo'])
+		},
+		onLoad() {
+			
+			
 		},
 		methods: {
 			cancel(){

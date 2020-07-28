@@ -39,6 +39,7 @@
 
 <script>
 	import utils from 'utils/method.js'
+
 	export default{
 		data(){
 			return {
@@ -54,6 +55,7 @@
 				confirmBtnDisable: false
 			}
 		},
+	
 		methods:{
 			async register(){
 				let _data = [
