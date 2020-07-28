@@ -237,6 +237,7 @@ import tabBar from "@/components/tab-bar.vue"
 			},800)
 		},
 		async onLoad(opt) {
+			
 			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){
 				// #ifdef APP-PLUS

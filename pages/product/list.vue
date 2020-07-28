@@ -240,6 +240,7 @@
 					this.isShow = true;
 				}).catch(_ => {})
 				uni.hideLoading()
+				
 			},
 			//点击关键字搜索
 			kewSearch(word){

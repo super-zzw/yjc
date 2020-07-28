@@ -38,10 +38,10 @@ export default{
 	clearCart:"/oms/remove/cart",  //清空购物车
 	
 	changePwdCode:"/app/pwd/sendAuthCode",  //修改密码验证码
-	changePwd:"/ums/changePassword",  //修改登录密码
+	changePwd:"/login/changePassword",  //修改登录密码
 	changePhone:"/ums/changePhone",  //修改手机号
 	getUserInfo:"/ums/getUserInfo",  //获取用户信息
-	logOut:"/ums/logout",  //退出登录
+	logOut:"/login/logout",  //退出登录
 	refreshSession:"/ums/refreshSession",  //刷新session
 	getCollect:"/ums/get/productCoolect",  //获取收藏列表
 	deleteCollect:"/ums/delete/productCoolect",  //删除某个收藏
@@ -67,10 +67,10 @@ export default{
 	getPrgs:"/oms/get/orderReturnApplyInfo",  //获取售后详情
 	getGood:"/ums/confirm/order",  //确认收货
 	
-	register:"/ums/register",  //用户注册
-	phoneLogin:"/ums/loginPhone",  //手机号密码登录
-	codeLogin:"/ums/loginPhoneNumber",  //手机验证码登录
-	resetPwd:"/ums/phoneResetLoginpwd",  //手机号重置密码
+	register:"/login/register",  //用户注册
+	phoneLogin:"/login/loginPhone",  //手机号密码登录
+	codeLogin:"/login/loginPhoneNumber",  //手机验证码登录
+	resetPwd:"/login/phoneResetLoginpwd",  //手机号重置密码
 	getArticle:"/sms/get/article",  //根据文章id获取文章内容
 	
 	search:"/pms/product/search",  //获取搜索结果
@@ -95,7 +95,7 @@ export default{
 	getGoodDeliver:"/oms/express/check",  //待收货物流
 	
 	checkUpdate:"/app/client/update",  //检查更新
-	mpLogin:"/ums/miniApp/Login",  //小程序关联
+	mpLogin:"/login/miniApp/login",  //小程序关联
 	
 	HomeFight:"/sms/get/home/groupProduct/list",  //首页团购列表
 	fightList:"/sms/get/more/home/groupProduct/list",  //团购列表
@@ -110,6 +110,10 @@ export default{
 	//公众号
 	wxJsdkConfig:"/app/jsconfig",  //获取公众号配置
 	wxJsdkLogin:"/ums/web/bindOpenId",  //公众号授权登录post
+	wxJsdkLogin:"/login/web/bindOpenId",  //公众号授权登录post
+	bindPayPwd:'/ums/bind/payPwd'  ,//绑定支付密码
+	myCoupon:'/sms/get/coupon/wuserList'  ,//获取我的优惠券
+	getAllCoupon:'/sms/get/coupon/allList',//领券中心列表
 	
 	//分销
 	DistributionInfo:"/fx/get/distribute/index",  //分销中心首页信息
