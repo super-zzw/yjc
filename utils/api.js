@@ -110,4 +110,11 @@ export default{
 	//公众号
 	wxJsdkConfig:"/app/jsconfig",  //获取公众号配置
 	wxJsdkLogin:"/ums/web/bindOpenId",  //公众号授权登录post
+	
+	//分销
+	DistributionInfo:"/fx/get/distribute/index",  //分销中心首页信息
+	fxTeamOne:"/ums/get/subTeam/oneList",  //下属团队一级代理
+	fxTeamTwo:"/ums/get/subTeam/twoList",  //下属团队二级代理
+	fxCustomer:"",  //获取直推客户
+	fxCommission:"",  //
 }

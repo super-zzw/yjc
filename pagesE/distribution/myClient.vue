@@ -3,15 +3,6 @@
 		<view class="top">
 			<text class="number">159</text>
 			<text class="ctxt">我的直推客户人数(人)</text>
-			<view class="agents">
-				<view class="agentTab ">
-					<text @tap="tab=1" :class="tab==1?'active':''">一级代理</text>
-				</view>
-				<text class="divider"></text>
-				<view class="agentTab">
-					<text :class="tab==2?'active':''" @tap="tab=2">二级代理</text>
-				</view>
-			</view>
 		</view>
 		<view class="content-List">
 			<view class="filters">
@@ -65,11 +56,26 @@
 				endTime:''
 			};
 		},
-		onLoad() {
+		async onLoad() {
 			// this.startTime=this.endTime=new Date().getFullYear()+'.'+ (new Date().getMonth()+1)
-			this.getDate()
+			this.getTime();
+			await this.getData();
 		},
 		methods:{
+			async getData(){
+				uni.showLoading({
+					title:"加载中..."
+				})
+				await this.$http({
+					apiName:"fxCustomer",
+					data:{
+						
+					}
+				}).then(res => {
+					
+				}).catch(err => {})
+				uni.hideLoading()
+			},
 			bindPickerChange1(e){
 				console.log(e)
 				this.index=e.detail.value
@@ -77,7 +83,7 @@
 			selDate(){
 				this.dateSel=true
 			},
-			getDate(){
+			getTime(){
 				let year = new Date().getFullYear();
 				let month =new Date().getMonth() + 1;
 				month=month<10?'0'+month:month,
@@ -87,10 +93,10 @@
 		},
 		  computed: {
 		        startDate() {
-		            return this.getDate('start');
+		            return this.getTime('start');
 		        },
 		        endDate() {
-		            return this.getDate('end');
+		            return this.getTime('end');
 		        }
 		    },
 	}
@@ -101,6 +107,7 @@
 		text-align: center;
 		display: flex;
 		flex-direction: column;
+		padding-bottom: 44rpx;
 		.number{
 			margin-top:44rpx;
 			font-size:44rpx;

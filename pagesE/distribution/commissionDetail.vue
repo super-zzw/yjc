@@ -47,26 +47,6 @@
 			</view>
 		</view>
 		<datePicker :dateSel="dateSel" @close="dateSel=false"/>
-		<!-- <view class="mask" v-if="dateSel" @tap.stop="dateSel=false"></view>
-		<view class="datePicker" :class="dateSel?'active':''" >
-			<view class="dateIpt">
-				
-				<view class="startTime Time">
-					<picker mode="date"   @change="bindDateChange2" fields="month">
-				
-						<input type="text" v-model="startTime" disabled placeholder-class="placeholder" placeholder="起始日期"/>
-					</picker>
-				</view>
-				<text class="txt">至</text>
-				<view class="endTime Time">
-					<picker mode="date"  @change="bindDateChange3" fields="month">
-					    <input type="text" v-model="endTime" disabled placeholder-class="placeholder" placeholder="结束日期"/>
-					</picker>
-				</view>
-			</view>
-		    <button type="default">确定</button>
-			
-		</view> -->
 	</view>
 </template>
 
@@ -83,11 +63,17 @@
 				endTime:''
 			};
 		},
-		onLoad() {
-			// this.startTime=this.endTime=new Date().getFullYear()+'.'+ (new Date().getMonth()+1)
-			// this.getDate()
+		async onLoad() {
+			await this.getData()
 		},
 		methods:{
+			async getData(){
+				await this.$http({
+					apiName:"fxCommission"
+				}).then(res => {
+					
+				}).catch(err => {})
+			},
 			bindPickerChange1(e){
 				console.log(e)
 				this.index=e.detail.value
@@ -95,19 +81,6 @@
 			selDate(){
 				this.dateSel=true
 			},
-			getDate(){
-				let year = new Date().getFullYear();
-				let month =new Date().getMonth() + 1;
-				month=month<10?'0'+month:month,
-				this.startTime=this.endTime=year+'.'+month
-			}, 
-			// bindDateChange2(e){
-			// 	this.startTime=e.detail.value
-			// },
-			// bindDateChange3(e){
-			// 	this.endTime=e.detail.value
-			// }
-			
 		},
 		
 	}

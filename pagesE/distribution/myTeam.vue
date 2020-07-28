@@ -5,11 +5,11 @@
 			<text class="ctxt">我的下属代理人数(人)</text>
 			<view class="agents">
 				<view class="agentTab ">
-					<text @tap="tab=1" :class="tab==1?'active':''">一级代理</text>
+					<text @tap="getData(1)" :class="tab==1?'active':''">一级代理</text>
 				</view>
 				<text class="divider"></text>
 				<view class="agentTab">
-					<text :class="tab==2?'active':''" @tap="tab=2">二级代理</text>
+					<text :class="tab==2?'active':''" @tap="getData(2)">二级代理</text>
 				</view>
 			</view>
 		</view>
@@ -17,21 +17,21 @@
 			<view class="filters">
 				<view class="leftFilter">
 					<view class="fTxt">
-						  <picker @change="bindPickerChange1" :value="index" :range="array1">
-						            <text class="uni-input">{{array1[index]}}</text>
-									<text class="iconfont iconriqishaixuan"></text>
-						  </picker>
+						<picker @change="bindPickerChange1" :value="index" :range="array1">
+							<text class="uni-input">{{array1[index]}}</text>
+							<text class="iconfont iconriqishaixuan"></text>
+						</picker>
 						<!-- <text>近7天</text> -->
-						
+
 					</view>
 				</view>
 				<view class="rightFilter">
 					<view class="fTxt" @tap="selDate">
-						
-							 <text class="iconfont iconzidingyishaixuan"></text>
-						     <text class="uni-input">{{date}}</text>
-						
-						
+
+						<text class="iconfont iconzidingyishaixuan"></text>
+						<text class="uni-input">{{date}}</text>
+
+
 						<!-- <text>自定义筛选</text> -->
 					</view>
 				</view>
@@ -48,7 +48,7 @@
 				</view>
 			</view>
 		</view>
-		<datePicker :dateSel="dateSel" @close="dateSel=false"/>
+		<datePicker :dateSel="dateSel" @close="dateSel=false" />
 	</view>
 </template>
 
@@ -56,174 +56,192 @@
 	export default {
 		data() {
 			return {
-				tab:2,
-				array1:['昨日','近7天','全部'],
-				index:2,
-				date:'自定义筛选',
-				dateSel:false,
-				startTime:'',
-				endTime:''
+				tab: 1,
+				array1: ['昨日', '近7天', '全部'],
+				index: 2,
+				date: '自定义筛选',
+				dateSel: false,
+				startTime: '',
+				endTime: ''
 			};
 		},
-		onLoad() {
+		async onLoad() {
 			// this.startTime=this.endTime=new Date().getFullYear()+'.'+ (new Date().getMonth()+1)
-			this.getDate()
+			this.getTime();
+			await this.getData(1);
 		},
-		methods:{
-			bindPickerChange1(e){
+		methods: {
+			async getData(tab){
+				uni.showLoading({
+					title:"加载中..."
+				})
+				let _api = "fxTeamOne";
+				if(tab == 2){
+					_api = "fxTeamTwo"
+				}
+				this.tab = tab;
+				await this.$http({
+					apiName:_api,
+					data:{
+						
+					}
+				}).then(res => {
+					
+				}).catch(err => {});
+				uni.hideLoading()
+			},
+			bindPickerChange1(e) {
 				console.log(e)
-				this.index=e.detail.value
+				this.index = e.detail.value
 			},
-			selDate(){
-				this.dateSel=true
+			selDate() {
+				this.dateSel = true
 			},
-			getDate(){
+			getTime() {
 				let year = new Date().getFullYear();
-				let month =new Date().getMonth() + 1;
-				month=month<10?'0'+month:month,
-				this.startTime=this.endTime=year+'.'+month
+				let month = new Date().getMonth() + 1;
+				month = month < 10 ? '0' + month : month,
+					this.startTime = this.endTime = year + '.' + month
 			}
-			//   getDate(type) {
-			//             const date = new Date();
-			//             let year = date.getFullYear();
-			//             let month = date.getMonth() + 1;
-			//             // let day = date.getDate();
-			
-			//             if (type === 'start') {
-			//                 year = year - 60;
-			//             } else if (type === 'end') {
-			//                 year = year + 2;
-			//             }
-			//             month = month > 9 ? month : '0' + month;;
-			//             // day = day > 9 ? day : '0' + day;
-			//             return `${year}-${month}`;
-			//         },
-			// 		   bindDateChange: function(e) {
-			// 		            this.date = e.target.value
-			// 		   },
 		},
-		  computed: {
-		        startDate() {
-		            return this.getDate('start');
-		        },
-		        endDate() {
-		            return this.getDate('end');
-		        }
-		    },
+		computed: {
+			startDate() {
+				return this.getTime('start');
+			},
+			endDate() {
+				return this.getTime('end');
+			}
+		},
 	}
 </script>
 
 <style lang="scss" scoped>
-    .top{
+	.top {
 		text-align: center;
 		display: flex;
 		flex-direction: column;
-		.number{
-			margin-top:44rpx;
-			font-size:44rpx;
-			font-family:PingFangSC-Medium,PingFang SC;
-			font-weight:500;
-			color:rgba(242,61,61,1);
-			line-height:60rpx;
+
+		.number {
+			margin-top: 44rpx;
+			font-size: 44rpx;
+			font-family: PingFangSC-Medium, PingFang SC;
+			font-weight: 500;
+			color: rgba(242, 61, 61, 1);
+			line-height: 60rpx;
 			margin-bottom: 8rpx;
 		}
-		.ctxt{
-			font-size:30rpx;
-			font-family:PingFangSC-Regular,PingFang SC;
-			font-weight:400;
-			color:rgba(48,49,51,1);
-			line-height:42rpx;
+
+		.ctxt {
+			font-size: 30rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: rgba(48, 49, 51, 1);
+			line-height: 42rpx;
 		}
-		.agents{
+
+		.agents {
 			margin-top: 44rpx;
 			display: flex;
 			align-items: center;
-			.agentTab{
+
+			.agentTab {
 				flex: 1;
 				box-sizing: border-box;
-				text{
-					font-size:28rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:400;
-					color:rgba(48,49,51,1);
+
+				text {
+					font-size: 28rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: rgba(48, 49, 51, 1);
 					line-height: 88rpx;
 					display: inline-block;
 					height: 88rpx;
 				}
 			}
-			.agentTab text.active{
+
+			.agentTab text.active {
 				border-bottom: 4rpx solid #F23D3D;
 			}
-			.divider{
-				width:2rpx;
-				height:30rpx;
+
+			.divider {
+				width: 2rpx;
+				height: 30rpx;
 				background: #DBDBDB;
 			}
 		}
 	}
-	.content-List{
-		
-	
+
+	.content-List {
+
+
 		// display: flex;
-		
-		.filters{
+
+		.filters {
 			display: flex;
 			justify-content: space-between;
-		   padding: 30rpx;
-					background: #F9FAFB;
-				.fTxt{
-					font-size:30rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:400;
-					color:rgba(48,49,51,1);
-					
-				}
-				.iconfont{
-					margin-left: 5rpx;
-				}
-				.iconzidingyishaixuan{
-					margin-right: 5rpx;
-				}
-			
-			
+			padding: 30rpx;
+			background: #F9FAFB;
+
+			.fTxt {
+				font-size: 30rpx;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: rgba(48, 49, 51, 1);
+
+			}
+
+			.iconfont {
+				margin-left: 5rpx;
+			}
+
+			.iconzidingyishaixuan {
+				margin-right: 5rpx;
+			}
+
+
 		}
-		
+
 	}
-	.fList{
+
+	.fList {
 		height: 800rpx;
-		.fItem{
+
+		.fItem {
 			display: flex;
 			margin: 0 32rpx;
 			padding: 26rpx 0 20rpx;
 			border-bottom: 2rpx solid #DBDBDB;
 			justify-content: space-between;
-			.left{
+
+			.left {
 				display: flex;
 				flex-direction: column;
-				.title{
-					font-size:32rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:400;
-					color:rgba(48,49,51,1);
-					line-height:44rpx;
+
+				.title {
+					font-size: 32rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: rgba(48, 49, 51, 1);
+					line-height: 44rpx;
 				}
-				.info{
-					font-size:24rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:400;
-					color:rgba(144,147,153,1);
-					line-height:34rpx;
+
+				.info {
+					font-size: 24rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: rgba(144, 147, 153, 1);
+					line-height: 34rpx;
 					margin-top: 10rpx;
 				}
-				.right.value{
-					font-size:32rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:400;
-					color:rgba(48,49,51,1);
-					line-height:44rpx;
+
+				.right.value {
+					font-size: 32rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: rgba(48, 49, 51, 1);
+					line-height: 44rpx;
 				}
 			}
 		}
 	}
-	
 </style>
