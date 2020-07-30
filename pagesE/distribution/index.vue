@@ -4,7 +4,7 @@
 			<view class="row1">
 				<view class="left">
 					<text class="cText1">累计佣金(元)</text>
-					<text class="value">288.35</text>
+					<text class="value">{{totalAmount}}</text>
 				</view>
 				<view class="right" @tap="toNav('cashOut')">
 					提现佣金
@@ -12,15 +12,15 @@
 			</view>
 			<view class="row2">
 				<view class="column L1">
-					<text class="money">288.00</text>
+					<text class="money">{{extractAmount}}</text>
 					<text class="tip">可提现佣金(元)</text>
 				</view>
 				<view class="column L2">
-					<text class="money">20.00</text>
+					<text class="money">{{pendingAmount}}</text>
 					<text class="tip">待入账(元)</text>
 				</view>
 				<view class="column L3">
-					<text class="money">0.35</text>
+					<text class="money">{{freezeAmount}}</text>
 					<text class="tip">冻结佣金(元)</text>
 				</view>
 			</view>
@@ -45,6 +45,10 @@
 	export default {
 		data() {
 			return {
+				totalAmount:"",
+				extractAmount:"",
+				pendingAmount:"",
+				freezeAmount:"",
 				list:[
 					{id:1,title:'推广赚佣金',nav:'posters'},
 					{id:2,title:'我的下属团队',nav:'myTeam'},
@@ -55,13 +59,34 @@
 				]
 			};
 		},
+		async onLoad() {
+			uni.showLoading({ title: '加载中' });
+			await this.getData();
+			uni.hideLoading();
+		},
 		methods:{
+			async getData(){
+				await this.$http({
+					apiName:"DistributionInfo"
+				}).then(res => {
+					this.totalAmount = res.data.totalAmount;
+					this.extractAmount = res.data.extractAmount;
+					this.pendingAmount = res.data.pendingAmount;
+					this.freezeAmount = res.data.freezeAmount;
+				}).catch(err => {})
+				
+			},
 			toNav(nav){
-				console.log(nav)
 				uni.navigateTo({
 					url:'/pagesE/distribution/'+nav
 				})
 			}
+		},
+		async onPullDownRefresh() {
+			uni.showLoading({ title: '加载中' });
+			await this.getData();
+			uni.stopPullDownRefresh()
+			uni.hideLoading();
 		}
 	}
 </script>
@@ -69,7 +94,7 @@
 <style lang="scss" scoped>
 	.container{
 		background: #F9FAFB;
-		height: 100vh;
+		height: calc(100vh - 88rpx);
 	}
   .topBox{
 	  background: url(../../static/background.png);

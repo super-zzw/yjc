@@ -1207,9 +1207,18 @@
 								"splitLine": {
 									"color":"#DBDBDB"
 								}
+							},
+							"pullToRefresh": {
+								"support": true,
+								"style": "circle",
+								"color": "#F23D3D",
+								"offset": "0"
 							}
-						}
+						},
+						"enablePullDownRefresh": true
 					}
+					
+					
 				}
 				,{
 				    "path" : "distribution/posters",
@@ -1345,6 +1354,22 @@
 				    "path" : "distribution/txTip",
 				   "style" : {
 				   	"navigationBarTitleText": "提交提示",
+				   	"app-plus":{
+				   		"bounce": "none",
+				   		"titleNView":{
+				   			"splitLine": {
+									"color":"#DBDBDB"
+									
+							
+				   			}
+				   		}
+				   	}
+				   }
+				},
+				{
+				    "path" : "distribution/makePoster",
+				   "style" : {
+				   	"navigationBarTitleText": "生产海报",
 				   	"app-plus":{
 				   		"bounce": "none",
 				   		"titleNView":{

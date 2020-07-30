@@ -49,8 +49,23 @@
 		methods:{
 			handleInvite(){
 					this.$refs.share.toggleMask();	
+			},
+			shareOthers(t){
+				console.log(t);
+				if(t == '微信好友'){
+					
+				}else if(t == '朋友圈'){
+					
+				}else if(t == '生成海报'){
+					uni.navigateTo({
+						url:"/pagesE/distribution/makePoster"
+					})
+				}else if(t == '复制链接'){
+					
+				}
 			}
-		}
+		},
+		
 	}
 </script>
 

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="mask" v-if="dateSel" @tap.stop="close"></view>
+		<view class="masks" v-if="dateSel" @tap.stop="close"></view>
 		<view class="datePicker" :class="dateSel?'active':''" >
 			<view class="dateIpt">
 				
@@ -53,7 +53,7 @@
 </script>
 
 <style lang="scss" scoped>
-.mask{
+.masks{
 		 position: fixed;
 		  top: 0;
 		  left: 0;
