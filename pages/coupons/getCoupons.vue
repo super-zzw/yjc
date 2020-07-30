@@ -1,19 +1,17 @@
 <template>
 	<view class="container">
-		
 		<view class="card-item" v-for="item in datalist" :key="item.id">
 			<view class="fengmian">
 				<view class="content">
 					￥<text>{{item.amount}}</text>
 				</view>
-				
 			</view>
 			<view class="main">
 				<text class="title">{{item.title}}</text>
 				<view class="info">
 					<text class="txt">{{item.minConsumption|useMethod}}</text>
 					<text class="btn btn1" v-if="!item.wuserFlag" @tap="recieve(item.id)">领取</text>
-					<text class="btn btn2" v-else>已领取</text>
+					<text class="btn btn2" v-else >已领取</text>
 				</view>
 				<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 			</view>
@@ -61,28 +59,31 @@
 				}).catch(err=>{})
 			},
 			async recieve(id){
-				uni.showLoading({
-					title:'领取中'
-				})
+				// uni.showLoading({
+				// 	title:'领取中'
+				// })
 				await this.$http({
-					apiName:'getAllCoupon',
+					apiName:'receiveCoupon',
 					type:'POST',
 					data:{
 						couponId:id
 					}
 					
 				}).then(res=>{
+					// uni.hideLoading()
 					uni.showToast({
 						title:'领取成功',
-						 mask:'none'
+						 
 					})
+					uni.hideLoading()
 				}).catch(err=>{
+					// uni.hideLoading()
 					uni.showToast({
 						title:'领取失败',
-					    mask:'none'
+					    icon:'none'
 					})
 				})
-				uni.hideLoading()
+				
 			}
 		}
 	}

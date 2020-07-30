@@ -16,8 +16,6 @@
 					<text class="title">{{item.title}}</text>
 					<view class="info">
 						<text class="txt">{{item.minConsumption|useMethod}}</text>
-						<!-- <text class="btn btn1" v-if="status==0">领取</text> -->
-						<!-- <text class="btn btn2">已领取</text> -->
 					</view>
 					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 				</view>

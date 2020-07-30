@@ -36,7 +36,7 @@ export default{
 	judgeData(arr) {
 		let res = true;
 		for (let item of arr) {
-			if (item.data.length == 0) {
+			if (item.data.length == 0||item.data==false) {
 				res = false;
 				uni.showToast({
 					icon: 'none',
@@ -332,4 +332,14 @@ export default{
 			this.jsApiCall(data ,callback_succ_func ,callback_error_func);  
 		}  
 	},
+	async getUserInfo(){
+		await http({
+			apiName:'getUserInfo',
+		}).then(res=>{
+			console.log(res)
+			store.commit('setUserInfo',res.data)
+		}).catch(err=>{
+			
+		})
+	}
 }

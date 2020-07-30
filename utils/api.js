@@ -114,6 +114,17 @@ export default{
 	bindPayPwd:'/ums/bind/payPwd'  ,//绑定支付密码
 	myCoupon:'/sms/get/coupon/wuserList'  ,//获取我的优惠券
 	getAllCoupon:'/sms/get/coupon/allList',//领券中心列表
+
+	receiveCoupon:'/sms/add/wusercoupon' , //领券
+	appWxLogin:'/login/openApp/login'  ,//app微信登录
+	bindPhoe:'/login/openApp/bindPhone', //app登录绑定手机号
+	setAppPwd:'/login/openApp/bindPwd',//app设置登录密码
+	addCardAmount:'/ums/add/cardAmount', //充值储值卡
+	getStoreList:'/oms/get/storeList', //获取储值消费列表
+	getOrderCoupon:'/oms/order/get/wuserCoupon'  ,//根据购物车信息获取优惠券可用列表
+	checkPayPwd:'/ums/check/payPwd' ,//校验支付密码
+	delStoreLog:'/oms/del/storeLog' ,//删除消费记录
+
 	
 	//分销
 	DistributionInfo:"/fx/get/distribute/index",  //分销中心首页信息
@@ -130,4 +141,6 @@ export default{
 	fxPoster:"/app/get/poster/share",  //根据id生成分销海报
 	fxAccountDetail:"/fx/info/cardAmount",  //分销提现账户详情
 	getCurrentPhoneCode:"/app/yzm/sendAuthCode",  //获取当前账号手机号验证码
+	fxTeamOne:"/ums/get/subTeam/oneList",  //下属团队一级代理
+	fxTeamTwo:"/ums/get/subTeam/twoList",  //下属团队二级代理
 }

@@ -3,11 +3,12 @@
 		<view class="wrapper">
 			<view class="inputCode">
 				<text class="tip">兑换码</text>
-				<input type="text" v-model="code" placeholder="请输入兑换码" placeholder-class="placeholder1" class="ipt" 
-				@input="code.length>=6?isOk=true:isOk=false"/>
+				<input type="text" v-model="code" placeholder="请输入兑换码" placeholder-class="placeholder1" class="ipt"
+				 @input="error=false"
+				/>
 				<text class="error" v-if="error">兑换码输入错误</text>
 			</view>
-			<button type="default" class="btn"  @tap="exchangeok" :class="isOk?'btnok':''">确认兑换</button>
+			<button type="default" class="btn" :disabled="!isOk" @tap="exchangeok" :class="isOk?'btnok':''">确认兑换</button>
 		</view>
 		
 	</view>
@@ -18,13 +19,32 @@
 		data() {
 			return {
 				code:'',
-				isOk:false,
+				isOk:true,
 				error:false
 			};
 		},
 		methods:{
 			exchangeok(){
-				
+				this.isOk=false
+				this.$http({
+					apiName:'addCardAmount',
+					type:'POST',
+					data:{
+						cardPwd:this.code
+					}
+				}).then(res=>{
+						this.isOk=true
+					uni.redirectTo({
+						url:'./ex_success'
+					})
+				}).catch(err=>{
+					this.isOk=true
+					if(err.message=='储值卡账号和密码不匹配'){
+						this.error=true
+					}
+					// console.log(err)
+					
+				})
 			}
 		}
 	}
