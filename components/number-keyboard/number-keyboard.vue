@@ -87,6 +87,7 @@
         this.$nextTick(() => {
           setTimeout(() => {
             this.KeyboarHid = false
+			
           }, 300)
         })
       },

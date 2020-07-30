@@ -1,20 +1,28 @@
 <template>
 	<view class="container">
-		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">个人资料</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
-		<view class="list-cell b-b " @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b " @click="toPage('/pages/address/address?from=set',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
-		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">绑定微信</text>
-			<text class="cell-more iconfont iconchakanquanbu"></text>
+			<view class="cell-more">
+				<text>{{userInfo.appBindExFlag?'已绑定':'未绑定'}}</text>
+				<text class="cell-more iconfont iconchakanquanbu"></text>
+			</view>
+			
+			
 		</view>
-		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">支付密码</text>
-			<text class="cell-more iconfont iconchakanquanbu"></text>
+			<view class="cell-more">
+				<text>{{userInfo.payPwdFlag?'已设置':'未设置'}}</text>
+				<text class=" iconfont iconchakanquanbu"></text>
+			</view>
 		</view>
 		<view class="list-cell b-b m-t" @click="clearCache" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">清除缓存</text>
@@ -66,7 +74,7 @@
 			};
 		},
 		computed:{
-			...mapState(['hasLogin','config'])
+			...mapState(['hasLogin','config','userInfo'])
 		},
 		onLoad() {
 			// #ifdef APP-PLUS

@@ -856,6 +856,12 @@
 				"navigationBarTitleText": "优惠券"
 			}
         }
+        ,{
+            "path" : "pages/set/loginPwd",
+            "style" : {
+				"navigationBarTitleText": "绑定手机号"
+			}
+        }
     ],
 	"subPackages":[
 		{
@@ -1378,7 +1384,7 @@
 							"bounce": "none",
 							"titleNView":{
 								"splitLine": {
-									"color":"#303133"
+									"color":"#DBDBDB"
 								}
 							}
 						}
@@ -1392,7 +1398,7 @@
 							"bounce": "none",
 							"titleNView":{
 								"splitLine": {
-									"color":"#303133"
+									"color":"#DBDBDB"
 								}
 							}
 						}

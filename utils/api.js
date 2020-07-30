@@ -113,4 +113,13 @@ export default{
 	bindPayPwd:'/ums/bind/payPwd'  ,//绑定支付密码
 	myCoupon:'/sms/get/coupon/wuserList'  ,//获取我的优惠券
 	getAllCoupon:'/sms/get/coupon/allList',//领券中心列表
+	receiveCoupon:'/sms/add/wusercoupon' , //领券
+	appWxLogin:'/login/openApp/login'  ,//app微信登录
+	bindPhoe:'/login/openApp/bindPhone', //app登录绑定手机号
+	setAppPwd:'/login/openApp/bindPwd',//app设置登录密码
+	addCardAmount:'/ums/add/cardAmount', //充值储值卡
+	getStoreList:'/oms/get/storeList', //获取储值消费列表
+	getOrderCoupon:'/oms/order/get/wuserCoupon'  ,//根据购物车信息获取优惠券可用列表
+	checkPayPwd:'/ums/check/payPwd' ,//校验支付密码
+	delStoreLog:'/oms/del/storeLog' //删除消费记录
 }

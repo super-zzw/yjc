@@ -551,7 +551,7 @@ import tabBar from "@/components/tab-bar.vue"
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background: #F9FAFB;
 	}

@@ -28,12 +28,12 @@
 							placeholder="请输入验证码"
 							placeholder-class="input-empty"
 							maxlength="6"
-							v-model="password"
-							@confirm="toLogin"
+							v-model="code"
+							
 						/>
 					</view>
 					
-					<text class="stext"  @tap="sendCode">获取验证码</text>
+					<text class="stext"  @tap="getCode">{{codeText}}</text>
 				</view>
 				<!-- <image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="weixin"></image>
@@ -48,7 +48,7 @@
 				</view>
 				 -->
 			</view>
-			<button class="confirm-btn" @click="toLogin" :disabled="logining" >确定</button>
+			<button class="confirm-btn" @click="confirmBtn" :disabled="logining" >确定</button>
 		</view>
 		<!-- <view class="suibian" @tap="toIndex">随便逛逛</view>
 		<view class="register-section">
@@ -77,14 +77,20 @@
 		data(){
 			return {
 				mobile: '',
-				password: '',
+				code: '',
 				logining: false,
 				tab:1,
-				sModal:false
+				sModal:false,
+				coding:false,  //是否处于发送验证码的状态
+				timer:"",
+				codeText:"发送验证码",
+				timeLeft:120,
+				
 			}
 		},
 		onLoad(opt){
 			//返回跳转过来的
+			
 		},
 		methods: {
 			// ...mapMutations(['login']),
@@ -102,11 +108,60 @@
 			navBack(){
 				uni.navigateBack();
 			},
-			async toLogin(){
-				if(this.logining){
+			async getCode(){
+				if(this.coding){
 					return
 				}
-				this.logining = true;
+				uni.showLoading({
+					title:"获取验证码...",
+					mask:true
+				})
+				let _data = [
+					{
+						data:this.mobile.trim(),
+						info:'手机号不能为空'
+					},
+					{
+						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+						info:'手机号格式不正确'
+					}
+				]
+				let jres = await utils.judgeData(_data)
+				if(jres){
+					this.coding = true;
+					this.countDown();
+					await this.$http({
+						apiName:"getCode",
+						type:"POST",
+						data:{
+							phoneNumber:this.mobile,
+						}
+					}).then(res => {
+						uni.hideLoading();
+					}).catch(_ => {
+						this.clearCountDown();
+						uni.hideLoading();
+					})
+				}else{
+					uni.hideLoading()
+				}
+			},
+			countDown(){
+				this.timer = setInterval(() => {
+					  this.codeText = "请稍后" + this.timeLeft + 's'
+					  this.timeLeft -= 1;
+					  if(this.timeLeft == 0){
+						  this.clearCountDown();
+					  }
+				},1000)
+			},
+			clearCountDown(){
+				  clearInterval(this.timer);
+				  this.coding = false
+				  this.timeLeft = 120
+				  this.codeText = "发送验证码"
+			},
+			async confirmBtn(){
 				let _data = [
 					{
 						data:this.mobile.trim(),
@@ -117,51 +172,46 @@
 						info:'手机号格式不正确'
 					},
 					{
-						data:this.password,
-						info:'密码不能为空'
-					},
+						data:this.code.trim(),
+						info:'验证码不能为空'
+					}
 				]
 				let jres = await utils.judgeData(_data)
+				console.log(jres)
 				if(jres){
 					await this.$http({
-						apiName:"phoneLogin",
-						type:"POST",
+						apiName:'bindPhoe',
+						type:'POST',
 						data:{
-							password:utils.md5(this.password),
+							appOpenId:uni.getStorageSync('appInfo').openId,
+							authCode:this.code,
 							phoneNumber:this.mobile,
+							headUrl:uni.getStorageSync('appInfo').avatarUrl,
+							wuserName:uni.getStorageSync('appInfo').nickName
 						}
-					}).then(res => {
-					  console.log(res)
-						utils.setSesion(res.data)
-						utils.afterLoginJump()
-					}).catch(_ => {})
-				}
-				this.logining = false;
-			},
-			oAuth(e){
-				var type=e.currentTarget.dataset.logintype
-				uni.login({
-					provider:type,
-					success:(res)=>{
-						uni.getUserInfo({
-							provider:type,
-							success:(info)=> {
-								console.log(info.userInfo)
-								// this.$store.commit('setLogin',true)
-								// uni.setStorageSync('wxInfo',info.userInfo)
-								uni.navigateTo({
-									url:'/pages/user/user'
-								})
-									
-								
-								// utils.setSesion(info.userInfo)
-								// utils.afterLoginJump()
-							}
+					}).then(res=>{
+						uni.showToast({
+							title:'绑定手机号成功',
+							duration:1500
 						})
-					}
-				})
+						console.log(res)
+						utils.setSesion(res.data)
+						utils.getUserInfo()
+						utils.afterLoginJump()
+					}).catch(err=>{
+						uni.redirectTo({
+							url:'../set/loginPwd'
+						})
+						// uni.showToast({
+						// 	title:'绑定失败'
+						// })
+						// uni.redirectTo({
+						// 	url:'../set/loginPwd'
+						// })
+					})
+				}
+				
 			}
-			
 		},
 
 	}

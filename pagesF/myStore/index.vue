@@ -9,7 +9,7 @@
 				<view class="box2">
 					<view class="left">
 						<view class="r1">
-							<text class="L1">¥1998</text>
+							<text class="L1">¥{{userInfo.cardAmount}}</text>
 							<text class="L2">储值余额</text>
 						</view>
 						<view class="r2">
@@ -28,32 +28,48 @@
 			<view class="sbox">
 				<view v-for="(item,index) in dataList" :key="index" class="order-item" v-if="dataList.length">
 					<view class="i-top b-b">
-						<text class="time">{{item.orderTime | dealTime}}</text>
+						<text class="time">{{item.createTime | dealTime}}</text>
 						<text 
 							class="del-btn iconfont iconshanchu"
-							@click="deleteLog()"
+							@click="deleteLog(item.logId)"
 						></text>
 					</view>
 					<view 
 						class="goods-box-single"
+						v-if="item.itemList==null||item.itemList.length==1"
 					>
-						<image class="goods-img" :src="item.picUrl" mode="aspectFill"></image>
-						<view class="right">
-							<text class="title clamp">{{item.productName}}</text>
-							<text class="attr-box">
-								规格：<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
-								；<text>数量：{{item.productQuantity}}</text>
-							</text>
-							<text class="price">{{item.minPrice}}</text>
+						 <view class="goods-img" :style="{background:item.itemList?'url('+item.itemList[0].picUrl+')':'','background-size':'100% 100%'}"></view>
+						 <view class="right">
+						 	<text class="title clamp" v-if="item.itemList">{{item.itemList[0].productName}}</text>
+							<text class="title clamp">{{item.cardTitle}}</text>
+						 	<text class="attr-box" v-if="item.itemList">
+						 		<text v-for="(aitem,akey,aindex) of item.itemList[0].specificationsMap" :key="aindex"  
+								>{{akey}}：{{aitem}};</text>
+							
+								
+						 		<text v-if="item.itemList">数量：{{item.itemList[0].productQuantity}}</text>
+						 	</text>
+						 	<text class="price" v-if="item.itemList">{{item.itemList[0].promotionPrice}}</text>
+						 	<text class="count" v-if="!item.itemList">x1</text>
+						 </view>
+					</view>
+					
+					<view class="goods-box-single flex-column" 
+						v-if="item.itemList&&item.itemList.length>1">
+						<scroll-view scroll-x class="scrollview">
+							<view v-for="(item1,index1) in item.itemList" :key="index1" class="goodbox">
+								<image :src="item1.picUrl" class="goods-img"></image>
+							</view>
+						</scroll-view>
+						<view class="good-box-sn">
+							订单编号：{{item.itemList[0].orderSn}}
+							<text class="iconfont iconfuzhi gbsc"></text>
 						</view>
 					</view>
-					<!-- <view class="good-box-sn">
-						订单编号：{{item.orderSn}}
-						<text class="iconfont iconfuzhi gbsc"></text>
-					</view> -->
+					
 					<view class="price-box">
 						储值余额 :
-						<text class="price">{{item.payAmount}}</text>
+						<text class="price">-{{item.amount}}</text>
 					</view>
 				</view>
 			</view>
@@ -82,11 +98,12 @@
 				dataList:[
 					// {orderTime:111,orderId:111,picUrl:'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png',
 					// productName:11,specificationsMap:{},productQuantity:11,orderSn:11,payAmount:11,minPrice:120},
-					// {orderTime:111,orderId:111,picUrl:'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png',
+					// {orderTime:111,orderId:111,picUrl:'',
 					// productName:11,specificationsMap:{},productQuantity:11,orderSn:11,payAmount:11,minPrice:120},
 					
 				],
 				noMore:true,
+				itemList:[]
 			};
 		},
 		computed: {
@@ -97,42 +114,57 @@
 				return utils.unixToDatetime(val) || ""
 			}
 		},
+		onLoad() {
+			this.getStoreList()
+			
+		},
 		methods:{
 			// 兑换
 			toExchange(){
+				
 				uni.navigateTo({
 					url:'./exchange'
 				})
 			},
+			async getStoreList(){
+				await this.$http({
+					apiName:'getStoreList',
+					
+				}).then(res=>{
+					this.dataList=res.data
+					// if(res.data)
+				}).catch(err=>{})
+			},
 			//删除订单
-				async deleteLog(){
+				async deleteLog(id){
 					let that = this
 					uni.showModal({
 						title: '提示',
 						content: '确定删除该订单？',
 						success: function (res) {
 							if (res.confirm) {
-								that.deleteLogOk()
+								that.deleteLogOk(id)
 							}
 						}
 					})
 				},
 				//确定删除
-				 deleteLogOk(){
-					// uni.showLoading({
-					// 	title: '删除中...'
-					// })
-					// await this.$http({
-					// 	apiName:"deleteOrder",
-					// 	type:"POST",
-					// 	data:{id:orderId}
-					// }).then(res => {
-					// 	this.dataList.splice(index, 1);
-					// 	uni.showToast({
-					// 		title:"删除成功"
-					// 	})
-					// }).catch(_ => {})
-					// uni.hideLoading();
+				async deleteLogOk(id){
+					uni.showLoading({
+						title: '删除中...'
+					})
+					await this.$http({
+						apiName:"delStoreLog",
+						type:"POST",
+						data:{id:id}
+					}).then(res => {
+						// this.dataList.splice(index, 1);
+						uni.showToast({
+							title:"删除成功"
+						})
+						this.getStoreList()
+					}).catch(_ => {})
+					uni.hideLoading();
 				}
 			}
 		}
@@ -287,27 +319,34 @@
 		  			display: block;
 		  			width: 100%;
 		  			height: 100%;
+					background:red;
 		  		}
 		  	}
 		  	/* 单条商品 */
 		  	.goods-box-single{
 		  		display: flex;
 		  		padding: 20rpx 0;
+				
 		  		.goods-img{
 		  			display: block;
 		  			width: 120rpx;
 		  			height: 120rpx;
+					background: #C0C4CC;
 		  		}
 		  		.right{
 		  			flex: 1;
 		  			display: flex;
 		  			flex-direction: column;
-		  			padding: 0 30rpx 0 24rpx;
+		  			padding: 0 60rpx 0 24rpx;
+					justify-content: space-around;
 		  			overflow: hidden;
 		  			.title{
 		  				font-size: $font-base + 2rpx;
 		  				color: $font-color-dark;
 		  				line-height: 1;
+						width: auto;
+						// width: 500rpx;
+						
 		  			}
 		  			.attr-box{
 		  				font-size: $font-sm + 2rpx;
@@ -318,12 +357,17 @@
 		  			.price{
 		  				font-size: $font-base + 2rpx;
 		  				color: $font-color-dark;
+						font-weight: 500;
 		  				&:before{
 		  					content: '￥';
 		  					font-size: $font-sm;
 		  					margin: 0 2rpx 0 8rpx;
 		  				}
 		  			}
+					.count{
+						font-size: $font-base + 2rpx;
+						color: $font-color-dark;
+					}
 		  		}
 		  	}
 		  	.good-box-sn{
@@ -393,4 +437,14 @@
 		  }
 	  }
   }
+  .scrollview{
+	  margin-bottom: 20rpx;
+	  white-space: nowrap;
+  }
+ .goodbox{
+	
+	 display: inline-block;
+	 margin-right: 30rpx;
+ }
+ 
 </style>

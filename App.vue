@@ -192,6 +192,7 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		display: block;
+	
 	}
 
 	.common-hover {

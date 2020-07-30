@@ -100,17 +100,17 @@
 					
 					
 				</view>
-				<view class="hsitem" @tap="navTo('/pages/coupons/index',true)">
+				<view class="hsitem" @tap="navTo('/pages/coupons/index')">
 			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
 						<text class="itemBoxText">优惠券</text>
 					
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesE/distribution/index',true)">
+				<view class="hsitem" @tap="navTo('/pagesE/distribution/index')">
 				    <image src="../../static/user/fenxiao.png" class="icon"></image>
 						<text class="itemBoxText">分销中心</text>
 					
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesF/myStore/index',true)">
+				<view class="hsitem" @tap="navTo('/pagesF/myStore/index')">
 				    <image src="../../static/user/chuzhi.png" class="icon"></image>
 						<text class="itemBoxText">我的储值</text>
 					
@@ -142,10 +142,10 @@
 			if(this.hasLogin){
 				await this.getUserInfo()
 				this.getCartNms();  //获取购物车数量
-				console.log(this.userInfo)
+	
 			}
 			utils.setBadgeText(0,this.msgNms)
-			console.log(uni.getStorageSync('wxInfo'))
+			
 		},
         computed: {
 			...mapState(['hasLogin','userInfo','msgNms','hasScore','hasSigin','config']),
@@ -263,7 +263,7 @@
 		}
     }  
 </script>  
-<style lang='scss'>
+<style lang='scss' scoped>
 	%flex-center {
 	 display:flex;
 	 flex-direction: column;

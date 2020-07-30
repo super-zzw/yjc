@@ -58,7 +58,7 @@ export function http(opt){
 							title: res.data.message,
 							duration: 1500
 						});
-						reject(res.data.message)
+						reject(res.data)
 					}
 				}else{
 					uni.hideLoading()
