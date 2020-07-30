@@ -5,7 +5,7 @@
 			<view class="dateIpt">
 				
 				<view class="startTime Time">
-					<picker mode="date"   @change="bindDateChange2" fields="month">
+					<picker mode="date"   @change="bindDateChange2" fields="day">
 					<!-- 	<text>{{startTime}}</text>
 						<text class="iconfont iconzidingyishaixuan-shijianshaixuan"></text> -->
 						<input type="text" v-model="startTime" disabled placeholder-class="placeholder" placeholder="起始日期"/>
@@ -13,7 +13,7 @@
 				</view>
 				<text class="txt">至</text>
 				<view class="endTime Time">
-					<picker mode="date"  @change="bindDateChange3" fields="month">
+					<picker mode="date"  @change="bindDateChange3" fields="day">
 					    <input type="text" v-model="endTime" disabled placeholder-class="placeholder" placeholder="结束日期"/>
 					</picker>
 				</view>
@@ -38,9 +38,22 @@
 		},
 		methods:{
 			close(){
-				// console.log(this.$parent.dateSel)
-				// this.$parent.dateSel=false
-				this.$emit('close')
+				if(!this.startTime || !this.endTime){
+					uni.showToast({
+						icon:"none",
+						title:"请选择完整时间段"
+					})
+				}else if(this.startTime && this.endTime && (Number(this.startTime.split("-").join("")) > Number(this.endTime.split("-").join("")))){
+					uni.showToast({
+						icon:"none",
+						title:"时间段不合理"
+					})
+				}else{
+					this.$emit('close',{
+						startTime:this.startTime,
+						endTime:this.endTime
+					})
+				}
 			},
 			bindDateChange2(e){
 				this.startTime=e.detail.value

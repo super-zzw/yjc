@@ -1,91 +1,97 @@
 <template>
 	<view>
 		<view class="top">
-			<text class="number">-1260</text>
+			<text class="number">-{{totalAmount}}</text>
 			<text class="ctxt">累计提现佣金(元)</text>
 		</view>
 		<view class="content-List">
 			<view class="filters">
 				
 			</view>
-			<view class="fList">
-				<view class="fItem">
+			<view class="fList" v-if="dataList.length > 0">
+				<view class="fItem" v-for="(item,index) in dataList" :key="index">
 					<view class="left">
-						<text class="title">提现</text>
-						<text class="info">2019.12.23 10:00</text>
+						<text class="title">{{item.name}}</text>
+						<text class="info">{{item.createTime}}</text>
 					</view>
 					<view class="right">
-						<text class="value">-88</text>
-						<text class="result">审核中</text>
+						<text class="value">-{{item.amount}}</text>
+						<text class="result" v-if="item.status == 0">审核中</text>
+						<text class="result" v-if="item.status == 1">提现成功</text>
+						<text class="result" v-if="item.status == 2">提现失败</text>
 					</view>
 					
 				</view>
-				<button type="default" hover-class="none" class="loadmore" @tap="loadmore">加载更多</button>
 			</view>
+			<empty v-if="dataList.length == 0 && noMore" :height="'76vh'"></empty>
 		</view>
-		<datePicker :dateSel="dateSel" @close="dateSel=false" />
+		
+		<view v-if="dataList.length > 0 && noMore" class="no_more">
+			<text class="no_more_side"></text>
+			<text class="no_more_text">没有更多数据了</text>
+			<text class="no_more_side"></text>
+		</view>
 	</view>
 </template>
 
 <script>
+	import empty from "@/components/empty";
 	export default {
+		components:{empty},
 		data() {
 			return {
-				tab:2,
-				array1:['昨日','近7天','全部'],
-				index:2,
-				date:'自定义筛选',
-				dateSel:false,
-				startTime:'',
-				endTime:''
+				dataList:[],
+				page:1,
+				size:8,
+				noMore:false,
+				totalAmount:""
 			};
 		},
-		onLoad() {
-			// this.startTime=this.endTime=new Date().getFullYear()+'.'+ (new Date().getMonth()+1)
-			this.getDate()
+		async onLoad() {
+			uni.showLoading({
+				title:"加载中..."
+			})
+			await this.getInfo();
+			await this.getData();
+			uni.hideLoading()
 		},
 		methods:{
-			bindPickerChange1(e){
-				console.log(e)
-				this.index=e.detail.value
+			getInfo(){
+				this.$http({
+					apiName:"DistributionInfo"
+				}).then(res => {
+					this.totalAmount = res.data.totalAmountOut;
+				}).catch(err => {})
 			},
-			selDate(){
-				this.dateSel=true
+			async getData(){
+				this.dataList = [];
+				await this.$http({
+					apiName:"fxWithdrawList",
+					data:{
+						page:this.page,
+						size:this.size,
+					}
+				}).then(res => {
+					
+					this.noMore = !res.data.withdrawList.hasNextPage
+					this.dataList = this.dataList.concat(res.data.withdrawList.list)
+				}).catch(err => {})
 			},
-			getDate(){
-				let year = new Date().getFullYear();
-				let month =new Date().getMonth() + 1;
-				month=month<10?'0'+month:month,
-				this.startTime=this.endTime=year+'.'+month
-			},
-			loadmore(){}
-			//   getDate(type) {
-			//             const date = new Date();
-			//             let year = date.getFullYear();
-			//             let month = date.getMonth() + 1;
-			//             // let day = date.getDate();
-			
-			//             if (type === 'start') {
-			//                 year = year - 60;
-			//             } else if (type === 'end') {
-			//                 year = year + 2;
-			//             }
-			//             month = month > 9 ? month : '0' + month;;
-			//             // day = day > 9 ? day : '0' + day;
-			//             return `${year}-${month}`;
-			//         },
-			// 		   bindDateChange: function(e) {
-			// 		            this.date = e.target.value
-			// 		   },
 		},
-		  computed: {
-		        startDate() {
-		            return this.getDate('start');
-		        },
-		        endDate() {
-		            return this.getDate('end');
-		        }
-		    },
+		onReachBottom(){
+			if(this.noMore){
+				return
+			}
+			this.page ++;
+			this.getData()
+		},
+		async onPullDownRefresh() {
+			this.page = 1;
+			this.noMore = false;
+			await this.getInfo()
+			await this.getData();
+			uni.stopPullDownRefresh()
+		}
 	}
 </script>
 
@@ -167,7 +173,6 @@
 		
 	}
 	.fList{
-		height: 800rpx;
 			margin: 0 32rpx;
 			.loadmore{
 				border-radius:40rpx;

@@ -2,11 +2,11 @@
 	<view>
 		<view class="top">
 			<view class="left">
-				<text class="number">-1260</text>
+				<text class="number">-{{totalAmountOut}}</text>
 				<text class="ctxt">累计提现佣金(元)</text>
 			</view>
 			<view class="right">
-				<text class="number">+2300</text>
+				<text class="number">+{{totalAmountIn}}</text>
 				<text class="ctxt">累计佣金收入(元)</text>
 			</view>
 		</view>
@@ -33,8 +33,8 @@
 					</view>
 				</view>
 			</view>
-			<view class="fList">
-				<view class="fItem">
+			<view class="fList" v-if="dataList.length > 0">
+				<view class="fItem" v-for="(item,index) in dataList" :key="index">
 					<view class="left">
 						<text class="title">_JungYumi业绩收入</text>
 						<text class="info">TA在2020.02.03加入你的三级代理团队</text>
@@ -46,43 +46,109 @@
 				</view>
 			</view>
 		</view>
-		<datePicker :dateSel="dateSel" @close="dateSel=false"/>
+		<view v-if="dataList.length > 0 && noMore" class="no_more">
+			<text class="no_more_side"></text>
+			<text class="no_more_text">没有更多数据了</text>
+			<text class="no_more_side"></text>
+		</view>
+		<empty v-if="dataList.length == 0 && noMore" :height="'75vh'"></empty>
+		<datePicker :dateSel="dateSel" @close="colseTime"/>
 	</view>
 </template>
 
 <script>
+	import empty from "@/components/empty";
 	export default {
+		components:{
+			empty
+		},
 		data() {
 			return {
-				tab:2,
+				tab:1,
 				array1:['昨日','近7天','全部'],
-				index:2,
+				index:1,
 				date:'自定义筛选',
 				dateSel:false,
 				startTime:'',
-				endTime:''
+				endTime:'',
+				dataList:[],
+				page:1,
+				size:8,
+				noMore:false,
+				type:"",
+				totalAmountOut:"",
+				totalAmountIn:""
 			};
 		},
 		async onLoad() {
-			await this.getData()
+			uni.showLoading({
+				title:"加载中..."
+			})
+			await this.getInfo();
+			await this.getData();
+			uni.hideLoading()
 		},
 		methods:{
-			async getData(){
-				await this.$http({
-					apiName:"fxCommission"
+			getInfo(){
+				this.$http({
+					apiName:"DistributionInfo"
 				}).then(res => {
-					
+					this.totalAmountOut = res.data.totalAmountOut;
+					this.totalAmountIn = res.data.totalAmountIn;
 				}).catch(err => {})
 			},
-			bindPickerChange1(e){
-				console.log(e)
-				this.index=e.detail.value
+			async getData(){
+				this.dataList = [];
+				await this.$http({
+					apiName:"fxCommissionList",
+					data:{
+						page:this.page,
+						size:this.size,
+						timeE:this.endTime,
+						timeS:this.startTime,
+						type:this.type
+					}
+				}).then(res => {
+					
+					this.noMore = !res.data.hasNextPage
+					this.dataList = this.dataList.concat(res.data.list)
+				}).catch(err => {})
+			},
+			async bindPickerChange1(e){
+				this.index=e.detail.value;
+				if(this.index == 0){
+					this.type = 1;
+				}else if(this.index == 1){
+					this.type = 7
+				}else if(this.index == 2){
+					this.type = ""
+				}
+				await this.getData()
 			},
 			selDate(){
 				this.dateSel=true
 			},
+			async colseTime(e){
+				this.dateSel = false;
+				this.startTime = e.startTime;
+				this.endTime = e.endTime;
+				await this.getData()
+			},
 		},
-		
+		onReachBottom(){
+			if(this.noMore){
+				return
+			}
+			this.page ++;
+			this.getData()
+		},
+		async onPullDownRefresh() {
+			this.page = 1;
+			this.noMore = false;
+			await this.getInfo();
+			await this.getData();
+			uni.stopPullDownRefresh()
+		}
 	}
 </script>
 
@@ -144,7 +210,6 @@
 		
 	}
 	.fList{
-		height: 800rpx;
 		.fItem{
 			display: flex;
 			margin: 0 32rpx;

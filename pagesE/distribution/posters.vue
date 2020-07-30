@@ -22,6 +22,7 @@
 
 <script>
 	import Share from "../../components/share.vue";
+	import utils from '@/utils/method.js'
 	export default {
 		data() {
 			return {
@@ -43,27 +44,71 @@
 						text: "复制链接"
 					},
 				],
+				info:{}
 			};
 		},
 		components:{Share},
+		async onLoad() {
+			await this.getInfo();
+		},
 		methods:{
+			getInfo(){
+				this.$http({
+					apiName:"DistributionInfo"
+				}).then(res => {
+					this.info = res.data;
+				}).catch(err => {})
+			},
 			handleInvite(){
-					this.$refs.share.toggleMask();	
+				this.$refs.share.toggleMask();	
 			},
 			shareOthers(t){
 				console.log(t);
 				if(t == '微信好友'){
-					
+					name = "WXSceneSession";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
 				}else if(t == '朋友圈'){
-					
+					name = "WXSenceTimeline";
+					// #ifdef APP-PLUS
+					this.appShare(name,e);
+					// #endif
 				}else if(t == '生成海报'){
 					uni.navigateTo({
 						url:"/pagesE/distribution/makePoster"
 					})
 				}else if(t == '复制链接'){
-					
+					let _this = this;
+					uni.setClipboardData({
+						data: _this.info.distributeInviteUrl,
+						success(res) {
+							uni.showToast({
+								title: "复制成功，请前往浏览器打开",
+								icon: "none"
+							})
+						}
+					});
 				}
-			}
+			},
+			appShare(name,type){
+				let _self = this;
+				uni.share({
+					provider: "weixin",
+					scene: name,
+					type:0,
+					title: _self.info.distributeInviteTitle,
+					imageUrl: _self.info.distributeInviteImg,
+					summary: _self.info.distributeInviteDescription,
+					href: _self.info.distributeInviteUrl,
+					success(res) {
+						console.log(res);
+					},
+					fail(err){
+						console.log(err);
+					}
+				})
+			},
 		},
 		
 	}

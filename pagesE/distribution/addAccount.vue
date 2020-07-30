@@ -25,13 +25,13 @@
 			<view class="sItem">
 				<view class="slabel">备注</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="remark" placeholder="对该账户进行备注"/>
+					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="对该账户进行备注"/>
 				</view>
 			</view>
 			
 		</view>
 		
-		<button class="btn" hover-class="none" :loading="registerBtnDisable" :disabled="registerBtnDisable" @tap="register" >确定</button>
+		<button class="btn" hover-class="none"  @tap="register" >确定</button>
 		
 	</view>
 </template>
@@ -45,25 +45,50 @@
 				name:"",
 				code:"",
 				remark:"",
-				repwd:"",
-				icode:"",
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
 				codeText:"获取验证码",
-				registerBtnDisable: false,
-				type:0
+				type:0,
+				id:""
 			}
 		},
 		onLoad(opt) {
-			this.type=opt.type
-			if(opt.type==1){
-				uni.setNavigationBarTitle({
-					title: '添加银行卡账户'
-				});
+			this.type = opt.type;
+			let _title1 = "添加";
+			let _title2 = "支付宝账户";
+			if(opt.id){
+				this.id = opt.id;
+				_title1 = "管理";
+				this.getDetail()
 			}
+			if(opt.type==1){
+				_title2 = "银行卡账户"
+			}
+			uni.setNavigationBarTitle({
+				title: _title1 + _title2
+			});
 		},
 		methods:{
+			getDetail(){
+				uni.showLoading({
+					title:"加载中...",
+					mask:true
+				})
+				this.$http({
+					apiName:"fxAccountDetail",
+					type:"POST",
+					data:{
+						id:this.id
+					}
+				}).then(res => {
+					this.id = res.data.id;
+					this.account = res.data.account;
+					this.name = res.data.name;
+					this.remark = res.data.title;
+					uni.hideLoading();
+				}).catch(err => {uni.hideLoading()})
+			},
 			async register(){
 				let _data = [
 					{
@@ -81,26 +106,33 @@
 				]
 				let jres = await utils.judgeData(_data)
 				if(jres){
-					this.registerBtnDisable = true;
-				// 	await this.$http({
-				// 		apiName:"register",
-				// 		type:"POST",
-				// 		data:{
-				// 			wusername :this.name,
-				// 			password:utils.md5(this.pwd),
-				// 			phoneNumber:this.phone,
-				// 			sourceType:1,  //0pc,1app,2公众号，3小程序
-				// 			authCode:this.code,
-				// 			inviteCode:this.icode
-				// 		}
-				// 	}).then(res => {
-				// 		this.registerBtnDisable = false;
-				// 		uni.navigateTo({
-				// 		    url: '/pages/public/registerok'
-				// 		});
-				// 	}).catch(_ => {
-				// 		this.registerBtnDisable = false;
-				// 	})
+					uni.showLoading({
+						title:"保存中...",
+						mask:true
+					})
+					await this.$http({
+						apiName:"fxAddWithdrawAccount",
+						type:"POST",
+						data:{
+							account:this.account.trim(),
+							authCode:this.code,
+							name:this.name.trim(),
+							title:this.remark,
+							id:this.id,
+							type:this.type
+						}
+					}).then(res => {
+						uni.hideLoading();
+						uni.showToast({
+							icon:"success",
+							title:"保存成功"
+						})
+						setTimeout(() => {
+							uni.navigateBack()
+						},1500)
+					}).catch(err => {
+						uni.hideLoading()
+					})
 				}
 				
 			},
@@ -112,35 +144,17 @@
 					title:"获取验证码...",
 					mask:true
 				})
-				let _data = [
-					{
-						data:this.phone.trim(),
-						info:'手机号不能为空'
-					},
-					{
-						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone.trim()) ? "1" : "",
-						info:'手机号格式不正确'
-					}
-				]
-				let jres = await utils.judgeData(_data)
-				if(jres){
-					this.coding = true;
-					this.countDown();
-					await this.$http({
-						apiName:"getCode",
-						type:"POST",
-						data:{
-							phoneNumber:this.phone,
-						}
-					}).then(res => {
-						uni.hideLoading();
-					}).catch(_ => {
-						this.clearCountDown();
-						uni.hideLoading();
-					})
-				}else{
-					uni.hideLoading()
-				}
+				this.coding = true;
+				this.countDown();
+				await this.$http({
+					apiName:"getCurrentPhoneCode",
+					type:"POST",
+				}).then(res => {
+					uni.hideLoading();
+				}).catch(_ => {
+					this.clearCountDown();
+					uni.hideLoading();
+				})
 			},
 			countDown(){
 				this.timer = setInterval(() => {

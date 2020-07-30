@@ -22,8 +22,12 @@ const store = new Vuex.Store({
 		hasScore:-1,  //积++分模块
 		hasSigin:-1,  //签到模块
 		cartNms:0,  //购物车数量
+		selectFxAccount:0
 	},
 	mutations: {
+		selectFxAccountSet(state,data){
+			state.selectFxAccount = data;
+		},
 		setCartNms(state,data){
 			state.cartNms = data
 		},

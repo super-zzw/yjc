@@ -117,8 +117,17 @@ export default{
 	
 	//分销
 	DistributionInfo:"/fx/get/distribute/index",  //分销中心首页信息
-	fxTeamOne:"/ums/get/subTeam/oneList",  //下属团队一级代理
-	fxTeamTwo:"/ums/get/subTeam/twoList",  //下属团队二级代理
-	fxCustomer:"",  //获取直推客户
-	fxCommission:"",  //
+	fxTeamOne:"/fx/get/subTeam/oneList",  //下属团队一级代理
+	fxTeamTwo:"/fx/get/subTeam/twoList",  //下属团队二级代理
+	fxCustomerList:"/fx/get/zhitui/list",  //获取直推客户列表
+	fxCommissionList:"/fx/get/distribute/logList",  //佣金明细列表
+	fxWithdrawList:"/fx/get/withdrawLog/list",  //佣金提现列表
+	fxyjAccountList:"/fx/get/cardAmountList",  //获取分销佣金提现账户
+	fxWithdraw:"/fx/add/withdraw",  //用户佣金提现
+	fxWithdrawDeleteAccount:"/fx/del/cardAmount",  //删除佣金提现账户
+	fxAddWithdrawAccount:"/fx/addOrEdit/cardAmount",  //新增/编辑提现账户
+	fxPosterEx:"/app/get/poster/templateList",  //生成海报模板
+	fxPoster:"/app/get/poster/share",  //根据id生成分销海报
+	fxAccountDetail:"/fx/info/cardAmount",  //分销提现账户详情
+	getCurrentPhoneCode:"/app/yzm/sendAuthCode",  //获取当前账号手机号验证码
 }

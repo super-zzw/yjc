@@ -1,18 +1,25 @@
 <template>
 	<view class="container">
 		<view class="accountList">
-			<view class="accountItem" v-for="(item,index) in 3" @tap="select=index">
-				<view class="left">
-					<image src="../image/zhifubao.png" mode="" class="accountImg"></image>
-					<view class="info">
-						<text class="name">支付宝账户1</text>
-						<text class="num">187****2736</text>
+			<view class="" v-if="dataList.length > 0">
+				<view class="accountItem" v-for="(item,index) in dataList" @tap="selectAccount(index)">
+					<view class="left">
+						<image src="../image/zhifubao.png" mode="" class="accountImg" v-if="item.type == 0"></image>
+						<image src="../image/yhk.png" mode="" class="accountImg" v-if="item.type == 1"></image>
+						<view class="info">
+							<text class="name">{{item.name}}</text>
+							<text class="num">{{item.account}}</text>
+						</view>
 					</view>
+					<text class="iconfont iconxuanzetixianzhanghu" v-if="select==index&&!editing"></text>
+					<text class="noSelected" v-if="select!=index&&editing"></text>
+					<image src="../image/select.png" mode="" class="selected" v-if="select==index&&editing"></image>
 				</view>
-				<text class="iconfont iconxuanzetixianzhanghu" v-if="select==index&&!editing"></text>
-				<text class="noSelected" v-if="select!=index&&editing"></text>
-				<image src="../image/select.png" mode="" class="selected" v-if="select==index&&editing"></image>
 			</view>
+			<view class="accountEmpty" v-else>
+				暂无可用账户，请点击新增账户
+			</view>
+			
 		
 			
 				<view v-if="!editing" class="btns">
@@ -20,10 +27,11 @@
 					  <button type="default" hover-class="none" class="addAccount btn">新增账户</button>
 					</picker>
 					
-					<button type="default" hover-class="none" class="editAccount btn" @tap="editAccount">编辑账户</button>
+					<button v-if="dataList.length > 0" type="default" hover-class="none" class="editAccount btn" @tap="editAccount">管理账户</button>
 				</view>
 				<view v-if="editing" class="btns">
-					<button type="default" hover-class="none" class="delBtn">删除</button>
+					<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
+					<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
 				</view>
 		</view>
 		
@@ -31,20 +39,57 @@
 </template>
 
 <script>
+	import {mapMutations,mapState} from 'vuex'
 	export default {
 		data() {
 			return {
 				select:0,
 				editing:false,
-				range:['支付宝账户','银行卡账户']
+				range:['支付宝账户','银行卡账户'],
+				dataList:[]
 			};
 		},
+		onLoad() {
+			this.select = this.selectFxAccount
+		},
+		onShow() {
+			this.getData();
+		},
+		computed:{
+			...mapState(['selectFxAccount'])
+		},
 		methods:{
+			...mapMutations(['selectFxAccountSet']),
+			selectAccount(index){
+				this.select = index;
+				if(!this.editing){
+					this.selectFxAccountSet(index);
+					uni.navigateBack()
+				}
+			},
+			toEdit(){
+				let _id = this.dataList[this.select].id;
+				let _type = this.dataList[this.select].type;
+				uni.navigateTo({
+					url:'./addAccount?type='+_type + '&id=' + _id
+				})
+			},
+			getData(){
+				uni.showLoading({
+					title:"加载中..."
+				})
+				this.$http({
+					apiName:"fxyjAccountList"
+				}).then(res => {
+					this.dataList = res.data;
+					uni.hideLoading()
+				}).catch(err => {uni.hideLoading()})
+			},
 			editAccount(){
 				this.editing=true
-			uni.setNavigationBarTitle({
-				title: '佣金提现账户管理'
-			});
+				uni.setNavigationBarTitle({
+					title: '佣金提现账户管理'
+				});
 
 			},
 			addAccount(e){
@@ -52,14 +97,44 @@
 				uni.navigateTo({
 					url:'./addAccount?type='+e.detail.value
 				})
-		    }
+		    },
+			deleteAccount(){
+				let _this = this;
+				uni.showModal({
+					title:"确定删除该账户？",
+					success(res) {
+						if(res.confirm){
+							_this.deleteAccount2()
+						}
+					}
+				})
+			},
+			async deleteAccount2(){
+				uni.showLoading({
+					title:"删除中..."
+				})
+				await this.$http({
+					apiName:"fxWithdrawDeleteAccount",
+					type:"POST",
+					data:{
+						id:this.dataList[this.select].id
+					}
+				}).then(res => {
+					uni.showToast({
+						icon:"success",
+						title:"删除成功"
+					})
+					this.getData()
+				}).catch(err => {})
+				uni.hideLoading()
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
     .container{
-		height: 100vh;
+		height: calc(100vh - 88rpx);
 		background: #F9FAFB;
 		.accountList{
 			padding:0 35rpx;
@@ -113,6 +188,7 @@
 				margin-top: 50rpx;
 				display: flex;
 				flex-direction: row;
+				justify-content: space-around;
 				.btn{
 					width: 308rpx;
 					border-radius:40rpx;
@@ -137,8 +213,13 @@
 					font-size:30rpx;
 					font-family:PingFangSC-Regular,PingFang SC;
 					font-weight:500;
-					width: 100%;
+					width: 50%;
 				}
+			}
+			.accountEmpty{
+				text-align: center;
+				font-size: 32rpx;
+				padding-top: 40rpx;
 			}
         }
 	}

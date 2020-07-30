@@ -1,13 +1,13 @@
 <template>
 	<view class="mWrap">
 		<view class="posterBox">
-			<image class="poster" src="https://s1.ax1x.com/2020/07/27/ailzOP.th.png" mode="heightFix"></image>
+			<image class="poster" :src="posterUrl" mode="heightFix"></image>
 		</view>
 		<view class="imgList">
-			<image class="imgItem" :src="item.url" v-for="item in imgList" :key="item.id" mode="heightFix"></image>
+			<image class="imgItem" :src="item.url" v-for="item in imgList" :key="item.id" mode="heightFix" @tap="changePoster(item.id)"></image>
 		</view>
 		<view class="oprList">
-			<view class="oprItem" v-for="item in oprList" :key="item.text">
+			<view class="oprItem" v-for="item in oprList" :key="item.text" @tap="shareOthers(item.text)">
 				<image class="oprItemImg" :src="item.icon" mode="widthFix"></image>
 				<view class="oprItemText">
 					{{item.text}}
@@ -18,22 +18,12 @@
 </template>
 
 <script>
+import Share from "../../components/share.vue";
+import utils from '@/utils/method.js'
 export default{
 	data(){
 		return {
-			imgList:[
-				{id:1,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:2,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:3,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:4,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:5,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:6,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:7,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:8,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:9,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:10,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-				{id:11,url:"https://s1.ax1x.com/2020/07/27/ailzOP.th.png"},
-			],
+			imgList:[],
 			oprList:[
 				{
 					icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
@@ -47,8 +37,162 @@ export default{
 					icon: require("../image/download.png"),
 					text: "保存本地"
 				},
-			]
+			],
+			posterUrl:"",
+			templateId:"",
+			info:""
 		}
+	},
+	async onLoad() {
+		uni.showLoading({
+			title:"加载中...",
+			mask:true
+		})
+		await this.getPoster();
+		await this.getList();
+		this.getInfo();
+		uni.hideLoading()
+	},
+	methods:{
+		getInfo(){
+			this.$http({
+				apiName:"DistributionInfo"
+			}).then(res => {
+				this.info = res.data;
+			}).catch(err => {})
+		},
+		getPoster(){
+			this.$http({
+				apiName:"fxPoster",
+				data:{
+					templateId:this.templateId
+				}
+			}).then(res => {
+				this.posterUrl = res.data;
+			}).catch(err => {})
+		},
+		getList(){
+			this.$http({
+				apiName:"fxPosterEx"
+			}).then(res => {
+				this.imgList = res.data;
+			}).catch(err => {})
+		},
+		async changePoster(id){
+			uni.showLoading({
+				title:"加载中...",
+				mask:true
+			})
+			this.templateId = id;
+			await this.getPoster();
+			uni.hideLoading()
+		},
+		shareOthers(t){
+			if(t == '微信好友'){
+				name = "WXSceneSession";
+				// #ifdef APP-PLUS
+				this.appShare(name,e);
+				// #endif
+			}else if(t == '朋友圈'){
+				name = "WXSenceTimeline";
+				// #ifdef APP-PLUS
+				this.appShare(name,e);
+				// #endif
+			}else if(t == '保存本地'){
+				this.saveImg()
+			}
+		},
+		appShare(name,type){
+			let _self = this;
+			uni.share({
+				provider: "weixin",
+				scene: name,
+				type:0,
+				title: _self.info.distributeInviteTitle,
+				imageUrl: _self.info.distributeInviteImg,
+				summary: _self.info.distributeInviteDescription,
+				href: _self.info.distributeInviteUrl,
+				success(res) {
+					console.log(res);
+				},
+				fail(err){
+					console.log(err);
+				}
+			})
+		},
+		saveImg(){
+			// #ifndef MP-WEIXIN
+			let _self = this
+			uni.saveImageToPhotosAlbum({
+				filePath:this.posterUrl,
+				success: function () {
+					uni.showToast({
+					    title: "保存成功",
+					    duration: 1000
+					});
+				}
+			});
+			// #endif
+			
+			// #ifdef MP-WEIXIN
+			uni.showLoading({
+				title:"保存中..."
+			})
+			let that = this
+			uni.downloadFile({
+				url: that.posterUrl,
+				success:function (res) {
+					//图片保存到本地
+					uni.saveImageToPhotosAlbum({
+						filePath: res.tempFilePath,
+						success:function (data) {
+							uni.showToast({
+							    title: "保存成功",
+							    duration: 1000
+							});
+						},
+						fail:function (err) {
+							if (err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" || err.errMsg === "saveImageToPhotosAlbum:fail auth deny" || err.errMsg === "saveImageToPhotosAlbum:fail authorize no response") {
+								uni.showModal({
+									title: '提示',
+									content: '需要您授权保存相册',
+									showCancel: false,
+									success: modalSuccess => {
+									uni.openSetting({
+										success(settingdata) {
+											if (settingdata.authSetting['scope.writePhotosAlbum']) {
+												uni.showModal({
+													title: '提示',
+													content: '获取权限成功,再次点击保存',
+													showCancel: false,
+												})
+											} else {
+												uni.showModal({
+													title: '提示',
+													content: '获取权限失败，将无法保存到相册哦~',
+													showCancel: false,
+												})
+											}
+										},
+										fail(failData) {
+											console.log("failData", failData)
+										},
+										complete(finishData) {
+											console.log("finishData", finishData)
+										}
+									})
+									}
+								})
+							}
+						}
+					})
+				},
+				complete(){
+					uni.hideLoading()
+				}
+			});
+			// #endif
+		},
 	}
 }
 </script>

@@ -1,15 +1,15 @@
 <template>
 	<view>
 		<view class="top">
-			<text class="number">159</text>
+			<text class="number">{{teamNum}}</text>
 			<text class="ctxt">我的下属代理人数(人)</text>
 			<view class="agents">
 				<view class="agentTab ">
-					<text @tap="getData(1)" :class="tab==1?'active':''">一级代理</text>
+					<text @tap="changeTab(1)" :class="tab==1?'active':''">一级代理</text>
 				</view>
 				<text class="divider"></text>
 				<view class="agentTab">
-					<text :class="tab==2?'active':''" @tap="getData(2)">二级代理</text>
+					<text :class="tab==2?'active':''" @tap="changeTab(2)">二级代理</text>
 				</view>
 			</view>
 		</view>
@@ -37,18 +37,18 @@
 				</view>
 			</view>
 			<view class="fList">
-				<view class="fItem">
+				<view class="fItem" v-for="(item,index) in list" :key="index">
 					<view class="left">
-						<text class="title">_JungYumi业绩收入</text>
-						<text class="info">TA在2020.02.03加入你的三级代理团队</text>
+						<text class="title">{{item.title}}</text>
+						<text class="info">{{item.content}}</text>
 					</view>
 					<view class="right">
-						<text class="value">+20</text>
+						<text class="value">+{{item.amount}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
-		<datePicker :dateSel="dateSel" @close="dateSel=false" />
+		<datePicker :dateSel="dateSel" @close="colseTime" />
 	</view>
 </template>
 
@@ -57,61 +57,77 @@
 		data() {
 			return {
 				tab: 1,
-				array1: ['昨日', '近7天', '全部'],
-				index: 2,
+				array1: ['昨日', '近7天', '全部',],
+				index: 1,
 				date: '自定义筛选',
 				dateSel: false,
 				startTime: '',
-				endTime: ''
+				endTime: '',
+				type:7,
+				list:[],
+				teamNum:""
 			};
 		},
 		async onLoad() {
-			// this.startTime=this.endTime=new Date().getFullYear()+'.'+ (new Date().getMonth()+1)
-			this.getTime();
-			await this.getData(1);
+			this.getInfo();
+			await this.getData();
 		},
 		methods: {
-			async getData(tab){
+			changeTab(tab){
+				if(tab == this.tab){return}else{this.tab = tab;this.getData()}
+			},
+			async getInfo(){
+				await this.$http({
+					apiName:"DistributionInfo"
+				}).then(res => {
+					this.teamNum = res.data.teamNum;
+				}).catch(err => {})
+			},
+			async getData(){
 				uni.showLoading({
 					title:"加载中..."
 				})
 				let _api = "fxTeamOne";
-				if(tab == 2){
+				if(this.tab == 2){
 					_api = "fxTeamTwo"
 				}
-				this.tab = tab;
 				await this.$http({
 					apiName:_api,
 					data:{
-						
+						type:this.type,
+						timeE:this.endTime,
+						timeS:this.startTime
 					}
 				}).then(res => {
-					
+					this.list = res.data
 				}).catch(err => {});
 				uni.hideLoading()
 			},
-			bindPickerChange1(e) {
-				console.log(e)
-				this.index = e.detail.value
+			async bindPickerChange1(e) {
+				this.index = e.detail.value;
+				if(this.index == 0){
+					this.type = 1;
+				}else if(this.index == 1){
+					this.type = 7
+				}else if(this.index == 2){
+					this.type = ""
+				}
+				await this.getData()
 			},
 			selDate() {
 				this.dateSel = true
 			},
-			getTime() {
-				let year = new Date().getFullYear();
-				let month = new Date().getMonth() + 1;
-				month = month < 10 ? '0' + month : month,
-					this.startTime = this.endTime = year + '.' + month
+			async colseTime(e){
+				this.dateSel = false;
+				this.startTime = e.startTime;
+				this.endTime = e.endTime;
+				await this.getData()
 			}
 		},
-		computed: {
-			startDate() {
-				return this.getTime('start');
-			},
-			endDate() {
-				return this.getTime('end');
-			}
-		},
+		async onPullDownRefresh() {
+			await this.getData();
+			uni.stopPullDownRefresh()
+		}
 	}
 </script>
 

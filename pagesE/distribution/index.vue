@@ -45,17 +45,25 @@
 	export default {
 		data() {
 			return {
-				totalAmount:"",
-				extractAmount:"",
-				pendingAmount:"",
-				freezeAmount:"",
+				//teamNum我的下属代理人数,
+				// oneCustmerNum我的直推客户人数,
+				// totalAmountOut累计提现佣金,
+				// totalAmountIn累计佣金收入
+				// distributeInviteCode分销码
+				// distributeInviteDescription分享出去的摘要
+				// distributeInviteImg 分享图片
+				// distributeInviteTitle  分享标题
+				//distributeInviteUrl 分享注册链接(带邀请码)
+				totalAmount:"",  //累计佣金
+				extractAmount:"",  //可提取佣金
+				pendingAmount:"",  //待入账
+				freezeAmount:"",  //冻结佣金
 				list:[
 					{id:1,title:'推广赚佣金',nav:'posters'},
 					{id:2,title:'我的下属团队',nav:'myTeam'},
 					{id:3,title:'我的直推客户',nav:'myClient'},
 					{id:4,title:'我的佣金明细',nav:'commissionDetail'},
 					{id:5,title:'佣金提现记录',nav:'commissionLog'},
-					// {icon:'iconyongjintixianzhanghuguanli',title:'佣金提现账户管理'},
 				]
 			};
 		},
