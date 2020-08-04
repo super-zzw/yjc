@@ -18,7 +18,7 @@
 						<text class="value">-{{item.amount}}</text>
 						<text class="result" v-if="item.status == 0">审核中</text>
 						<text class="result" v-if="item.status == 1">提现成功</text>
-						<text class="result" v-if="item.status == 2">提现失败</text>
+						<text class="result" v-if="item.status == -1">提现失败</text>
 					</view>
 					
 				</view>

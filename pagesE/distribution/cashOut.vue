@@ -1,5 +1,5 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="config">
 		<view class="accountBox" @tap="accountSel">
 			<view class="left" v-if="accountList.length > 0">
 				<image src="../image/zhifubao.png" mode="" class="accountImg" v-if="accountList[selectFxAccount].type == 0"></image>
@@ -22,6 +22,20 @@
 			<text class="divider"></text>
 			<text class="txt2">可提现金额¥{{ableMoney}}</text>
 			<button type="default" hover-class="none" @tap="tx">提交</button>
+			<view class="txt2">
+				<view class="">
+					提现说明:
+				</view>
+				<view class="">
+					1.最小提现金额为¥{{config.DISTRIBUTE_WITHDRAW.withdrawMin}}
+				</view>
+				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1">
+					2.提现手续费为¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
+				</view>
+				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 2">
+					2.提现手续费为提现金额的{{config.DISTRIBUTE_WITHDRAW.withdrawRatio * 100}}%
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -45,7 +59,7 @@
 			uni.hideLoading()
 		},
 		computed:{
-			...mapState(['selectFxAccount'])
+			...mapState(['selectFxAccount','config'])
 		},
 		methods:{
 			//获取账户详情
@@ -99,8 +113,9 @@
 						})
 					}).catch(err => {
 						uni.hideLoading()
-						uni.navigateTo({
-							url:'./txTip?status='+0
+						uni.showToast({
+							icon:"none",
+							title:err.message
 						})
 					})
 					

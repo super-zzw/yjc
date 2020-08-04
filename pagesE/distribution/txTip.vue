@@ -1,9 +1,9 @@
 <template>
-	<view class="container">
+	<view class="container" v-if="config">
 		<view class="content" v-if="status==1">
 			<text class="iconfont iconchenggong"></text>
 			<text class="tit">提交成功</text>
-			<text class="tit1">钱款将在N个工作日内退回所填账户</text>
+			<text class="tit1">钱款将在{{config.DISTRIBUTE_WITHDRAW_SH}}个工作日内退回所填账户</text>
 			<navigator url="./index" class="nav">返回首页</navigator>
 		</view>
 		<view class="content" v-else>
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -25,6 +26,9 @@
 		},
 		onLoad(opt) {
 			this.status=opt.status
+		},
+		computed:{
+			...mapState(['config'])
 		}
 	}
 </script>

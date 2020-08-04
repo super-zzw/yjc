@@ -36,12 +36,15 @@
 			<view class="fList" v-if="dataList.length > 0">
 				<view class="fItem" v-for="(item,index) in dataList" :key="index">
 					<view class="left">
-						<text class="title">_JungYumi业绩收入</text>
-						<text class="info">TA在2020.02.03加入你的三级代理团队</text>
+						<text class="title">{{item.title}}</text>
+						<text class="info">{{item.createTime}}</text>
 					</view>
 					<view class="right">
-						<text class="value">-168</text>
-						<text class="result">审核中</text>
+						<text class="value" v-if="item.type == 0">+{{item.amount}}</text>
+						<text class="value" v-if="item.type == 1">-{{item.amount}}</text>
+						<text class="result" v-if="item.withdrawStatus == 0">待处理</text>
+						<text class="result" v-if="item.withdrawStatus == 1">通过</text>
+						<text class="result" v-if="item.withdrawStatus == -1">失败</text>
 					</view>
 				</view>
 			</view>
