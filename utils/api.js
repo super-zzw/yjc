@@ -141,6 +141,6 @@ export default{
 	fxPoster:"/app/get/poster/share",  //根据id生成分销海报
 	fxAccountDetail:"/fx/info/cardAmount",  //分销提现账户详情
 	getCurrentPhoneCode:"/app/yzm/sendAuthCode",  //获取当前账号手机号验证码
-	fxTeamOne:"/ums/get/subTeam/oneList",  //下属团队一级代理
-	fxTeamTwo:"/ums/get/subTeam/twoList",  //下属团队二级代理
+	fxTeamOne:"/fx/get/subTeam/oneList",  //下属团队一级代理
+	fxTeamTwo:"/fx/get/subTeam/twoList",  //下属团队二级代理
 }
