@@ -15,6 +15,7 @@
 </template>
 
 <script>
+	import utils from "@/utils/method.js"
 	export default {
 		data() {
 			return {
@@ -34,6 +35,7 @@
 					}
 				}).then(res=>{
 						this.isOk=true
+						utils.getUserInfo()
 					uni.redirectTo({
 						url:'./ex_success'
 					})
@@ -52,7 +54,7 @@
 
 <style lang="scss" scoped>
    .container{
-	   background: $page-color-base;
+	   // background: $page-color-base;
 	   height: calc(100vh - 88rpx);
 	   .wrapper{
 		   padding: 0 32rpx 100rpx;

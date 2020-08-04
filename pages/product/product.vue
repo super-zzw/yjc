@@ -132,7 +132,7 @@
 				<view class="a-t">
 					<image :src="stockInfo.pic"></image>
 					<view class="right">
-						<text class="price">¥{{stockInfo.promotionPrice}}</text>
+						<text class="price">{{stockInfo.exchangePoint}}</text>
 						<text class="stock">库存：{{stockInfo.stock}}件</text>
 						<view class="selected">
 							已选：
@@ -559,7 +559,7 @@
 					picUrl:this.picUrl,
 					specSelected:this.specSelected,
 					price:this.stockInfo.promotionPrice,
-					exchangePoints:this.exchangePoints || 0,
+					exchangePoints:this.stockInfo.exchangePoint || 0,
 					productType:this.productType
 				})
 				uni.navigateTo({

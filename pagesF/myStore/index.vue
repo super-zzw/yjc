@@ -69,7 +69,7 @@
 					
 					<view class="price-box">
 						储值余额 :
-						<text class="price">-{{item.amount}}</text>
+						<text class="price">{{item.type?'-'+item.amount:'+'+item.amount}}</text>
 					</view>
 				</view>
 			</view>
@@ -95,13 +95,7 @@
 		},
 		data() {
 			return {
-				dataList:[
-					// {orderTime:111,orderId:111,picUrl:'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png',
-					// productName:11,specificationsMap:{},productQuantity:11,orderSn:11,payAmount:11,minPrice:120},
-					// {orderTime:111,orderId:111,picUrl:'',
-					// productName:11,specificationsMap:{},productQuantity:11,orderSn:11,payAmount:11,minPrice:120},
-					
-				],
+				dataList:[],
 				noMore:true,
 				itemList:[]
 			};

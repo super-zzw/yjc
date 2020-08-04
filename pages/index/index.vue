@@ -54,7 +54,7 @@
 				</view>
 			</view>
 			<view class="group-section2">
-				<swiper class="g-swiper" :duration="500" :autoplay="true">
+				<swiper class="g-swiper" :duration="500" :autoplay="true" v-if="config.PROMOTION_TITLE.subjectStyle==1">
 					<swiper-item
 						class="g-swiper-item"
 						v-for="(item, index) in tipics" :key="index"
@@ -71,6 +71,21 @@
 						<view class="pro-box">{{item.description}}</view>
 					</swiper-item>
 				</swiper>
+				<view class="itemBox" v-if="config.PROMOTION_TITLE.subjectStyle==2">
+					<view class="s-item" v-for="(item,index) in tipics" :key="index" @tap="toTopic(item.id)">
+						<image mode="" class="item-img" :src="item.pic" />
+						<view class="sbox">
+							<view class="t-box">
+								<text class="title">{{item.title}}</text>
+								<view class="price-box" v-if="item.price">
+									<text class="price nm-font">￥{{item.price}}</text> 
+									<text class="m-price">起</text>
+								</view>
+							</view>
+							<view class="pro-box">{{item.description}}</view>
+						</view>
+					</view>
+				</view>
 			</view>
 		</view>
 		
@@ -526,7 +541,7 @@ import tabBar from "@/components/tab-bar.vue"
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {
-			console.log(e)
+			
 			const index = e.index;
 			// #ifdef APP-PLUS
 			const pages = getCurrentPages();
@@ -805,6 +820,57 @@ import tabBar from "@/components/tab-bar.vue"
 					-webkit-line-clamp: 2;
 					-webkit-box-orient: vertical;
 				}
+			}
+		}
+		.itemBox{
+			.s-item{
+				margin-bottom: 20rpx;
+				padding-top: 32rpx;
+				padding-bottom: 28rpx;
+				background-color: #fff;
+				padding-left: 32rpx;
+				padding-right: 32rpx;
+				.item-img{
+					width: 100%;
+					height: 343rpx;
+					border-radius: 10rpx;
+				}
+			}
+		}
+		.sbox{
+			
+			.t-box{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				.title{
+					color: #303133;
+					font-size: 34rpx;
+					font-weight: bold;
+				}
+				.price-box{
+					.price{
+						color: #F23D3D;
+						font-size: 38rpx;
+						font-weight: bold;
+						margin-right: 10rpx;
+					}
+					.m-price{
+						color: #C0C4CC;
+						font-size: 24rpx;
+					}
+				}
+			}
+			.pro-box{
+				margin-top: 10rpx;
+				color: #909399;
+				font-size: 28rpx;
+				width:100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
 			}
 		}
 	}

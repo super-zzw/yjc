@@ -62,7 +62,7 @@
 			<text class="rscen">|</text>
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
-		<view class="wxLogin" @click="oAuth">
+		<view class="wxLogin" @click="oAuth" data-logintype="weixin">
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>

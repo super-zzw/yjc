@@ -5,14 +5,15 @@ var test =true ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
-	_baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强0
+	// _baseUrl = 'http://192.168.1.25:9502/api';  //测试地址日强0
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
-	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
+	_baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 } else {
 	// _baseUrl = 'http://api.youmall.vip/api';  //i&m商，只对app，微信支付：wx4c4af1149bf6832e
-	_baseUrl = 'https://api.vyunmall.com/api';  //辰悠++优品汇，只对app和小程序，微信支付：wx3e2043f6604d1b94，小程序appid wx869ea006d7b72f96
+	// _baseUrl = 'https://api.vyunmall.com/api';  //辰悠++优品汇，只对app和小程序，微信支付：wx3e2043f6604d1b94，小程序appid wx869ea006d7b72f96
 	// _baseUrl = 'https://www.zmhstem.com.cn/api'  //迈智汇小程序appid	wxa75ea180e9fc8015
 	// _baseUrl = 'https://api.mrtht.newideafuture.com/api'  //每日特惠团小程序appid wx0dffc4bfc45653d2
+	// _baseUrl='http://cymall-api.dev.gzcyou.com/api'  //商城1.2.7测试接口
 }
 var baseUrl = _baseUrl;
 // 请求loading交给页面处理
@@ -41,6 +42,7 @@ export function http(opt){
 			success:res => {
 				if(res.statusCode == 200 && res.data.code){
 					//300003,300000
+					
 					if(res.data.code == 200000){
 						resolve(res.data)
 					}else if(res.data.code == 300003 || res.data.code == 300000){
@@ -52,6 +54,7 @@ export function http(opt){
 						utils.rmData()
 						reject(res.data.message)
 					}else{
+						console.log(res.data.message)
 						uni.hideLoading()
 						uni.showToast({
 							icon: 'none',

@@ -151,7 +151,7 @@
 		<view class="yhqSel" :class="sModal1?'active':''">
 			<text class="titles">选择优惠券</text>
 			<text class="cancel" @tap="sModal1=false,sMask=false">取消</text>
-			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)">
+			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)" v-if="couponsList">
 				<view class="fengmian">
 					<view class="content">
 						￥<text>{{item.amount}}</text>
@@ -166,6 +166,10 @@
 					<text></text>
 				</view>
                 <image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
+			</view>
+			<view v-if="!couponsList" class="none">
+				<image src="../../static/null.png" mode="" ></image>
+				<text>暂无优惠券</text>
 			</view>
 		</view>
 	</view>
@@ -201,7 +205,7 @@
 				password: '',
 				sMask: '',
 				sModal1: false,
-				couponsList:[],
+				couponsList:'',
 				yhq:0,   //优惠券数值
 				storeValue:0,  ///使用的储值
 				wuserCouponId:''
@@ -225,10 +229,8 @@
 							this.storeValue=all
 							 this.total2=0
 						}else{
-							// console.log(this.userInfo)
-							// console.log(Number(this.userInfo.cardAmount))
 							this.storeValue=this.userInfo.cardAmount
-							this.total2=Number(this.total)-Number(this.userInfo.cardAmount) 
+							this.total2=(Number(this.total)-Number(this.userInfo.cardAmount)).toFixed(2) 
 						}
 						
 						// this.storeValue=
@@ -272,9 +274,11 @@
 		},
 		async onShow() {
 			// this.total = 0;
-			// if (this.selectAddr) {
-			// 	this.total2=this.total
-			// }
+			if (this.selectAddr) {
+				this.total2=Number(this.total+this.fee-this.storeValue-this.yhq).toFixed(2)
+			}else{
+				this.total2='请选择地址'
+			}
 			// if (this.cart == 1) {
 			// 	await this.getCart()
 			// 	await this.getCartYf()
@@ -296,17 +300,45 @@
 			...mapState(['order', 'selectAddr', 'config', 'setOrder','userInfo'])
 		},
 		methods: {
-			...mapMutations(['setSelectAddr']),
+			...mapMutations(['setSelectAddr','setAfterLoginUrl']),
 			switchChecked() {
-				if (!this.checked) {
-					this.sModal = true
-					this.sMask = true
-					this.$refs.KeyboarHid.open();
+				if(this.userInfo.payPwdFlag){
+					if (!this.checked) {
+						if((Number(this.total) + Number(this.fee)).toFixed(2)<=this.yhq){
+							uni.showToast({
+								title:'您无需使用储值',
+								icon:'none'
+							})
+						}else{
+							this.sModal = true
+							this.sMask = true
+							this.$refs.KeyboarHid.open();
+						}
+						
+					}else{
+						this.$refs.KeyboarHid.iptNum=[]
+						this.checked=false
+						this.total2=(Number(this.total) + Number(this.fee)-this.yhq).toFixed(2)
+					}
 				}else{
-					this.$refs.KeyboarHid.iptNum=[]
-					this.checked=false
-					this.total2=(Number(this.total) + Number(this.fee)-this.yhq).toFixed(2)
+					uni.showModal({
+						title: '提示',
+						content:'您还未设置支付密码，请前往设置',
+						success(res) {
+							if(res.confirm){
+								uni.navigateTo({
+									url:'../set/payPwd'
+								})
+								// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
+							}else{
+								return
+							}
+						
+						}
+						
+					})
 				}
+				
 			},
 			clickInput(val) {
 				this.password = val;
@@ -318,12 +350,9 @@
 				
 			},
 			openKeyboard() {
-
 				if (!this.$refs.KeyboarHid.KeyboarHid) {
-					this.$refs.KeyboarHid.open();
-					
+					this.$refs.KeyboarHid.open();	
 				}
-
 			},
 			yhqSel() {
 				this.sMask = true
@@ -389,7 +418,7 @@
 						// #endif
 						skuJson: JSON.stringify(_skuJson),
 						remark: this.desc,
-						tradepwd:this.password,
+						tradepwd:utils.md5(this.password),
 						cardAmountFlag:cardAmountFlag,
 						wuserCouponId:this.wuserCouponId
 					}
@@ -535,9 +564,10 @@
 					this.sModal1 = false
 					this.yhq=item.amount
 					this.wuserCouponId=item.wuserCouponId
-					if(this.total<=item.amount){
+					if((Number(this.total) + Number(this.fee)).toFixed(2)<=item.amount){
 						this.total2=0
 						this.checked=false
+						this.$refs.KeyboarHid.iptNum=[]
 					}else{
 						if(this.checked){
 							if((Number(this.total) + Number(this.fee)).toFixed(2)>this.userInfo.cardAmount){
@@ -1271,5 +1301,23 @@
 	.yhqSel.active {
 		transition: .4s;
 		height: 700rpx;
+	}
+	.none{
+		image{
+			width: 200rpx;
+			height: 150rpx;
+			margin-bottom: 20rpx;
+		}
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		font-size:28rpx;
+		font-family:PingFangSC-Regular,PingFang SC;
+		font-weight:400;
+		color:rgba(144,147,153,1);
 	}
 </style>

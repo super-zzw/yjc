@@ -7,7 +7,7 @@
 		</view>
 		<view class="list">
 			<view class="card-item" v-if="datalist.length" v-for="(item,index) in datalist" :key="index">
-				<view class="fengmian" :style="{'background':status==-1?'url(../../static/guoqi.png)':'url(../../static/yhq.png)','background-size':'100%'}">
+				<view class="fengmian" :class="status==-1?'':'active'">
 					<view class="content" >
 						￥<text>{{item.amount}}</text>
 					</view>
@@ -20,17 +20,16 @@
 					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 				</view>
 				<image src="../../static/yishiyong.png" mode="" class="tag" v-if="status==1"></image>
-				<image src="../../static/yiguoqi.png" mode="" class="tag" v-if="status==-1"></image>
+				
+				<image src="../../static/yiguoqi.png" mode="" class="tag" v-if="status==-1&&item.status==2"></image>
+				<image src="../../static/yishixiao.png" mode="" class="tag" v-if="status==-1&&item.status==3"></image>
 			</view>
 			<view class="nodata" v-if="datalist.length==0">
 				<image src="../../static/null.png" mode="widthFix"></image>
 				<text>暂无记录</text>
 			</view>
 		</view>
-		
-		
-		
-		<navigator url="./getCoupons" class="getCoupons">去领券</navigator>
+		<navigator url="./getCoupons" class="getCoupons" hover-class="none">去领券</navigator>
 	</view> 
 </template>
 
@@ -44,6 +43,9 @@
 			};
 		},
 		onLoad() {
+			this.getMyCoupon(this.status)
+		},
+		onShow() {
 			this.getMyCoupon(this.status)
 		},
 		filters:{
@@ -95,14 +97,12 @@
 				text{
 					display: flex;
 					line-height: 88rpx;
-					
 					font-size:30rpx;
 					align-items: center;
 					font-family:PingFangSC-Medium,PingFang SC;
 					font-weight:600;
 					color:rgba(48,49,51,1);
-				}
-				
+				}	
 			}
 			.navItem text.active{
 				color:$base-color;
@@ -115,16 +115,16 @@
 			.card-item{
 					margin:40rpx 32rpx;
 					background: #fff;
-				
 					height: 200rpx;
 					display: flex;
-					
 					.fengmian{
 						width: 200rpx;
 						height: 200rpx;
 						display: flex;
 						align-items: center;
 						justify-content: center;
+					background:url(../../static/guoqi.png) ;
+					background-size: 100% 100%;
 						.content{
 							font-size:28rpx;
 							font-family:PingFangSC-Semibold,PingFang SC;
@@ -139,6 +139,10 @@
 							}
 						}
 					
+				}
+				.fengmian.active{
+					background:url(../../static/yhq.png) ;
+					background-size: 100% 100%;
 				}
 				.main{
 					flex: 1;

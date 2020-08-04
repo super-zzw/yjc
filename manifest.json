@@ -139,7 +139,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://192.168.1.25:9502/api",
+                    // "target" : "http://192.168.1.25:9502/api",
+                    "target" : "http://cymall-api.dev.gzcyou.com/api",
                     "changeOrigin" : true
                 }
             }

@@ -90,62 +90,255 @@
 				<text class="cell-tip">{{fee}}</text>
 			</view>
 			<view class="yt-list-cell desc-cell">
-				<text class="cell-tit clamp">备注</text>
-				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
+				<text class="cell-tit clamp" style="width: '140rpx'">备注</text>
+				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder1" />
+			</view>
+		</view>
+		
+		<!-- 优惠 -->
+		<view class="yt-list">
+		
+			<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">优惠券</text>
+				<view class="cell-tip" @tap="yhqSel">
+					<text class="cell-right" v-if="yhq">优惠¥{{yhq}}</text>
+					<text class="iconfont iconright"></text>
+		
+				</view>
+		
+			</view>
+			<view class="yt-list-cell b-b">
+				<text class="cell-tit clamp">储值余额抵扣</text>
+				<view class="flex align-items">
+					<text class="cell-tip" v-if="checked">储值余额抵扣¥{{storeValue}}</text>
+					<image src="../../static/off.png" mode="" class="switch" @tap="switchChecked" v-if="!checked"></image>
+					<image src="../../static/on.png" mode="" class="switch" @tap="switchChecked" v-else></image>
+				</view>
+				
+				<!-- <text class="cell-tip" v-else>{{fee}}</text> -->
+			</view>
+			<view class="yt-list-cell desc-cell b-b">
+				<text class="cell-tit clamp">剩余待支付</text>
+				<text class="cell-right">¥{{total2}}</text>
+				<!-- <input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" /> -->
 			</view>
 		</view>
 		
 		<!-- 底部 -->
 		<view class="footer">
-			<view class="price-content">
+		<!-- 	<view class="price-content" >
+				<text>实付款</text>
+				<text class="price-tip">￥</text>
+				<text class="price">0.00</text>
+			</view> -->
+			<view class="price-content" >
 				<text>实付款</text>
 				<text class="price-tip">￥</text>
 				<text class="price">{{total2}}</text>
 			</view>
+			<!-- <text class="submit" @click="scoreEx" v-if="isScore">立即兑换</text>
+			<text class="submit" @click="submit2" v-else-if="cart == 1">提交订单</text> -->
 			<text class="submit" @click="submit">提交订单</text>
+		</view>
+		
+		<!-- 弹出验证框 -->
+		<view class="masks" v-if="sMask"></view>
+		<view class="validateBox" :class="sModal?'active':''">
+			<text class="iconfont iconclose-hei" @tap="closePass"></text>
+			<text class="txt1">支付密码验证</text>
+			<view class="input_area">
+				<passwordInput :numLng='password' @open="openKeyboard" />
+				<!-- <input class="box" disabled v-for="(item,index) in 6" :key="index" ></input> -->
+				<!-- <input type="password" value="" class="box" maxlength="1" v-for="(item,index) in 6" :key="index" @input="input(index)" :focus="currentIpt==index?true:false"
+				:disabled="currentIpt>=index?false:true"/> -->
+			</view>
+			<text class="txt2">请输入6位数字支付密码</text>
+			<numberKeyboard psdLength='6' ref='KeyboarHid' @input='clickInput' />
+		</view>
+		
+		<!-- 选择优惠券 -->
+		<view class="yhqSel" :class="sModal1?'active':''">
+			<text class="titles">选择优惠券</text>
+			<text class="cancel" @tap="sModal1=false,sMask=false">取消</text>
+			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)" v-if="couponsList">
+				<view class="fengmian">
+					<view class="content">
+						￥<text>{{item.amount}}</text>
+					</view>
+				</view>
+				<view class="main">
+					<text class="title">{{item.title}}</text>
+				
+					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
+				</view>
+				<view class="circle" v-if="item.useFlag">
+					<text></text>
+				</view>
+		        <image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
+			</view>
+			<view v-if="!couponsList" class="none">
+				<image src="../../static/null.png" mode="" ></image>
+				<text>暂无优惠券</text>
+			</view>
 		</view>
 
 	</view>
 </template>
 
 <script>
+	import passwordInput from '../../components/password-input/password-input.vue'
+	import numberKeyboard from '../../components/number-keyboard/number-keyboard.vue'
 	import {
 	   mapState,
 	   mapMutations
     } from 'vuex';
+	import utils from '../../utils/method.js'
 	export default {
+		components: {
+			passwordInput,
+			numberKeyboard
+		},
 		data() {
 			return {
 				receiveWay:1,  //1自提，0快递
 				total:0,
 				totalScore:0,
+				isScore:'',
 				desc: '', //备注
 				fee:"0",
+				cart: "",
 				orderList:[],
 				addrText:"地址加载中...",  //
-				total2:"加载中..."
+				total2:"加载中...",
+				checked: false,
+				sModal: false,
+				currentIpt: 0,
+				password: '',
+				sMask: false,
+				sModal1: false,
+				couponsList:'',
+				yhq:0,   //优惠券数值
+				storeValue:0,  ///使用的储值
+				wuserCouponId:''
 			}
 		},
 		async onLoad(opt){
 			// console.log(this.userInfo)
+			if (!this.selectAddr) {
+				await this.getAddr()
+				this.total2 = "请选择地址"
+			}
+			if(opt.cart == 1){
+				this.cart = opt.cart
+				await this.getCart()
+				await this.getCartYf()
+				await this.getCoupons()
+			}else{
+				this.total = Number(this.order.price * this.order.number).toFixed(2)
+				await this.getCoupons()
+				await this.getYf()
+				if(opt.score == 'true'){
+					this.isScore = true
+					this.totalScore = this.order.exchangePoints
+				}
+			}
 		},
 		async onShow(){
-			this.total = 0;
-			if(!this.selectAddr){
-				await this.getAddr()
-			}
-			this.total = Number(this.order.price * this.order.number).toFixed(2)
-			if(this.receiveWay == 0){
-				await this.getYf()
-			}else{
-				this.total2 = this.total;
-			}
+			// this.total = 0;
+			// if(!this.selectAddr){
+			// 	await this.getAddr()
+			// }
+			// this.total = Number(this.order.price * this.order.number).toFixed(2)
+			// if(this.receiveWay == 0){
+			// 	await this.getYf()
+			// }else{
+			// 	this.total2 = this.total;
+			// }
+			
+			// if (opt.score == 'true') {
+			// 	this.isScore = true
+				
+			// }
+			
 		},
 		computed:{
 			...mapState(['order','selectAddr','userInfo','config'])
 		},
+		filters:{
+			date(data){
+				return utils.unixToDatetime(data,9)
+			}
+		},
+		watch:{
+			password(data){
+				let all=(Number(this.total) + Number(this.fee)-Number(this.yhq)).toFixed(2)
+				if(data.length>=6){
+					this.$http({
+						apiName:'checkPayPwd',
+						type:'POST',
+						data:{
+							tradepwd:utils.md5(this.password) 
+						}
+					}).then(res=>{
+						this.closePass()
+						
+						if(this.userInfo.cardAmount==0){
+							uni.showToast({
+								title:'储值余额为0',
+								duration:1500,
+								icon:'none'
+							})
+						}else if(this.userInfo.cardAmount>=all){
+							this.checked=true
+							this.storeValue=all
+							 this.total2=0
+						}else{
+							this.checked=true
+							this.storeValue=this.userInfo.cardAmount
+							this.total2=(Number(this.total)-Number(this.userInfo.cardAmount)).toFixed(2) 
+						}
+						
+						// this.storeValue=
+					}).catch(err=>{
+						this.$refs.KeyboarHid.iptNum=[]
+					})
+				}
+			}
+		},
 		methods: {
 			...mapMutations(['setSelectAddr']),
+			switchChecked() {
+				if (!this.checked) {
+					this.sModal = true
+					this.sMask = true
+					this.$refs.KeyboarHid.open();
+				}else{
+					this.$refs.KeyboarHid.iptNum=[]
+					this.checked=false
+					this.total2=(Number(this.total) + Number(this.fee)-this.yhq).toFixed(2)
+				}
+			},
+			clickInput(val) {
+				this.password = val;
+			},
+			closePass() {
+				this.sModal = false
+				this.sMask = false
+				this.$refs.KeyboarHid.close();
+				
+			},
+			openKeyboard() {
+			
+				if (!this.$refs.KeyboarHid.KeyboarHid) {
+					this.$refs.KeyboarHid.open();
+					
+				}
+			
+			},
+			yhqSel() {
+				this.sMask = true
+				this.sModal1 = true
+			},
 			async changeSend(e){
 				let _i = e.detail.value[0];
 				if(_i){
@@ -182,6 +375,7 @@
 				this.order.specSelected.map(item => {
 					_skuJson[item.key] = item.value
 				})
+				    let cardAmountFlag=this.checked?1:0
 				await this.$http({
 					apiName:"createFightOrder",
 					type:"POST",
@@ -201,12 +395,24 @@
 						sourceType:'3',
 						// #endif
 						skuJson:JSON.stringify(_skuJson),
-						remark:this.desc
+						remark:this.desc,
+						tradepwd:this.password,
+						cardAmountFlag:cardAmountFlag,
+						wuserCouponId:this.wuserCouponId
 					}
 				}).then(res => {
-					uni.redirectTo({
-						url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}&group=1`
-					})
+					// uni.redirectTo({
+					// 	url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}&group=1`
+					// })
+					if(this.total2>0){
+							uni.redirectTo({
+								url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}&group=1`
+							})
+					}else{
+							uni.redirectTo({
+								url: "/pages/money/paySuccess"
+							})
+					}
 				}).catch(_ => {})
 				
 			},
@@ -294,12 +500,52 @@
 					}).catch(_ =>{})
 				}
 			},
-			stopPrevent(){}
+			stopPrevent(){},
+			async getCoupons(){
+					await this.$http({
+						apiName:'getOrderCoupon',
+						// type:'POST',
+						data:{
+							payAmount:this.total
+						}
+					}).then(res=>{
+						this.couponsList=res.data
+					}).catch(err=>{})
+				},
+				selCoupon(item){
+					if(item.useFlag){
+						this.sMask = false
+						this.sModal1 = false
+						this.yhq=item.amount
+						this.wuserCouponId=item.wuserCouponId
+						if(this.total<=item.amount){
+							this.total2=0
+							this.checked=false
+						}else{
+							if(this.checked){
+								if((Number(this.total) + Number(this.fee)).toFixed(2)>this.userInfo.cardAmount){
+									this.storeValue=this.userInfo.cardAmount
+								}else{
+									this.storeValue=(this.total-Number(item.amount)).toFixed(2)
+								}
+								
+							}
+							this.total2=(Number(this.total)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+						}
+						
+					}else{
+						uni.showToast({
+							title:'该优惠券不可用'
+						})
+					}
+					
+				}
+			
 		},
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	page {
 		background: $page-color-base;
 		padding-bottom: 100rpx;
@@ -569,7 +815,8 @@
 		.cell-tip {
 			font-size: 26rpx;
 			color: $font-color-dark;
-
+            min-width: 100rpx;
+			text-align: right;
 			&.disabled {
 				color: $font-color-light;
 			}
@@ -584,14 +831,15 @@
 
 		&.desc-cell {
 			.cell-tit {
-				max-width: 90rpx;
+				// max-width: 150rpx;
 			}
 		}
 
 		.desc {
-			flex: 1;
+		
 			font-size: $font-base;
 			color: $font-color-dark;
+			width: 550rpx;
 		}
 	}
 	
@@ -784,5 +1032,256 @@
 			}
 		}
 	}
-
+    .switch {
+    	width: 66rpx;
+    	height: 40rpx;
+    	margin-left: 20rpx;
+    }
+    
+    .validateBox {
+    	height: 0;
+    	position: fixed;
+    	left: 0;
+    	bottom: 0;
+    	width: 100%;
+    	background: #fff;
+    	z-index: 999;
+    	display: flex;
+    	// justify-content: center;
+    	flex-direction: column;
+    	align-items: center;
+    	// position: relative;
+    	overflow: hidden;
+    
+    	// opacity: 0;
+    	.iconfont {
+    		font-size: 30rpx;
+    		position: absolute;
+    		left: 20rpx;
+    		top: 20rpx;
+    		// left: 0;
+    	}
+    
+    	.txt1 {
+    		margin: 38rpx 0;
+    	}
+    
+    	.input_area {
+    		margin-top: 30rpx;
+    		display: flex;
+    
+    		.box {
+    			width: 80rpx;
+    			height: 80rpx;
+    			border: 2rpx solid rgba(192, 196, 204, 1);
+    			text-align: center;
+    			margin-right: 20rpx;
+    		}
+    
+    		.box:last-child {
+    			margin-right: 0;
+    		}
+    	}
+    
+    	.txt2 {
+    		font-size: 30rpx;
+    		font-family: PingFangSC-Regular, PingFang SC;
+    		font-weight: 400;
+    		color: rgba(192, 196, 204, 1);
+    		margin-top: 30rpx;
+    		margin-bottom: 100rpx;
+    	}
+    }
+    
+    .validateBox.active {
+    	transition: .4s;
+    	// opacity: 1;
+    	// min-height: 410rpx;
+    	height: auto;
+    }
+    
+    .yhqSel {
+    	height: 0;
+    	position: fixed;
+    	left: 0;
+    	bottom: 0;
+    	width: 100%;
+    	background: #fff;
+    	z-index: 999;
+    	display: flex;
+    	flex-direction: column;
+    	align-items: center;
+        background: #F9FAFB;
+    	overflow: scroll;
+    	// padding:0 32rpx 60rpx;
+    	.titles {
+    		margin: 38rpx 0 58rpx;
+    		font-size: 32rpx;
+    		font-family: PingFangSC-Medium, PingFang SC;
+    		font-weight: 600;
+    		color: rgba(48, 49, 51, 1);
+    	}
+       .cancel{
+    	   position: absolute;
+    	   right: 30rpx;
+    	   top: 48rpx;
+    	   font-size:24rpx;
+    	   font-family:PingFangSC-Regular,PingFang SC;
+    	   font-weight:400;
+    	   color:rgba(242,61,61,1);
+       }
+    	.card-item {
+    		// margin:0 32rpx;
+    		background: #fff;
+    		width: 700rpx;
+    		height: 200rpx;
+    		display: flex;
+    		margin-bottom: 40rpx;
+    		// align-items: center;
+      
+    		.fengmian {
+    			width: 200rpx;
+    			height: 200rpx;
+    			// position: absolute;
+    			// left: 0;
+    			// top: 0;
+    			background: url(../../static/yhq.png) no-repeat;
+    			background-size: 100%;
+    			display: flex;
+    			align-items: center;
+    			justify-content: center;
+    
+    			.content {
+    				font-size: 28rpx;
+    				font-family: PingFangSC-Semibold, PingFang SC;
+    				font-weight: 600;
+    				color: rgba(255, 255, 255, 1);
+    				display: flex;
+    				align-items: flex-end;
+    
+    				text {
+    					font-size: 52rpx;
+    					line-height: 58rpx;
+    				}
+    			}
+    
+    		}
+    
+    		.main {
+    			flex: 1;
+    			margin: 0 10rpx 0 30rpx;
+    			overflow: hidden;
+    			display: flex;
+    			flex-direction: column;
+    			justify-content: space-around;
+    			height: 100%;
+    
+    			.title {
+    				overflow: hidden;
+    				white-space: nowrap;
+    				text-overflow: ellipsis;
+    				font-size: 32rpx;
+    				font-family: PingFangSC-Regular, PingFang SC;
+    				font-weight: 500;
+    				color: rgba(48, 49, 51, 1);
+    				// width: 100%;
+    				width: 100%;
+    			}
+    
+    			.info {
+    				display: flex;
+    				justify-content: space-between;
+    				align-items: center;
+    
+    				.txt {
+    					font-size: 28rpx;
+    					font-family: PingFangSC-Regular, PingFang SC;
+    					font-weight: 400;
+    					color: rgba(168, 171, 179, 1);
+    				}
+    
+    				.btn {
+    					border-radius: 22rpx;
+    
+    					padding: 0 18rpx;
+    					line-height: 44rpx;
+    					font-size: 28rpx;
+    					font-family: PingFangSC-Regular, PingFang SC;
+    					font-weight: 400;
+    
+    				}
+    
+    				.btn1 {
+    					border: 2rpx solid rgba(242, 61, 61, 1);
+    					color: rgba(242, 61, 61, 1);
+    				}
+    
+    				.btn2 {
+    					border: 2rpx solid rgba(144, 147, 153, 1);
+    					color: rgba(144, 147, 153, 1);
+    				}
+    			}
+    
+    			.date {
+    				font-size: 24rpx;
+    				font-family: PingFangSC-Regular, PingFang SC;
+    				font-weight: 400;
+    				color: rgba(168, 171, 179, 1);
+    			}
+    		}
+    	}
+    
+    	.card-item:last-child {
+    		margin-bottom: 60rpx;
+    	}
+    
+    	.circle {
+    		text{
+    			width: 36rpx;
+    			height: 36rpx;
+    			border: 2rpx solid rgba(217, 217, 217, 1);
+    			border-radius: 50%;
+    		}
+    		height: 100%;
+    		margin-right: 30rpx;
+    		display: flex;
+    		align-items: center;
+    	}
+    	.nouse{
+    		width: 104rpx;
+    		height: 104rpx;
+    		
+    	}
+		.none{
+			image{
+				width: 200rpx;
+				height: 150rpx;
+				margin-bottom: 20rpx;
+			}
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%,-50%);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-size:28rpx;
+			font-family:PingFangSC-Regular,PingFang SC;
+			font-weight:400;
+			color:rgba(144,147,153,1);
+		}
+    }
+    
+    .yhqSel.active {
+    	transition: .4s;
+    	height: 700rpx;
+    }
+	.masks {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(52, 52, 52, 0.7);
+	}
 </style>

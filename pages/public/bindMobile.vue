@@ -194,14 +194,14 @@
 							title:'绑定手机号成功',
 							duration:1500
 						})
-						console.log(res)
+						
 						utils.setSesion(res.data)
 						utils.getUserInfo()
 						utils.afterLoginJump()
 					}).catch(err=>{
-						uni.redirectTo({
-							url:'../set/loginPwd'
-						})
+						// uni.redirectTo({
+						// 	url:'../set/loginPwd'
+						// })
 						// uni.showToast({
 						// 	title:'绑定失败'
 						// })

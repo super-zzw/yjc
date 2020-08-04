@@ -8,9 +8,9 @@
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
-		<view class="list-cell b-b m-t" @click="toPage('/pages/userinfo/userinfo?from=set',true)" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b m-t" @click="bindWx" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">绑定微信</text>
-			<view class="cell-more">
+			<view class="cell-more" >
 				<text>{{userInfo.appBindExFlag?'已绑定':'未绑定'}}</text>
 				<text class="cell-more iconfont iconchakanquanbu"></text>
 			</view>
@@ -29,7 +29,7 @@
 			<text class="cell-tip">{{cache}}</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
-		<view class="list-cell b-b " @click="toPage('/pages/userinfo/userinfo?from=set')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b " @click="toAbout" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">关于 优之汇商城</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
@@ -101,6 +101,69 @@
 				uni.navigateTo({
 					url:url
 				})
+			},
+			bindWx(){
+				// console.log(this.userInfo.payPwdFlag)
+				if(!this.hasLogin){
+					this.setAfterLoginUrl(url);
+					uni.navigateTo({
+						url:"/pages/public/login"
+					})
+				}else{
+					console.log(this.userInfo.payPwdFlag)
+					if(this.userInfo.appBindExFlag){
+						
+						return
+					}else{
+					
+						uni.login({
+							provider: 'weixin',
+							success: (res) => {
+								uni.getUserInfo({
+									provider: 'weixin',
+									success: (info) => {
+										uni.setStorageSync('appInfo', info.userInfo)
+										console.log(info.userInfo)
+										this.$http({
+											apiName: 'appWxLogin',
+											type: 'POST',
+											data: {
+												appOpenId: info.userInfo.openId,
+												headUrl: info.userInfo.avatarUrl,
+												wuserName: info.userInfo.nickName
+											}
+										}).then(res => {
+											console.log(res)
+											uni.showToast({
+												title: '绑定成功',
+												mask: false,
+												duration: 1500,
+												
+											});
+											utils.getUserInfo()
+											uni.navigateTo({
+												url:'/pages/set/set'
+											})
+											
+										}).catch(err => {
+											
+											if(err.code==500070){
+												uni.redirectTo({
+												       url:'../public/bindMobile'
+											   })
+											}else{
+												uni.redirectTo({
+										              url:'../set/loginPwd'
+												})
+											}
+											
+										})
+									}
+								})
+							}
+						})
+					}
+				}
 			},
 			loginOut(){
 				var that = this

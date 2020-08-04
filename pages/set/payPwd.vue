@@ -81,27 +81,29 @@
 							// newPassword:utils.md5(this.newPwd),
 							tradepwd:utils.md5(this.password),
 							authCode:this.code,
-							// // #ifdef APP-PLUS
-							// sourceType:1,  //0pc,1app,2公众号，3小程序
-							// // #endif
-							// // #ifdef H5
-							// sourceType:2,  //0pc,1app,2公众号，3小程序
-							// // #endif
-							// // #ifdef MP-WEIXIN
-							// sourceType:3,  //0pc,1app,2公众号，3小程序
-							// // #endif
+							// #ifdef APP-PLUS
+							sourceType:1,  //0pc,1app,2公众号，3小程序
+							// #endif
+							// #ifdef H5
+							sourceType:2,  //0pc,1app,2公众号，3小程序
+							// #endif
+							// #ifdef MP-WEIXIN
+							sourceType:3,  //0pc,1app,2公众号，3小程序
+							// #endif
 						}
 					}).then(res => {
 						uni.showToast({
 							title:"设置成功"
 						})
-						utils.rmData()
+						this.confirmBtnDisable = false;
+						 utils.getUserInfo()
+						// utils.rmData()
 						setTimeout(_ => {
-							this.confirmBtnDisable = false;
-							uni.reLaunch({
-							    url: '/pages/user/user'
-							});
-						},2000)
+							uni.navigateBack()
+							// uni.reLaunch({
+							//     url: '/pages/user/user'
+							// });
+						},1500)
 					}).catch(_ => {
 						this.confirmBtnDisable = false;
 					})
