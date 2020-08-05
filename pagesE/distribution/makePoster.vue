@@ -1,7 +1,7 @@
 <template>
 	<view class="mWrap">
 		<view class="posterBox">
-			<image class="poster" :src="posterUrl" mode="heightFix"></image>
+			<image class="poster" :src="posterUrl" mode="heightFix" @load="loadImg"></image>
 		</view>
 		<view class="imgList">
 			<image class="imgItem" :src="item.url" v-for="item in imgList" :key="item.id" mode="heightFix" @tap="changePoster(item.id)"></image>
@@ -51,9 +51,12 @@ export default{
 		await this.getPoster();
 		await this.getList();
 		this.getInfo();
-		uni.hideLoading()
+		
 	},
 	methods:{
+		loadImg(){
+			uni.hideLoading()
+		},
 		getInfo(){
 			this.$http({
 				apiName:"DistributionInfo"
@@ -87,18 +90,19 @@ export default{
 			await this.getPoster();
 			uni.hideLoading()
 		},
-		shareOthers(t){
-			if(t == '微信好友'){
+		shareOthers(e){
+			let name = ""
+			if(e == '微信好友'){
 				name = "WXSceneSession";
 				// #ifdef APP-PLUS
 				this.appShare(name,e);
 				// #endif
-			}else if(t == '朋友圈'){
+			}else if(e == '朋友圈'){
 				name = "WXSenceTimeline";
 				// #ifdef APP-PLUS
 				this.appShare(name,e);
 				// #endif
-			}else if(t == '保存本地'){
+			}else if(e == '保存本地'){
 				this.saveImg()
 			}
 		},

@@ -1,15 +1,14 @@
 <template>
-	<view class="container">
-	   <view class="method">
-		   <!-- <image src="../image/bg1.png" mode="widthFix"></image> -->
-		 
+	<view class="container" v-if="config">
+		<image :src="config.POSTER_RULE" class="posterImg"></image>
+	   <!-- <view class="method">
 		   <view class="title">
 			     <text class="point"></text>
 			   <text class="txt">参与方式</text>
 			   <text class="point"></text>
 			</view>
 		    
-	   </view>
+	   </view> -->
 	   <button type="default" class="inviteBtn" @tap="handleInvite">立即邀请</button>
 	   <share
 	   	ref="share" 
@@ -23,6 +22,7 @@
 <script>
 	import Share from "../../components/share.vue";
 	import utils from '@/utils/method.js'
+	import {mapState} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -47,6 +47,9 @@
 				info:{}
 			};
 		},
+		computed:{
+			...mapState(['config'])
+		},
 		components:{Share},
 		async onLoad() {
 			await this.getInfo();
@@ -62,23 +65,23 @@
 			handleInvite(){
 				this.$refs.share.toggleMask();	
 			},
-			shareOthers(t){
-				console.log(t);
-				if(t == '微信好友'){
+			shareOthers(e){
+				let name = "";
+				if(e == '微信好友'){
 					name = "WXSceneSession";
 					// #ifdef APP-PLUS
 					this.appShare(name,e);
 					// #endif
-				}else if(t == '朋友圈'){
+				}else if(e == '朋友圈'){
 					name = "WXSenceTimeline";
 					// #ifdef APP-PLUS
 					this.appShare(name,e);
 					// #endif
-				}else if(t == '生成海报'){
+				}else if(e == '生成海报'){
 					uni.navigateTo({
 						url:"/pagesE/distribution/makePoster"
 					})
-				}else if(t == '复制链接'){
+				}else if(e == '复制链接'){
 					let _this = this;
 					uni.setClipboardData({
 						data: _this.info.distributeInviteUrl,
@@ -118,8 +121,11 @@
    .container{
 	   height:calc(100vh - 88rpx);
 	   width: 100vw;
-	   background: url(../image/haibao.png);
-	   background-size: 100% 100%;
+	   .posterImg{
+		   width: 100%;
+		   height: 100%;
+		   display: block;
+	   }
 	   .method{
 		   position: absolute;
 		   bottom: 170rpx;
