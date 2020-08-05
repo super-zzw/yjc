@@ -31,9 +31,12 @@
 							<text class="state">
 								<!-- -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部 -->
 								<!-- 发货之后不可取消订单，只有联系售后 -->
-								<text v-if="item.orderType == 2 && item.status != 5">
+								<text v-if="item.orderType == 2">
 									<text v-if="currentTime < item.endGroupTime && item.groupMember < item.minMember">待成团</text>
-									<text v-else-if="item.groupMember >= item.minMember">已成团，待发货</text>
+									<text v-else-if="item.groupMember >= item.minMember">
+										<text v-if="item.status == 1">已成团，待发货</text>
+										<text v-if="item.status == 2">待收货</text>
+									</text>
 									<text v-else>未成团</text>
 								</text>
 								<text v-else>
