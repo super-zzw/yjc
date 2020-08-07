@@ -1,4 +1,5 @@
 <script>
+	// 这是一句才
 	import utils from 'utils/method.js'
 	import store from 'store/index.js'
 	export default {
