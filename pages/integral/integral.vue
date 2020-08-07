@@ -63,7 +63,7 @@
 		<view class="s-box5">
 			<navigator url="" hover-class="none" class="nav">
 				<text class="iconfont iconjifenzhongxin"></text>
-				<text class="txt">积分中心</text>
+				<text class="txt">优币中心</text>
 			</navigator>
 			<navigator url="./record" hover-class="none" class="nav">
 				<text class="iconfont iconduihuanjilu"></text>
@@ -174,7 +174,7 @@
 					apiName:"setSigin",
 					type:"POST"
 				}).then(res => {
-					this.userInfo.integration += 5;
+					utils.getUserInfo()
 					uni.showToast({
 						title:"签到成功"
 					})
@@ -420,7 +420,7 @@
 			justify-content: center;
 			.iconfont{
 				font-size: 48rpx;
-				// color: #909399;
+				
 			}
 			.txt{
 				font-size:24rpx;

@@ -58,6 +58,7 @@
 			margin-top: 30rpx;
 			text-align: center;
 			border: 2rpx solid gray;
+			
 		}
 	}
 </style>

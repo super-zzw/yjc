@@ -1,6 +1,6 @@
 <script>
 	import utils from 'utils/method.js'
-	
+	import store from 'store/index.js'
 	export default {
 		methods: {
 		},

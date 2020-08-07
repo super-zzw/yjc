@@ -55,7 +55,7 @@
 <style lang="scss" scoped>
    .container{
 	   // background: $page-color-base;
-	   height: calc(100vh - 88rpx);
+	   min-height: calc(100vh - 88rpx);
 	   .wrapper{
 		   padding: 0 32rpx 100rpx;
 		     background: #fff;

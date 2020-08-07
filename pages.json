@@ -570,7 +570,7 @@
 		}, {
 			"path": "pages/integral/integral",
 			"style": {
-				"navigationBarTitleText": "我的积分",
+				"navigationBarTitleText": "我的优币",
 				"app-plus": {
 					"bounce": "none",
 					"titleNView": {

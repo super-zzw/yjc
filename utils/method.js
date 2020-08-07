@@ -64,7 +64,8 @@ export default{
 		store.commit('setLogin',false)
 		store.commit('setUserInfo',{})
 		store.commit('setOrder',[])
-		store.commit('setSelectAddr',null)
+		store.commit('setCartNms',0)
+	
 		uni.removeStorageSync('yzhexpireTime');
 		uni.removeStorageSync('yzhloginSession');
 		uni.removeStorageSync('yzhrefreshSession');

@@ -91,15 +91,15 @@
 						uni.showToast({
 							title:"设置成功"
 						})
-						utils.rmData()
-						console.log(res)
+						// utils.rmData()
 						utils.setSesion(res.data)
 						utils.getUserInfo()
 						setTimeout(_ => {
 							this.confirmBtnDisable = false;
-							uni.reLaunch({
-							    url: '/pages/user/user'
-							});
+							utils.afterLoginJump()
+							// uni.reLaunch({
+							//     url: '/pages/user/user'
+							// });
 						},2000)
 					}).catch(_ => {
 						this.confirmBtnDisable = false;

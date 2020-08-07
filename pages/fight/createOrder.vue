@@ -85,7 +85,7 @@
 				<text class="cell-tit clamp">商品金额</text>
 				<text class="cell-tip">￥{{total}}</text>
 			</view>
-			<view class="yt-list-cell b-b">
+			<view class="yt-list-cell b-b" v-if="receiveWay!=1">
 				<text class="cell-tit clamp">运费</text>
 				<text class="cell-tip">{{fee}}</text>
 			</view>
@@ -205,7 +205,7 @@
 				totalScore:0,
 				isScore:'',
 				desc: '', //备注
-				fee:"0",
+				fee:0,
 				cart: "",
 				orderList:[],
 				addrText:"地址加载中...",  //
@@ -231,12 +231,13 @@
 			if(opt.cart == 1){
 				this.cart = opt.cart
 				await this.getCart()
-				await this.getCartYf()
+				// await this.getCartYf()
 				await this.getCoupons()
 			}else{
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
+				this.total2=Number(this.total).toFixed(2)
 				await this.getCoupons()
-				await this.getYf()
+				// await this.getYf()
 				if(opt.score == 'true'){
 					this.isScore = true
 					this.totalScore = this.order.exchangePoints
@@ -244,6 +245,12 @@
 			}
 		},
 		async onShow(){
+			// if (this.selectAddr) {
+			
+			// 	this.total2=Number(this.total+this.fee-this.storeValue-this.yhq).toFixed(2)
+			// }else{
+			// 	this.total2='请选择地址'
+			// }
 			// this.total = 0;
 			// if(!this.selectAddr){
 			// 	await this.getAddr()
@@ -281,7 +288,6 @@
 						}
 					}).then(res=>{
 						this.closePass()
-						
 						if(this.userInfo.cardAmount==0){
 							uni.showToast({
 								title:'储值余额为0',
@@ -289,13 +295,14 @@
 								icon:'none'
 							})
 						}else if(this.userInfo.cardAmount>=all){
+							console.log(1)
 							this.checked=true
 							this.storeValue=all
 							 this.total2=0
 						}else{
 							this.checked=true
 							this.storeValue=this.userInfo.cardAmount
-							this.total2=(Number(this.total)-Number(this.userInfo.cardAmount)).toFixed(2) 
+							this.total2=(Number(this.total)+ Number(this.fee)-Number(this.userInfo.cardAmount)-Number(this.yhq)).toFixed(2) 
 						}
 						
 						// this.storeValue=
@@ -303,19 +310,75 @@
 						this.$refs.KeyboarHid.iptNum=[]
 					})
 				}
+			},
+			selectAddr(item){
+			
+				if(this.receiveWay==1){
+					return
+				}
+				if(item){
+					// if(this.cart==1){
+					// 	this.getCartYf()
+					// }else{
+						this.getYf()
+					// }
+					this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				}else{
+					return
 			}
+			},
+			storeValue(value){
+				if(value==0){
+					this.checked=false
+				}
+			},
+			// total2(value){
+			// 	if(value<0){
+			// 		this.total2=0
+			// 	}else{
+			// 		this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+			// 	}
+			// }
 		},
 		methods: {
 			...mapMutations(['setSelectAddr']),
 			switchChecked() {
-				if (!this.checked) {
-					this.sModal = true
-					this.sMask = true
-					this.$refs.KeyboarHid.open();
+				if(this.userInfo.payPwdFlag){
+					if (!this.checked) {
+						if((Number(this.total) + Number(this.fee)).toFixed(2)<=this.yhq){
+							uni.showToast({
+								title:'您无需使用储值',
+								icon:'none'
+							})
+						}else{
+							this.sModal = true
+							this.sMask = true
+							this.$refs.KeyboarHid.open();
+						}
+						
+					}else{
+						this.$refs.KeyboarHid.iptNum=[]
+						this.checked=false
+						this.storeValue=0
+						this.total2=(Number(this.total) + Number(this.fee)-Number(this.yhq) ).toFixed(2)
+					}
 				}else{
-					this.$refs.KeyboarHid.iptNum=[]
-					this.checked=false
-					this.total2=(Number(this.total) + Number(this.fee)-this.yhq).toFixed(2)
+					uni.showModal({
+						title: '提示',
+						content:'您还未设置支付密码，请前往设置',
+						success(res) {
+							if(res.confirm){
+								uni.navigateTo({
+									url:'../set/payPwd'
+								})
+								// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
+							}else{
+								return
+							}
+						
+						}
+						
+					})
 				}
 			},
 			clickInput(val) {
@@ -341,13 +404,28 @@
 			},
 			async changeSend(e){
 				let _i = e.detail.value[0];
+			
 				if(_i){
 					this.receiveWay = 1;  //自提
-					this.total2 = this.total;
+					// this.total2 = this.total;
+					this.fee=0
+					if(this.checked){
+						this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+					}
+					if(Number(this.yhq)>Number(this.total)){
+						this.total2=0
+					}else{
+						this.total2=Number(this.total)-Number(this.storeValue)-Number(this.yhq)
+					}
+					
 				}else{
+				  
+					this.getYf()
 					this.receiveWay = 0;  //运费
-					await this.getYf();
+					// await this.getYf();
 				}
+				// this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq) 
+				// this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
 			},
 			fetchAddr(){
 				uni.navigateTo({
@@ -362,7 +440,7 @@
 					this.orderList = res.data
 					this.orderList.map(item => {
 						if(item.checkedFlag){
-							that.total = that.total + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
+							that.total =Number(that.total) + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
 							// that.total = (that.total + Number(Number(item.promotionPrice * item.number).toFixed(2)))
 							// console.log(that.total)
 						}
@@ -396,7 +474,7 @@
 						// #endif
 						skuJson:JSON.stringify(_skuJson),
 						remark:this.desc,
-						tradepwd:this.password,
+						tradepwd:utils.md5(this.password),
 						cardAmountFlag:cardAmountFlag,
 						wuserCouponId:this.wuserCouponId
 					}
@@ -480,8 +558,22 @@
 							province:this.selectAddr.province
 						}
 					}).then(res => {
+						
 						this.fee = res.data.fee
-						this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
+					    if(this.checked){
+							console.log(1)
+						if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+							this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+						}else{
+							this.storeValue=this.userInfo.cardAmount
+						}
+						}
+						if(Number(this.total)+Number(this.fee)<=Number(this.yhq)){
+							this.total2=0
+						}else{
+							this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+						}
+						
 					}).catch(_ =>{})
 					uni.hideLoading()
 				}
@@ -518,19 +610,22 @@
 						this.sModal1 = false
 						this.yhq=item.amount
 						this.wuserCouponId=item.wuserCouponId
-						if(this.total<=item.amount){
+						if(Number(this.total) +Number(this.fee)<=item.amount){
 							this.total2=0
 							this.checked=false
+							this.$refs.KeyboarHid.iptNum=[]
 						}else{
 							if(this.checked){
-								if((Number(this.total) + Number(this.fee)).toFixed(2)>this.userInfo.cardAmount){
+								if((Number(this.total) + Number(this.fee)-Number(item.amount)).toFixed(2)>this.userInfo.cardAmount){
 									this.storeValue=this.userInfo.cardAmount
 								}else{
-									this.storeValue=(this.total-Number(item.amount)).toFixed(2)
+									this.storeValue=(Number(this.total)+Number(this.fee)-Number(item.amount)).toFixed(2)
 								}
-								
+									
 							}
-							this.total2=(Number(this.total)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+							
+						this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+							// this.total2=(Number(this.total) + Number(this.fee)).toFixed(2)
 						}
 						
 					}else{

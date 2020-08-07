@@ -42,7 +42,8 @@
 					<image v-if="imgItem.icon && imgIndex < 10" class="img" :src="imgItem.icon" mode=""></image>
 				</view>
 				<text class="fpNumst1">已有{{fightData.group.length}}人参团，</text>
-				<text class="fpNumst2">还差{{fightData.minMember - fightData.group.length}}人成团</text>
+				<text class="fpNumst2" v-if="fightData.minMember - fightData.group.length>0">还差{{fightData.minMember - fightData.group.length}}人成团</text>
+				<text class="fpNumst2" v-else>已成团</text>
 			</view>
 		</view>
 		<view class="share-section share-section2" v-if="sevenReturnApply == 1">正品保证·支持7天无理由退换货</view>

@@ -1,120 +1,122 @@
 <template>
 	<view>
-		<!-- 地址 -->
-		<view @tap="fetchAddr" class="address-section">
-			<view class="order-content order-content2" v-if="!selectAddr">
-				<text class="iconfont icondizhi"></text>
-				<view class="cen">
-					<view class="top">
-						<text class="name">{{addrText}}</text>
-						<text class="mobile"></text>
+		<view class="scrollview">
+			<!-- 地址 -->
+			<view @tap="fetchAddr" class="address-section">
+				<view class="order-content order-content2" v-if="!selectAddr">
+					<text class="iconfont icondizhi"></text>
+					<view class="cen">
+						<view class="top">
+							<text class="name">{{addrText}}</text>
+							<text class="mobile"></text>
+						</view>
+						<text class="address"></text>
 					</view>
-					<text class="address"></text>
-				</view>
-				<text class="iconfont iconright"></text>
-			</view>
-			<view class="order-content" v-else>
-				<text class="iconfont icondizhi"></text>
-				<view class="cen">
-					<view class="top">
-						<text class="name">{{selectAddr.name}}</text>
-						<text class="mobile">{{selectAddr.phoneNumber}}</text>
-					</view>
-					<text class="address">{{selectAddr.province}}{{selectAddr.city}}{{selectAddr.region}}{{selectAddr.detailAddress}}</text>
-				</view>
-				<text class="iconfont iconright"></text>
-			</view>
-
-			<image class="a-bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/orderLine.png"></image>
-		</view>
-
-		<view class="goods-section" v-if="cart == 1">
-			<view class="g-item" v-for="(item,index) in orderList" :key="index" v-if="item.checkedFlag">
-				<image :src="item.picUrl"></image>
-				<view class="right">
-					<text class="title clamp">{{item.title}}</text>
-					<text class="spec">
-						<text class="spec-text" v-for="(aitem,akey,aindex) in item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
-					</text>
-					<view class="price-box">
-						<text class="price nm-font">￥{{item.minPrice || item.promotionPrice}}</text>
-						<text class="number">x {{item.number}}</text>
-					</view>
-				</view>
-			</view>
-		</view>
-		<view class="goods-section" v-else>
-			<!-- 商品列表 -->
-
-			<view class="g-item">
-				<image :src="order.picUrl"></image>
-				<view class="right">
-					<text class="title clamp">{{order.title}}</text>
-					<text class="spec">
-						<text class="spec-text" v-for="(item,index) in order.specSelected" :key="index">{{item.value}}</text>
-					</text>
-					<view class="price-box" v-if="!isScore">
-						<text class="price">￥{{order.price}}</text>
-						<text class="number">x {{order.number}}</text>
-					</view>
-				</view>
-			</view>
-		</view>
-
-		<!-- 金额明细 -->
-		<view class="yt-list">
-			<view class="yt-list-cell b-b" v-if="isScore">
-				<text class="cell-tit clamp">消耗{{config.MALL_POINT_TITLE}}</text>
-				<text class="cell-tip">{{totalScore}}</text>
-			</view>
-			<view class="yt-list-cell b-b" v-else>
-				<text class="cell-tit clamp">商品金额</text>
-				<text class="cell-tip">￥{{total}}</text>
-			</view>
-			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip" v-if="isScore">{{config.MALL_POINT_TITLE}}兑换免运费</text>
-				<text class="cell-tip" v-else>{{fee}}</text>
-			</view>
-			<view class="yt-list-cell desc-cell b-b">
-				<text class="cell-tit clamp">备注</text>
-				<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder1" />
-			</view>
-			<view class="yt-list-cell desc-cell" v-if="order.productType == 3">
-				<text class="cell-tit clamp">提示：</text>
-				<input class="desc" type="text" value="虚拟商品付款后请联系客服获取相关信息" disabled />
-			</view>
-		</view>
-
-		<!-- 优惠 -->
-		<view class="yt-list">
-
-			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">优惠券</text>
-				<view class="cell-tip" @tap="yhqSel">
-					<text class="cell-right" v-if="yhq">优惠¥{{yhq}}</text>
 					<text class="iconfont iconright"></text>
-
+				</view>
+				<view class="order-content" v-else>
+					<text class="iconfont icondizhi"></text>
+					<view class="cen">
+						<view class="top">
+							<text class="name">{{selectAddr.name}}</text>
+							<text class="mobile">{{selectAddr.phoneNumber}}</text>
+						</view>
+						<text class="address">{{selectAddr.province}}{{selectAddr.city}}{{selectAddr.region}}{{selectAddr.detailAddress}}</text>
+					</view>
+					<text class="iconfont iconright"></text>
 				</view>
 
+				<image class="a-bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/orderLine.png"></image>
 			</view>
-			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">储值余额抵扣</text>
-				<view class="flex align-items">
-					<text class="cell-tip" v-if="checked">储值余额抵扣¥{{storeValue}}</text>
-					<image src="../../static/off.png" mode="" class="switch" @tap="switchChecked" v-if="!checked"></image>
-					<image src="../../static/on.png" mode="" class="switch" @tap="switchChecked" v-else></image>
+
+			<view class="goods-section" v-if="cart == 1">
+				<view class="g-item" v-for="(item,index) in orderList" :key="index" v-if="item.checkedFlag">
+					<image :src="item.picUrl"></image>
+					<view class="right">
+						<text class="title clamp">{{item.title}}</text>
+						<text class="spec">
+							<text class="spec-text" v-for="(aitem,akey,aindex) in item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
+						</text>
+						<view class="price-box">
+							<text class="price nm-font">￥{{item.minPrice || item.promotionPrice}}</text>
+							<text class="number">x {{item.number}}</text>
+						</view>
+					</view>
 				</view>
-				
-				<!-- <text class="cell-tip" v-else>{{fee}}</text> -->
 			</view>
-			<view class="yt-list-cell desc-cell b-b">
-				<text class="cell-tit clamp">剩余待支付</text>
-				<text class="cell-right">¥{{total2}}</text>
-				<!-- <input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" /> -->
+			<view class="goods-section" v-else>
+				<!-- 商品列表 -->
+
+				<view class="g-item">
+					<image :src="order.picUrl"></image>
+					<view class="right">
+						<text class="title clamp">{{order.title}}</text>
+						<text class="spec">
+							<text class="spec-text" v-for="(item,index) in order.specSelected" :key="index">{{item.value}}</text>
+						</text>
+						<view class="price-box" v-if="!isScore">
+							<text class="price">￥{{order.price}}</text>
+							<text class="number">x {{order.number}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<!-- 金额明细 -->
+			<view class="yt-list">
+				<view class="yt-list-cell b-b" v-if="isScore">
+					<text class="cell-tit clamp">消耗{{config.MALL_POINT_TITLE}}</text>
+					<text class="cell-tip">{{totalScore}}</text>
+				</view>
+				<view class="yt-list-cell b-b" v-else>
+					<text class="cell-tit clamp">商品金额</text>
+					<text class="cell-tip">￥{{total}}</text>
+				</view>
+				<view class="yt-list-cell b-b">
+					<text class="cell-tit clamp">运费</text>
+					<text class="cell-tip" v-if="isScore">{{config.MALL_POINT_TITLE}}兑换免运费</text>
+					<text class="cell-tip" v-else>{{fee}}</text>
+				</view>
+				<view class="yt-list-cell desc-cell b-b">
+					<text class="cell-tit clamp">备注</text>
+					<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder1" />
+				</view>
+				<view class="yt-list-cell desc-cell" v-if="order.productType == 3">
+					<text class="cell-tit clamp">提示：</text>
+					<input class="desc" type="text" value="虚拟商品付款后请联系客服获取相关信息" disabled />
+				</view>
+			</view>
+
+			<!-- 优惠 -->
+			<view class="yt-list" v-if="!isScore">
+
+				<view class="yt-list-cell b-b">
+					<text class="cell-tit clamp">优惠券</text>
+					<view class="cell-tip" @tap="yhqSel">
+						<text class="cell-right" v-if="yhq">优惠¥{{yhq}}</text>
+						<text class="iconfont iconright"></text>
+
+					</view>
+
+				</view>
+				<view class="yt-list-cell b-b">
+					<text class="cell-tit clamp">储值余额抵扣</text>
+					<view class="flex align-items">
+						<text class="cell-tip" v-if="checked">储值余额抵扣¥{{storeValue}}</text>
+						<image src="../../static/off.png" mode="" class="switch" @tap="switchChecked" v-if="!checked"></image>
+						<image src="../../static/on.png" mode="" class="switch" @tap="switchChecked" v-else></image>
+					</view>
+
+					<!-- <text class="cell-tip" v-else>{{fee}}</text> -->
+				</view>
+				<view class="yt-list-cell desc-cell b-b">
+					<text class="cell-tit clamp">剩余待支付</text>
+					<text class="cell-right" v-if="selectAddr">¥{{total2}}</text>
+					<text class="cell-right" v-else>{{total2}}</text>
+					<!-- <input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" /> -->
+				</view>
 			</view>
 		</view>
-
 		<!-- 底部 -->
 		<view class="footer">
 			<view class="price-content" v-if="isScore">
@@ -124,7 +126,7 @@
 			</view>
 			<view class="price-content" v-else>
 				<text>实付款</text>
-				<text class="price-tip">￥</text>
+				<text class="price-tip" v-if="selectAddr">￥</text>
 				<text class="price">{{total2}}</text>
 			</view>
 			<text class="submit" @click="scoreEx" v-if="isScore">立即兑换</text>
@@ -159,16 +161,16 @@
 				</view>
 				<view class="main">
 					<text class="title">{{item.title}}</text>
-				
+
 					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 				</view>
 				<view class="circle" v-if="item.useFlag">
 					<text></text>
 				</view>
-                <image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
+				<image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
 			</view>
 			<view v-if="!couponsList" class="none">
-				<image src="../../static/null.png" mode="" ></image>
+				<image src="../../static/null.png" mode=""></image>
 				<text>暂无优惠券</text>
 			</view>
 		</view>
@@ -205,62 +207,83 @@
 				password: '',
 				sMask: '',
 				sModal1: false,
-				couponsList:'',
-				yhq:0,   //优惠券数值
-				storeValue:0,  ///使用的储值
-				wuserCouponId:''
+				couponsList: '',
+				yhq: 0, //优惠券数值
+				storeValue: 0, ///使用的储值
+				wuserCouponId: ''
 			}
 		},
-		watch:{
-			password(data){
-				let all=(Number(this.total) + Number(this.fee)-Number(this.yhq)).toFixed(2)
-				if(data.length>=6){
+		watch: {
+			password(data) {
+				let all = (Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+				if (data.length >= 6) {
 					this.$http({
-						apiName:'checkPayPwd',
-						type:'POST',
-						data:{
-							tradepwd:utils.md5(this.password) 
+						apiName: 'checkPayPwd',
+						type: 'POST',
+						data: {
+							tradepwd: utils.md5(this.password)
 						}
-					}).then(res=>{
+					}).then(res => {
 						this.closePass()
-						this.checked=true
-					
-						if(this.userInfo.cardAmount>=all){
-							this.storeValue=all
-							 this.total2=0
-						}else{
-							this.storeValue=this.userInfo.cardAmount
-							this.total2=(Number(this.total)-Number(this.userInfo.cardAmount)).toFixed(2) 
+						this.checked = true
+
+						if (this.userInfo.cardAmount >= all) {
+							this.storeValue = all
+							this.total2 = 0
+						} else {
+							this.storeValue = this.userInfo.cardAmount
+							this.total2 = (Number(this.total) + Number(this.fee) - Number(this.userInfo.cardAmount) - Number(this.yhq)).toFixed(
+								2)
 						}
-						
-						// this.storeValue=
-					}).catch(err=>{
-						this.$refs.KeyboarHid.iptNum=[]
+
+
+					}).catch(err => {
+						this.$refs.KeyboarHid.iptNum = []
 					})
 				}
+			},
+			selectAddr(item){
+				if(item){
+					if(this.cart==1){
+						this.getCartYf()
+					}else{
+						this.getYf()
+					}
+					this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				}else{
+					return
 			}
+			},
+			storeValue(value){
+				if(value==0){
+					this.checked=false
+				}
+			}
+			
 		},
 		async onLoad(opt) {
-			console.log(this.userInfo)
+			
 			this.cart = opt.cart;
 			if (opt.score == 'true') {
 				this.isScore = true
-				
+				await this.getAddr()
 			}
 			if (!this.selectAddr) {
 				await this.getAddr()
 				this.total2 = "请选择地址"
 			}
-			if(opt.cart == 1){
+			if (opt.cart == 1) {
 				this.cart = opt.cart
 				await this.getCart()
 				await this.getCartYf()
 				await this.getCoupons()
-			}else{
+			} else {
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
+				
 				await this.getCoupons()
 				await this.getYf()
-				if(opt.score == 'true'){
+				// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				if (opt.score == 'true') {
 					this.isScore = true
 					this.totalScore = this.order.exchangePoints
 				}
@@ -274,11 +297,13 @@
 		},
 		async onShow() {
 			// this.total = 0;
-			if (this.selectAddr) {
-				this.total2=Number(this.total+this.fee-this.storeValue-this.yhq).toFixed(2)
-			}else{
-				this.total2='请选择地址'
-			}
+			// if (this.selectAddr) {
+			// 	this.getYf()
+			// }
+			// 	this.total2=Number(this.total+this.fee-this.storeValue-this.yhq).toFixed(2)
+			// }else{
+			// 	this.total2='请选择地址'
+			// }
 			// if (this.cart == 1) {
 			// 	await this.getCart()
 			// 	await this.getCartYf()
@@ -291,54 +316,55 @@
 			// 	}
 			// }
 		},
-		filters:{
-			date(data){
-				return utils.unixToDatetime(data,9)
+		filters: {
+			date(data) {
+				return utils.unixToDatetime(data, 9)
 			}
 		},
 		computed: {
-			...mapState(['order', 'selectAddr', 'config', 'setOrder','userInfo'])
+			...mapState(['order', 'selectAddr', 'config', 'setOrder', 'userInfo'])
 		},
 		methods: {
-			...mapMutations(['setSelectAddr','setAfterLoginUrl']),
+			...mapMutations(['setSelectAddr', 'setAfterLoginUrl']),
 			switchChecked() {
-				if(this.userInfo.payPwdFlag){
+				if (this.userInfo.payPwdFlag) {
 					if (!this.checked) {
-						if((Number(this.total) + Number(this.fee)).toFixed(2)<=this.yhq){
+						if ((Number(this.total) + Number(this.fee)).toFixed(2) <= this.yhq) {
 							uni.showToast({
-								title:'您无需使用储值',
-								icon:'none'
+								title: '您无需使用储值',
+								icon: 'none'
 							})
-						}else{
+						} else {
 							this.sModal = true
 							this.sMask = true
 							this.$refs.KeyboarHid.open();
 						}
-						
-					}else{
-						this.$refs.KeyboarHid.iptNum=[]
-						this.checked=false
-						this.total2=(Number(this.total) + Number(this.fee)-this.yhq).toFixed(2)
+
+					} else {
+						this.$refs.KeyboarHid.iptNum = []
+						this.checked = false
+						this.storeValue = 0
+						this.total2 = (Number(this.total) + Number(this.fee) - this.yhq).toFixed(2)
 					}
-				}else{
+				} else {
 					uni.showModal({
 						title: '提示',
-						content:'您还未设置支付密码，请前往设置',
+						content: '您还未设置支付密码，请前往设置',
 						success(res) {
-							if(res.confirm){
+							if (res.confirm) {
 								uni.navigateTo({
-									url:'../set/payPwd'
+									url: '../set/payPwd'
 								})
 								// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
-							}else{
+							} else {
 								return
 							}
-						
+
 						}
-						
+
 					})
 				}
-				
+
 			},
 			clickInput(val) {
 				this.password = val;
@@ -347,11 +373,11 @@
 				this.sModal = false
 				this.sMask = false
 				this.$refs.KeyboarHid.close();
-				
+
 			},
 			openKeyboard() {
 				if (!this.$refs.KeyboarHid.KeyboarHid) {
-					this.$refs.KeyboarHid.open();	
+					this.$refs.KeyboarHid.open();
 				}
 			},
 			yhqSel() {
@@ -376,11 +402,11 @@
 					apiName: "getCartList"
 				}).then(res => {
 					this.orderList = res.data
-					
+
 					this.orderList.map(item => {
 						if (item.checkedFlag) {
-							that.total = that.total + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
-							
+							that.total =Number(that.total)  + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
+
 						}
 					})
 				}).catch(_ => {})
@@ -399,7 +425,7 @@
 				this.order.specSelected.map(item => {
 					_skuJson[item.key] = item.value
 				})
-                   let cardAmountFlag=this.checked?1:0
+				let cardAmountFlag = this.checked ? 1 : 0
 				await this.$http({
 					apiName: "createOrder",
 					type: "POST",
@@ -418,9 +444,9 @@
 						// #endif
 						skuJson: JSON.stringify(_skuJson),
 						remark: this.desc,
-						tradepwd:utils.md5(this.password),
-						cardAmountFlag:cardAmountFlag,
-						wuserCouponId:this.wuserCouponId
+						tradepwd: utils.md5(this.password),
+						cardAmountFlag: cardAmountFlag,
+						wuserCouponId: this.wuserCouponId
 					}
 				}).then(res => {
 					// if (that.isScore) {
@@ -432,14 +458,14 @@
 					// 		url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}`
 					// 	})
 					// }
-					if(this.total2>0){
-							uni.redirectTo({
-								url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}`
-							})
-					}else{
-							uni.redirectTo({
-								url: "/pages/money/paySuccess"
-							})
+					if (this.total2 > 0) {
+						uni.redirectTo({
+							url: `/pages/money/pay?money=${this.total2}&orderid=${res.data}`
+						})
+					} else {
+						uni.redirectTo({
+							url: "/pages/money/paySuccess"
+						})
 					}
 				}).catch(_ => {})
 
@@ -453,7 +479,7 @@
 					})
 					return
 				}
-              let cardAmountFlag=this.checked?1:0
+				let cardAmountFlag = this.checked ? 1 : 0
 				var that = this
 				await this.$http({
 					apiName: "createCartOrder",
@@ -469,19 +495,19 @@
 						// #ifdef MP-WEIXIN
 						sourceType: '3',
 						// #endif
-						tradepwd:this.password,
-						cardAmountFlag:cardAmountFlag,
-						wuserCouponId:this.wuserCouponId
+						tradepwd: utils.md5(this.password),
+						cardAmountFlag: cardAmountFlag,
+						wuserCouponId: this.wuserCouponId
 					}
 				}).then(res => {
-					if(this.total2>0){
-							uni.redirectTo({
-								url: `/pages/money/pay?money=${this.total2}&orderid=${res.data.order.id}`
-							})
-					}else{
-							uni.redirectTo({
-								url: "/pages/money/paySuccess"
-							})
+					if (this.total2 > 0) {
+						uni.redirectTo({
+							url: `/pages/money/pay?money=${this.total2}&orderid=${res.data.order.id}`
+						})
+					} else {
+						uni.redirectTo({
+							url: "/pages/money/paySuccess"
+						})
 					}
 					// uni.redirectTo({
 					// 	url: `/pages/money/pay?money=${this.total2}&orderid=${res.data.order.id}`
@@ -490,6 +516,21 @@
 
 			},
 			scoreEx() {
+				if (!this.selectAddr) {
+
+					uni.showToast({
+
+						title: "请先选择地址",
+
+						mask: true,
+
+						icon: "none"
+
+					})
+
+					return
+
+				}
 				var that = this
 				uni.showModal({
 					title: '提示',
@@ -517,7 +558,7 @@
 				}).catch(_ => {})
 			},
 			async getYf() {
-				if (this.selectAddr) {
+				// if (this.selectAddr) {
 					// this.getCoupons()
 					await this.$http({
 						apiName: "getYunfei",
@@ -527,10 +568,24 @@
 							province: this.selectAddr.province
 						}
 					}).then(res => {
-						this.fee = res.data.fee
-						this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
+						if(res.data){
+							this.fee = res.data.fee
+						}else{
+							this.fee=0
+						}
+						
+						if(this.checked){
+							if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+								this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+							}else{
+								this.storeValue=this.userInfo.cardAmount
+							}
+						}
+						console.log(1)
+						this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+					
 					}).catch(_ => {})
-				}
+				// }
 			},
 			async getCartYf() {
 				if (this.selectAddr) {
@@ -542,50 +597,60 @@
 						}
 					}).then(res => {
 						this.fee = res.data
-						this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
+						if(this.checked){
+							if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+								this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+							}else{
+								this.storeValue=this.userInfo.cardAmount
+							}
+						}
+						
+						this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+						// this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
 					}).catch(_ => {})
 				}
 			},
 			stopPrevent() {},
-			async getCoupons(){
+			async getCoupons() {
 				await this.$http({
-					apiName:'getOrderCoupon',
+					apiName: 'getOrderCoupon',
 					// type:'POST',
-					data:{
-						payAmount:this.total
+					data: {
+						payAmount: this.total
 					}
-				}).then(res=>{
-					this.couponsList=res.data
-				}).catch(err=>{})
+				}).then(res => {
+					this.couponsList = res.data
+				}).catch(err => {})
 			},
-			selCoupon(item){
-				if(item.useFlag){
+			selCoupon(item) {
+				if (item.useFlag) {
 					this.sMask = false
 					this.sModal1 = false
-					this.yhq=item.amount
-					this.wuserCouponId=item.wuserCouponId
-					if((Number(this.total) + Number(this.fee)).toFixed(2)<=item.amount){
-						this.total2=0
-						this.checked=false
-						this.$refs.KeyboarHid.iptNum=[]
-					}else{
-						if(this.checked){
-							if((Number(this.total) + Number(this.fee)).toFixed(2)>this.userInfo.cardAmount){
-								this.storeValue=this.userInfo.cardAmount
-							}else{
-								this.storeValue=(this.total-Number(item.amount)).toFixed(2)
+					this.yhq = item.amount
+					this.wuserCouponId = item.wuserCouponId
+					if ((Number(this.total) + Number(this.fee)).toFixed(2) <= item.amount) {
+						this.total2 = 0
+						this.checked = false
+						this.$refs.KeyboarHid.iptNum = []
+					} else {
+						if (this.checked) {
+							if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
+								this.storeValue = this.userInfo.cardAmount
+							} else {
+								this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
 							}
-							
+
+							// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
 						}
-						this.total2=(Number(this.total)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+						this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
 					}
-					
-				}else{
+
+				} else {
 					uni.showToast({
-						title:'该优惠券不可用'
+						title: '该优惠券不可用'
 					})
 				}
-				
+
 			}
 		},
 		onBackPress(e) {
@@ -615,6 +680,7 @@
 	page {
 		background: $page-color-base;
 		padding-bottom: 100rpx;
+
 	}
 
 	.masks {
@@ -624,6 +690,11 @@
 		width: 100vw;
 		height: 100vh;
 		background: rgba(52, 52, 52, 0.7);
+	}
+
+	.scrollview {
+		height: calc(100vh - 90rpx);
+		overflow: scroll;
 	}
 
 	.address-section {
@@ -775,7 +846,8 @@
 		padding: 10rpx 30rpx 10rpx 40rpx;
 		line-height: 70rpx;
 		position: relative;
-        justify-content: space-between;
+		justify-content: space-between;
+
 		&.cell-hover {
 			background: #fafafa;
 		}
@@ -1155,8 +1227,9 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-        background: #F9FAFB;
+		background: #F9FAFB;
 		overflow: scroll;
+
 		// padding:0 32rpx 60rpx;
 		.titles {
 			margin: 38rpx 0 58rpx;
@@ -1165,15 +1238,17 @@
 			font-weight: 600;
 			color: rgba(48, 49, 51, 1);
 		}
-       .cancel{
-		   position: absolute;
-		   right: 30rpx;
-		   top: 48rpx;
-		   font-size:24rpx;
-		   font-family:PingFangSC-Regular,PingFang SC;
-		   font-weight:400;
-		   color:rgba(242,61,61,1);
-	   }
+
+		.cancel {
+			position: absolute;
+			right: 30rpx;
+			top: 48rpx;
+			font-size: 24rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: rgba(242, 61, 61, 1);
+		}
+
 		.card-item {
 			// margin:0 32rpx;
 			background: #fff;
@@ -1182,7 +1257,7 @@
 			display: flex;
 			margin-bottom: 40rpx;
 			// align-items: center;
-      
+
 			.fengmian {
 				width: 200rpx;
 				height: 200rpx;
@@ -1280,21 +1355,23 @@
 		}
 
 		.circle {
-			text{
+			text {
 				width: 36rpx;
 				height: 36rpx;
 				border: 2rpx solid rgba(217, 217, 217, 1);
 				border-radius: 50%;
 			}
+
 			height: 100%;
 			margin-right: 30rpx;
 			display: flex;
 			align-items: center;
 		}
-		.nouse{
+
+		.nouse {
 			width: 104rpx;
 			height: 104rpx;
-			
+
 		}
 	}
 
@@ -1302,22 +1379,25 @@
 		transition: .4s;
 		height: 700rpx;
 	}
-	.none{
-		image{
+
+	.none {
+		image {
 			width: 200rpx;
 			height: 150rpx;
 			margin-bottom: 20rpx;
 		}
+
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		font-size:28rpx;
-		font-family:PingFangSC-Regular,PingFang SC;
+		font-family:PingFangSC-Regular,
+		PingFang SC;
 		font-weight:400;
-		color:rgba(144,147,153,1);
+		color:rgba(144, 147, 153, 1);
 	}
 </style>

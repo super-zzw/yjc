@@ -151,7 +151,7 @@
 			...mapState(['hasLogin','userInfo','msgNms','hasScore','hasSigin','config']),
 		},
         methods: {
-			...mapMutations(['setUserInfo','setAfterLoginUrl','setAfterLoginIsTab','setCartNms']),
+			...mapMutations(['setUserInfo','setAfterLoginUrl','setAfterLoginIsTab','setCartNms','setMsgNms']),
 			getCartNms(){
 				this.$http({
 					apiName:"getCartNms"
@@ -184,6 +184,12 @@
 					apiName:"logOut"
 				}).then(res => {
 					utils.rmData()
+					this.setCartNms(0)
+					utils.setBadgeText(0,0)
+					// this.setMsgNms(0)
+					uni.removeTabBarBadge({
+						index: 2,
+					})
 					uni.showToast({
 						title:"退出成功"
 					})
@@ -277,10 +283,10 @@
 	  background: #fff;
 	}
 	page{
-		background: #F9FAFB;
+		/* background: #F9FAFB; */
 	}
 	.container{
-		min-height: calc(100vh - 0);
+		/* min-height: calc(100vh - 0); */
 		background: #F9FAFB;
 		box-sizing: border-box;
 	}

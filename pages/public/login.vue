@@ -66,6 +66,10 @@
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
+		<!-- <view class="content"> -->
+			<!-- 苹果登录 -->
+		<!-- 	<view class="sign-in-with-apple" v-if="system >= 13 && platform=='ios'" @click="appleLogin">sign in with apple</view>
+		</view> -->
 	</view>
 </template>
 
@@ -86,13 +90,42 @@
 				timer: "",
 				codeText: "发送验证码",
 				timeLeft: 120,
+				system: '', // 系统版本
+				platform: '', // 平台
 			}
 		},
 		onLoad(opt) {
 			//返回跳转过来的
+			// 先判断 系统版本
+			// uni.getSystemInfo({
+			// 	success: (res) => {
+			// 		console.log(res)
+			// 		this.system = res.system
+			// 		this.platform = res.platform
+			// 	},
+			// 	fail: (err) => {},
+			// 	complete: () => {}
+			// })
 		},
 		methods: {
 			// ...mapMutations(['login']),
+			// 苹果登录
+			// appleLogin() {
+			// 	// 判断是 iOS13版本
+			// 	uni.login({
+			// 		provider: 'apple',
+			// 		success: (loginRes) => {
+			// 			uni.getUserInfo({
+			// 				provider: 'apple',
+			// 				success: (userInfoRes) => {
+			// 					console.log(userInfoRes)
+			// 				},
+			// 				fail: (err) => {}
+			// 			})
+			// 		},
+			// 		fail: (err) => {}
+			// 	})
+			// },
 			toIndex() {
 				uni.switchTab({
 					// uni.reLaunch({
@@ -117,7 +150,7 @@
 				if (this.tab == 1) {
 					_data = [{
 							data: this.mobile.trim(),
-							info: '手机号不能为空'
+							info: '账号不能为空'
 						},
 						{
 							data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
@@ -248,19 +281,19 @@
 									utils.setSesion(res.data)
 									utils.getUserInfo()
 									utils.afterLoginJump()
-									
+
 								}).catch(err => {
 									console.log(err)
-									if(err.code==500070){
+									if (err.code == 500070) {
 										uni.redirectTo({
-										       url:'./bindMobile'
-									   })
-									}else{
+											url: './bindMobile'
+										})
+									} else {
 										uni.redirectTo({
-								              url:'../set/loginPwd'
+											url: '../set/loginPwd'
 										})
 									}
-									
+
 								})
 							}
 						})

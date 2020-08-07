@@ -197,7 +197,10 @@
 						
 						utils.setSesion(res.data)
 						utils.getUserInfo()
-						utils.afterLoginJump()
+						uni.navigateTo({
+							url:'../set/loginPwd'
+						})
+						// utils.afterLoginJump()
 					}).catch(err=>{
 						// uni.redirectTo({
 						// 	url:'../set/loginPwd'

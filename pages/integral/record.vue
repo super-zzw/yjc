@@ -19,7 +19,7 @@
 							规格：<text v-for="(aitem,akey,aindex) of item.specificationsMap" :key="aindex">{{akey}}:{{aitem}};</text>
 							；<text>数量：{{item.productQuantity}}</text>
 						</text>
-						<text class="price">{{item.minPrice}}</text>
+						<!-- <text class="price">{{item.minPrice}}</text> -->
 					</view>
 				</view>
 				<!-- <view class="good-box-sn">
@@ -206,6 +206,7 @@ export default{
 				flex: 1;
 				display: flex;
 				flex-direction: column;
+				justify-content: space-around;
 				padding: 0 30rpx 0 24rpx;
 				overflow: hidden;
 				.title{
@@ -222,11 +223,11 @@ export default{
 				.price{
 					font-size: $font-base + 2rpx;
 					color: $font-color-dark;
-					&:before{
-						content: '￥';
-						font-size: $font-sm;
-						margin: 0 2rpx 0 8rpx;
-					}
+					// &:before{
+					// 	content: '￥';
+					// 	font-size: $font-sm;
+					// 	margin: 0 2rpx 0 8rpx;
+					// }
 				}
 			}
 		}
