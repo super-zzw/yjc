@@ -1,10 +1,10 @@
 <template>
 	<view class="container">
-
-		<view class="banner">
-			<image src="../../static/loginBg.png" mode="widthFix" class="bannerImg"></image>
-			<image src="../../static/mallLogo.png" class="logo"></image>
-		</view>
+       <view class="top">
+		   <image src="../../static/yijucai.png" mode=""></image>
+		   <text class="txt">欢迎来到易聚财</text>
+	   </view>
+		
 		
 		<view class="wrapper">
 		
@@ -253,18 +253,19 @@
 			text-align: center;
 		}
 	}
-	.banner{
-		position: relative;
-		.bannerImg{
-		  width: 100vw;
+	.top{
+		margin-top: 90rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		image{
+			width: 96rpx;
+			height: 96rpx;
 		}
-		.logo{
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%,-50%);
-			width: 107rpx;
-			height: 107rpx;
+		.txt{
+			font-size:32rpx;
+			font-weight:500;
+			color:rgba(144,147,153,1);
 		}
 	}
 	

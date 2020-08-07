@@ -64,13 +64,18 @@
 				<text class="left">我的账户</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>
-					<text class="txt2"></text>
+					<text class="txt2">¥435.50</text>
+					<image src="../../static/user/arrow.png" mode="" class="txt3"></image>
 				</view>
 			</view>
 			
 			<view class="my-section">
 				<text class="left">我的聚财卡</text>
-				<view class="right">聚财卡余额</view>
+				<view class="right">
+					<text class="txt1">账户余额</text>
+					<text class="txt2">¥2020.00</text>
+					<image src="../../static/user/arrow.png" mode="" class="txt3"></image>
+				</view>
 			</view>
 			
 			<!-- 浏览历史 -->
@@ -108,18 +113,17 @@
 						<text class="itemBoxText">邀请好友</text>
 						
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesB/rebate/index')">
-					 <image src="../../static/user/yaoqingfanli.png" class="icon"></image>
-						<text class="itemBoxText">邀请返利</text>
-					
+				<view class="hsitem" @tap="navTo('/pagesF/myStore/index')">
+				    <image src="../../static/user/chuzhi.png" class="icon"></image>
+						<text class="itemBoxText">我的储值</text>
 					
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/coupons/index')">
 			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
-						<text class="itemBoxText">优惠券</text>
+						<text class="itemBoxText">银行卡</text>
 					
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesE/distribution/index')">
+			<!-- 	<view class="hsitem" @tap="navTo('/pagesE/distribution/index')">
 				    <image src="../../static/user/fenxiao.png" class="icon"></image>
 						<text class="itemBoxText">分销中心</text>
 					
@@ -128,7 +132,7 @@
 				    <image src="../../static/user/chuzhi.png" class="icon"></image>
 						<text class="itemBoxText">我的储值</text>
 					
-				</view>
+				</view> -->
 			</view>
 			<view class="submit" v-if="hasLogin" @tap="loginOut">退出登录</view>
 		</view>
@@ -511,7 +515,24 @@
 			color:rgba(48,49,51,1);
 		}
 		.right{
-			
+			display: flex;
+			align-items: center;
+			.txt1{
+				font-size:24rpx;
+				font-weight:600;
+				color:rgba(74,75,76,1);
+				margin-right: 20rpx;
+			}
+			.txt2{
+				font-size:28rpx;
+				font-weight:500;
+				color:rgba(242,61,61,1);
+				margin-right: 16rpx;
+			}
+			.txt3{
+				width: 14rpx;
+				height: 22rpx;
+			}
 		}
 	}
 	.history-section{
