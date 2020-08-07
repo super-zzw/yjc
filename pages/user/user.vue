@@ -59,6 +59,20 @@
 					<text>退款/售后</text>
 				</view>
 			</view>
+			
+			<view class="my-section">
+				<text class="left">我的账户</text>
+				<view class="right">
+					<text class="txt1">账户余额</text>
+					<text class="txt2"></text>
+				</view>
+			</view>
+			
+			<view class="my-section">
+				<text class="left">我的聚财卡</text>
+				<view class="right">聚财卡余额</view>
+			</view>
+			
 			<!-- 浏览历史 -->
 			<view class="history-section icon">
 				<view class="hsitem" @tap="navTo('/pages/address/address?source=2')">
@@ -484,6 +498,21 @@
 		.icon-shouhoutuikuan{
 			font-size:44rpx;
 		} */
+	}
+	.my-section{
+		margin-top: 30rpx;
+		background: #fff;
+		padding:22rpx 28rpx 22rpx 32rpx;
+		display: flex;
+		justify-content: space-between;
+		.left{
+			font-size:28rpx;
+			font-weight:600;
+			color:rgba(48,49,51,1);
+		}
+		.right{
+			
+		}
 	}
 	.history-section{
 		margin-top: 20rpx;
