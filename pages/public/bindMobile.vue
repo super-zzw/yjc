@@ -22,7 +22,7 @@
 					<view class="left">
 						<image src="../../static/code.png" mode="" class="icon"></image>
 						<input 
-							type="text" 
+							type="password" 
 							placeholder="请输入验证码"
 							placeholder-class="input-empty"
 							maxlength="6"

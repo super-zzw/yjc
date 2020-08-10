@@ -567,6 +567,10 @@ import tabBar from "@/components/tab-bar.vue"
 				uni.navigateTo({
 					url: '/pagesD/notice/index'
 				})
+			}else{
+				uni.navigateTo({
+					url: '/pages/receipt/index'
+				})
 			}
 		}
 	}

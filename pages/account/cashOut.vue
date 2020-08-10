@@ -40,10 +40,14 @@
 				</view>
 			</view> -->
 		</view>
+		<pwdValidate :sModal="sModal"/>
+		
 	</view>
 </template>
 
 <script>
+	
+	import utils from '../../utils/method.js'
 	import {mapState} from 'vuex'
 	export default {
 		data() {
@@ -51,6 +55,8 @@
 				money:'',
 				accountList:[],  //提现账户
 				ableMoney:"",  //可提现金额
+				sModal:false,
+				password:''
 			};
 		},
 		async onShow() {
@@ -83,10 +89,16 @@
 				}).catch(err => {})
 			},
 			accountSel(){
-				uni.navigateTo({
-					url:'./accountSel'
-				})
+				if(this.accountList.length==0){
+					uni.navigateTo({
+						url:'addAccount'
+					})
+				}
+				// uni.navigateTo({
+				// 	url:'./accountSel'
+				// })
 			},
+			
 			async tx(){
 				// if(!this.accountList.length){
 				// 	uni.showToast({
@@ -123,9 +135,12 @@
 				// 	})
 					
 				// }
-				uni.redirectTo({
-					url:'successTip?status=1'
-				})
+				this.sModal = true
+				
+			
+				// uni.redirectTo({
+				// 	url:'successTip?status=1'
+				// })
 			}
 		}
 	}
@@ -220,4 +235,73 @@
 			color:rgba(255,255,255,1);
 		}
    }
+   .masks {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: rgba(52, 52, 52, 0.7);
+	}
+	.validateBox {
+		height: 0;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
+		background: #fff;
+		z-index: 999;
+		display: flex;
+		// justify-content: center;
+		flex-direction: column;
+		align-items: center;
+		// position: relative;
+		overflow: hidden;
+	
+		// opacity: 0;
+		.iconfont {
+			font-size: 30rpx;
+			position: absolute;
+			left: 20rpx;
+			top: 20rpx;
+			// left: 0;
+		}
+	
+		.txt1 {
+			margin: 38rpx 0;
+		}
+	
+		.input_area {
+			margin-top: 30rpx;
+			display: flex;
+	
+			.box {
+				width: 80rpx;
+				height: 80rpx;
+				border: 2rpx solid rgba(192, 196, 204, 1);
+				text-align: center;
+				margin-right: 20rpx;
+			}
+	
+			.box:last-child {
+				margin-right: 0;
+			}
+		}
+	
+		.txt2 {
+			font-size: 30rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: rgba(192, 196, 204, 1);
+			margin-top: 30rpx;
+			margin-bottom: 100rpx;
+		}
+	}
+	
+	.validateBox.active {
+		transition: .4s;
+		// opacity: 1;
+		// min-height: 410rpx;
+		height: auto;
+	}
 </style>

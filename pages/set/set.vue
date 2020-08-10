@@ -30,7 +30,7 @@
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
 		<view class="list-cell b-b " @click="toAbout" hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">关于 优之汇商城</text>
+			<text class="cell-tit">关于 易聚财</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
 		<!-- <view class="list-cell b-b" @click="toPage('/pages/set/changePwd',true)" hover-class="cell-hover" :hover-stay-time="50">

@@ -1,58 +1,51 @@
 <template>
 	<view class="container">
-		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
-		<view class="banner">
-			<image src="../../static/loginBg.png" mode="widthFix" class="bannerImg"></image>
-			<image src="../../static/mallLogo.png" class="logo"></image>
-		</view>
-
+       <view class="top">
+		   <image src="../../static/yijucai.png" mode=""></image>
+		   <text class="txt">欢迎来到易聚财</text>
+	   </view>
 		<view class="wrapper">
-			<!-- <view class="left-top-sign">WELCOME BACK</view> -->
-			<!-- 	<view class="welcome">
-				欢迎回来！
-			</view> -->
-			<view class="tabbar">
-				<view class="tab">
-					<text :class="tab==1?'active':''" @tap="tab=1">账号密码登录</text>
-				</view>
-				<view class="tab">
-					<text :class="tab==2?'active':''" @tap="tab=2">手机验证码登录</text>
-				</view>
-			</view>
 			<view class="input-content">
-				<view class="input-item" v-if="tab==1">
-					<text class="tit">账号</text>
-					<input type="number" v-model="mobile" placeholder="请输入账号" maxlength="11" />
+				<view class="input-item" >
+					<!-- <text >手机号码</text> -->
+					<image src="../../static/mobile.png" mode="" class="icon"></image>
+					<input 
+						type="number" 
+						v-model="mobile"
+						placeholder="请输入手机号"
+						maxlength="11"
+					/>
 				</view>
-				<view class="input-item" v-if="tab==2">
-					<text class="tit">手机号码</text>
-					<input type="number" v-model="mobile" placeholder="请输入手机号码" maxlength="11" />
-				</view>
-				<view class="input-item" v-if="tab==1">
-					<text class="tit">密码</text>
-					<input type="text" placeholder="请输入登录密码" placeholder-class="input-empty" maxlength="20" v-model="password"
-					 password @confirm="toLogin" />
-				</view>
-				<view class="input-item input-item1" v-if="tab==2">
+			</view>	
+			<view class="input-content">
+				<view class="input-item input-item1" >
 					<view class="left">
-						<text class="tit">验证码</text>
-						<input type="text" placeholder="请输入验证码" placeholder-class="input-empty" maxlength="6" v-model="code" @confirm="toLogin" />
+						<image src="../../static/code.png" mode="" class="icon"></image>
+						<input 
+							type="password" 
+							placeholder="请输入验证码"
+							placeholder-class="input-empty"
+							maxlength="6"
+							v-model="code"
+							
+						/>
 					</view>
-
-					<text class="stext" @tap="getCode">{{codeText}}</text>
+					
+					<text class="stext"  @tap="getCode">{{codeText}}</text>
 				</view>
+				
 				<!-- <image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="weixin"></image>
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="qq"></image> -->
-				<view class="forget-section forget-section2">
+			<!-- 	<view class="forget-section forget-section2"  @tap="toPage('/pages/public/logincode')">
 					<view>
 						没有账户?
 						<text class="register" @click="toPage('/pages/public/register')">立即注册</text>
 					</view>
 					<text class="forget" @click="toPage('/pages/public/forgetpwd')" v-if="tab==1">忘记密码</text>
 				</view>
-
+				 -->
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
 		</view>
@@ -62,171 +55,85 @@
 			<text class="rscen">|</text>
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
-		<view class="wxLogin" @click="oAuth" data-logintype="weixin">
+		<view class="wxLogin">
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
-		<!-- <view class="content"> -->
-			<!-- 苹果登录 -->
-		<!-- 	<view class="sign-in-with-apple" v-if="system >= 13 && platform=='ios'" @click="appleLogin">sign in with apple</view>
-		</view> -->
+		<view class="mask" v-if="sModal"></view>
+		<view class="tipBox" v-if="sModal">
+			<text class="txt">该手机号已绑定其他微信号</text>
+			<view class="back" @tap="sModal=false">返回登录</view>
+		</view>
 	</view>
 </template>
 
 <script>
 	// import {  
-	//        mapState 
-	//    } from 'vuex';
-	import utils from 'utils/method.js'
-	export default {
-		data() {
+ //        mapState 
+ //    } from 'vuex';
+	import utils from '../../utils/method.js'
+	export default{
+		data(){
 			return {
 				mobile: '',
-				password: '',
 				code: '',
 				logining: false,
-				tab: 1,
-				coding: false, //是否处于发送验证码的状态
-				timer: "",
-				codeText: "发送验证码",
-				timeLeft: 120,
-				system: '', // 系统版本
-				platform: '', // 平台
+				tab:1,
+				sModal:false,
+				coding:false,  //是否处于发送验证码的状态
+				timer:"",
+				codeText:"获取验证码",
+				timeLeft:120,
+				
 			}
 		},
-		onLoad(opt) {
+		onLoad(opt){
 			//返回跳转过来的
-			// 先判断 系统版本
-			// uni.getSystemInfo({
-			// 	success: (res) => {
-			// 		console.log(res)
-			// 		this.system = res.system
-			// 		this.platform = res.platform
-			// 	},
-			// 	fail: (err) => {},
-			// 	complete: () => {}
-			// })
+			
 		},
 		methods: {
 			// ...mapMutations(['login']),
-			// 苹果登录
-			// appleLogin() {
-			// 	// 判断是 iOS13版本
-			// 	uni.login({
-			// 		provider: 'apple',
-			// 		success: (loginRes) => {
-			// 			uni.getUserInfo({
-			// 				provider: 'apple',
-			// 				success: (userInfoRes) => {
-			// 					console.log(userInfoRes)
-			// 				},
-			// 				fail: (err) => {}
-			// 			})
-			// 		},
-			// 		fail: (err) => {}
-			// 	})
-			// },
-			toIndex() {
+			toIndex(){
 				uni.switchTab({
-					// uni.reLaunch({
-					url: '/pages/index/index'
+				// uni.reLaunch({
+					url:'/pages/index/index'
 				})
 			},
-			toPage(url) {
+			toPage(url){
 				uni.navigateTo({
-					url: url
+					url:url
 				})
 			},
-			navBack() {
+			navBack(){
 				uni.navigateBack();
 			},
-			async toLogin() {
-				if (this.logining) {
-					return
-				}
-				this.logining = true;
-
-				let _data, apiName, formdata
-				if (this.tab == 1) {
-					_data = [{
-							data: this.mobile.trim(),
-							info: '账号不能为空'
-						},
-						{
-							data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-							info: '手机号格式不正确'
-						},
-						{
-							data: this.password,
-							info: '密码不能为空'
-						},
-					]
-					apiName = 'phoneLogin'
-					formdata = {
-						password: utils.md5(this.password),
-						phoneNumber: this.mobile,
-					}
-				} else {
-					_data = [{
-							data: this.mobile.trim(),
-							info: '手机号不能为空'
-						},
-						{
-							data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-							info: '手机号格式不正确'
-						},
-						{
-							data: this.code,
-							info: '验证码不能为空'
-						},
-					]
-					apiName = 'codeLogin'
-					formdata = {
-						authCode: this.code,
-						phoneNumber: this.mobile,
-					}
-				}
-				let jres = await utils.judgeData(_data)
-				if (jres) {
-
-					await this.$http({
-						apiName: apiName,
-						type: "POST",
-						data: formdata
-					}).then(res => {
-						console.log(res)
-						utils.setSesion(res.data)
-						utils.afterLoginJump()
-					}).catch(_ => {})
-				}
-				this.logining = false;
-			},
-			async getCode() {
-				if (this.coding) {
+			async getCode(){
+				if(this.coding){
 					return
 				}
 				uni.showLoading({
-					title: "获取验证码...",
-					mask: true
+					title:"获取验证码...",
+					mask:true
 				})
-				let _data = [{
-						data: this.mobile.trim(),
-						info: '手机号不能为空'
+				let _data = [
+					{
+						data:this.mobile.trim(),
+						info:'手机号不能为空'
 					},
 					{
-						data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-						info: '手机号格式不正确'
+						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+						info:'手机号格式不正确'
 					}
 				]
 				let jres = await utils.judgeData(_data)
-				if (jres) {
+				if(jres){
 					this.coding = true;
 					this.countDown();
 					await this.$http({
-						apiName: "getCode",
-						type: "POST",
-						data: {
-							phoneNumber: this.mobile,
+						apiName:"getCode",
+						type:"POST",
+						data:{
+							phoneNumber:this.mobile,
 						}
 					}).then(res => {
 						uni.hideLoading();
@@ -234,95 +141,86 @@
 						this.clearCountDown();
 						uni.hideLoading();
 					})
-				} else {
+				}else{
 					uni.hideLoading()
 				}
 			},
-			countDown() {
+			countDown(){
 				this.timer = setInterval(() => {
-					this.codeText = "请稍后" + this.timeLeft + 's'
-					this.timeLeft -= 1;
-					if (this.timeLeft == 0) {
-						this.clearCountDown();
-					}
-				}, 1000)
+					  this.codeText = "请稍后" + this.timeLeft + 's'
+					  this.timeLeft -= 1;
+					  if(this.timeLeft == 0){
+						  this.clearCountDown();
+					  }
+				},1000)
 			},
-			clearCountDown() {
-				clearInterval(this.timer);
-				this.coding = false
-				this.timeLeft = 120
-				this.codeText = "发送验证码"
+			clearCountDown(){
+				  clearInterval(this.timer);
+				  this.coding = false
+				  this.timeLeft = 120
+				  this.codeText = "发送验证码"
 			},
-			oAuth(e) {
-				var type = e.currentTarget.dataset.logintype
-				uni.login({
-					provider: type,
-					success: (res) => {
-						uni.getUserInfo({
-							provider: type,
-							success: (info) => {
-								uni.setStorageSync('appInfo', info.userInfo)
-								console.log(info.userInfo)
-								this.$http({
-									apiName: 'appWxLogin',
-									type: 'POST',
-									data: {
-										appOpenId: info.userInfo.openId,
-										headUrl: info.userInfo.avatarUrl,
-										wuserName: info.userInfo.nickName
-									}
-								}).then(res => {
-									console.log(res)
-									uni.showToast({
-										title: '登陆成功',
-										mask: false,
-										duration: 1500
-									});
-									utils.setSesion(res.data)
-									utils.getUserInfo()
-									utils.afterLoginJump()
-
-								}).catch(err => {
-									console.log(err)
-									if (err.code == 500070) {
-										uni.redirectTo({
-											url: './bindMobile'
-										})
-									} else {
-										uni.redirectTo({
-											url: '../set/loginPwd'
-										})
-									}
-
-								})
+		   async toLogin() {
+						if (this.logining) {
+							return
+						}
+						this.logining = true;
+						let _data, apiName, formdata
+						
+							_data = [{
+									data: this.mobile.trim(),
+									info: '手机号不能为空'
+								},
+								{
+									data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+									info: '手机号格式不正确'
+								},
+								{
+									data: this.code,
+									info: '验证码不能为空'
+								},
+							]
+							apiName = 'codeLogin'
+							formdata = {
+								authCode: this.code,
+								phoneNumber: this.mobile,
 							}
-						})
-					}
-				})
-			}
-
+						
+						let jres = await utils.judgeData(_data)
+						if (jres) {
+							await this.$http({
+								apiName: apiName,
+								type: "POST",
+								data: formdata
+							}).then(res => {
+								console.log(res)
+								utils.setSesion(res.data)
+								utils.afterLoginJump()
+							}).catch(_ => {})
+						}
+						this.logining = false;
+					},
 		},
 
 	}
 </script>
 
-<style lang='scss'>
-	page {
+<style lang='scss' scoped>
+	page{
 		background: #fff;
 	}
-
-	.container {
+	.container{
 		/* padding-top: 115px; */
-		position: relative;
+		position:relative;
 		width: 100vw;
-
+		
 		/*#ifdef APP-PLUS*/
-		/* 	height: 100vh; */
+	/* 	height: 100vh; */
 		/* #endif */
 		/* #ifdef H5 */
 		/* height: calc(100vh - 88rpx); */
 		/* #endif */
-		/* 	overflow: hidden;
+	/* 	overflow: hidden;
 		background: #fff;
 		box-sizing: border-box; */
 		/*  #ifdef APP-PLUS || H5 */
@@ -333,66 +231,60 @@
 		/*  #endif */
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-
-		.suibian {
+		.suibian{
 			font-size: 12px;
 			color: #4399fc;
 			margin-top: 60rpx;
 			text-align: center;
 		}
 	}
-
-	.banner {
-		position: relative;
-
-		.bannerImg {
-			width: 100vw;
+	.top{
+		margin-top: 90rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		image{
+			width: 96rpx;
+			height: 96rpx;
 		}
-
-		.logo {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translate(-50%, -50%);
-			width: 107rpx;
-			height: 107rpx;
+		.txt{
+			font-size:32rpx;
+			font-weight:500;
+			color:rgba(144,147,153,1);
+			margin-top: 20rpx;
 		}
 	}
-
-	.wrapper {
-		position: relative;
+	
+	.wrapper{
+		position:relative;
 		z-index: 90;
 		/* padding-bottom: 40rpx; */
-		margin-top: 40rpx;
-
-		.tabbar {
+		margin-top: 80rpx;
+		.tabbar{
 			padding-top: 22rpx;
 			display: flex;
 			border-bottom: 2rpx solid #DBDBDB;
-
-			.tab {
+			.tab{
 				flex: 1;
 				display: flex;
 				justify-content: center;
-
-				text {
-					font-size: 32rpx;
-					color: rgba(144, 147, 153, 1);
-					font-weight: 400;
+				
+				text{
+					font-size:32rpx;
+					color:rgba(144,147,153,1);
+					font-weight:400;
 					line-height: 88rpx;
 				}
-
-				text.active {
-					color: rgba(48, 49, 51, 1);
+				text.active{
+					color:rgba(48,49,51,1);
 					border-bottom: 4rpx solid #F23D3D;
 				}
 			}
-
+			
 		}
 	}
-
-	.back-btn {
-		position: absolute;
+	.back-btn{
+		position:absolute;
 		left: 40rpx;
 		z-index: 9999;
 		padding-top: var(--status-bar-height);
@@ -400,36 +292,30 @@
 		font-size: 40rpx;
 		color: $font-color-dark;
 	}
-
-	.left-top-sign {
+	.left-top-sign{
 		font-size: 80rpx;
 		font-weight: bold;
 		color: $page-color-base;
-		position: relative;
+		position:relative;
 		left: 60rpx;
 	}
-
-	.right-top-sign {
-		position: absolute;
+	.right-top-sign{
+		position:absolute;
 		top: 80rpx;
 		right: -30rpx;
 		z-index: 95;
-
-		&:before,
-		&:after {
-			display: block;
-			content: "";
+		&:before, &:after{
+			display:block;
+			content:"";
 			width: 400rpx;
 			height: 80rpx;
 			background: #b4f3e2;
 		}
-
-		&:before {
+		&:before{
 			transform: rotate(50deg);
 			border-radius: 0 50px 0 0;
 		}
-
-		&:after {
+		&:after{
 			position: absolute;
 			right: -198rpx;
 			top: 0;
@@ -438,47 +324,43 @@
 			/* background: pink; */
 		}
 	}
-
-	.left-bottom-sign {
-		position: absolute;
+	.left-bottom-sign{
+		position:absolute;
 		left: -270rpx;
 		bottom: -320rpx;
 		border: 100rpx solid #d0d1fd;
 		border-radius: 50%;
 		padding: 180rpx;
 	}
-
-	.welcome {
-		position: relative;
+	.welcome{
+		position:relative;
 		left: 50rpx;
 		top: -90rpx;
 		font-size: 46rpx;
 		color: #555;
-		text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
+		text-shadow: 1px 0px 1px rgba(0,0,0,.3);
 	}
-
-	.input-content {
-		margin-top: 50rpx;
-		padding: 0 60rpx;
-
-		.oAuthIcon {
+	.input-content{
+		/* margin-top: 80rpx; */
+		padding: 0 48rpx 0;
+		.oAuthIcon{
 			width: 80rpx;
 			height: 80rpx;
 		}
 	}
-
-	.input-item {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		justify-content: center;
-		padding: 0 30rpx;
-		background: $page-color-light;
+	.input-item{
+		display:flex;
+		align-items: center;
+		/* flex-direction: column; */
+		/* align-items:flex-start;
+		justify-content: center; */
+		/* padding: 25rpx; */
+		/* background:$page-color-light; */
 		height: 120rpx;
 		border-radius: 4px;
 		margin-bottom: 50rpx;
-
-		.stext {
+		border-bottom: 4rpx solid #DBDBDB;
+		.stext{
 			color: #F23D3D;
 			border: 2rpx solid #F23D3D;
 			border-radius: 30rpx;
@@ -488,117 +370,135 @@
 			text-align: center;
 			padding: 10rpx 16rpx;
 		}
-
-		&:last-child {
+		&:last-child{
 			margin-bottom: 0;
 		}
-
-		.tit {
+		.icon{
 			/* height: 50rpx; */
 			/* line-height: 56rpx; */
-			font-size: $font-sm+2rpx;
-			color: $font-color-base;
+			height: 48rpx;
+			width: 48rpx;
+			margin-right: 14rpx;
+			/* font-size: $font-sm+2rpx;
+			color: $font-color-base; */
 		}
-
-		input {
+		input{
 			height: 60rpx;
 			font-size: $font-base + 2rpx;
 			color: $font-color-dark;
 			width: 100%;
-		}
+		}	
 	}
-
-	.input-item.input-item1 {
+    .input-item.input-item1{
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-
-		.left {
+		.left{
 			display: flex;
-			flex-direction: column;
+			align-items: center;
+			/* flex-direction: column; */
 		}
-
-		.stext {
-			margin-top: 20rpx;
-		}
+		
 	}
-
-	.confirm-btn {
+	.confirm-btn{
 		width: 630rpx;
 		height: 76rpx;
 		line-height: 76rpx;
 		border-radius: 50px;
-		margin-top: 40rpx;
+		margin-top: 90rpx;
 		background: #F23D3D;
 		color: #fff;
 		font-size: $font-lg;
-
-		&:after {
+		&:after{
 			border-radius: 100px;
 		}
 	}
-
-	.forget-section {
+	.forget-section{
 		font-size: $font-sm+2rpx;
 		color: #C0C4CC;
 		text-align: center;
 		margin-top: 40rpx;
 	}
-
-	.forget-section2 {
+	.forget-section2{
 		display: flex;
 		justify-content: space-between;
 		margin-top: -20rpx;
-
-		.register {
+		.register{
 			color: #F23D3D;
 			margin-left: 10rpx;
 		}
-
-		.forget {
+		.forget{
 			text-align: right;
 			color: #F23D3D
 		}
 	}
-
-	.register-section {
-		position: absolute;
+	.register-section{
+		position:absolute;
 		left: 0;
 		bottom: 50rpx;
 		width: 100%;
 		font-size: $font-sm+2rpx;
 		color: $font-color-base;
 		text-align: center;
-
-		text {
+		text{
 			color: $font-color-spec;
 			margin-left: 10rpx;
 		}
-
-		.rscen {
+		.rscen{
 			margin-left: 20rpx;
 			margin-right: 20rpx;
 		}
 	}
-
-	.wxLogin {
-		margin-top: 90rpx;
+	.tipBox{
+		background: #fff;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
-
-		.wxIcon {
-			width: 60rpx;
-			height: 60rpx;
+		flex-direction: column;
+		padding: 0 75rpx;
+		z-index: 101;
+		.txt{
+			margin: 116rpx 0 50rpx;
+			font-size:32rpx;
+			font-family:PingFangSC-Medium,PingFang SC;
+			font-weight:600;
+			color:rgba(48,49,51,1);
 		}
-
-		text {
-			font-size: 28rpx;
-			font-family: PingFangSC-Regular, PingFang SC;
-			font-weight: 400;
-			color: rgba(144, 147, 153, 1);
-			margin-top: 16rpx;
+		.back{
+			height:80rpx;
+			border-radius:40px;
+			border:2rpx solid rgba(242,61,61,1);
+			font-size:28rpx;
+			font-family:PingFangSC-Regular,PingFang SC;
+			font-weight:500;
+			color:rgba(242,61,61,1);
+			width: 100%;
+			margin-bottom: 110rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
+		
 	}
+	.wxLogin {
+			margin-top: 180rpx;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.wxIcon {
+				width: 60rpx;
+				height: 60rpx;
+			}
+			text {
+				font-size: 28rpx;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: rgba(144, 147, 153, 1);
+				margin-top: 16rpx;
+			}
+		}
 </style>

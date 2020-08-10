@@ -40,8 +40,10 @@ Vue.prototype.$api = {prePage};
 
 import wxTabbar from '@/components/wx-tabbar.vue'
 import datePicker from '@/components/datePicker.vue'
+import pwdValidate from '@/components/pwd-validate.vue'
 Vue.component('wxTabbar',wxTabbar)
 Vue.component('datePicker',datePicker)
+Vue.component('pwdValidate',pwdValidate)
 App.mpType = 'app'
 
 const app = new Vue({

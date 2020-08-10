@@ -10,7 +10,7 @@
 			<text class="desc">聚财卡余额</text>
 		</view>
 		<view class="s-item">
-			<view class="wrap" @tap="navTo('/pages/account/cashOut')">
+			<view class="wrap" @tap="navTo('/pages/account/cashOut?type=')">
 				<view class="left">
 					<i class="iconfont icontixian" :style="{color:type==0?'#F23F3F':'#FFA31A'}"></i>
 					<text class="txt">提现</text>
@@ -41,6 +41,11 @@
 		onLoad(opt) {
 			console.log(opt)
 			this.type=opt.type
+			if(opt.type==1){
+				uni.setNavigationBarTitle({
+					title:'我的聚财卡'
+				});
+			}
 		},
 		methods:{
 			navTo(url){

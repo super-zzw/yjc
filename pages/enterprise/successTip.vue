@@ -2,14 +2,14 @@
 	<view class="container" v-if="config">
 		<view class="content" >
 			<text class="iconfont iconchenggong"></text>
-			<view v-if="status==1" class="txtBox">
+			<view  class="txtBox">
 				<text class="tit">提交成功</text>
-				<text class="tit1">钱款将在{{config.DISTRIBUTE_WITHDRAW_SH}}个工作日内退回所填账户</text>
+				<text class="tit1">您可以在企业服务页面「我的企业服务」中</text>
+				<text class="tit1">查看已购买的企业服务</text>
 			</view>
 			
-			<text v-if="status==2" class="tit">钱款已转入对方账户</text>
-			<text v-if="status==3" class="tit">钱款已转入对方聚财卡</text>
-			<navigator url="./index" class="nav">返回首页</navigator>
+			<navigator url="./index" class="nav">查看我的企业服务</navigator>
+			<navigator url="./index" class="nav nav1">返回首页</navigator>
 		</view>
 		<!-- <view class="content" v-else>
 			<text class="iconfont icontijiaoshibai"></text>
@@ -71,9 +71,7 @@
 		.nav{
 			background:rgba(242,61,61,1);
 			border-radius:40rpx;
-			font-size:30rpx;
-			font-family:PingFangSC-Regular,PingFang SC;
-			font-weight:600;
+			font-size: 30rpx;
 			color:rgba(255,255,255,1);
 			margin-top: 70rpx;
 			width: 100%;
@@ -86,16 +84,9 @@
 			background:#fff;
 			border:2rpx solid rgba(242,61,61,1);
 			border-radius:40rpx;
-			font-size:30rpx;
-			font-family:PingFangSC-Regular,PingFang SC;
-			font-weight:600;
 			color:#F23D3D;
 			margin-top: 40rpx;
-			width: 100%;
-			height: 80rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
+			
 		}
 		.txtBox{
 			display: flex;

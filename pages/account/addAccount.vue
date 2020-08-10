@@ -2,32 +2,30 @@
 	<view class="sWrap">
 		<view class="sBox">
 			<view class="sItem">
-				<view class="slabel">{{type==2?'平台用户账号':'聚财卡卡号'}}</view>
+				<view class="slabel">卡号</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="account" 
-					:placeholder="type==2?'请输入平台用户账号':'请输入聚财卡号'"/>
+					placeholder="请输入银行卡号"/>
 				</view>
-				
 			</view>
-			<text v-if="type==2&&aacountName" class="aacountName">该账号对应账户名“{{aacountName}}”</text>
 			<view class="sItem">
-				<view class="slabel">转账金额</view>
+				<view class="slabel">姓名</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="name" 
-					placeholder="请输入转账金额"/>
+					placeholder="请输入银行卡账户姓名"/>
 				</view>
 			</view>
-			<!-- <view class="sItem">
+			<view class="sItem">
 				<view class="slabel">手机验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入手机验证码"/>
 					<text  hover-class="none" class="stext" @tap="sendCode">{{codeText}}</text>
 				</view>
-			</view> -->
+			</view>
 			<view class="sItem">
 				<view class="slabel">备注</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="添加备注(50字以内)"/>
+					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="对该账户进行备注"/>
 				</view>
 			</view>
 			
@@ -51,22 +49,12 @@
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
 				codeText:"获取验证码",
-				type:2,
-				id:"",
-				aacountName:'耶耶耶'
+				type:0,
+				id:""
 			}
 		},
 		onLoad(opt) {
-			this.type = opt.type;
-			let _title=''
-			if(this.type==2){
-				_title='账户转账'
-			}else{
-				_title='聚财卡转账'
-			}
-			uni.setNavigationBarTitle({
-				title: _title
-			});
+			
 		},
 		methods:{
 			getDetail(){
@@ -89,53 +77,51 @@
 				}).catch(err => {uni.hideLoading()})
 			},
 			async register(){
-				// let _data = [
-				// 	{
-				// 		data:this.account.trim(),
-				// 		info:'账号不能为空'
-				// 	},
-				// 	{
-				// 		data:this.name.trim(),
-				// 		info:'姓名不能为空'
-				// 	},
-				// 	{
-				// 		data:this.code,
-				// 		info:'验证码不能为空'
-				// 	},
-				// ]
-				// let jres = await utils.judgeData(_data)
-				// if(jres){
-				// 	uni.showLoading({
-				// 		title:"保存中...",
-				// 		mask:true
-				// 	})
-				// 	await this.$http({
-				// 		apiName:"fxAddWithdrawAccount",
-				// 		type:"POST",
-				// 		data:{
-				// 			account:this.account.trim(),
-				// 			authCode:this.code,
-				// 			name:this.name.trim(),
-				// 			title:this.remark,
-				// 			id:this.id,
-				// 			type:this.type
-				// 		}
-				// 	}).then(res => {
-				// 		uni.hideLoading();
-				// 		uni.showToast({
-				// 			icon:"success",
-				// 			title:"保存成功"
-				// 		})
-				// 		setTimeout(() => {
-				// 			uni.navigateBack()
-				// 		},1500)
-				// 	}).catch(err => {
-				// 		uni.hideLoading()
-				// 	})
-				// }
-				uni.redirectTo({
-					url:'successTip?status='+this.type
-				})
+				let _data = [
+					{
+						data:this.account.trim(),
+						info:'账号不能为空'
+					},
+					{
+						data:this.name.trim(),
+						info:'姓名不能为空'
+					},
+					{
+						data:this.code,
+						info:'验证码不能为空'
+					},
+				]
+				let jres = await utils.judgeData(_data)
+				if(jres){
+					uni.showLoading({
+						title:"保存中...",
+						mask:true
+					})
+					await this.$http({
+						apiName:"fxAddWithdrawAccount",
+						type:"POST",
+						data:{
+							account:this.account.trim(),
+							authCode:this.code,
+							name:this.name.trim(),
+							title:this.remark,
+							id:this.id,
+							type:this.type
+						}
+					}).then(res => {
+						uni.hideLoading();
+						uni.showToast({
+							icon:"success",
+							title:"保存成功"
+						})
+						setTimeout(() => {
+							uni.navigateBack()
+						},1500)
+					}).catch(err => {
+						uni.hideLoading()
+					})
+				}
+				
 			},
 			async sendCode(){
 				if(this.coding){
@@ -255,10 +241,5 @@
 	.btn:active{
 		opacity: 0.3;
 	}
-	.aacountName{
-		font-size:28rpx;
-		font-weight:500;
-		color:rgba(48,49,51,1);
-    }
 }
 </style>

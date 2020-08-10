@@ -21,14 +21,14 @@
 							},
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
-								"text": "\ue7b3",
+								"text": "\ue69c",
 								"fontSize": "28",
 								"color": "#303133",
 								"background": "rgba(0,0,0,0)"
 							},
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
-								"text": "\ue7b3",
+								"text": "\ue699",
 								"fontSize": "28",
 								"color": "#303133",
 								"background": "rgba(0,0,0,0)"
@@ -852,7 +852,7 @@
         ,{
             "path" : "pages/account/index",
             "style" : {
-				"navigationBarTitleText": "我的聚财卡"
+				"navigationBarTitleText": "我的账户"
 			}
         }
         ,{
@@ -871,6 +871,62 @@
             "path" : "pages/account/transfer",
             "style" : {
 				"navigationBarTitleText": "账户转账"
+			}
+        }
+        ,{
+            "path" : "pages/receipt/index",
+            "style" : {
+				"navigationBarTitleText": "易聚财收款",
+				"navigationBarBackgroundColor":"#F23D3D",
+				"navigationBarTextStyle":"white"
+			}
+        }
+        ,{
+            "path" : "pages/enterprise/index",
+            "style" : {
+				"navigationBarTitleText": "企业服务",
+				"app-plus":{
+					"titleNView":{
+						"splitLine": {
+							"color": "#DBDBDB"
+						},
+						"buttons":[{
+							"text":"我的企业服务",
+							"float":"right",
+							"color":"#303133",
+							"fontSrc": "/static/font/iconfont/iconfont.ttf",
+							"fontSize": "16",
+							"background": "rgba(0,0,0,0)"
+						}]
+					}
+				}
+			
+			}
+        }
+        ,{
+            "path" : "pages/enterprise/successTip",
+            "style" : {
+				"navigationBarTitleText": "企业服务支付成功"
+				
+			}
+        }
+        ,{
+            "path" : "pages/account/addAccount",
+            "style" : {
+				"navigationBarTitleText": "添加银行卡账户"
+			}
+        }
+        ,{
+            "path" : "pages/account/accountSel",
+            "style" : {
+				"navigationBarTitleText": "选择提现账户"
+				
+			}
+        }
+        ,{
+            "path" : "pages/enterprise/detail",
+            "style" : {
+				"navigationBarTitleText": "企业服务详情页"
 			}
         }
     ],
