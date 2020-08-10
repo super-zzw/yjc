@@ -60,7 +60,7 @@
 				</view>
 			</view>
 			
-			<view class="my-section">
+			<view class="my-section" @tap="navTo('/pages/account/index?type=0')">
 				<text class="left">我的账户</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>
@@ -69,7 +69,7 @@
 				</view>
 			</view>
 			
-			<view class="my-section">
+			<view class="my-section" @tap="navTo('/pages/account/index?type=1')">
 				<text class="left">我的聚财卡</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>

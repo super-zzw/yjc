@@ -13,10 +13,17 @@
 						"titleSize": "16",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
-								"text": "\ue761",
+								"text": "\ue7b3",
 								"fontSize": "28",
 								"color": "#303133",
 								"float": "left",
+								"background": "rgba(0,0,0,0)"
+							},
+							{
+								"fontSrc": "/static/font/iconfont/iconfont.ttf",
+								"text": "\ue7b3",
+								"fontSize": "28",
+								"color": "#303133",
 								"background": "rgba(0,0,0,0)"
 							},
 							{
@@ -840,6 +847,30 @@
             "path" : "pages/set/loginPwd",
             "style" : {
 				"navigationBarTitleText": "绑定手机号"
+			}
+        }
+        ,{
+            "path" : "pages/account/index",
+            "style" : {
+				"navigationBarTitleText": "我的聚财卡"
+			}
+        }
+        ,{
+            "path" : "pages/account/cashOut",
+            "style" : {
+				"navigationBarTitleText": "提现"
+			}
+        }
+        ,{
+            "path" : "pages/account/successTip",
+            "style" : {
+				"navigationBarTitleText": "提交提示"
+			}
+        }
+        ,{
+            "path" : "pages/account/transfer",
+            "style" : {
+				"navigationBarTitleText": "账户转账"
 			}
         }
     ],

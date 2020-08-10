@@ -1,13 +1,14 @@
 <template>
 	<view class="sWrap">
+		<view class="aBox">
 		<view class="sBox">
-			<view class="sItem">
+		<!-- 	<view class="sItem">
 				<view class="slabel">短信验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="code" placeholder="请输入短信验证码"/>
 					<text class="stext"  @tap="sendCode">{{codeText}}</text>
 				</view>
-			</view>
+			</view> -->
 			<view class="sItem">
 				<view class="slabel">设置支付密码</view>
 				<view class="sinputbox">
@@ -23,6 +24,7 @@
 		
 		</view>
 		<button class="btn" :disabled="confirmBtnDisable" :loading="confirmBtnDisable" @tap="register" >完成</button>
+		</view>
 	</view>
 </template>
 
@@ -32,14 +34,14 @@
 	export default{
 		data(){
 			return {
-				code:"",
+				// code:"",
 				password:"",
 				checkPassword:"",
 				
 				timer:"",
-				coding:false,  //是否处于发送验证码的状态
-				timeLeft:120,
-				codeText:"获取验证码",
+				// coding:false,  //是否处于发送验证码的状态
+				// timeLeft:120,
+				// codeText:"获取验证码",
 				confirmBtnDisable: false
 			}
 		},
@@ -53,10 +55,10 @@
 			async register(){
 				let _data = [
 					
-					{
-						data:this.code,
-						info:'验证码不能为空'
-					},
+					// {
+					// 	data:this.code,
+					// 	info:'验证码不能为空'
+					// },
 					{
 						data:this.password,
 						info:'请输入支付密码'
@@ -189,10 +191,12 @@
 </script>
 
 <style lang="scss" scoped>
+	page{
+		background-color: #F9FAFB;
+	}
 .sWrap{
-	background-color: #fff;
-	padding-left: 32rpx;
-	padding-right: 32rpx;
+	
+	
 	/* #ifdef H5 */
 	height: calc(100vh - 88rpx);
 	/* #endif */
@@ -208,7 +212,14 @@
 			color: $font-color-spec;
 		}
 	}
+	.aBox{
+		background: #fff;
+		padding-left: 32rpx;
+		padding-right: 32rpx;
+		padding-bottom: 60rpx;
+	}
 	.sBox{
+		padding-top: 34rpx;
 		.sItem{
 			padding-top: 24rpx;
 			padding-bottom: 24rpx;
@@ -216,6 +227,7 @@
 			.slabel{
 				color: #303133;
 				font-size: 30rpx;
+				font-weight: 500;
 			}
 			.sinputbox{
 				margin-top: 6rpx;
@@ -257,6 +269,7 @@
 		text-align: center;
 		transition: opacity .2s ;
 		height: auto;
+		
 	}
 	.btn:active{
 		opacity: 0.3;

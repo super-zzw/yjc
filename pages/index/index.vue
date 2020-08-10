@@ -553,9 +553,15 @@ import tabBar from "@/components/tab-bar.vue"
 			});
 			// #endif
 			
-			if (index === 1) {
-				uni.navigateTo({
-					url: '/pages/product/list'
+			if (index === 2) {
+				// uni.navigateTo({
+				// 	url: '/pages/product/list'
+				// })
+				uni.scanCode({
+					 success: function (res) {
+					            console.log('条码类型：' + res.scanType);
+					            console.log('条码内容：' + res.result);
+					   }
 				})
 			} else if (index === 0) {
 				uni.navigateTo({

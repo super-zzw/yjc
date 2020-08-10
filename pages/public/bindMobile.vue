@@ -4,25 +4,23 @@
 		   <image src="../../static/yijucai.png" mode=""></image>
 		   <text class="txt">欢迎来到易聚财</text>
 	   </view>
-		
-		
 		<view class="wrapper">
-		
-		
 			<view class="input-content">
 				<view class="input-item" >
-					<text class="tit">手机号码</text>
+					<!-- <text >手机号码</text> -->
+					<image src="../../static/mobile.png" mode="" class="icon"></image>
 					<input 
 						type="number" 
 						v-model="mobile"
-						placeholder="请输入手机号码"
+						placeholder="请输入手机号"
 						maxlength="11"
 					/>
 				</view>
-				
+			</view>	
+			<view class="input-content">
 				<view class="input-item input-item1" >
 					<view class="left">
-						<text class="tit">验证码</text>
+						<image src="../../static/code.png" mode="" class="icon"></image>
 						<input 
 							type="text" 
 							placeholder="请输入验证码"
@@ -35,6 +33,7 @@
 					
 					<text class="stext"  @tap="getCode">{{codeText}}</text>
 				</view>
+				
 				<!-- <image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="weixin"></image>
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png" mode="" @tap="oAuth" class="oAuthIcon"
@@ -48,7 +47,7 @@
 				</view>
 				 -->
 			</view>
-			<button class="confirm-btn" @click="confirmBtn" :disabled="logining" >确定</button>
+			<button class="confirm-btn" @click="confirmBtn" :disabled="logining" >绑定</button>
 		</view>
 		<!-- <view class="suibian" @tap="toIndex">随便逛逛</view>
 		<view class="register-section">
@@ -83,7 +82,7 @@
 				sModal:false,
 				coding:false,  //是否处于发送验证码的状态
 				timer:"",
-				codeText:"发送验证码",
+				codeText:"获取验证码",
 				timeLeft:120,
 				
 			}
@@ -266,6 +265,7 @@
 			font-size:32rpx;
 			font-weight:500;
 			color:rgba(144,147,153,1);
+			margin-top: 20rpx;
 		}
 	}
 	
@@ -273,7 +273,7 @@
 		position:relative;
 		z-index: 90;
 		/* padding-bottom: 40rpx; */
-		margin-top: 40rpx;
+		margin-top: 80rpx;
 		.tabbar{
 			padding-top: 22rpx;
 			display: flex;
@@ -355,8 +355,8 @@
 		text-shadow: 1px 0px 1px rgba(0,0,0,.3);
 	}
 	.input-content{
-		margin-top: 50rpx;
-		padding: 0 60rpx;
+		/* margin-top: 80rpx; */
+		padding: 44rpx 48rpx 28rpx;
 		.oAuthIcon{
 			width: 80rpx;
 			height: 80rpx;
@@ -364,14 +364,16 @@
 	}
 	.input-item{
 		display:flex;
-		flex-direction: column;
-		align-items:flex-start;
-		justify-content: center;
-		padding: 25rpx;
-		background:$page-color-light;
+		align-items: center;
+		/* flex-direction: column; */
+		/* align-items:flex-start;
+		justify-content: center; */
+		/* padding: 25rpx; */
+		/* background:$page-color-light; */
 		height: 120rpx;
 		border-radius: 4px;
 		margin-bottom: 50rpx;
+		border-bottom: 4rpx solid #DBDBDB;
 		.stext{
 			color: #F23D3D;
 			border: 2rpx solid #F23D3D;
@@ -385,11 +387,14 @@
 		&:last-child{
 			margin-bottom: 0;
 		}
-		.tit{
+		.icon{
 			/* height: 50rpx; */
 			/* line-height: 56rpx; */
-			font-size: $font-sm+2rpx;
-			color: $font-color-base;
+			height: 48rpx;
+			width: 48rpx;
+			margin-right: 14rpx;
+			/* font-size: $font-sm+2rpx;
+			color: $font-color-base; */
 		}
 		input{
 			height: 60rpx;
@@ -405,7 +410,8 @@
 		align-items: center;
 		.left{
 			display: flex;
-			flex-direction: column;
+			align-items: center;
+			/* flex-direction: column; */
 		}
 		.stext{
 			margin-top: 20rpx;
