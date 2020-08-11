@@ -20,11 +20,11 @@
 <script>
 	import passwordInput from './password-input/password-input.vue'
 	import numberKeyboard from './number-keyboard/number-keyboard.vue'
+	import utils from '../utils/method.js'
 	export default {
 		props:{
 				sModal:{
 					default:false,
-					
 				}
 			
 		},
@@ -37,14 +37,44 @@
 				password:''
 			};
 		},
-		
+		watch:{
+			password(data) {
+				// let all = (Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+				if (data.length >= 6) {
+					this.$http({
+						apiName: 'checkPayPwd',
+						type: 'POST',
+						data: {
+							tradepwd: utils.md5(this.password)
+						}
+					}).then(res => {
+						this.closePass()
+						this.$emit('validateOk',this.password)
+						this.clear()
+						// this.$refs.KeyboarHid.iptNum = []
+						
+			
+			
+					}).catch(err => {
+						this.clear()
+					})
+				}
+			},
+			sModal(val){
+			
+				if(val){
+				
+					this.$refs.KeyboarHid.open();
+				}
+			}
+		},
 		methods:{
 			clickInput(val) {
 				this.password = val;
 			},
 			closePass() {
-				this.sModal = false
-				this.sMask = false
+				// this.sModal = false
+			    this.$emit('close')
 				this.$refs.KeyboarHid.close();
 			
 			},
@@ -53,6 +83,9 @@
 					this.$refs.KeyboarHid.open();
 				}
 			},
+			clear(){
+				this.$refs.KeyboarHid.iptNum = []
+			}
 		}
 	}
 </script>

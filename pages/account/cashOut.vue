@@ -40,13 +40,12 @@
 				</view>
 			</view> -->
 		</view>
-		<pwdValidate :sModal="sModal"/>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
 		
 	</view>
 </template>
 
 <script>
-	
 	import utils from '../../utils/method.js'
 	import {mapState} from 'vuex'
 	export default {
@@ -98,7 +97,12 @@
 				// 	url:'./accountSel'
 				// })
 			},
-			
+			validateOk(pass){
+				this.password=pass
+			},
+			close(){
+				this.sModal=false
+			},
 			async tx(){
 				// if(!this.accountList.length){
 				// 	uni.showToast({

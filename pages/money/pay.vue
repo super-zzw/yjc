@@ -9,10 +9,25 @@
 			<!-- 1=支付宝；2=微信 4=货到付款, -->
 			<view class="" v-for="(item,index) in payTypes" :key="index">
 				<view class="type-item b-b" @click="changePayType(1)" v-if="item.payType === 2">
+					<text class="icon iconfont iconzhanghuyuezhifu"></text>
+					<view class="con">
+						<view class="row1">
+							<text class="tit">账户余额支付</text>
+							<text class="shengyu">(余额：¥435.50)</text>
+						</view>
+						<text v-if="item.payDefault == 1">推荐使用</text>
+					</view>
+					<label class="radio">
+						<radio value="" color="#F23D3D" :checked='payType == 1' />
+						</radio>
+					</label>
+				</view>
+				
+				<view class="type-item b-b" @click="changePayType(1)" v-if="item.payType === 2">
 					<text class="icon iconfont iconweixin"></text>
 					<view class="con">
 						<text class="tit">微信支付</text>
-						<text v-if="item.payDefault == 1">推荐使用微信支付</text>
+						<!-- <text v-if="item.payDefault == 1">推荐使用微信支付</text> -->
 					</view>
 					<label class="radio">
 						<radio value="" color="#F23D3D" :checked='payType == 1' />
@@ -33,7 +48,7 @@
 					</label>
 				</view>
 
-				<view class="type-item b-b" @click="changePayType(3)" v-if="item.payType === 4 && group != 1">
+				<!-- <view class="type-item b-b" @click="changePayType(3)" v-if="item.payType === 4 && group != 1">
 					<text class="icon iconfont iconhuodaofukuan"></text>
 					<view class="con">
 						<text class="tit">货到付款</text>
@@ -42,7 +57,7 @@
 						<radio value="" color="#F23D3D" :checked='payType == 3' />
 						</radio>
 					</label>
-				</view>
+				</view> -->
 			</view>
 		</view>
 		<text>{{err}}</text>
@@ -483,5 +498,8 @@
 		background-color: $base-color;
 		border-radius: 10rpx;
 		box-shadow: 1px 2px 5px rgba(219, 63, 96, 0.4);
+	}
+	.iconzhanghuyuezhifu{
+		color: #f23d3d;
 	}
 </style>
