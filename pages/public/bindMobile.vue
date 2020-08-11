@@ -185,8 +185,8 @@
 							appOpenId:uni.getStorageSync('appInfo').openId,
 							authCode:this.code,
 							phoneNumber:this.mobile,
-							headUrl:uni.getStorageSync('appInfo').avatarUrl,
-							wuserName:uni.getStorageSync('appInfo').nickName
+							// headUrl:uni.getStorageSync('appInfo').avatarUrl,
+							// wuserName:uni.getStorageSync('appInfo').nickName
 						}
 					}).then(res=>{
 						uni.showToast({
@@ -196,20 +196,12 @@
 						
 						utils.setSesion(res.data)
 						utils.getUserInfo()
-						uni.navigateTo({
-							url:'../set/loginPwd'
+						uni.redirectTo({
+							url:'../set/payPwd'
 						})
 						// utils.afterLoginJump()
 					}).catch(err=>{
-						// uni.redirectTo({
-						// 	url:'../set/loginPwd'
-						// })
-						// uni.showToast({
-						// 	title:'绑定失败'
-						// })
-						// uni.redirectTo({
-						// 	url:'../set/loginPwd'
-						// })
+					
 					})
 				}
 				

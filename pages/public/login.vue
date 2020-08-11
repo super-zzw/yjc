@@ -1,44 +1,32 @@
 <template>
 	<view class="container">
-       <view class="top">
-		   <image src="../../static/yijucai.png" mode=""></image>
-		   <text class="txt">欢迎来到易聚财</text>
-	   </view>
+		<view class="top">
+			<image src="../../static/yijucai.png" mode=""></image>
+			<text class="txt">欢迎来到易聚财</text>
+		</view>
 		<view class="wrapper">
 			<view class="input-content">
-				<view class="input-item" >
+				<view class="input-item">
 					<!-- <text >手机号码</text> -->
 					<image src="../../static/mobile.png" mode="" class="icon"></image>
-					<input 
-						type="number" 
-						v-model="mobile"
-						placeholder="请输入手机号"
-						maxlength="11"
-					/>
+					<input type="number" v-model="mobile" placeholder="请输入手机号" maxlength="11" />
 				</view>
-			</view>	
+			</view>
 			<view class="input-content">
-				<view class="input-item input-item1" >
+				<view class="input-item input-item1">
 					<view class="left">
 						<image src="../../static/code.png" mode="" class="icon"></image>
-						<input 
-							type="password" 
-							placeholder="请输入验证码"
-							placeholder-class="input-empty"
-							maxlength="6"
-							v-model="code"
-							
-						/>
+						<input type="password" placeholder="请输入验证码" placeholder-class="input-empty" maxlength="6" v-model="code" />
 					</view>
-					
-					<text class="stext"  @tap="getCode">{{codeText}}</text>
+
+					<text class="stext" @tap="getCode">{{codeText}}</text>
 				</view>
-				
+
 				<!-- <image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="weixin"></image>
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="qq"></image> -->
-			<!-- 	<view class="forget-section forget-section2"  @tap="toPage('/pages/public/logincode')">
+				<!-- 	<view class="forget-section forget-section2"  @tap="toPage('/pages/public/logincode')">
 					<view>
 						没有账户?
 						<text class="register" @click="toPage('/pages/public/register')">立即注册</text>
@@ -55,7 +43,7 @@
 			<text class="rscen">|</text>
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
-		<view class="wxLogin">
+		<view class="wxLogin" @click="oAuth" data-logintype="weixin">
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
@@ -69,71 +57,70 @@
 
 <script>
 	// import {  
- //        mapState 
- //    } from 'vuex';
+	//        mapState 
+	//    } from 'vuex';
 	import utils from '../../utils/method.js'
-	export default{
-		data(){
+	export default {
+		data() {
 			return {
 				mobile: '',
 				code: '',
 				logining: false,
-				tab:1,
-				sModal:false,
-				coding:false,  //是否处于发送验证码的状态
-				timer:"",
-				codeText:"获取验证码",
-				timeLeft:120,
-				
+				tab: 1,
+				sModal: false,
+				coding: false, //是否处于发送验证码的状态
+				timer: "",
+				codeText: "获取验证码",
+				timeLeft: 120,
+
 			}
 		},
-		onLoad(opt){
+		onLoad(opt) {
 			//返回跳转过来的
-			
+
 		},
 		methods: {
 			// ...mapMutations(['login']),
-			toIndex(){
+			toIndex() {
 				uni.switchTab({
-				// uni.reLaunch({
-					url:'/pages/index/index'
+					// uni.reLaunch({
+					url: '/pages/index/index'
 				})
 			},
-			toPage(url){
+			toPage(url) {
 				uni.navigateTo({
-					url:url
+					url: url
 				})
 			},
-			navBack(){
+			navBack() {
 				uni.navigateBack();
 			},
-			async getCode(){
-				if(this.coding){
+			async getCode() {
+				if (this.coding) {
 					return
 				}
 				uni.showLoading({
-					title:"获取验证码...",
-					mask:true
+					title: "获取验证码...",
+					mask: true
 				})
-				let _data = [
-					{
-						data:this.mobile.trim(),
-						info:'手机号不能为空'
+				let _data = [{
+						data: this.mobile.trim(),
+						info: '手机号不能为空'
 					},
 					{
-						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-						info:'手机号格式不正确'
+						data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+						info: '手机号格式不正确'
 					}
 				]
 				let jres = await utils.judgeData(_data)
-				if(jres){
+				if (jres) {
 					this.coding = true;
 					this.countDown();
 					await this.$http({
-						apiName:"getCode",
-						type:"POST",
-						data:{
-							phoneNumber:this.mobile,
+						apiName: "getCode",
+						type: "POST",
+						data: {
+							phoneNumber: this.mobile,
 						}
 					}).then(res => {
 						uni.hideLoading();
@@ -141,86 +128,130 @@
 						this.clearCountDown();
 						uni.hideLoading();
 					})
-				}else{
+				} else {
 					uni.hideLoading()
 				}
 			},
-			countDown(){
+			countDown() {
 				this.timer = setInterval(() => {
-					  this.codeText = "请稍后" + this.timeLeft + 's'
-					  this.timeLeft -= 1;
-					  if(this.timeLeft == 0){
-						  this.clearCountDown();
-					  }
-				},1000)
+					this.codeText = "请稍后" + this.timeLeft + 's'
+					this.timeLeft -= 1;
+					if (this.timeLeft == 0) {
+						this.clearCountDown();
+					}
+				}, 1000)
 			},
-			clearCountDown(){
-				  clearInterval(this.timer);
-				  this.coding = false
-				  this.timeLeft = 120
-				  this.codeText = "发送验证码"
+			clearCountDown() {
+				clearInterval(this.timer);
+				this.coding = false
+				this.timeLeft = 120
+				this.codeText = "发送验证码"
 			},
-		   async toLogin() {
-						if (this.logining) {
-							return
-						}
-						this.logining = true;
-						let _data, apiName, formdata
-						
-							_data = [{
-									data: this.mobile.trim(),
-									info: '手机号不能为空'
-								},
-								{
-									data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
-									info: '手机号格式不正确'
-								},
-								{
-									data: this.code,
-									info: '验证码不能为空'
-								},
-							]
-							apiName = 'codeLogin'
-							formdata = {
-								authCode: this.code,
-								phoneNumber: this.mobile,
-							}
-						
-						let jres = await utils.judgeData(_data)
-						if (jres) {
-							await this.$http({
-								apiName: apiName,
-								type: "POST",
-								data: formdata
-							}).then(res => {
-								console.log(res)
-								utils.setSesion(res.data)
-								utils.afterLoginJump()
-							}).catch(_ => {})
-						}
-						this.logining = false;
+			async toLogin() {
+				if (this.logining) {
+					return
+				}
+				this.logining = true;
+				let _data, apiName, formdata
+				_data = [{
+						data: this.mobile.trim(),
+						info: '手机号不能为空'
 					},
+					{
+						data: /^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.mobile.trim()) ? "1" : "",
+						info: '手机号格式不正确'
+					},
+					{
+						data: this.code,
+						info: '验证码不能为空'
+					},
+				]
+				apiName = 'codeLogin'
+				formdata = {
+					authCode: this.code,
+					phoneNumber: this.mobile,
+				}
+
+				let jres = await utils.judgeData(_data)
+				if (jres) {
+					await this.$http({
+						apiName: apiName,
+						type: "POST",
+						data: formdata
+					}).then(res => {
+						console.log(res)
+						utils.setSesion(res.data)
+						utils.afterLoginJump()
+					}).catch(_ => {})
+				}
+				this.logining = false;
+			},
+			oAuth(e) {
+				var type = e.currentTarget.dataset.logintype
+				uni.login({
+					provider: type,
+					success: (res) => {
+						uni.getUserInfo({
+							provider: type,
+							success: (info) => {
+								uni.setStorageSync('appInfo', info.userInfo)
+								console.log(info.userInfo)
+								this.$http({
+									apiName: 'appWxLogin',
+									type: 'POST',
+									data: {
+										appOpenId: info.userInfo.openId,
+										headUrl: info.userInfo.avatarUrl
+									}
+								}).then(res => {
+									console.log(res)
+									uni.showToast({
+										title: '登陆成功',
+										mask: false,
+										duration: 1500
+									});
+									utils.setSesion(res.data)
+									utils.getUserInfo()
+									utils.afterLoginJump()
+								}).catch(err => {
+									console.log(err)
+									if (err.code === 500082) {
+										uni.redirectTo({
+											url: './bindMobile'
+										})
+									} else {
+										uni.redirectTo({
+											url: '../set/payPwd'
+										})
+									}
+								})
+							}
+						})
+					}
+				})
+			}
 		},
 
 	}
 </script>
 
 <style lang='scss' scoped>
-	page{
+	page {
 		background: #fff;
 	}
-	.container{
+
+	.container {
 		/* padding-top: 115px; */
-		position:relative;
+		position: relative;
 		width: 100vw;
-		
+
 		/*#ifdef APP-PLUS*/
-	/* 	height: 100vh; */
+		/* 	height: 100vh; */
 		/* #endif */
 		/* #ifdef H5 */
 		/* height: calc(100vh - 88rpx); */
 		/* #endif */
-	/* 	overflow: hidden;
+		/* 	overflow: hidden;
 		background: #fff;
 		box-sizing: border-box; */
 		/*  #ifdef APP-PLUS || H5 */
@@ -231,60 +262,68 @@
 		/*  #endif */
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-		.suibian{
+
+		.suibian {
 			font-size: 12px;
 			color: #4399fc;
 			margin-top: 60rpx;
 			text-align: center;
 		}
 	}
-	.top{
+
+	.top {
 		margin-top: 90rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		image{
+
+		image {
 			width: 96rpx;
 			height: 96rpx;
 		}
-		.txt{
-			font-size:32rpx;
-			font-weight:500;
-			color:rgba(144,147,153,1);
+
+		.txt {
+			font-size: 32rpx;
+			font-weight: 500;
+			color: rgba(144, 147, 153, 1);
 			margin-top: 20rpx;
 		}
 	}
-	
-	.wrapper{
-		position:relative;
+
+	.wrapper {
+		position: relative;
 		z-index: 90;
 		/* padding-bottom: 40rpx; */
 		margin-top: 80rpx;
-		.tabbar{
+
+		.tabbar {
 			padding-top: 22rpx;
 			display: flex;
 			border-bottom: 2rpx solid #DBDBDB;
-			.tab{
+
+			.tab {
 				flex: 1;
 				display: flex;
 				justify-content: center;
-				
-				text{
-					font-size:32rpx;
-					color:rgba(144,147,153,1);
-					font-weight:400;
+
+				text {
+					font-size: 32rpx;
+					color: rgba(144, 147, 153, 1);
+					font-weight: 400;
 					line-height: 88rpx;
 				}
-				text.active{
-					color:rgba(48,49,51,1);
+
+				text.active {
+					color: rgba(48, 49, 51, 1);
 					border-bottom: 4rpx solid #F23D3D;
 				}
 			}
-			
+
 		}
 	}
-	.back-btn{
-		position:absolute;
+
+	.back-btn {
+		position: absolute;
 		left: 40rpx;
 		z-index: 9999;
 		padding-top: var(--status-bar-height);
@@ -292,30 +331,36 @@
 		font-size: 40rpx;
 		color: $font-color-dark;
 	}
-	.left-top-sign{
+
+	.left-top-sign {
 		font-size: 80rpx;
 		font-weight: bold;
 		color: $page-color-base;
-		position:relative;
+		position: relative;
 		left: 60rpx;
 	}
-	.right-top-sign{
-		position:absolute;
+
+	.right-top-sign {
+		position: absolute;
 		top: 80rpx;
 		right: -30rpx;
 		z-index: 95;
-		&:before, &:after{
-			display:block;
-			content:"";
+
+		&:before,
+		&:after {
+			display: block;
+			content: "";
 			width: 400rpx;
 			height: 80rpx;
 			background: #b4f3e2;
 		}
-		&:before{
+
+		&:before {
 			transform: rotate(50deg);
 			border-radius: 0 50px 0 0;
 		}
-		&:after{
+
+		&:after {
 			position: absolute;
 			right: -198rpx;
 			top: 0;
@@ -324,32 +369,37 @@
 			/* background: pink; */
 		}
 	}
-	.left-bottom-sign{
-		position:absolute;
+
+	.left-bottom-sign {
+		position: absolute;
 		left: -270rpx;
 		bottom: -320rpx;
 		border: 100rpx solid #d0d1fd;
 		border-radius: 50%;
 		padding: 180rpx;
 	}
-	.welcome{
-		position:relative;
+
+	.welcome {
+		position: relative;
 		left: 50rpx;
 		top: -90rpx;
 		font-size: 46rpx;
 		color: #555;
-		text-shadow: 1px 0px 1px rgba(0,0,0,.3);
+		text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
 	}
-	.input-content{
+
+	.input-content {
 		/* margin-top: 80rpx; */
 		padding: 0 48rpx 0;
-		.oAuthIcon{
+
+		.oAuthIcon {
 			width: 80rpx;
 			height: 80rpx;
 		}
 	}
-	.input-item{
-		display:flex;
+
+	.input-item {
+		display: flex;
 		align-items: center;
 		/* flex-direction: column; */
 		/* align-items:flex-start;
@@ -360,7 +410,8 @@
 		border-radius: 4px;
 		margin-bottom: 50rpx;
 		border-bottom: 4rpx solid #DBDBDB;
-		.stext{
+
+		.stext {
 			color: #F23D3D;
 			border: 2rpx solid #F23D3D;
 			border-radius: 30rpx;
@@ -370,10 +421,12 @@
 			text-align: center;
 			padding: 10rpx 16rpx;
 		}
-		&:last-child{
+
+		&:last-child {
 			margin-bottom: 0;
 		}
-		.icon{
+
+		.icon {
 			/* height: 50rpx; */
 			/* line-height: 56rpx; */
 			height: 48rpx;
@@ -382,26 +435,30 @@
 			/* font-size: $font-sm+2rpx;
 			color: $font-color-base; */
 		}
-		input{
+
+		input {
 			height: 60rpx;
 			font-size: $font-base + 2rpx;
 			color: $font-color-dark;
 			width: 100%;
-		}	
+		}
 	}
-    .input-item.input-item1{
+
+	.input-item.input-item1 {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-		.left{
+
+		.left {
 			display: flex;
 			align-items: center;
 			/* flex-direction: column; */
 		}
-		
+
 	}
-	.confirm-btn{
+
+	.confirm-btn {
 		width: 630rpx;
 		height: 76rpx;
 		line-height: 76rpx;
@@ -410,47 +467,56 @@
 		background: #F23D3D;
 		color: #fff;
 		font-size: $font-lg;
-		&:after{
+
+		&:after {
 			border-radius: 100px;
 		}
 	}
-	.forget-section{
+
+	.forget-section {
 		font-size: $font-sm+2rpx;
 		color: #C0C4CC;
 		text-align: center;
 		margin-top: 40rpx;
 	}
-	.forget-section2{
+
+	.forget-section2 {
 		display: flex;
 		justify-content: space-between;
 		margin-top: -20rpx;
-		.register{
+
+		.register {
 			color: #F23D3D;
 			margin-left: 10rpx;
 		}
-		.forget{
+
+		.forget {
 			text-align: right;
 			color: #F23D3D
 		}
 	}
-	.register-section{
-		position:absolute;
+
+	.register-section {
+		position: absolute;
 		left: 0;
 		bottom: 50rpx;
 		width: 100%;
 		font-size: $font-sm+2rpx;
 		color: $font-color-base;
 		text-align: center;
-		text{
+
+		text {
 			color: $font-color-spec;
 			margin-left: 10rpx;
 		}
-		.rscen{
+
+		.rscen {
 			margin-left: 20rpx;
 			margin-right: 20rpx;
 		}
 	}
-	.tipBox{
+
+	.tipBox {
 		background: #fff;
 		position: fixed;
 		left: 0;
@@ -461,44 +527,49 @@
 		flex-direction: column;
 		padding: 0 75rpx;
 		z-index: 101;
-		.txt{
+
+		.txt {
 			margin: 116rpx 0 50rpx;
-			font-size:32rpx;
-			font-family:PingFangSC-Medium,PingFang SC;
-			font-weight:600;
-			color:rgba(48,49,51,1);
+			font-size: 32rpx;
+			font-family: PingFangSC-Medium, PingFang SC;
+			font-weight: 600;
+			color: rgba(48, 49, 51, 1);
 		}
-		.back{
-			height:80rpx;
-			border-radius:40px;
-			border:2rpx solid rgba(242,61,61,1);
-			font-size:28rpx;
-			font-family:PingFangSC-Regular,PingFang SC;
-			font-weight:500;
-			color:rgba(242,61,61,1);
+
+		.back {
+			height: 80rpx;
+			border-radius: 40px;
+			border: 2rpx solid rgba(242, 61, 61, 1);
+			font-size: 28rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 500;
+			color: rgba(242, 61, 61, 1);
 			width: 100%;
 			margin-bottom: 110rpx;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 		}
-		
+
 	}
+
 	.wxLogin {
-			margin-top: 180rpx;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			.wxIcon {
-				width: 60rpx;
-				height: 60rpx;
-			}
-			text {
-				font-size: 28rpx;
-				font-family: PingFangSC-Regular, PingFang SC;
-				font-weight: 400;
-				color: rgba(144, 147, 153, 1);
-				margin-top: 16rpx;
-			}
+		margin-top: 180rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.wxIcon {
+			width: 60rpx;
+			height: 60rpx;
 		}
+
+		text {
+			font-size: 28rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: rgba(144, 147, 153, 1);
+			margin-top: 16rpx;
+		}
+	}
 </style>

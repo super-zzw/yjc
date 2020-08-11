@@ -60,20 +60,20 @@
 				</view>
 			</view>
 			
-			<view class="my-section" @tap="navTo('/pages/account/index?type=0')">
+			<view class="my-section" @tap="navTo('/pages/account/index?type=0')" v-if="hasLogin">
 				<text class="left">我的账户</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>
-					<text class="txt2">¥435.50</text>
+					<text class="txt2">¥{{userInfo.yjcBalance}}</text>
 					<image src="../../static/user/arrow.png" mode="" class="txt3"></image>
 				</view>
 			</view>
 			
-			<view class="my-section" @tap="navTo('/pages/account/index?type=1')">
+			<view class="my-section" @tap="navTo('/pages/account/index?type=1')" v-if="hasLogin">
 				<text class="left">我的聚财卡</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>
-					<text class="txt2">¥2020.00</text>
+					<text class="txt2">¥{{userInfo.yjcCardBalance}}</text>
 					<image src="../../static/user/arrow.png" mode="" class="txt3"></image>
 				</view>
 			</view>
@@ -108,17 +108,17 @@
 						<text class="itemBoxText">我的评价</text>
 						
 				</view>
-				<view class="hsitem" @tap="navTo('/pagesC/invite/invite')" v-if="hasScore">
+				<!-- <view class="hsitem" @tap="navTo('/pagesC/invite/invite')" v-if="hasScore">
 					 <image src="../../static/user/invite.png" class="icon"></image>
 						<text class="itemBoxText">邀请好友</text>
 						
-				</view>
-				<view class="hsitem" @tap="navTo('/pagesF/myStore/index')">
+				</view> -->
+			<!-- 	<view class="hsitem" @tap="navTo('/pagesF/myStore/index')">
 				    <image src="../../static/user/chuzhi.png" class="icon"></image>
 						<text class="itemBoxText">我的储值</text>
 					
-				</view>
-				<view class="hsitem" @tap="navTo('/pages/coupons/index')">
+				</view> -->
+				<view class="hsitem" @tap="navTo('/pages/account/accountSel')">
 			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
 						<text class="itemBoxText">银行卡</text>
 					

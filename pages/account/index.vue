@@ -1,12 +1,12 @@
 <template>
 	<view>
 		<view class="top0 top" v-if="type==0">
-			<text class="money">¥2020.00</text>
+			<text class="money">¥{{userInfo.yjcBalance}}</text>
 			<text class="desc">账户余额</text>
-			<text class="desc1">（包含物质福利金¥203.00，不可提现）</text>
+			<text class="desc1">（包含物质福利金¥{{userInfo.yjcFreezeBalance}}，不可提现）</text>
 		</view>
 		<view class="top1 top" v-if="type==1">
-			<text class="money">¥2020.00</text>
+			<text class="money">¥{{userInfo.yjcCardBalance}}</text>
 			<text class="desc">聚财卡余额</text>
 		</view>
 		<view class="s-item">
@@ -32,11 +32,17 @@
 </template>
 
 <script>
+	import {
+	    mapState,mapMutations
+	} from 'vuex';
 	export default {
 		data() {
 			return {
 				type:0
 			};
+		},
+		computed:{
+			...mapState(['userInfo']),
 		},
 		onLoad(opt) {
 			console.log(opt)

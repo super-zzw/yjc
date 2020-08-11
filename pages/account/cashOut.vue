@@ -3,10 +3,10 @@
 		<view class="accountBox" @tap="accountSel">
 			<view class="left" v-if="accountList.length > 0">
 			<!-- 	<! <image src="../image/zhifubao.png" mode="" class="accountImg" v-if="accountList[selectFxAccount].type == 0"></image> -->
-				<i  mode="" class="accountImg iconfont iconyinhangkazhanghu" v-if="accountList[selectFxAccount].type == 1"></i>
+				<i  mode="" class=" iconfont iconyinhangkazhanghu" ></i>
 				<view class="info">
-					<text class="name">{{accountList[selectFxAccount].name}}</text>
-					<text class="num">{{accountList[selectFxAccount].account}}</text>
+					<text class="name">{{accountList[selectFxAccount].bankname}}</text>
+					<text class="num">{{accountList[selectFxAccount].cardno}}</text>
 				</view>
 			</view>
 			<view class="left" v-else>
@@ -21,24 +21,16 @@
 			<view class="iptBox">￥<input type="number" value="" v-model="money"/></view>
 			<text class="divider"></text>
 			<view class="txts">
-				<text class="txt2">可提现金额¥{{ableMoney}}</text>
-				<text class="txt2">手续费：¥60.00</text>
+				<text class="txt2">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance}}</text>
+				<text class="txt2" v-if="money">手续费：¥{{shouxu}}</text>
+			<!-- 	<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1" class="txt2">
+					手续费：¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
+				</view>
+				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 2" class="txt2">
+					手续费：{{config.DISTRIBUTE_WITHDRAW.withdrawRatio * money}}
+				</view> -->
 			</view>
 			<button type="default" hover-class="none" @tap="tx">提交</button>
-		<!-- 	<view class="txt2">
-				<view class="">
-					提现说明:
-				</view>
-				<view class="">
-					1.最小提现金额为¥{{config.DISTRIBUTE_WITHDRAW.withdrawMin}}
-				</view>
-				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1">
-					2.提现手续费为¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
-				</view>
-				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 2">
-					2.提现手续费为提现金额的{{config.DISTRIBUTE_WITHDRAW.withdrawRatio * 100}}%
-				</view>
-			</view> -->
 		</view>
 		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
 		
@@ -55,7 +47,8 @@
 				accountList:[],  //提现账户
 				ableMoney:"",  //可提现金额
 				sModal:false,
-				password:''
+				password:'',
+				
 			};
 		},
 		async onShow() {
@@ -66,8 +59,16 @@
 			await this.getAccount();
 			uni.hideLoading()
 		},
+	
 		computed:{
-			...mapState(['selectFxAccount','config'])
+			...mapState(['selectFxAccount','config','userInfo']),
+			shouxu(){
+				if(this.config.YJC_WITHDRAW.withdrawType == 1){
+					return this.config.YJC_WITHDRAW.withdrawAmount
+				}else{
+					return (this.config.YJC_WITHDRAW.withdrawRatio * this.money).toFixed(2)
+				}
+			}
 		},
 		methods:{
 			//获取账户详情
@@ -88,9 +89,9 @@
 				}).catch(err => {})
 			},
 			accountSel(){
-				if(this.accountList.length==0){
+				if(this.accountList.length>0){
 					uni.navigateTo({
-						url:'addAccount'
+						url:'accountSel'
 					})
 				}
 				// uni.navigateTo({
@@ -172,6 +173,7 @@
 		  .info{
 			  display: flex;
 			  flex-direction: column;
+			  margin-left: 30rpx;
 			  .name{
 				  font-size:32rpx;
 				  font-family:PingFangSC-Regular,PingFang SC;
@@ -268,6 +270,7 @@
 			position: absolute;
 			left: 20rpx;
 			top: 20rpx;
+			
 			// left: 0;
 		}
 	
@@ -307,5 +310,9 @@
 		// opacity: 1;
 		// min-height: 410rpx;
 		height: auto;
+	}
+	.iconyinhangkazhanghu{
+		color: #f89809;
+		font-size: 88rpx;
 	}
 </style>
