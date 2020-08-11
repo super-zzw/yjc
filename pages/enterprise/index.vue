@@ -68,6 +68,27 @@
 				uni.redirectTo({
 					url:'./successTip'
 				})
+			},
+			onNavigationBarButtonTap(e) {
+				
+				const index = e.index;
+				// #ifdef APP-PLUS
+				const pages = getCurrentPages();
+				
+				const page = pages[pages.length - 1];
+				const currentWebview = page.$getAppWebview();
+				currentWebview.hideTitleNViewButtonRedDot({
+					index
+				});
+				// #endif
+				
+				
+				 if (index === 0) {
+					
+					uni.navigateTo({
+						url: './myService'
+					})
+				}
 			}
 		}
 	}

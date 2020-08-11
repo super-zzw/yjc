@@ -906,27 +906,73 @@
         ,{
             "path" : "pages/enterprise/successTip",
             "style" : {
-				"navigationBarTitleText": "企业服务支付成功"
+				"navigationBarTitleText": "企业服务支付成功",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
 				
 			}
         }
         ,{
             "path" : "pages/account/addAccount",
             "style" : {
-				"navigationBarTitleText": "添加银行卡账户"
+				"navigationBarTitleText": "添加银行卡账户",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
 			}
         }
         ,{
             "path" : "pages/account/accountSel",
             "style" : {
-				"navigationBarTitleText": "选择提现账户"
+				"navigationBarTitleText": "选择提现账户",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
 				
 			}
         }
         ,{
             "path" : "pages/enterprise/detail",
             "style" : {
-				"navigationBarTitleText": "企业服务详情页"
+				"navigationBarTitleText": "企业服务详情页",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
+			}
+        }
+        ,{
+            "path" : "pages/enterprise/myService",
+            "style" : {
+				"navigationBarTitleText": "我的企业服务",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
 			}
         }
     ],
