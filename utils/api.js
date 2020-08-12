@@ -146,4 +146,9 @@ export default{
 	getCurrentPhoneCode:"/app/yzm/sendAuthCode",  //获取当前账号手机号验证码
 	fxTeamOne:"/fx/get/subTeam/oneList",  //下属团队一级代理
 	fxTeamTwo:"/fx/get/subTeam/twoList",  //下属团队二级代理
+	
+	//企业服务
+	getServiceList:"/yjc/get/enterpriseServices/list"  ,//获取企业服务列表
+	addServiceCart:"/yjc/add/enterpriseServices/cart", //企业服务添加购物车
+	updateServiceNum:"/yjc/update/enterpriseServices/quantity", //修改购物车中企业服务的数量
 }
