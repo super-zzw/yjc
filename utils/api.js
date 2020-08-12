@@ -135,8 +135,10 @@ export default{
 	fxCommissionList:"/fx/get/distribute/logList",  //佣金明细列表
 	fxWithdrawList:"/fx/get/withdrawLog/list",  //佣金提现列表
 	fxyjAccountList:"/yjc/get/cardAmountList",  //获取分销佣金提现账户
-	fxWithdraw:"/fx/add/withdraw",  //用户佣金提现
+	fxWithdraw:"/yjc/add/cardAmount",  //用户佣金提现
 	fxWithdrawDeleteAccount:"/yjc/del/cardAmount",  //删除佣金提现账户
+	getAccountName:"/yjc/get/transfer/userName",  //转账，根据卡号获取用户名
+	yjcTransfer:"/yjc/send/transfer", //账户转账和聚财卡转账
 	fxAddWithdrawAccount:"/yjc/addOrEdit/cardAmount",  //新增/编辑提现账户
 	fxPosterEx:"/app/get/poster/templateList",  //生成海报模板
 	fxPoster:"/app/get/poster/share",  //根据id生成分销海报
