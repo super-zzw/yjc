@@ -456,7 +456,7 @@ import tabBar from "@/components/tab-bar.vue"
 				})  
 			}, 
 			//模块跳转
-			//type：1新品首发，2精品推荐，3促销专区，4积++分兑换，5今日签到，6商品详情，7专题详情 8文章,9超值拼团
+			//type：1新品首发，2精品推荐，3促销专区，4积++分兑换，5今日签到，6商品详情，7专题详情 8文章,9超值拼团,10产品列表，11联系客户，12企业服务
 			pageJump(typeId,dataId){
 				switch(Number(typeId)){
 					case 1:
@@ -505,6 +505,16 @@ import tabBar from "@/components/tab-bar.vue"
 					case 10:
 						uni.navigateTo({
 							url:"/pages/product/list?categoryid=" + dataId
+						})
+						break;
+					case 11:
+						uni.navigateTo({
+							url:"/pages/service/service"
+						})
+						break;
+					case 12:
+						uni.navigateTo({
+							url:"/pages/enterprise/index"
 						})
 						break;
 					default:
