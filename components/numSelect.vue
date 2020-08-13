@@ -1,38 +1,80 @@
 <template>
 	<view>
-		<view class="countBox box1" v-if="!counting" @tap="counting=true,$emit('changeValue',Number(price))">+</view>
+		<view class="countBox box1" v-if="!counting" @tap="addCart">+</view>
 		<view v-if="counting" class="counting">
-			<view class="countBox box2" @tap="subtract">-</view>
+			<view class="countBox box2" @tap="updateServiceNum(-1)">-</view>
 			<view class="content">{{num}}</view>
-			<view class="countBox box2" @tap="add">+</view>
+			<view class="countBox box2" @tap="updateServiceNum(1)">+</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		props:['price'],
+		props:['price',"id"],
 		data() {
 			return {
                counting:false,
 			   num:1,
-			 
+			   cartId:''
 			};
 		},
 		methods:{
-			subtract(){
-				if(this.num==1){
-					return
-				}else{
+			async updateServiceNum(type){
+				if(type==-1){
 					this.num--
-					
+					if(this.num==0){
+						this.counting=false
+						this.num=1
+						this.$emit('changeValue',Number(-this.price) )
+						return
+					}
 					this.$emit('changeValue',Number(-this.price) )
+				}else{
+					this.num++		
+					this.$emit('changeValue',Number(this.price))
 				}
+				await this.$http({
+					apiName:"updateServiceNum",
+					type:"POST",
+					data:{
+						cartId:this.cartId,
+						num:this.num
+					}
+				})
+			},
+			subtract(){
+					this.num--
+					if(this.num==0){
+						this.counting=false
+						this.num=1
+					}
+					this.$emit('changeValue',Number(-this.price) )
 			},
 			add(){
 				this.num++
-			
 				this.$emit('changeValue',Number(this.price))
+			},
+			async addCart(){
+				this.counting=true,
+				this.$emit('changeValue',Number(this.price))
+				uni.showLoading({
+					title:'正在添加...'
+				})
+				await this.$http({
+					apiName:'addServiceCart',
+					type:'POST',
+					data:{
+						num:1,
+						enterpriseServicesId:this.id
+					}
+				}).then(res=>{
+					uni.showToast({
+						title:'添加服务成功'
+					})
+					this.cartId=res.data
+					uni.hideLoading()
+				}).catch(err=>{uni.hideLoading()})
 			}
 		}
 	}

@@ -3,7 +3,6 @@
 		<view class="masks" v-if="dateSel" @tap.stop="close"></view>
 		<view class="datePicker" :class="dateSel?'active':''" >
 			<view class="dateIpt">
-				
 				<view class="startTime Time">
 					<picker mode="date"   @change="bindDateChange2" fields="day">
 					<!-- 	<text>{{startTime}}</text>

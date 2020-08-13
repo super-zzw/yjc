@@ -69,7 +69,7 @@ export default{
 	
 	register:"/login/register",  //用户注册
 	phoneLogin:"/login/loginPhone",  //手机号密码登录
-	codeLogin:"/login/loginPhoneNumber",  //手机验证码登录
+	codeLogin:"/yjc/loginPhoneNumber",  //手机验证码登录
 	resetPwd:"/login/phoneResetLoginpwd",  //手机号重置密码
 	getArticle:"/sms/get/article",  //根据文章id获取文章内容
 	
@@ -111,18 +111,19 @@ export default{
 	wxJsdkConfig:"/app/jsconfig",  //获取公众号配置
 	wxJsdkLogin:"/ums/web/bindOpenId",  //公众号授权登录post
 	wxJsdkLogin:"/login/web/bindOpenId",  //公众号授权登录post
-	bindPayPwd:'/ums/bind/payPwd'  ,//绑定支付密码
+	bindPayPwd:'/yjc/bind/login/payPwd'  ,//绑定支付密码
+	changePayPwd:'/yjc/bind/payPwd',   //重置支付密码
 	myCoupon:'/sms/get/coupon/wuserList'  ,//获取我的优惠券
 	getAllCoupon:'/sms/get/coupon/allList',//领券中心列表
 
 	receiveCoupon:'/sms/add/wusercoupon' , //领券
-	appWxLogin:'/login/openApp/login'  ,//app微信登录
-	bindPhoe:'/login/openApp/bindPhone', //app登录绑定手机号
+	appWxLogin:'/yjc/openApp/login'  ,//app微信登录
+	bindPhoe:'/yjc/openApp/bindPhone', //app登录绑定手机号
 	setAppPwd:'/login/openApp/bindPwd',//app设置登录密码
 	addCardAmount:'/ums/add/cardAmount', //充值储值卡
 	getStoreList:'/oms/get/storeList', //获取储值消费列表
 	getOrderCoupon:'/oms/order/get/wuserCoupon'  ,//根据购物车信息获取优惠券可用列表
-	checkPayPwd:'/ums/check/payPwd' ,//校验支付密码
+	checkPayPwd:'/yjc/check/payPwd' ,//校验支付密码
 	delStoreLog:'/oms/del/storeLog' ,//删除消费记录
 
 	
@@ -133,14 +134,22 @@ export default{
 	fxCustomerList:"/fx/get/zhitui/list",  //获取直推客户列表
 	fxCommissionList:"/fx/get/distribute/logList",  //佣金明细列表
 	fxWithdrawList:"/fx/get/withdrawLog/list",  //佣金提现列表
-	fxyjAccountList:"/fx/get/cardAmountList",  //获取分销佣金提现账户
-	fxWithdraw:"/fx/add/withdraw",  //用户佣金提现
-	fxWithdrawDeleteAccount:"/fx/del/cardAmount",  //删除佣金提现账户
-	fxAddWithdrawAccount:"/fx/addOrEdit/cardAmount",  //新增/编辑提现账户
+	fxyjAccountList:"/yjc/get/cardAmountList",  //获取分销佣金提现账户
+	fxWithdraw:"/yjc/add/cardAmount",  //用户佣金提现
+	fxWithdrawDeleteAccount:"/yjc/del/cardAmount",  //删除佣金提现账户
+	getAccountName:"/yjc/get/transfer/userName",  //转账，根据卡号获取用户名
+	yjcTransfer:"/yjc/send/transfer", //账户转账和聚财卡转账
+	fxAddWithdrawAccount:"/yjc/addOrEdit/cardAmount",  //新增/编辑提现账户
 	fxPosterEx:"/app/get/poster/templateList",  //生成海报模板
 	fxPoster:"/app/get/poster/share",  //根据id生成分销海报
-	fxAccountDetail:"/fx/info/cardAmount",  //分销提现账户详情
+	fxAccountDetail:"/yjc/info/cardAmount",  //分销提现账户详情
 	getCurrentPhoneCode:"/app/yzm/sendAuthCode",  //获取当前账号手机号验证码
 	fxTeamOne:"/fx/get/subTeam/oneList",  //下属团队一级代理
 	fxTeamTwo:"/fx/get/subTeam/twoList",  //下属团队二级代理
+	
+	//企业服务
+	getServiceList:"/yjc/get/enterpriseServices/list"  ,//获取企业服务列表
+	addServiceCart:"/yjc/add/enterpriseServices/cart", //企业服务添加购物车
+	updateServiceNum:"/yjc/update/enterpriseServices/quantity", //修改购物车中企业服务的数量
+	payYjcOrder:"/pay/pay/yjcOrder"//易聚财付款统一下单
 }

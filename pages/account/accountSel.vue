@@ -7,28 +7,38 @@
 						<image src="../../static/yhk.png" mode="" class="accountImg" ></image>
 					
 						<view class="info">
-							<text class="name">{{item.name}}</text>
-							<text class="num">{{item.account}}</text>
+							<text class="name">{{item.bankname}}</text>
+							<text class="num">{{item.cardno}}</text>
 						</view>
 					</view>
-					<!-- <text class="iconfont iconxuanzetixianzhanghu" v-if="select==index&&!editing"></text> -->
-					<!-- <text class="noSelected" v-if="select!=index&&editing"></text> -->
-					<!-- <image src="../image/select.png" mode="" class="selected" v-if="select==index&&editing"></image> -->
+					<text class="iconfont iconxuanzetixianzhanghu" v-if="select==index&&!editing"></text>
+					<text class="noSelected" v-if="select!=index&&editing"></text>
+					<image src="../../static/select.png" mode="" class="selected" v-if="select==index&&editing"></image>
 				</view>
 			</view>
-			<!-- <view class="accountEmpty" v-else>
+			<view class="accountEmpty" v-else>
 				暂无可用账户，请点击新增账户
-			</view> -->
+			</view>
 			
-		
+		<view v-if="!editing" class="btns">
+			<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
+			  <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增账户</button>
+			<!-- </picker> -->
 			
-				<view  class="btns">
+			<button v-if="dataList.length > 0" type="default" hover-class="none" class="editAccount btn" @tap="editAccount">管理账户</button>
+		</view>
+		<view v-if="editing" class="btns">
+			<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
+			<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
+		</view>
+			
+			<!-- 	<view  class="btns"> -->
 					<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
-					  <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增银行卡</button>
+					  <!-- <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增银行卡</button> -->
 					<!-- </picker> -->
 					
-					<button  type="default" hover-class="none" class="editAccount btn" @tap="editAccount">编辑银行卡</button>
-				</view>
+					<!-- <button  type="default" hover-class="none" class="editAccount btn" @tap="editAccount">编辑银行卡</button> -->
+				<!-- </view> -->
 				<!-- <view v-if="editing" class="btns">
 					<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
 					<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
@@ -45,15 +55,15 @@
 			return {
 				select:0,
 				editing:false,
-				dataList:[
-					{name:'zzw',account:'123'},{name:'zzw',account:'123'}]
+				dataList:[]
 			};
 		},
 		onLoad() {
 			this.select = this.selectFxAccount
+			// this.getData()
 		},
 		onShow() {
-			// this.getData();
+			this.getData();
 		},
 		computed:{
 			...mapState(['selectFxAccount'])

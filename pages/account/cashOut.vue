@@ -2,11 +2,11 @@
 	<view class="container" v-if="config">
 		<view class="accountBox" @tap="accountSel">
 			<view class="left" v-if="accountList.length > 0">
-			<!-- 	<! <image src="../image/zhifubao.png" mode="" class="accountImg" v-if="accountList[selectFxAccount].type == 0"></image> -->
-				<i  mode="" class="accountImg iconfont iconyinhangkazhanghu" v-if="accountList[selectFxAccount].type == 1"></i>
+				<!-- 	<! <image src="../image/zhifubao.png" mode="" class="accountImg" v-if="accountList[selectFxAccount].type == 0"></image> -->
+				<i mode="" class=" iconfont iconyinhangkazhanghu"></i>
 				<view class="info">
-					<text class="name">{{accountList[selectFxAccount].name}}</text>
-					<text class="num">{{accountList[selectFxAccount].account}}</text>
+					<text class="name">{{accountList[selectFxAccount].bankname}}</text>
+					<text class="num">{{accountList[selectFxAccount].cardno}}</text>
 				</view>
 			</view>
 			<view class="left" v-else>
@@ -18,126 +18,165 @@
 		</view>
 		<view class="moneyBox">
 			<text class="txt1">提现金额</text>
-			<view class="iptBox">￥<input type="number" value="" v-model="money"/></view>
+			<view class="iptBox">￥<input type="number" value="" v-model="money" /></view>
 			<text class="divider"></text>
 			<view class="txts">
-				<text class="txt2">可提现金额¥{{ableMoney}}</text>
-				<text class="txt2">手续费：¥60.00</text>
+				<text class="txt2">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance}}</text>
+				<text class="txt2" v-if="money">手续费：¥{{shouxu}}</text>
+				<!-- 	<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1" class="txt2">
+					手续费：¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
+				</view>
+				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 2" class="txt2">
+					手续费：{{config.DISTRIBUTE_WITHDRAW.withdrawRatio * money}}
+				</view> -->
 			</view>
 			<button type="default" hover-class="none" @tap="tx">提交</button>
-		<!-- 	<view class="txt2">
-				<view class="">
-					提现说明:
-				</view>
-				<view class="">
-					1.最小提现金额为¥{{config.DISTRIBUTE_WITHDRAW.withdrawMin}}
-				</view>
-				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1">
-					2.提现手续费为¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
-				</view>
-				<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 2">
-					2.提现手续费为提现金额的{{config.DISTRIBUTE_WITHDRAW.withdrawRatio * 100}}%
-				</view>
-			</view> -->
 		</view>
-		<pwdValidate :sModal="sModal"/>
-		
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" />
+
 	</view>
 </template>
 
 <script>
-	
 	import utils from '../../utils/method.js'
-	import {mapState} from 'vuex'
+	import {
+		mapState
+	} from 'vuex'
 	export default {
 		data() {
 			return {
-				money:'',
-				accountList:[],  //提现账户
-				ableMoney:"",  //可提现金额
-				sModal:false,
-				password:''
+				money: '',
+				accountList: [], //提现账户
+				ableMoney: "", //可提现金额
+				sModal: false,
+				password: '',
+                type:''
 			};
+		},
+		onLoad(opt) {
+			if(opt.type==2){
+				this.type=1
+			}else{
+				this.type=2
+			}
 		},
 		async onShow() {
 			uni.showLoading({
-				title:"加载中..."
+				title: "加载中..."
 			})
 			await this.getInfo();
 			await this.getAccount();
 			uni.hideLoading()
 		},
-		computed:{
-			...mapState(['selectFxAccount','config'])
+
+		computed: {
+			...mapState(['selectFxAccount', 'config', 'userInfo']),
+			shouxu() {
+				if (this.config.YJC_WITHDRAW.withdrawType == 1) {
+					return this.config.YJC_WITHDRAW.withdrawAmount
+				} else {
+					return (this.config.YJC_WITHDRAW.withdrawRatio * this.money).toFixed(2)
+				}
+			}
 		},
-		methods:{
+		methods: {
 			//获取账户详情
-			getInfo(){
+			getInfo() {
 				this.$http({
-					apiName:"DistributionInfo"
+					apiName: "DistributionInfo"
 				}).then(res => {
-					
+
 					this.ableMoney = res.data.extractAmount;
 				}).catch(err => {})
 			},
 			//获取账户列表
-			getAccount(){
+			getAccount() {
 				this.$http({
-					apiName:"fxyjAccountList",
+					apiName: "fxyjAccountList",
 				}).then(res => {
 					this.accountList = res.data;
 				}).catch(err => {})
 			},
-			accountSel(){
-				if(this.accountList.length==0){
+			accountSel() {
+				if (this.accountList.length > 0) {
 					uni.navigateTo({
-						url:'addAccount'
+						url: 'accountSel'
 					})
 				}
 				// uni.navigateTo({
 				// 	url:'./accountSel'
 				// })
 			},
-			
-			async tx(){
-				// if(!this.accountList.length){
-				// 	uni.showToast({
-				// 		icon:"none",
-				// 		title:"请创建提现账户"
-				// 	})
-				// }else if(!this.money){
-				// 	uni.showToast({
-				// 		icon:"none",
-				// 		title:"请输入可提现金额"
-				// 	})
-				// }else{
-				// 	uni.showLoading({
-				// 		title:"提交中..."
-				// 	})
-				// 	await this.$http({
-				// 		apiName:"fxWithdraw",
-				// 		type:"POST",
-				// 		data:{
-				// 			amount:this.money,
-				// 			withdrawAccountId:this.accountList[0].id
-				// 		}
-				// 	}).then(res => {
-				// 		uni.hideLoading();
-				// 		uni.navigateTo({
-				// 			url:'./txTip?status='+1
-				// 		})
-				// 	}).catch(err => {
-				// 		uni.hideLoading()
-				// 		uni.showToast({
-				// 			icon:"none",
-				// 			title:err.message
-				// 		})
-				// 	})
-					
-				// }
-				this.sModal = true
+			async validateOk(pass) {
+				this.password = pass
 				
-			
+				uni.showLoading({
+					title: "提交中..."
+				})
+				await this.$http({
+					apiName: "fxWithdraw",
+					type: "POST",
+					data: {
+						amount: this.money,
+						tradepwd:utils.md5(this.password),
+						withdrawAccountId: this.accountList[0].id,
+						type:this.type
+					}
+				}).then(res => {
+					uni.hideLoading();
+					uni.navigateTo({
+						url: './successTip?status=' + 1
+					})
+				}).catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						icon: "none",
+						title: err.message
+					})
+				})
+			},
+			close() {
+				this.sModal = false
+			},
+			async tx() {
+				if (!this.accountList.length) {
+					uni.showToast({
+						icon: "none",
+						title: "请创建提现账户"
+					})
+				} else if (!this.money) {
+					uni.showToast({
+						icon: "none",
+						title: "请输入可提现金额"
+					})
+				} else {
+					// 	uni.showLoading({
+					// 		title:"提交中..."
+					// 	})
+					// 	await this.$http({
+					// 		apiName:"fxWithdraw",
+					// 		type:"POST",
+					// 		data:{
+					// 			amount:this.money,
+					// 			withdrawAccountId:this.accountList[0].id
+					// 		}
+					// 	}).then(res => {
+					// 		uni.hideLoading();
+					// 		uni.navigateTo({
+					// 			url:'./txTip?status='+1
+					// 		})
+					// 	}).catch(err => {
+					// 		uni.hideLoading()
+					// 		uni.showToast({
+					// 			icon:"none",
+					// 			title:err.message
+					// 		})
+					// 	})
+					this.sModal = true
+				}
+
+
+
 				// uni.redirectTo({
 				// 	url:'successTip?status=1'
 				// })
@@ -147,95 +186,111 @@
 </script>
 
 <style lang="scss" scoped>
-	.container{
+	.container {
 		height: 100vh;
-		background: #F9FAFB;;
+		background: #F9FAFB;
+		;
 	}
-   .accountBox{
-	   background: #fff;
-	   padding: 36rpx 40rpx;
-	   display: flex;
-	   justify-content: space-between;
-	   align-items: center;
-	   
-	   .left{
-		   display: flex;
-		  .accountImg{
-			  width: 88rpx;
-			  height:88rpx;
-			  margin-right:28rpx
-		  }
-		  .info{
-			  display: flex;
-			  flex-direction: column;
-			  .name{
-				  font-size:32rpx;
-				  font-family:PingFangSC-Regular,PingFang SC;
-				  font-weight:500;
-				  color:rgba(48,49,51,1);
-			  }
-			  .num{
-				  font-size:28rpx;
-				  font-family:PingFangSC-Regular,PingFang SC;
-				  font-weight:400;
-				  color:rgba(168,171,179,1);
-			  }
-		 }
-	   }
-   }
-   .moneyBox{
-	   margin-top: 20rpx;
-	   padding: 32rpx 32rpx 80rpx;
-	   background: #fff;
-	   display: flex;
-	   flex-direction: column;
-	   .txt1{
-		   font-size:30rpx;
-		   font-family:PingFangSC-Regular,PingFang SC;
-		   font-weight:600;
-		   color:rgba(48,49,51,1);
-		   line-height:42px;
-		}
-		.iptBox,.iptBox input{
+
+	.accountBox {
+		background: #fff;
+		padding: 36rpx 40rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.left {
 			display: flex;
-			font-size:44rpx;
-			font-family:PingFangSC-Medium,PingFang SC;
-			font-weight:500;
-			color:rgba(48,49,51,1);
-			line-height:60rpx;
-			
+
+			.accountImg {
+				width: 88rpx;
+				height: 88rpx;
+				margin-right: 28rpx
+			}
+
+			.info {
+				display: flex;
+				flex-direction: column;
+				margin-left: 30rpx;
+
+				.name {
+					font-size: 32rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 500;
+					color: rgba(48, 49, 51, 1);
+				}
+
+				.num {
+					font-size: 28rpx;
+					font-family: PingFangSC-Regular, PingFang SC;
+					font-weight: 400;
+					color: rgba(168, 171, 179, 1);
+				}
+			}
 		}
-		.divider{
-			
+	}
+
+	.moneyBox {
+		margin-top: 20rpx;
+		padding: 32rpx 32rpx 80rpx;
+		background: #fff;
+		display: flex;
+		flex-direction: column;
+
+		.txt1 {
+			font-size: 30rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 600;
+			color: rgba(48, 49, 51, 1);
+			line-height: 42px;
+		}
+
+		.iptBox,
+		.iptBox input {
+			display: flex;
+			font-size: 44rpx;
+			font-family: PingFangSC-Medium, PingFang SC;
+			font-weight: 500;
+			color: rgba(48, 49, 51, 1);
+			line-height: 60rpx;
+
+		}
+
+		.divider {
+
 			height: 2rpx;
 			width: 100%;
 			background: #DBDBDB;
 			margin-top: 20rpx;
 		}
-		.txts{
+
+		.txts {
 			display: flex;
 			justify-content: space-between;
 		}
-		.txt2{
+
+		.txt2 {
 			margin-top: 20rpx;
-			font-size:30rpx;
-			font-family:PingFangSC-Regular,PingFang SC;
-			font-weight:400;
-			color:rgba(144,147,153,1);
-			line-height:42rpx;
+			font-size: 30rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: rgba(144, 147, 153, 1);
+			line-height: 42rpx;
 		}
-		button{
-			background:rgba(242,61,61,1);
-			border-radius:44rpx;
+
+		button {
+			background: rgba(242, 61, 61, 1);
+			border-radius: 44rpx;
 			width: 100%;
 			margin-top: 60rpx;
-			font-size:30rpx;
-			font-family:PingFangSC-Semibold,PingFang SC;
-			font-weight:600;
-			color:rgba(255,255,255,1);
+			font-size: 30rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 600;
+			color: rgba(255, 255, 255, 1);
 		}
-   }
-   .masks {
+	}
+
+	.masks {
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -243,6 +298,7 @@
 		height: 100vh;
 		background: rgba(52, 52, 52, 0.7);
 	}
+
 	.validateBox {
 		height: 0;
 		position: fixed;
@@ -257,24 +313,25 @@
 		align-items: center;
 		// position: relative;
 		overflow: hidden;
-	
+
 		// opacity: 0;
 		.iconfont {
 			font-size: 30rpx;
 			position: absolute;
 			left: 20rpx;
 			top: 20rpx;
+
 			// left: 0;
 		}
-	
+
 		.txt1 {
 			margin: 38rpx 0;
 		}
-	
+
 		.input_area {
 			margin-top: 30rpx;
 			display: flex;
-	
+
 			.box {
 				width: 80rpx;
 				height: 80rpx;
@@ -282,12 +339,12 @@
 				text-align: center;
 				margin-right: 20rpx;
 			}
-	
+
 			.box:last-child {
 				margin-right: 0;
 			}
 		}
-	
+
 		.txt2 {
 			font-size: 30rpx;
 			font-family: PingFangSC-Regular, PingFang SC;
@@ -297,11 +354,16 @@
 			margin-bottom: 100rpx;
 		}
 	}
-	
+
 	.validateBox.active {
 		transition: .4s;
 		// opacity: 1;
 		// min-height: 410rpx;
 		height: auto;
+	}
+
+	.iconyinhangkazhanghu {
+		color: #f89809;
+		font-size: 88rpx;
 	}
 </style>

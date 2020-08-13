@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
 		<view class="sBox">
-			<view class="sItem"  >
-				 <image src="../../static/guoqi.png" mode="" class="image"></image>
+			<view class="sItem"  v-for="item in list" :key="item.id">
+				 <image :src="item.picUrl" mode="" class="image"></image>
 				 <view class="info">
-					 <text class="title" @tap="toDetail">一项企业服务的名字，文字做两行的长度限制…</text>
+					 <text class="title" @tap="toDetail">{{item.title}}</text>
 					 <view class="opt">
-						 <text class="s-price">¥600</text>
-						<nunSelect price="600" @changeValue="calcSum"></nunSelect>
+						 <text class="s-price">¥{{item.promotionPrice}}</text>
+						<nunSelect :price="item.promotionPrice" :id="item.id" @changeValue="calcSum"></nunSelect>
 					 </view>
 				 </view>
 				 
@@ -45,7 +45,23 @@
 				sModal:false
 			};
 		},
+		onLoad() {
+			uni.showLoading({
+				title:'加载中...'
+			})
+			this.getList()
+			uni.hideLoading()
+		},
 		methods:{
+			async getList(){
+				await this.$http({
+					apiName:'getServiceList',
+				}).then(res=>{
+					this.list=res.data
+				}).catch(err=>{
+					
+				})
+			},
 			calcSum(value){
 				this.sum+=Number(value) 
 			},
@@ -68,6 +84,27 @@
 				uni.redirectTo({
 					url:'./successTip'
 				})
+			},
+			onNavigationBarButtonTap(e) {
+				
+				const index = e.index;
+				// #ifdef APP-PLUS
+				const pages = getCurrentPages();
+				
+				const page = pages[pages.length - 1];
+				const currentWebview = page.$getAppWebview();
+				currentWebview.hideTitleNViewButtonRedDot({
+					index
+				});
+				// #endif
+				
+				
+				 if (index === 0) {
+					
+					uni.navigateTo({
+						url: './myService'
+					})
+				}
 			}
 		}
 	}

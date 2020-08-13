@@ -11,7 +11,7 @@
 		<view class="list-cell b-b m-t" @click="bindWx" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">绑定微信</text>
 			<view class="cell-more" >
-				<text>{{userInfo.appBindExFlag?'已绑定':'未绑定'}}</text>
+				<text>{{userInfo.appBindExFlag?'解绑':'未绑定'}}</text>
 				<text class="cell-more iconfont iconchakanquanbu"></text>
 			</view>
 			
@@ -20,7 +20,7 @@
 		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd',true)" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">支付密码</text>
 			<view class="cell-more">
-				<text>{{userInfo.payPwdFlag?'已设置':'未设置'}}</text>
+				<text>{{userInfo.payPwdFlag?'重置密码':'未设置'}}</text>
 				<text class=" iconfont iconchakanquanbu"></text>
 			</view>
 		</view>

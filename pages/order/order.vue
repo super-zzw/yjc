@@ -150,6 +150,7 @@
 			:shareList="shareList"
 			@invite="shareOthers"
 		></share>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
 	</view>
 </template> 
 
@@ -243,6 +244,10 @@
 						text: "复制链接"
 					},
 				],
+				sModal:false,
+				password:'',
+				selID:'',
+				selIndex:''
 			};
 		},
 		filters:{
@@ -260,6 +265,17 @@
 		},
 		 
 		methods: {
+			validateOk(pass){
+				this.password=pass
+				uni.showLoading({
+					title: '加载中...'
+				})
+				this.getGoodOk()
+				uni.hideLoading();
+			},
+			close(){
+				this.sModal=false
+			},
 			toDelivery(id){
 				uni.navigateTo({
 					url:`/pages/order/delivery?id=${id}`
@@ -302,16 +318,22 @@
 				})
 			},
 			//确定确认收货
-			async getGood(index,orderId){
+			 getGood(index,orderId){
+				this.sModal=true
+				this.selID=orderId
+				this.selIndex=index
+				
+			},
+			async getGoodOk(){
 				uni.showLoading({
 					title: '加载中...'
 				})
 				await this.$http({
 					apiName:"getGood",
 					type:"POST",
-					data:{orderId:orderId}
+					data:{orderId:this.selID}
 				}).then(res => {
-					this.$set(this.navList[this.tabCurrentIndex].orderList[index],"status",3)
+					this.$set(this.navList[this.tabCurrentIndex].orderList[this.selIndex],"status",3)
 					uni.showToast({
 						title:"已收货"
 					})

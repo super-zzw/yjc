@@ -4,16 +4,17 @@
 			<view class="sItem">
 				<view class="slabel">{{type==2?'平台用户账号':'聚财卡卡号'}}</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="account" 
-					:placeholder="type==2?'请输入平台用户账号':'请输入聚财卡号'"/>
+					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="account" 
+					:placeholder="type==2?'请输入平台用户账号':'请输入聚财卡号'" @blur="getAccountName" maxlength="10"/>
 				</view>
 				
 			</view>
-			<text v-if="type==2&&aacountName" class="aacountName">该账号对应账户名“{{aacountName}}”</text>
+			<text v-if="aacountName&&flag" class="aacountName">该账号对应账户名“{{aacountName}}”</text>
+			<text class="aacountName" v-if="flag&&!aacountName" style="color:red">此用户不存在</text>
 			<view class="sItem">
 				<view class="slabel">转账金额</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="name" 
+					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="money" 
 					placeholder="请输入转账金额"/>
 				</view>
 			</view>
@@ -33,7 +34,7 @@
 			
 		</view>
 		
-		<button class="btn" hover-class="none"  @tap="register" >确定</button>
+		<button class="btn" hover-class="none"  @tap="register" :disabled="disable">确定</button>
 		
 	</view>
 </template>
@@ -44,16 +45,15 @@
 		data(){
 			return {
 				account:"",
-				name:"",
-				code:"",
+				money:"",
 				remark:"",
-				timer:"",
-				coding:false,  //是否处于发送验证码的状态
-				timeLeft:120,
-				codeText:"获取验证码",
 				type:2,
+				_type:'',
 				id:"",
-				aacountName:'耶耶耶'
+				aacountName:'',
+				flag:false,
+				hasUser:false,
+				disable:false
 			}
 		},
 		onLoad(opt) {
@@ -61,8 +61,10 @@
 			let _title=''
 			if(this.type==2){
 				_title='账户转账'
+				this._type=1
 			}else{
 				_title='聚财卡转账'
+				this._type=2
 			}
 			uni.setNavigationBarTitle({
 				title: _title
@@ -88,54 +90,85 @@
 					uni.hideLoading();
 				}).catch(err => {uni.hideLoading()})
 			},
+			async getAccountName(){
+				if(!this.account){
+					this.flag=false
+					return
+					
+				}else if(this.account.length<8){
+					this.flag=false
+					uni.showToast({
+						icon:'none',
+						title:'请输入8-10位银行卡号'
+					})
+				}
+				else{
+					this.flag=false
+					
+					await this.$http({
+						apiName:'getAccountName',
+						
+						data:{
+							cardCode:this.account,
+							type:this._type
+						}
+					}).then(res=>{
+						this.flag=true
+					    if(res.data){
+							this.hasUser=true
+						}
+							this.aacountName=res.data
+					
+					}).catch(err=>{})
+				}
+			},
 			async register(){
-				// let _data = [
-				// 	{
-				// 		data:this.account.trim(),
-				// 		info:'账号不能为空'
-				// 	},
-				// 	{
-				// 		data:this.name.trim(),
-				// 		info:'姓名不能为空'
-				// 	},
-				// 	{
-				// 		data:this.code,
-				// 		info:'验证码不能为空'
-				// 	},
-				// ]
-				// let jres = await utils.judgeData(_data)
-				// if(jres){
-				// 	uni.showLoading({
-				// 		title:"保存中...",
-				// 		mask:true
-				// 	})
-				// 	await this.$http({
-				// 		apiName:"fxAddWithdrawAccount",
-				// 		type:"POST",
-				// 		data:{
-				// 			account:this.account.trim(),
-				// 			authCode:this.code,
-				// 			name:this.name.trim(),
-				// 			title:this.remark,
-				// 			id:this.id,
-				// 			type:this.type
-				// 		}
-				// 	}).then(res => {
-				// 		uni.hideLoading();
-				// 		uni.showToast({
-				// 			icon:"success",
-				// 			title:"保存成功"
-				// 		})
-				// 		setTimeout(() => {
-				// 			uni.navigateBack()
-				// 		},1500)
-				// 	}).catch(err => {
-				// 		uni.hideLoading()
-				// 	})
-				// }
-				uni.redirectTo({
-					url:'successTip?status='+this.type
-				})
+				let _data = [
+					{
+						data:this.account.trim(),
+						info:'账号不能为空'
+					},
+					{
+						data:this.account.length>=8,
+						info:'请输入8-10位银行卡号'
+					},
+					{
+						data:this.hasUser,
+						info:'账号不存在'
+					},
+					{
+						data:this.money.trim(),
+						info:'转账金额不能为空'
+					}
+				]
+				let jres = await utils.judgeData(_data)
+				console.log(jres)
+				if(jres){
+					this.disable=true
+					uni.showLoading({
+						title:"保存中...",
+						mask:true
+					})
+					await this.$http({
+						apiName:"yjcTransfer",
+						type:"POST",
+						data:{
+							amount:this.money,
+							cardCode:this.account,
+							remark:this.remark,
+							type:this._type
+						}
+					}).then(res => {
+						uni.hideLoading();
+						this.disable=false
+						uni.redirectTo({
+							url:'successTip?status='+this.type
+						})
+					}).catch(err => {
+						uni.hideLoading()
+					})
+				}
+				
 			},
 			async sendCode(){
 				if(this.coding){

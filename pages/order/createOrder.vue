@@ -88,7 +88,7 @@
 			</view>
 
 			<!-- 优惠 -->
-			<view class="yt-list" v-if="!isScore">
+		<!-- 	<view class="yt-list" v-if="!isScore">
 
 				<view class="yt-list-cell b-b">
 					<text class="cell-tit clamp">优惠券</text>
@@ -107,15 +107,15 @@
 						<image src="../../static/on.png" mode="" class="switch" @tap="switchChecked" v-else></image>
 					</view>
 
-					<!-- <text class="cell-tip" v-else>{{fee}}</text> -->
+					 <text class="cell-tip" v-else>{{fee}}</text>
 				</view>
-				<view class="yt-list-cell desc-cell b-b">
+				 <view class="yt-list-cell desc-cell b-b">
 					<text class="cell-tit clamp">剩余待支付</text>
 					<text class="cell-right" v-if="selectAddr">¥{{total2}}</text>
 					<text class="cell-right" v-else>{{total2}}</text>
-					<!-- <input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" /> -->
+					<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
 				</view>
-			</view>
+			</view> -->
 		</view>
 		<!-- 底部 -->
 		<view class="footer">
@@ -135,22 +135,10 @@
 		</view>
 
 		<!-- 弹出验证框 -->
-		<view class="masks" v-if="sMask"></view>
-		<view class="validateBox" :class="sModal?'active':''">
-			<text class="iconfont iconclose-hei" @tap="closePass"></text>
-			<text class="txt1">支付密码验证</text>
-			<view class="input_area">
-				<passwordInput :numLng='password' @open="openKeyboard" />
-				<!-- <input class="box" disabled v-for="(item,index) in 6" :key="index" ></input> -->
-				<!-- <input type="password" value="" class="box" maxlength="1" v-for="(item,index) in 6" :key="index" @input="input(index)" :focus="currentIpt==index?true:false"
-				:disabled="currentIpt>=index?false:true"/> -->
-			</view>
-			<text class="txt2">请输入6位数字支付密码</text>
-			<numberKeyboard psdLength='6' ref='KeyboarHid' @input='clickInput' />
-		</view>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
 
 		<!-- 选择优惠券 -->
-		<view class="yhqSel" :class="sModal1?'active':''">
+		<!-- <view class="yhqSel" :class="sModal1?'active':''">
 			<text class="titles">选择优惠券</text>
 			<text class="cancel" @tap="sModal1=false,sMask=false">取消</text>
 			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)" v-if="couponsList">
@@ -173,23 +161,19 @@
 				<image src="../../static/null.png" mode=""></image>
 				<text>暂无优惠券</text>
 			</view>
-		</view>
+		</view> -->
 	</view>
 </template>
 
 <script>
-	import passwordInput from '../../components/password-input/password-input.vue'
-	import numberKeyboard from '../../components/number-keyboard/number-keyboard.vue'
+	
 	import utils from '../../utils/method.js'
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex';
 	export default {
-		components: {
-			passwordInput,
-			numberKeyboard
-		},
+		
 		data() {
 			return {
 				total: 0,
@@ -205,7 +189,6 @@
 				sModal: false,
 				currentIpt: 0,
 				password: '',
-				sMask: '',
 				sModal1: false,
 				couponsList: '',
 				yhq: 0, //优惠券数值
@@ -214,34 +197,6 @@
 			}
 		},
 		watch: {
-			password(data) {
-				let all = (Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
-				if (data.length >= 6) {
-					this.$http({
-						apiName: 'checkPayPwd',
-						type: 'POST',
-						data: {
-							tradepwd: utils.md5(this.password)
-						}
-					}).then(res => {
-						this.closePass()
-						this.checked = true
-
-						if (this.userInfo.cardAmount >= all) {
-							this.storeValue = all
-							this.total2 = 0
-						} else {
-							this.storeValue = this.userInfo.cardAmount
-							this.total2 = (Number(this.total) + Number(this.fee) - Number(this.userInfo.cardAmount) - Number(this.yhq)).toFixed(
-								2)
-						}
-
-
-					}).catch(err => {
-						this.$refs.KeyboarHid.iptNum = []
-					})
-				}
-			},
 			selectAddr(item){
 				if(item){
 					if(this.cart==1){
@@ -253,13 +208,7 @@
 				}else{
 					return
 			}
-			},
-			storeValue(value){
-				if(value==0){
-					this.checked=false
-				}
 			}
-			
 		},
 		async onLoad(opt) {
 			
@@ -276,13 +225,13 @@
 				this.cart = opt.cart
 				await this.getCart()
 				await this.getCartYf()
-				await this.getCoupons()
+				// await this.getCoupons()
 			} else {
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
 				
-				await this.getCoupons()
-				await this.getYf()
-				// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				// await this.getCoupons()
+				// await this.getYf()
+				this.total2=Number(Number(this.total)+Number(this.fee) ).toFixed(2)
 				if (opt.score == 'true') {
 					this.isScore = true
 					this.totalScore = this.order.exchangePoints
@@ -296,25 +245,7 @@
 			// this.setOrder([])
 		},
 		async onShow() {
-			// this.total = 0;
-			// if (this.selectAddr) {
-			// 	this.getYf()
-			// }
-			// 	this.total2=Number(this.total+this.fee-this.storeValue-this.yhq).toFixed(2)
-			// }else{
-			// 	this.total2='请选择地址'
-			// }
-			// if (this.cart == 1) {
-			// 	await this.getCart()
-			// 	await this.getCartYf()
-			// } else {
-			// 	this.total = Number(this.order.price * this.order.number).toFixed(2)
-			// 	if (this.isScore == true) {
-			// 		this.totalScore = this.order.exchangePoints
-			// 	} else {
-			// 		await this.getYf()
-			// 	}
-			// }
+			
 		},
 		filters: {
 			date(data) {
@@ -328,22 +259,23 @@
 			...mapMutations(['setSelectAddr', 'setAfterLoginUrl']),
 			switchChecked() {
 				if (this.userInfo.payPwdFlag) {
+				
 					if (!this.checked) {
+							
 						if ((Number(this.total) + Number(this.fee)).toFixed(2) <= this.yhq) {
 							uni.showToast({
 								title: '您无需使用储值',
 								icon: 'none'
 							})
 						} else {
+						
 							this.sModal = true
-							this.sMask = true
-							this.$refs.KeyboarHid.open();
 						}
 
 					} else {
-						this.$refs.KeyboarHid.iptNum = []
+						this.$refs.pwdValidate.clear()
 						this.checked = false
-						this.storeValue = 0
+					
 						this.total2 = (Number(this.total) + Number(this.fee) - this.yhq).toFixed(2)
 					}
 				} else {
@@ -366,24 +298,25 @@
 				}
 
 			},
-			clickInput(val) {
-				this.password = val;
-			},
-			closePass() {
-				this.sModal = false
-				this.sMask = false
-				this.$refs.KeyboarHid.close();
-
-			},
-			openKeyboard() {
-				if (!this.$refs.KeyboarHid.KeyboarHid) {
-					this.$refs.KeyboarHid.open();
-				}
-			},
-			yhqSel() {
-				this.sMask = true
-				this.sModal1 = true
-			},
+			// validateOk(pass){
+			// 	this.password=pass
+			// 	this.checked=true
+			// 	let all = (Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+			// 	if (this.userInfo.cardAmount >= all) {
+			// 			this.storeValue = all
+			// 			this.total2 = 0
+			// 	} else {
+			// 	this.storeValue = this.userInfo.cardAmount
+			// 	this.total2 = (Number(this.total) + Number(this.fee) - Number(this.userInfo.cardAmount) - Number(this.yhq)).toFixed(2)
+			// 	}
+			// },
+			// close(){
+			// 	this.sModal=false
+			// },
+			// yhqSel() {
+			// 	this.sMask = true
+			// 	this.sModal1 = true
+			// },
 			fetchAddr() {
 				if (this.cart == 1) {
 					uni.navigateTo({
@@ -509,9 +442,7 @@
 							url: "/pages/money/paySuccess"
 						})
 					}
-					// uni.redirectTo({
-					// 	url: `/pages/money/pay?money=${this.total2}&orderid=${res.data.order.id}`
-					// })
+				
 				}).catch(_ => {})
 
 			},
@@ -581,7 +512,7 @@
 								this.storeValue=this.userInfo.cardAmount
 							}
 						}
-						console.log(1)
+						
 						this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
 					
 					}).catch(_ => {})
@@ -611,47 +542,48 @@
 				}
 			},
 			stopPrevent() {},
-			async getCoupons() {
-				await this.$http({
-					apiName: 'getOrderCoupon',
-					// type:'POST',
-					data: {
-						payAmount: this.total
-					}
-				}).then(res => {
-					this.couponsList = res.data
-				}).catch(err => {})
-			},
-			selCoupon(item) {
-				if (item.useFlag) {
-					this.sMask = false
-					this.sModal1 = false
-					this.yhq = item.amount
-					this.wuserCouponId = item.wuserCouponId
-					if ((Number(this.total) + Number(this.fee)).toFixed(2) <= item.amount) {
-						this.total2 = 0
-						this.checked = false
-						this.$refs.KeyboarHid.iptNum = []
-					} else {
-						if (this.checked) {
-							if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
-								this.storeValue = this.userInfo.cardAmount
-							} else {
-								this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
-							}
+			// async getCoupons() {
+			// 	await this.$http({
+			// 		apiName: 'getOrderCoupon',
+			// 		// type:'POST',
+			// 		data: {
+			// 			payAmount: this.total
+			// 		}
+			// 	}).then(res => {
+			// 		this.couponsList = res.data
+			// 	}).catch(err => {})
+			// },
+			// selCoupon(item) {
+			// 	if (item.useFlag) {
+			// 		this.sMask = false
+			// 		this.sModal1 = false
+			// 		this.yhq = item.amount
+			// 		this.wuserCouponId = item.wuserCouponId
+			// 		if ((Number(this.total) + Number(this.fee)).toFixed(2) <= item.amount) {
+			// 			this.total2 = 0
+			// 			this.checked = false
+			// 			this.$refs.pwdValidate.clear()
+						
+			// 		} else {
+			// 			if (this.checked) {
+			// 				if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
+			// 					this.storeValue = this.userInfo.cardAmount
+			// 				} else {
+			// 					this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
+			// 				}
 
-							// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
-						}
-						this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
-					}
+			// 				// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+			// 			}
+			// 			this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+			// 		}
 
-				} else {
-					uni.showToast({
-						title: '该优惠券不可用'
-					})
-				}
+			// 	} else {
+			// 		uni.showToast({
+			// 			title: '该优惠券不可用'
+			// 		})
+			// 	}
 
-			}
+			// }
 		},
 		onBackPress(e) {
 			if (this.cart == 1) {

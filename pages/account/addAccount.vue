@@ -54,6 +54,10 @@
 			}
 		},
 		onLoad(opt) {
+			if(opt.id){
+				this.id=opt.id
+				this.getDetail()
+			}
 			
 		},
 		methods:{
@@ -70,9 +74,9 @@
 					}
 				}).then(res => {
 					this.id = res.data.id;
-					this.account = res.data.account;
-					this.name = res.data.name;
-					this.remark = res.data.title;
+					this.account = res.data.cardno;
+					this.name = res.data.customername;
+					this.remark = res.data.bankname;
 					uni.hideLoading();
 				}).catch(err => {uni.hideLoading()})
 			},
@@ -80,7 +84,7 @@
 				let _data = [
 					{
 						data:this.account.trim(),
-						info:'账号不能为空'
+						info:'银行卡号不能为空'
 					},
 					{
 						data:this.name.trim(),
@@ -106,7 +110,7 @@
 							name:this.name.trim(),
 							title:this.remark,
 							id:this.id,
-							type:this.type
+							
 						}
 					}).then(res => {
 						uni.hideLoading();
@@ -115,7 +119,9 @@
 							title:"保存成功"
 						})
 						setTimeout(() => {
-							uni.navigateBack()
+							uni.redirectTo({
+								url:'./accountSel'
+							})
 						},1500)
 					}).catch(err => {
 						uni.hideLoading()
