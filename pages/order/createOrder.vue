@@ -231,7 +231,7 @@
 				
 				// await this.getCoupons()
 				// await this.getYf()
-				// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				this.total2=Number(Number(this.total)+Number(this.fee) ).toFixed(2)
 				if (opt.score == 'true') {
 					this.isScore = true
 					this.totalScore = this.order.exchangePoints
