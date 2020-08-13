@@ -1,19 +1,19 @@
 <template>
 	<view>
 		<view class="sbox">
-			<image src="../../pagesE/image/bg1.png" mode="widthFix" class="image_1"></image>
+			<image :src="dataInfo.picUrl" mode="widthFix" class="image_1"></image>
 			<view class="info">
-				<text class="title">一项企业服务的名字，企业服务企业服务文字做两行的长度限制，超出两超出两行超出两行超出两行超出两行超出两行</text>
+				<text class="title">{{dataInfo.title}}</text>
 				<view class="box1">
-					<text class="left">¥600</text>
-					<text class="right">+</text>
+					<text class="left">¥{{dataInfo.promotionPrice}}</text>
+					<!-- <text class="right">+</text> -->
 				</view>
 			</view>
 		</view>
 		<view class="mt"></view>
-		<view class="sbox">
+		<view class="sbox sbox2">
 			<text class="txt1">- 图文详情 -</text>
-			<view></view>
+			<rich-text :nodes="dataInfo.descriptionHtml"></rich-text>
 		</view>
 		
 	</view>
@@ -23,8 +23,30 @@
 	export default {
 		data() {
 			return {
-				
+				enterpriseServicesId:"",
+				dataInfo:""
 			};
+		},
+		onLoad(opt) {
+			if(opt.enterpriseServicesId){
+				this.enterpriseServicesId = opt.enterpriseServicesId;
+				this.getData()
+			}
+		},
+		methods:{
+			async getData(){
+				await this.$http({
+					apiName:"cpDetail",
+					data:{
+						enterpriseServicesId:this.enterpriseServicesId
+					}
+				}).then(res => {
+					this.dataInfo = res.data;
+					if(this.dataInfo.albumPics){
+						this.dataInfo.albumPics = JSON.parse(this.dataInfo.albumPics)
+					}
+				}).catch(_ => {})
+			}
 		}
 	}
 </script>
@@ -41,7 +63,7 @@
 		background: #fff;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		// align-items: center;
 		.image_1{
 			  width: 100%;
 		}
@@ -88,5 +110,7 @@
 		}
 		
 	}
- 
+	.sbox2{
+		align-items: center;
+	}
 </style>

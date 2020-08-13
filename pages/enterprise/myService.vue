@@ -1,34 +1,33 @@
 <template>
 	<view>
 		<view class="orderList">
-			<view class="orderItem">
+			<view class="orderItem" v-for="(item,index) in list" :key="index">
 				<view class="banner">
-					<text class="orderNum">订单编号：Q202007100001</text>
-					<text class="orderStatus">待审核</text>
+					<text class="orderNum">订单编号：{{item.orderSn}}</text>
+					<!-- -2=审核不通过,-1=已取消,0=待审核，1=待转账，2=已转账，3=已完成 -->
+					<text class="orderStatus" v-if="item.status == -2">审核不通过</text>
+					<text class="orderStatus" v-if="item.status == -1">已取消</text>
+					<text class="orderStatus" v-if="item.status == 0">待审核</text>
+					<text class="orderStatus" v-if="item.status == 1">待转账</text>
+					<text class="orderStatus" v-if="item.status == 2">已转账</text>
+					<text class="orderStatus" v-if="item.status == 3">已完成</text>
 				</view>
 				<view class="serviceList">
-					<view class="serviceItem">
-						<image src="../../static/mallLogo.png" mode="" class="left"></image>
+					<view class="serviceItem" v-for="(item2,index2) in item.orderItemList" :key="index2">
+						<image :src="item2.picUrl" mode="" class="left"></image>
 						<view class="right">
-							<text class="name">一项企业服务的名字，文字做两行的长度限文字做两行的长度限制文字做两行的长度限制</text>
-							<text class="count">x 1</text>
-						</view>
-					</view>
-					<view class="serviceItem">
-						<image src="../../static/mallLogo.png" mode="" class="left"></image>
-						<view class="right">
-							<text class="name">一项企业服务的名字，文字做两行的长度限文字做两行的长度限制文字做两行的长度限制</text>
-							<text class="count">x 1</text>
+							<text class="name">{{item2.enterpriseServicesproductName}}</text>
+							<text class="count">¥{{item2.promotionPrice}}x {{item2.buyNum}}</text>
 						</view>
 					</view>
 				</view>
 				<view class="footer">
 					<view class="left">
-						<text class="price">订单金额：¥1200</text>
-						<text class="date">2020.07.10 11:21:30</text>
+						<text class="price">订单金额：¥{{item.payAmount}}</text>
+						<text class="date">{{item.createTime}}</text>
 					</view>
-					<view class="right status1" v-if="status==-1">取消订单</view>
-					<view class="right status2" v-if="status==1">去转账</view>
+					<view class="right status1" v-if="item.status == 0" @tap="cancleOrder(item.id,-1)">取消订单</view>
+					<view class="right status2" v-if="item.status == 1" @tap="cancleOrder(item.id,2)">去转账</view>
 				</view>
 			</view>
 		</view>
@@ -39,11 +38,51 @@
 	export default {
 		data() {
 			return {
-				status:-1
+				status:-1,
+				list:[]
 			};
 		},
+		onLoad() {
+			this.getData()
+		},
 		methods:{
-			
+			async getData(){
+				await this.$http({
+					apiName:"myCpService",
+				}).then(res => {
+					this.list = res.data
+				}).catch(_ => {})
+			},
+			cancleOrder(id,type){
+				// 状态：-1=取消，2=已转账
+				let _text = type == -1 ? "确定取消该订单？" : "确定设置为已转账？";
+				let _this = this;
+				uni.showModal({
+					title:"提示",
+					content:_text,
+					success(res) {
+						if(res.confirm){
+							_this.cancleOrder2(id,type)
+						}
+						
+					}
+				})
+			},
+			cancleOrder2(id,type){
+				this.$http({
+					apiName:"cancelCpService",
+					type:"POST",
+					data:{
+						enterpriseServicesOrderId:id,
+						status:type
+					}
+				}).then(res => {
+					uni.showToast({
+						title:"操作成功"
+					})
+					this.getData()
+				}).catch(_ => {})
+			}
 		}
 	}
 </script>

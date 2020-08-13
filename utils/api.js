@@ -151,5 +151,9 @@ export default{
 	getServiceList:"/yjc/get/enterpriseServices/list"  ,//获取企业服务列表
 	addServiceCart:"/yjc/add/enterpriseServices/cart", //企业服务添加购物车
 	updateServiceNum:"/yjc/update/enterpriseServices/quantity", //修改购物车中企业服务的数量
-	payYjcOrder:"/pay/pay/yjcOrder"//易聚财付款统一下单
+	payYjcOrder:"/pay/pay/yjcOrder",//易聚财付款统一下单
+	cpDetail:"/yjc/get/enterpriseServices/Info",  //企业服务详情
+	myCpService:"/yjc/get/myenterpriseServices/list",  //我的企业服务
+	setCpService:"/yjc/enterpriseServices/cart/add",  //企业服务
+	cancelCpService:"/yjc/update/enterpriseServices/status",  //取消或设置已转账企业服务
 }

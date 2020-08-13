@@ -4,7 +4,7 @@
 			<view class="sItem"  v-for="item in list" :key="item.id">
 				 <image :src="item.picUrl" mode="" class="image"></image>
 				 <view class="info">
-					 <text class="title" @tap="toDetail">{{item.title}}</text>
+					 <text class="title" @tap="toDetail(item.id)">{{item.title}}</text>
 					 <view class="opt">
 						 <text class="s-price">¥{{item.promotionPrice}}</text>
 						<nunSelect :price="item.promotionPrice" :id="item.id" @changeValue="calcSum"></nunSelect>
@@ -65,9 +65,9 @@
 			calcSum(value){
 				this.sum+=Number(value) 
 			},
-			toDetail(){
+			toDetail(id){
 				uni.navigateTo({
-					url:'./detail'
+					url:'./detail?enterpriseServicesId=' + id
 				})
 			},
 			handleSubmit(){
@@ -80,10 +80,16 @@
 					this.sModal=true
 				}
 			},
-			submitOK(){
-				uni.redirectTo({
-					url:'./successTip'
-				})
+			submitOK(e){
+				this.$http({
+					apiName:"setCpService",
+					type:"POST"
+				}).then(res => {
+					uni.redirectTo({
+						url:'./successTip'
+					})
+				}).catch(err => {})
+				
 			},
 			onNavigationBarButtonTap(e) {
 				
