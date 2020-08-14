@@ -975,6 +975,20 @@
 				}
 			}
         }
+        ,{
+            "path" : "pages/myBill/index",
+            "style" : {
+				"navigationBarTitleText": "账单",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
+			}
+        }
     ],
 	"subPackages":[
 		{

@@ -43,10 +43,13 @@
 			<text class="rscen">|</text>
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
+		<!-- #ifdef APP-PLUS -->
 		<view class="wxLogin" @click="oAuth" data-logintype="weixin">
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
+		<!-- #endif -->
+		
 		<view class="mask" v-if="sModal"></view>
 		<view class="tipBox" v-if="sModal">
 			<text class="txt">该手机号已绑定其他微信号</text>

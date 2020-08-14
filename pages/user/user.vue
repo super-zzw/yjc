@@ -98,9 +98,9 @@
 						<text class="itemBoxText">浏览历史</text>
 						
 				</view>
-				<view class="hsitem" @tap="navTo('/pages/integral/integral')" v-if="hasScore">
-					<image src="../../static/user/integral.png" class="icon"></image>
-						<text class="itemBoxText">我的{{config.MALL_POINT_TITLE}}</text>
+				<view class="hsitem" @tap="navTo('/pages/myBill/index')" v-if="hasScore">
+					<image src="../../static/user/zhangdan.png" class="icon"></image>
+						<text class="itemBoxText">我的账单</text>
 						
 				</view>
 				<view class="hsitem" @tap="navTo('/pages/order/myAssess')">

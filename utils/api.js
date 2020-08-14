@@ -154,6 +154,9 @@ export default{
 	payYjcOrder:"/pay/pay/yjcOrder",//易聚财付款统一下单
 	cpDetail:"/yjc/get/enterpriseServices/Info",  //企业服务详情
 	myCpService:"/yjc/get/myenterpriseServices/list",  //我的企业服务
-	setCpService:"/yjc/enterpriseServices/cart/add",  //企业服务
+	setCpService:"/yjc/enterpriseServices/cart/add",  //根据购物车信息生成企业服务订单
 	cancelCpService:"/yjc/update/enterpriseServices/status",  //取消或设置已转账企业服务
+	
+	getOrderLog:"/yjc/get/my/cardOrderLog", //我的账单
+	getOrderTotal:"/yjc/get/my/cardOrderTotal", //我的账单(累计收入支出)
 }
