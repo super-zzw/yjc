@@ -54,9 +54,20 @@
 						// this.$refs.KeyboarHid.iptNum = []
 						
 			
-			
 					}).catch(err => {
 						this.clear()
+						if(err.code==500085){
+							uni.showModal({
+								title: '提示',
+								content:err.message+',前往修改支付密码?',
+								success:(res)=> {
+									if(res.confirm){
+										this.$emit('navTo','/pages/set/payPwd')
+										
+									}
+								}
+							})
+						}
 					})
 				}
 			},

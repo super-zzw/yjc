@@ -244,10 +244,12 @@ import tabBar from "@/components/tab-bar.vue"
 		},
 		async onShow(){
 			let that = this
+			that.getDynamicNav()
 			setTimeout(() => {
 				if(that.hasLogin){
 					that.getCartNms();  //获取购物车数量
 				}
+				
 				that.$getMsgNms()
 			},800)
 		},
@@ -368,6 +370,7 @@ import tabBar from "@/components/tab-bar.vue"
 			},
 			//动态菜单
 			async getDynamicNav(){
+				this.navs=[]
 				await this.$http({
 					apiName:"getDynamicNav"
 				}).then(res => {
@@ -563,23 +566,47 @@ import tabBar from "@/components/tab-bar.vue"
 			});
 			// #endif
 			
-			if (index === 2) {
-				// uni.navigateTo({
-				// 	url: '/pages/product/list'
-				// })
-				uni.scanCode({
-					 success: function (res) {
-					            console.log('条码类型：' + res.scanType);
-					            console.log('条码内容：' + res.result);
-					   }
-				})
-			} else if (index === 0) {
+			if(index!==0){
+				
+				let url=""
+				if(index==1){
+					this.setAfterLoginUrl('/pages/receipt/index')
+				}
+				if(!this.hasLogin){
+					// #ifdef MP-WEIXIN
+					url = '/pages/wxlogin/index';
+					// #endif
+					// #ifndef MP-WEIXIN
+					url = '/pages/public/login';
+					// #endif
+					uni.navigateTo({
+						url
+					})
+				}else{
+					if (index === 2) {
+						
+						uni.scanCode({
+							 success: function (res) {
+							        if(res){
+										uni.navigateTo({
+											url:'/pages/account/transfer?type=2&account='+res.result
+										})
+									}
+							   }
+						})
+					}else if(index==1){
+						
+						uni.navigateTo({
+							url: '/pages/receipt/index'
+						})
+					}
+				}
+				
+			}
+			 else {
 				uni.navigateTo({
-					url: '/pagesD/notice/index'
-				})
-			}else{
-				uni.navigateTo({
-					url: '/pages/receipt/index'
+					url: '/pages/product/list'
+					// url: '/pagesD/notice/index'
 				})
 			}
 		}
@@ -604,12 +631,6 @@ import tabBar from "@/components/tab-bar.vue"
 	.carousel-section {
 		position: relative;
 		padding-top: 10px;
-
-		// .titleNview-placing {
-		// 	height: var(--status-bar-height);
-		// 	padding-top: 44px;
-		// 	box-sizing: content-box;
-		// }
 
 		.titleNview-background {
 			position: absolute;

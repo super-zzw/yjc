@@ -120,6 +120,8 @@ export default{
 	appWxLogin:'/yjc/openApp/login'  ,//app微信登录
 	bindPhoe:'/yjc/openApp/bindPhone', //app登录绑定手机号
 	setAppPwd:'/login/openApp/bindPwd',//app设置登录密码
+	removeWx:"/yjc/remove/wxCode", //解绑微信号
+	
 	addCardAmount:'/ums/add/cardAmount', //充值储值卡
 	getStoreList:'/oms/get/storeList', //获取储值消费列表
 	getOrderCoupon:'/oms/order/get/wuserCoupon'  ,//根据购物车信息获取优惠券可用列表

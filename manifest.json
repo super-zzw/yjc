@@ -17,6 +17,8 @@
         "modules" : {
             "Payment" : {},
             "Share" : {},
+            "LivePusher" : {},
+            "Messaging" : {},
             "OAuth" : {}
         },
         /* 模块配置 */
@@ -25,6 +27,8 @@
             "android" : {
                 /* android打包配置 */
                 "permissions" : [
+                    "<uses-feature android:name=\"android.hardware.camera\"/>",
+                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
@@ -38,10 +42,13 @@
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_SMS\"/>",
                     "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+                    "<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>"
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+                    "<uses-permission android:name=\"android.permission.WRITE_SMS\"/>"
                 ],
                 "schemes" : [ "youmall" ],
                 "abiFilters" : [ "armeabi-v7a", "x86" ]
@@ -60,7 +67,7 @@
             "sdkConfigs" : {
                 "payment" : {
                     "weixin" : {
-                        "appid" : "wx3e2043f6604d1b94",
+                        "appid" : "wx4a2b78a895dd6323",
                         "UniversalLinks" : "https://www.vyunmall.com/ulinks"
                     },
                     "alipay" : {}
@@ -68,14 +75,14 @@
                 "ad" : {},
                 "share" : {
                     "weixin" : {
-                        "appid" : "wx3e2043f6604d1b94",
+                        "appid" : "wx4a2b78a895dd6323",
                         "UniversalLinks" : "https://www.vyunmall.com/ulinks"
                     }
                 },
                 "oauth" : {
                     "weixin" : {
-                        "appid" : "wx3e2043f6604d1b94",
-                        "appsecret" : "2565166002bbd79b25157ec5c24e0d2f",
+                        "appid" : "wx4a2b78a895dd6323",
+                        "appsecret" : "76419ba1a9ae16d623a395965d7ef3fd",
                         "UniversalLinks" : "https://www.vyunmall.com/ulinks"
                     },
                     "apple" : {}

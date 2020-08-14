@@ -3,7 +3,15 @@
 		<view class="sBox1">
 			<view class="main">
 				<text class="txt1">易聚财扫一扫，向我付钱</text>
-				<image :src="qrCode" mode="" class="qrCode"></image>
+				<!-- <image :src="qrCode" mode="" class="qrCode"></image> -->
+				<view class="recimg">
+				     <tki-qrcode
+				     ref="qrcode"
+				     :val="coinAddr"
+				     :size="size"
+				     :onval="onval"
+				     :loadingText="loadingText"/>
+				    </view>
 				<text class="txt2">收款方：菊次郎的夏天（手机尾号3342）</text>
 			</view>
 		</view>
@@ -15,16 +23,45 @@
 </template>
 
 <script>
+	import tkiQrcode from "@/components/tki-qrcode/tki-qrcode.vue"
+	import utils from '@/utils/method.js'
+	import {mapState} from 'vuex'
 	export default {
+		components:{tkiQrcode},
 		data() {
 			return {
-				 qrCode:'../../static/yijucai.png'
+				 qrCode:'../../static/yijucai.png',
+				 size:340,
+				 onval:true,  //动态生成二维码,
+				 coinAddr:'',
+				 loadingText:"二维码生成中"
 			};
+		},
+		async onLoad() {
+			await utils.getUserInfo()
+			this.setCode()
+		},
+		computed:{
+			...mapState(['userInfo'])
+		},
+		methods:{
+			setCode(){
+				setTimeout(()=>{
+					this.coinAddr = this.userInfo.cardCode
+				})
+				
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.recimg{
+	     display: flex;
+	     justify-content: center;
+	     margin-top: 16rpx;
+	
+	    }
    .sBox1{
 	   background: #F23D3D;
 	   padding:0 32rpx 60rpx;

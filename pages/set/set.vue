@@ -8,16 +8,18 @@
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
-		<view class="list-cell b-b m-t" @click="bindWx" hover-class="cell-hover" :hover-stay-time="50">
+		<!-- #ifdef APP-PLUS -->
+		<view class="list-cell b-b m-t" @click="bindWx" hover-class="cell-hover" :hover-stay-time="50" v-if="hasLogin">
 			<text class="cell-tit">绑定微信</text>
 			<view class="cell-more" >
 				<text>{{userInfo.appBindExFlag?'解绑':'未绑定'}}</text>
 				<text class="cell-more iconfont iconchakanquanbu"></text>
 			</view>
-			
-			
 		</view>
-		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd',true)" hover-class="cell-hover" :hover-stay-time="50">
+		<!-- #endif -->
+		
+		
+		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd',true)" hover-class="cell-hover" :hover-stay-time="50" v-if="hasLogin">
 			<text class="cell-tit">支付密码</text>
 			<view class="cell-more">
 				<text>{{userInfo.payPwdFlag?'重置密码':'未设置'}}</text>
@@ -105,14 +107,29 @@
 			bindWx(){
 				// console.log(this.userInfo.payPwdFlag)
 				if(!this.hasLogin){
-					this.setAfterLoginUrl(url);
+					// this.setAfterLoginUrl(url);
 					uni.navigateTo({
 						url:"/pages/public/login"
 					})
 				}else{
-					console.log(this.userInfo.payPwdFlag)
 					if(this.userInfo.appBindExFlag){
-						
+						uni.showModal({
+							title:'提示',
+							content:'确定解绑微信号?',
+							success:(res)=>{
+								if(res.confirm){
+									this.$http({
+										apiName:'removeWx',
+										type:'POST'
+									}).then(res=>{
+										uni.showToast({
+											title:'解绑成功'
+										})
+										utils.getUserInfo()
+									}).catch(err=>{})
+								}
+							}
+						})
 						return
 					}else{
 					

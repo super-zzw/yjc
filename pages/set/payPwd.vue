@@ -11,7 +11,7 @@
 				<view class="sItem" v-if="userInfo.payPwdFlag">
 					<view class="slabel">短信验证码</view>
 					<view class="sinputbox">
-						<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入短信验证码"/>
+						<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="code" placeholder="请输入短信验证码"/>
 						<text class="stext"  @tap="sendCode">{{codeText}}</text>
 					</view>
 				</view>
@@ -124,14 +124,19 @@
 						// }
 						data:_params
 					}).then(res => {
-						console.log(res)
+					
 						uni.showToast({
 							title: "设置成功"
 						})
+						
 						this.confirmBtnDisable = false;
 						utils.getUserInfo()
 						// utils.rmData()
-						utils.afterLoginJump()
+						setTimeout(()=>{
+							uni.navigateBack()
+						},1000)
+						
+						
 
 
 					}).catch(err => {

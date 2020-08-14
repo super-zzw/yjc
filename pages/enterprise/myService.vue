@@ -1,6 +1,6 @@
 <template>
-	<view>
-		<view class="orderList">
+	<view v-if="loading">
+		<view class="orderList" v-if="list.length>0">
 			<view class="orderItem" v-for="(item,index) in list" :key="index">
 				<view class="banner">
 					<text class="orderNum">订单编号：{{item.orderSn}}</text>
@@ -31,6 +31,10 @@
 				</view>
 			</view>
 		</view>
+		<view v-else class="nodata">
+			<image src="../../static/nodata.png" mode=""></image>
+			<text>暂无记录</text>
+		</view>
 	</view>
 </template>
 
@@ -39,7 +43,8 @@
 		data() {
 			return {
 				status:-1,
-				list:[]
+				list:[],
+				loading:false
 			};
 		},
 		onLoad() {
@@ -50,6 +55,7 @@
 				await this.$http({
 					apiName:"myCpService",
 				}).then(res => {
+					this.loading=true
 					this.list = res.data
 				}).catch(_ => {})
 			},
@@ -190,5 +196,23 @@
   }
   .orderItem:last-child{
 	 margin-bottom: 0;
+  }
+  .nodata{
+	  width: 30%;
+	  display: flex;
+	  justify-content: center;
+	  flex-direction: column;
+	  align-items: center;
+	  margin:200rpx auto;
+	  image{
+		  width: 100%;
+		  height: 200rpx;
+		  margin-bottom: 20rpx;
+	  }
+	  text{
+		  color: rgba(144, 147, 153, 1);
+		  font-size:34rpx;
+		  font-weight: 500;
+	  }
   }
 </style>

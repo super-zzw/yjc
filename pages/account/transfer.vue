@@ -56,8 +56,9 @@
 				disable:false
 			}
 		},
-		onLoad(opt) {
+		async onLoad(opt) {
 			this.type = opt.type;
+			
 			let _title=''
 			if(this.type==2){
 				_title='账户转账'
@@ -69,6 +70,10 @@
 			uni.setNavigationBarTitle({
 				title: _title
 			});
+			if(opt.account){
+				this.account=opt.account
+			    await this.getAccountName()	
+			}
 		},
 		methods:{
 			getDetail(){
@@ -107,18 +112,20 @@
 					
 					await this.$http({
 						apiName:'getAccountName',
-						
 						data:{
 							cardCode:this.account,
 							type:this._type
 						}
 					}).then(res=>{
-						this.flag=true
-					    if(res.data){
-							this.hasUser=true
-						}
-							this.aacountName=res.data
 					
+						 
+					  //   if(res.data){
+							// this.hasUser=true
+						// }
+							this.aacountName=res.data
+							console.log(res)
+							console.log(this.aacountName)
+					       this.flag=true
 					}).catch(err=>{})
 				}
 			},

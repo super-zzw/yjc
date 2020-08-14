@@ -135,7 +135,7 @@
 		</view>
 
 		<!-- 弹出验证框 -->
-		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
+		<!-- <pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/> -->
 
 		<!-- 选择优惠券 -->
 		<!-- <view class="yhqSel" :class="sModal1?'active':''">

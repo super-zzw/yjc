@@ -21,7 +21,7 @@
 			<view class="iptBox">￥<input type="number" value="" v-model="money" /></view>
 			<text class="divider"></text>
 			<view class="txts">
-				<text class="txt2">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance}}</text>
+				<text class="txt2">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance.toFixed(2)}}</text>
 				<text class="txt2" v-if="money">手续费：¥{{shouxu}}</text>
 				<!-- 	<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1" class="txt2">
 					手续费：¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
@@ -32,7 +32,7 @@
 			</view>
 			<button type="default" hover-class="none" @tap="tx">提交</button>
 		</view>
-		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" />
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/>
 
 	</view>
 </template>
@@ -137,6 +137,11 @@
 			},
 			close() {
 				this.sModal = false
+			},
+			toPayPwd(nav){
+				uni.navigateTo({
+					url:nav
+				})
 			},
 			async tx() {
 				if (!this.accountList.length) {
