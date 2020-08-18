@@ -15,7 +15,7 @@
 				<text class="txt2">收款方：{{userInfo.wusername}}（手机尾号{{userInfo.phone.slice(7)}}）</text>
 			</view>
 		</view>
-		<view class="sBox2">
+		<view class="sBox2" @tap="toMyBill">
 			<text class="record">收款记录</text>
 			<text class="iconfont iconchakanquanbu"></text>
 		</view>
@@ -50,6 +50,11 @@
 					this.coinAddr = this.userInfo.cardCode
 				})
 				
+			},
+			toMyBill(){
+				uni.navigateTo({
+					url:'../myBill/index'
+				})
 			}
 		}
 	}

@@ -101,7 +101,7 @@
 				})
 			},
 			async getList(){
-				// this.dataList = [];
+				this.dataList = [];
 				await this.$http({
 					apiName:"getOrderLog",
 					data:{
@@ -124,13 +124,16 @@
 			},
 			async bindPickerChange1(e){
 				this.index=e.detail.value;
+				this.dataList=[]
 				if(this.index == 0){
+					
 					this.type = 1;
 				}else if(this.index == 1){
 					this.type = 7
 				}else if(this.index == 2){
 					this.type = ""
 				}
+				
 				await this.getList()
 			},
 			selDate(){
