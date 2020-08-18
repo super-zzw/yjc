@@ -107,7 +107,7 @@
 				</view>
 		
 			</view>
-			<view class="yt-list-cell b-b">
+			<!-- <view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">储值余额抵扣</text>
 				<view class="flex align-items">
 					<text class="cell-tip" v-if="checked">储值余额抵扣¥{{storeValue}}</text>
@@ -115,8 +115,8 @@
 					<image src="../../static/on.png" mode="" class="switch" @tap="switchChecked" v-else></image>
 				</view>
 				
-				<!-- <text class="cell-tip" v-else>{{fee}}</text> -->
-			</view>
+				<text class="cell-tip" v-else>{{fee}}</text>
+			</view> -->
 			<view class="yt-list-cell desc-cell b-b">
 				<text class="cell-tit clamp">剩余待支付</text>
 				<text class="cell-right">¥{{total2}}</text>
@@ -143,24 +143,22 @@
 		
 		<!-- 弹出验证框 -->
 		<view class="masks" v-if="sMask"></view>
-		<view class="validateBox" :class="sModal?'active':''">
+		<!-- <view class="validateBox" :class="sModal?'active':''">
 			<text class="iconfont iconclose-hei" @tap="closePass"></text>
 			<text class="txt1">支付密码验证</text>
 			<view class="input_area">
 				<passwordInput :numLng='password' @open="openKeyboard" />
-				<!-- <input class="box" disabled v-for="(item,index) in 6" :key="index" ></input> -->
-				<!-- <input type="password" value="" class="box" maxlength="1" v-for="(item,index) in 6" :key="index" @input="input(index)" :focus="currentIpt==index?true:false"
-				:disabled="currentIpt>=index?false:true"/> -->
 			</view>
 			<text class="txt2">请输入6位数字支付密码</text>
 			<numberKeyboard psdLength='6' ref='KeyboarHid' @input='clickInput' />
-		</view>
+		</view> -->
 		
 		<!-- 选择优惠券 -->
 		<view class="yhqSel" :class="sModal1?'active':''">
 			<text class="titles">选择优惠券</text>
 			<text class="cancel" @tap="sModal1=false,sMask=false">取消</text>
-			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)" v-if="couponsList">
+			<view class="card-list">
+			<view class="card-item" v-for="(item,index) in couponsList" :key="index"  v-if="couponsList">
 				<view class="fengmian">
 					<view class="content">
 						￥<text>{{item.amount}}</text>
@@ -172,14 +170,17 @@
 					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
 				</view>
 				<view class="circle" v-if="item.useFlag">
-					<text></text>
+					<text v-if="index!=selYHQ" @tap="selCoupon(item,index)"></text>
+					<image src="../../static/select.png" mode="" v-if="index==selYHQ" @tap="selCoupon(item,index)"></image>
 				</view>
 		        <image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
+			</view>
 			</view>
 			<view v-if="!couponsList" class="none">
 				<image src="../../static/null.png" mode="" ></image>
 				<text>暂无优惠券</text>
 			</view>
+			<view class="confirmBtn" @tap="sMask=false,sModal1=false">确定</view>
 		</view>
 
 	</view>
@@ -210,7 +211,7 @@
 				orderList:[],
 				addrText:"地址加载中...",  //
 				total2:"加载中...",
-				checked: false,
+				// checked: false,
 				sModal: false,
 				currentIpt: 0,
 				password: '',
@@ -218,8 +219,9 @@
 				sModal1: false,
 				couponsList:'',
 				yhq:0,   //优惠券数值
-				storeValue:0,  ///使用的储值
-				wuserCouponId:''
+				// storeValue:0,  ///使用的储值
+				wuserCouponId:'',
+				selYHQ: -1
 			}
 		},
 		async onLoad(opt){
@@ -277,40 +279,6 @@
 			}
 		},
 		watch:{
-			password(data){
-				let all=(Number(this.total) + Number(this.fee)-Number(this.yhq)).toFixed(2)
-				if(data.length>=6){
-					this.$http({
-						apiName:'checkPayPwd',
-						type:'POST',
-						data:{
-							tradepwd:utils.md5(this.password) 
-						}
-					}).then(res=>{
-						this.closePass()
-						if(this.userInfo.cardAmount==0){
-							uni.showToast({
-								title:'储值余额为0',
-								duration:1500,
-								icon:'none'
-							})
-						}else if(this.userInfo.cardAmount>=all){
-							console.log(1)
-							this.checked=true
-							this.storeValue=all
-							 this.total2=0
-						}else{
-							this.checked=true
-							this.storeValue=this.userInfo.cardAmount
-							this.total2=(Number(this.total)+ Number(this.fee)-Number(this.userInfo.cardAmount)-Number(this.yhq)).toFixed(2) 
-						}
-						
-						// this.storeValue=
-					}).catch(err=>{
-						this.$refs.KeyboarHid.iptNum=[]
-					})
-				}
-			},
 			selectAddr(item){
 			
 				if(this.receiveWay==1){
@@ -322,82 +290,54 @@
 					// }else{
 						this.getYf()
 					// }
-					this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+					// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+					this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
 				}else{
 					return
 			}
-			},
-			storeValue(value){
-				if(value==0){
-					this.checked=false
-				}
-			},
-			// total2(value){
-			// 	if(value<0){
-			// 		this.total2=0
-			// 	}else{
-			// 		this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
-			// 	}
-			// }
+			}
 		},
 		methods: {
 			...mapMutations(['setSelectAddr']),
-			switchChecked() {
-				if(this.userInfo.payPwdFlag){
-					if (!this.checked) {
-						if((Number(this.total) + Number(this.fee)).toFixed(2)<=this.yhq){
-							uni.showToast({
-								title:'您无需使用储值',
-								icon:'none'
-							})
-						}else{
-							this.sModal = true
-							this.sMask = true
-							this.$refs.KeyboarHid.open();
-						}
+			// switchChecked() {
+			// 	if(this.userInfo.payPwdFlag){
+			// 		if (!this.checked) {
+			// 			if((Number(this.total) + Number(this.fee)).toFixed(2)<=this.yhq){
+			// 				uni.showToast({
+			// 					title:'您无需使用储值',
+			// 					icon:'none'
+			// 				})
+			// 			}else{
+			// 				this.sModal = true
+			// 				this.sMask = true
+			// 				this.$refs.KeyboarHid.open();
+			// 			}
 						
-					}else{
-						this.$refs.KeyboarHid.iptNum=[]
-						this.checked=false
-						this.storeValue=0
-						this.total2=(Number(this.total) + Number(this.fee)-Number(this.yhq) ).toFixed(2)
-					}
-				}else{
-					uni.showModal({
-						title: '提示',
-						content:'您还未设置支付密码，请前往设置',
-						success(res) {
-							if(res.confirm){
-								uni.navigateTo({
-									url:'../set/payPwd'
-								})
-								// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
-							}else{
-								return
-							}
+			// 		}else{
+			// 			this.$refs.KeyboarHid.iptNum=[]
+			// 			this.checked=false
+			// 			this.storeValue=0
+			// 			this.total2=(Number(this.total) + Number(this.fee)-Number(this.yhq) ).toFixed(2)
+			// 		}
+			// 	}else{
+			// 		uni.showModal({
+			// 			title: '提示',
+			// 			content:'您还未设置支付密码，请前往设置',
+			// 			success(res) {
+			// 				if(res.confirm){
+			// 					uni.navigateTo({
+			// 						url:'../set/payPwd'
+			// 					})
+			// 					// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
+			// 				}else{
+			// 					return
+			// 				}
 						
-						}
+			// 			}
 						
-					})
-				}
-			},
-			clickInput(val) {
-				this.password = val;
-			},
-			closePass() {
-				this.sModal = false
-				this.sMask = false
-				this.$refs.KeyboarHid.close();
-				
-			},
-			openKeyboard() {
-			
-				if (!this.$refs.KeyboarHid.KeyboarHid) {
-					this.$refs.KeyboarHid.open();
-					
-				}
-			
-			},
+			// 		})
+			// 	}
+			// },
 			yhqSel() {
 				this.sMask = true
 				this.sModal1 = true
@@ -409,13 +349,14 @@
 					this.receiveWay = 1;  //自提
 					// this.total2 = this.total;
 					this.fee=0
-					if(this.checked){
-						this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
-					}
+					// if(this.checked){
+					// 	this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+					// }
 					if(Number(this.yhq)>Number(this.total)){
 						this.total2=0
 					}else{
-						this.total2=Number(this.total)-Number(this.storeValue)-Number(this.yhq)
+						// this.total2=Number(this.total)-Number(this.storeValue)-Number(this.yhq)
+						this.total2=Number(this.total)-Number(this.yhq)
 					}
 					
 				}else{
@@ -453,7 +394,7 @@
 				this.order.specSelected.map(item => {
 					_skuJson[item.key] = item.value
 				})
-				    let cardAmountFlag=this.checked?1:0
+				    // let cardAmountFlag=this.checked?1:0
 				await this.$http({
 					apiName:"createFightOrder",
 					type:"POST",
@@ -475,7 +416,7 @@
 						skuJson:JSON.stringify(_skuJson),
 						remark:this.desc,
 						tradepwd:utils.md5(this.password),
-						cardAmountFlag:cardAmountFlag,
+						// cardAmountFlag:cardAmountFlag,
 						wuserCouponId:this.wuserCouponId
 					}
 				}).then(res => {
@@ -560,18 +501,19 @@
 					}).then(res => {
 						
 						this.fee = res.data.fee
-					    if(this.checked){
-							console.log(1)
-						if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
-							this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
-						}else{
-							this.storeValue=this.userInfo.cardAmount
-						}
-						}
+					 //    if(this.checked){
+						// 	console.log(1)
+						// if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+						// 	this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+						// }else{
+						// 	this.storeValue=this.userInfo.cardAmount
+						// }
+						// }
 						if(Number(this.total)+Number(this.fee)<=Number(this.yhq)){
 							this.total2=0
 						}else{
-							this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+							// this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+							this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)
 						}
 						
 					}).catch(_ =>{})
@@ -604,28 +546,28 @@
 						this.couponsList=res.data
 					}).catch(err=>{})
 				},
-				selCoupon(item){
+				selCoupon(item,index){
 					if(item.useFlag){
-						this.sMask = false
-						this.sModal1 = false
+						this.selYHQ = index
 						this.yhq=item.amount
 						this.wuserCouponId=item.wuserCouponId
 						if(Number(this.total) +Number(this.fee)<=item.amount){
 							this.total2=0
-							this.checked=false
-							this.$refs.KeyboarHid.iptNum=[]
+							// this.checked=false
+							// this.$refs.KeyboarHid.iptNum=[]
 						}else{
-							if(this.checked){
-								if((Number(this.total) + Number(this.fee)-Number(item.amount)).toFixed(2)>this.userInfo.cardAmount){
-									this.storeValue=this.userInfo.cardAmount
-								}else{
-									this.storeValue=(Number(this.total)+Number(this.fee)-Number(item.amount)).toFixed(2)
-								}
+							// if(this.checked){
+							// 	if((Number(this.total) + Number(this.fee)-Number(item.amount)).toFixed(2)>this.userInfo.cardAmount){
+							// 		this.storeValue=this.userInfo.cardAmount
+							// 	}else{
+							// 		this.storeValue=(Number(this.total)+Number(this.fee)-Number(item.amount)).toFixed(2)
+							// 	}
 									
-							}
+							// }
 							
-						this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
-							// this.total2=(Number(this.total) + Number(this.fee)).toFixed(2)
+						// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+						this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+							
 						}
 						
 					}else{
@@ -1225,6 +1167,10 @@
     	   font-weight:400;
     	   color:rgba(242,61,61,1);
        }
+	   .card-list {
+	   	height: 800rpx;
+	   	overflow: scroll;
+	   }
     	.card-item {
     		// margin:0 32rpx;
     		background: #fff;
@@ -1337,6 +1283,10 @@
     			border: 2rpx solid rgba(217, 217, 217, 1);
     			border-radius: 50%;
     		}
+			image {
+				width: 36rpx;
+				height: 36rpx;
+			}
     		height: 100%;
     		margin-right: 30rpx;
     		display: flex;
@@ -1369,7 +1319,7 @@
     
     .yhqSel.active {
     	transition: .4s;
-    	height: 700rpx;
+    	height: 1000rpx
     }
 	.masks {
 		position: fixed;
@@ -1378,5 +1328,16 @@
 		width: 100vw;
 		height: 100vh;
 		background: rgba(52, 52, 52, 0.7);
+	}
+	.confirmBtn {
+		width: 80%;
+		border-radius: 40rpx;
+		height: 100rpx;
+		background: #F23D3D;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+		margin: 20rpx 0;
 	}
 </style>

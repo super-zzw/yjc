@@ -88,7 +88,7 @@
 			</view>
 
 			<!-- 优惠 -->
-		<!-- 	<view class="yt-list" v-if="!isScore">
+			<view class="yt-list" v-if="!isScore">
 
 				<view class="yt-list-cell b-b">
 					<text class="cell-tit clamp">优惠券</text>
@@ -99,7 +99,7 @@
 					</view>
 
 				</view>
-				<view class="yt-list-cell b-b">
+				<!-- <view class="yt-list-cell b-b">
 					<text class="cell-tit clamp">储值余额抵扣</text>
 					<view class="flex align-items">
 						<text class="cell-tip" v-if="checked">储值余额抵扣¥{{storeValue}}</text>
@@ -108,14 +108,13 @@
 					</view>
 
 					 <text class="cell-tip" v-else>{{fee}}</text>
-				</view>
-				 <view class="yt-list-cell desc-cell b-b">
+				</view> -->
+				<view class="yt-list-cell desc-cell b-b">
 					<text class="cell-tit clamp">剩余待支付</text>
 					<text class="cell-right" v-if="selectAddr">¥{{total2}}</text>
 					<text class="cell-right" v-else>{{total2}}</text>
-					<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息" placeholder-class="placeholder" />
 				</view>
-			</view> -->
+			</view>
 		</view>
 		<!-- 底部 -->
 		<view class="footer">
@@ -133,47 +132,51 @@
 			<text class="submit" @click="submit2" v-else-if="cart == 1">提交订单</text>
 			<text class="submit" @click="submit" v-else>提交订单</text>
 		</view>
-
+		<view class="masks" v-if="sMask"></view>
 		<!-- 弹出验证框 -->
 		<!-- <pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/> -->
 
 		<!-- 选择优惠券 -->
-		<!-- <view class="yhqSel" :class="sModal1?'active':''">
+		<view class="yhqSel" :class="sModal1?'active':''">
 			<text class="titles">选择优惠券</text>
 			<text class="cancel" @tap="sModal1=false,sMask=false">取消</text>
-			<view class="card-item" v-for="(item,index) in couponsList" :key="index" @tap="selCoupon(item)" v-if="couponsList">
-				<view class="fengmian">
-					<view class="content">
-						￥<text>{{item.amount}}</text>
+			<view class="card-list">
+				<view class="card-item" v-for="(item,index) in couponsList" :key="index" v-if="couponsList">
+					<view class="fengmian">
+						<view class="content">
+							￥<text>{{item.amount}}</text>
+						</view>
 					</view>
-				</view>
-				<view class="main">
-					<text class="title">{{item.title}}</text>
+					<view class="main">
+						<text class="title">{{item.title}}</text>
 
-					<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
+						<text class="date">{{item.startTime|date}} 至 {{item.endTime|date}} 有效</text>
+					</view>
+					<view class="circle" v-if="item.useFlag">
+
+						<text v-if="index!=selYHQ" @tap="selCoupon(item,index)"></text>
+						<image src="../../static/select.png" mode="" v-if="index==selYHQ" @tap="selCoupon(item,index)"></image>
+					</view>
+					<image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
 				</view>
-				<view class="circle" v-if="item.useFlag">
-					<text></text>
-				</view>
-				<image src="../../static/nouse.png" mode="" class="nouse" v-if="!item.useFlag"></image>
 			</view>
 			<view v-if="!couponsList" class="none">
 				<image src="../../static/null.png" mode=""></image>
 				<text>暂无优惠券</text>
 			</view>
-		</view> -->
+			<view class="confirmBtn" @tap="sMask=false,sModal1=false">确定</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	
 	import utils from '../../utils/method.js'
 	import {
 		mapState,
 		mapMutations
 	} from 'vuex';
 	export default {
-		
+
 		data() {
 			return {
 				total: 0,
@@ -192,26 +195,29 @@
 				sModal1: false,
 				couponsList: '',
 				yhq: 0, //优惠券数值
-				storeValue: 0, ///使用的储值
-				wuserCouponId: ''
+				// storeValue: 0, ///使用的储值
+				wuserCouponId: '',
+				sMask: false,
+				selYHQ: -1
 			}
 		},
 		watch: {
-			selectAddr(item){
-				if(item){
-					if(this.cart==1){
+			selectAddr(item) {
+				if (item) {
+					if (this.cart == 1) {
 						this.getCartYf()
-					}else{
+					} else {
 						this.getYf()
 					}
-					this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
-				}else{
+					this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+					// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+				} else {
 					return
-			}
+				}
 			}
 		},
 		async onLoad(opt) {
-			
+
 			this.cart = opt.cart;
 			if (opt.score == 'true') {
 				this.isScore = true
@@ -225,13 +231,13 @@
 				this.cart = opt.cart
 				await this.getCart()
 				await this.getCartYf()
-				// await this.getCoupons()
+				await this.getCoupons()
 			} else {
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
-				
-				// await this.getCoupons()
+
+				await this.getCoupons()
 				// await this.getYf()
-				this.total2=Number(Number(this.total)+Number(this.fee) ).toFixed(2)
+				this.total2 = Number(Number(this.total) + Number(this.fee)).toFixed(2)
 				if (opt.score == 'true') {
 					this.isScore = true
 					this.totalScore = this.order.exchangePoints
@@ -245,7 +251,7 @@
 			// this.setOrder([])
 		},
 		async onShow() {
-			
+
 		},
 		filters: {
 			date(data) {
@@ -257,47 +263,47 @@
 		},
 		methods: {
 			...mapMutations(['setSelectAddr', 'setAfterLoginUrl']),
-			switchChecked() {
-				if (this.userInfo.payPwdFlag) {
-				
-					if (!this.checked) {
-							
-						if ((Number(this.total) + Number(this.fee)).toFixed(2) <= this.yhq) {
-							uni.showToast({
-								title: '您无需使用储值',
-								icon: 'none'
-							})
-						} else {
-						
-							this.sModal = true
-						}
+			// switchChecked() {
+			// 	if (this.userInfo.payPwdFlag) {
 
-					} else {
-						this.$refs.pwdValidate.clear()
-						this.checked = false
-					
-						this.total2 = (Number(this.total) + Number(this.fee) - this.yhq).toFixed(2)
-					}
-				} else {
-					uni.showModal({
-						title: '提示',
-						content: '您还未设置支付密码，请前往设置',
-						success(res) {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: '../set/payPwd'
-								})
-								// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
-							} else {
-								return
-							}
+			// 		if (!this.checked) {
 
-						}
+			// 			if ((Number(this.total) + Number(this.fee)).toFixed(2) <= this.yhq) {
+			// 				uni.showToast({
+			// 					title: '您无需使用储值',
+			// 					icon: 'none'
+			// 				})
+			// 			} else {
 
-					})
-				}
+			// 				this.sModal = true
+			// 			}
 
-			},
+			// 		} else {
+			// 			this.$refs.pwdValidate.clear()
+			// 			this.checked = false
+
+			// 			this.total2 = (Number(this.total) + Number(this.fee) - this.yhq).toFixed(2)
+			// 		}
+			// 	} else {
+			// 		uni.showModal({
+			// 			title: '提示',
+			// 			content: '您还未设置支付密码，请前往设置',
+			// 			success(res) {
+			// 				if (res.confirm) {
+			// 					uni.navigateTo({
+			// 						url: '../set/payPwd'
+			// 					})
+			// 					// this.setAfterLoginUrl('/pages/order/createOrder?score=${this.isScore}')
+			// 				} else {
+			// 					return
+			// 				}
+
+			// 			}
+
+			// 		})
+			// 	}
+
+			// },
 			// validateOk(pass){
 			// 	this.password=pass
 			// 	this.checked=true
@@ -313,10 +319,10 @@
 			// close(){
 			// 	this.sModal=false
 			// },
-			// yhqSel() {
-			// 	this.sMask = true
-			// 	this.sModal1 = true
-			// },
+			yhqSel() {
+				this.sMask = true
+				this.sModal1 = true
+			},
 			fetchAddr() {
 				if (this.cart == 1) {
 					uni.navigateTo({
@@ -338,7 +344,8 @@
 
 					this.orderList.map(item => {
 						if (item.checkedFlag) {
-							that.total =Number(that.total)  + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(2))
+							that.total = Number(that.total) + Number((Number(Number(item.promotionPrice * item.number).toFixed(2))).toFixed(
+								2))
 
 						}
 					})
@@ -358,7 +365,7 @@
 				this.order.specSelected.map(item => {
 					_skuJson[item.key] = item.value
 				})
-				let cardAmountFlag = this.checked ? 1 : 0
+				// let cardAmountFlag = this.checked ? 1 : 0
 				await this.$http({
 					apiName: "createOrder",
 					type: "POST",
@@ -378,7 +385,7 @@
 						skuJson: JSON.stringify(_skuJson),
 						remark: this.desc,
 						tradepwd: utils.md5(this.password),
-						cardAmountFlag: cardAmountFlag,
+						// cardAmountFlag: cardAmountFlag,
 						wuserCouponId: this.wuserCouponId
 					}
 				}).then(res => {
@@ -412,7 +419,7 @@
 					})
 					return
 				}
-				let cardAmountFlag = this.checked ? 1 : 0
+				// let cardAmountFlag = this.checked ? 1 : 0
 				var that = this
 				await this.$http({
 					apiName: "createCartOrder",
@@ -429,7 +436,7 @@
 						sourceType: '3',
 						// #endif
 						tradepwd: utils.md5(this.password),
-						cardAmountFlag: cardAmountFlag,
+						// cardAmountFlag: cardAmountFlag,
 						wuserCouponId: this.wuserCouponId
 					}
 				}).then(res => {
@@ -442,7 +449,7 @@
 							url: "/pages/money/paySuccess"
 						})
 					}
-				
+
 				}).catch(_ => {})
 
 			},
@@ -490,32 +497,32 @@
 			},
 			async getYf() {
 				// if (this.selectAddr) {
-					// this.getCoupons()
-					await this.$http({
-						apiName: "getYunfei",
-						type: "POST",
-						data: {
-							productId: this.order.productId,
-							province: this.selectAddr.province
-						}
-					}).then(res => {
-						if(res.data){
-							this.fee = res.data.fee
-						}else{
-							this.fee=0
-						}
-						
-						if(this.checked){
-							if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
-								this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
-							}else{
-								this.storeValue=this.userInfo.cardAmount
-							}
-						}
-						
-						this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
-					
-					}).catch(_ => {})
+				// this.getCoupons()
+				await this.$http({
+					apiName: "getYunfei",
+					type: "POST",
+					data: {
+						productId: this.order.productId,
+						province: this.selectAddr.province
+					}
+				}).then(res => {
+					if (res.data) {
+						this.fee = res.data.fee
+					} else {
+						this.fee = 0
+					}
+
+					// if(this.checked){
+					// 	if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+					// 		this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+					// 	}else{
+					// 		this.storeValue=this.userInfo.cardAmount
+					// 	}
+					// }
+
+					// this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+					this.total2 = Number(this.total) + Number(this.fee) - Number(this.yhq)
+				}).catch(_ => {})
 				// }
 			},
 			async getCartYf() {
@@ -528,62 +535,69 @@
 						}
 					}).then(res => {
 						this.fee = res.data
-						if(this.checked){
-							if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
-								this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
-							}else{
-								this.storeValue=this.userInfo.cardAmount
-							}
-						}
-						
-						this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+						// if(this.checked){
+						// 	if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
+						// 		this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
+						// 	}else{
+						// 		this.storeValue=this.userInfo.cardAmount
+						// 	}
+						// }
+
+						// this.total2=Number(this.total)+Number(this.fee)-Number(this.yhq)-Number(this.storeValue) 
+						this.total2 = Number(this.total) + Number(this.fee) - Number(this.yhq)
 						// this.total2 = (Number(this.total) + Number(this.fee)).toFixed(2)
 					}).catch(_ => {})
 				}
 			},
 			stopPrevent() {},
-			// async getCoupons() {
-			// 	await this.$http({
-			// 		apiName: 'getOrderCoupon',
-			// 		// type:'POST',
-			// 		data: {
-			// 			payAmount: this.total
-			// 		}
-			// 	}).then(res => {
-			// 		this.couponsList = res.data
-			// 	}).catch(err => {})
-			// },
-			// selCoupon(item) {
-			// 	if (item.useFlag) {
-			// 		this.sMask = false
-			// 		this.sModal1 = false
-			// 		this.yhq = item.amount
-			// 		this.wuserCouponId = item.wuserCouponId
-			// 		if ((Number(this.total) + Number(this.fee)).toFixed(2) <= item.amount) {
-			// 			this.total2 = 0
-			// 			this.checked = false
-			// 			this.$refs.pwdValidate.clear()
-						
-			// 		} else {
-			// 			if (this.checked) {
-			// 				if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
-			// 					this.storeValue = this.userInfo.cardAmount
-			// 				} else {
-			// 					this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
-			// 				}
+			async getCoupons() {
+				await this.$http({
+					apiName: 'getOrderCoupon',
+					// type:'POST',
+					data: {
+						payAmount: this.total
+					}
+				}).then(res => {
+					this.couponsList = res.data
+				}).catch(err => {})
+			},
+			selCoupon(item, index) {
+				if (this.selYHQ == index) {
+					this.selYHQ = -1
+					this.yhq = 0
+					this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+					return
+				}
+				if (item.useFlag) {
+					this.selYHQ = index
+					this.yhq = item.amount
+					this.wuserCouponId = item.wuserCouponId
+					if ((Number(this.total) + Number(this.fee)).toFixed(2) <= item.amount) {
+						this.total2 = 0
+						// this.checked = false
+						// this.$refs.pwdValidate.clear()
 
-			// 				// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
-			// 			}
-			// 			this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
-			// 		}
+					} else {
+						// if (this.checked) {
+						// 	if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
+						// 		this.storeValue = this.userInfo.cardAmount
+						// 	} else {
+						// 		this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
+						// 	}
 
-			// 	} else {
-			// 		uni.showToast({
-			// 			title: '该优惠券不可用'
-			// 		})
-			// 	}
+						// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
+						// }
+						// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+						this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
+					}
 
-			// }
+				} else {
+					uni.showToast({
+						title: '该优惠券不可用'
+					})
+				}
+
+			}
 		},
 		onBackPress(e) {
 			if (this.cart == 1) {
@@ -1181,6 +1195,11 @@
 			color: rgba(242, 61, 61, 1);
 		}
 
+		.card-list {
+			height: 800rpx;
+			overflow: scroll;
+		}
+
 		.card-item {
 			// margin:0 32rpx;
 			background: #fff;
@@ -1294,6 +1313,11 @@
 				border-radius: 50%;
 			}
 
+			image {
+				width: 36rpx;
+				height: 36rpx;
+			}
+
 			height: 100%;
 			margin-right: 30rpx;
 			display: flex;
@@ -1309,7 +1333,7 @@
 
 	.yhqSel.active {
 		transition: .4s;
-		height: 700rpx;
+		height: 1000rpx;
 	}
 
 	.none {
@@ -1331,5 +1355,17 @@
 		PingFang SC;
 		font-weight:400;
 		color:rgba(144, 147, 153, 1);
+	}
+
+	.confirmBtn {
+		width: 80%;
+		border-radius: 40rpx;
+		height: 100rpx;
+		background: #F23D3D;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #fff;
+		margin: 20rpx 0;
 	}
 </style>

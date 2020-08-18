@@ -123,8 +123,7 @@
 							// this.hasUser=true
 						// }
 							this.aacountName=res.data
-							console.log(res)
-							console.log(this.aacountName)
+							this.hasUser=true
 					       this.flag=true
 					}).catch(err=>{})
 				}

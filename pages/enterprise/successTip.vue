@@ -8,8 +8,8 @@
 				<text class="tit1">查看已购买的企业服务</text>
 			</view>
 			
-			<navigator url="./index" class="nav">查看我的企业服务</navigator>
-			<navigator url="./index" class="nav nav1">返回首页</navigator>
+			<view @tap="toMyService"  class="nav">查看我的企业服务</view>
+			<view @tap="toIndex"  class="nav nav1">返回首页</view>
 		</view>
 		<!-- <view class="content" v-else>
 			<text class="iconfont icontijiaoshibai"></text>
@@ -35,6 +35,18 @@
 		},
 		computed:{
 			...mapState(['config'])
+		},
+		methods:{
+			toMyService(){
+				uni.redirectTo({
+					url:'./myService'
+				})
+			},
+			toIndex(){
+				uni.redirectTo({
+					url:'./index'
+				})
+			}
 		}
 	}
 </script>

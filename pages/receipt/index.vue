@@ -12,7 +12,7 @@
 				     :onval="onval"
 				     :loadingText="loadingText"/>
 				    </view>
-				<text class="txt2">收款方：菊次郎的夏天（手机尾号3342）</text>
+				<text class="txt2">收款方：{{userInfo.wusername}}（手机尾号{{userInfo.phone.slice(7)}}）</text>
 			</view>
 		</view>
 		<view class="sBox2">

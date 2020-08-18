@@ -25,9 +25,8 @@
 					this.num--
 					if(this.num==0){
 						this.counting=false
-						this.num=1
-						this.$emit('changeValue',Number(-this.price) )
-						return
+					
+						// return
 					}
 					this.$emit('changeValue',Number(-this.price) )
 				}else{
@@ -56,7 +55,10 @@
 				this.$emit('changeValue',Number(this.price))
 			},
 			async addCart(){
-				this.counting=true,
+				this.counting=true
+				if(this.num==0){
+					this.num=1
+				}
 				this.$emit('changeValue',Number(this.price))
 				uni.showLoading({
 					title:'正在添加...'

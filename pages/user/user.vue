@@ -21,7 +21,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="signIn"  v-if="hasLogin && hasSigin" @tap="navTo(`/pages/integral/integral`)">每日签到</view>
+					<!-- <view class="signIn"  v-if="hasLogin && hasSigin" @tap="navTo(`/pages/integral/integral`)">每日签到</view> -->
 				</view>
 <!-- 				<view class="user-more" >
 					
@@ -121,6 +121,12 @@
 				<view class="hsitem" @tap="navTo('/pages/account/accountSel')">
 			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
 						<text class="itemBoxText">银行卡</text>
+					
+				</view>
+				<view class="hsitem" @tap="navTo('/pages/coupons/index')"
+				v-if="config.USERINFO_VIEW_MENU.couponFlag">
+				    <image src="../../static/user/youhuijuan.png" class="icon"></image>
+						<text class="itemBoxText">优惠券</text>
 					
 				</view>
 			<!-- 	<view class="hsitem" @tap="navTo('/pagesE/distribution/index')">

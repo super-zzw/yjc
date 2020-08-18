@@ -1,6 +1,6 @@
 <template>
-	<view class="container">
-		<view class="sBox">
+	<view class="container" v-if="flag">
+		<view class="sBox" v-if="list.length>0">
 			<view class="sItem"  v-for="item in list" :key="item.id">
 				 <image :src="item.picUrl" mode="" class="image"></image>
 				 <view class="info">
@@ -14,7 +14,11 @@
 			</view>
 			
 		</view>
-		<view class="bottomBar">
+		<view v-else class="nodata" v-else>
+			<image src="../../static/nodata.png" mode=""></image>
+			<text>暂无记录</text>
+		</view>
+		<view class="bottomBar" v-if="list.length>0">
 			<view class="left">
 				实付款 <text class="price">¥{{sum}}</text>
 			</view>
@@ -42,7 +46,8 @@
 			return {
 				sum:0,
 				list:[],
-				sModal:false
+				sModal:false,
+				flag:false
 			};
 		},
 		onLoad() {
@@ -57,6 +62,7 @@
 				await this.$http({
 					apiName:'getServiceList',
 				}).then(res=>{
+					this.flag=true
 					this.list=res.data
 				}).catch(err=>{
 					
@@ -76,7 +82,8 @@
 						title:'请至少选择一项服务',
 						icon:'none'
 					})
-				}else{
+				}
+				else{
 					this.sModal=true
 				}
 			},
@@ -263,5 +270,23 @@
    .tipBox.active{
 	   height: 400rpx;
 	   transition: all .3s;
+   }
+   .nodata{
+   	  width: 30%;
+   	  display: flex;
+   	  justify-content: center;
+   	  flex-direction: column;
+   	  align-items: center;
+   	  margin:200rpx auto;
+   	  image{
+   		  width: 100%;
+   		  height: 200rpx;
+   		  margin-bottom: 20rpx;
+   	  }
+   	  text{
+   		  color: rgba(144, 147, 153, 1);
+   		  font-size:34rpx;
+   		  font-weight: 500;
+   	  }
    }
 </style>

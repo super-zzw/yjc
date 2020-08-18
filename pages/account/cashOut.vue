@@ -18,11 +18,12 @@
 		</view>
 		<view class="moneyBox">
 			<text class="txt1">提现金额</text>
-			<view class="iptBox">￥<input type="number" value="" v-model="money" /></view>
+			<view class="iptBox">￥<input type="number" value="" v-model="money" @blur="getFee"/></view>
 			<text class="divider"></text>
 			<view class="txts">
-				<text class="txt2">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance.toFixed(2)}}</text>
-				<text class="txt2" v-if="money">手续费：¥{{shouxu}}</text>
+				<text class="txt2" v-if="type==1">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance.toFixed(2)}}</text>
+				<text class="txt2" v-if="type==2">可提现金额¥{{userInfo.yjcCardBalance.toFixed(2)}}</text>
+				<text class="txt2" v-if="isshow">手续费：¥{{fee}}</text>
 				<!-- 	<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1" class="txt2">
 					手续费：¥{{config.DISTRIBUTE_WITHDRAW.withdrawAmount}}
 				</view>
@@ -50,7 +51,9 @@
 				ableMoney: "", //可提现金额
 				sModal: false,
 				password: '',
-                type:''
+                type:'',
+				fee:0,
+				isshow:false
 			};
 		},
 		onLoad(opt) {
@@ -71,13 +74,7 @@
 
 		computed: {
 			...mapState(['selectFxAccount', 'config', 'userInfo']),
-			shouxu() {
-				if (this.config.YJC_WITHDRAW.withdrawType == 1) {
-					return this.config.YJC_WITHDRAW.withdrawAmount
-				} else {
-					return (this.config.YJC_WITHDRAW.withdrawRatio * this.money).toFixed(2)
-				}
-			}
+			
 		},
 		methods: {
 			//获取账户详情
@@ -102,10 +99,28 @@
 					uni.navigateTo({
 						url: 'accountSel'
 					})
+				}else{
+					uni.navigateTo({
+						url:'./addAccount'
+					})
 				}
-				// uni.navigateTo({
-				// 	url:'./accountSel'
-				// })
+				
+			},
+			// 获取手续费
+			async getFee(){
+				if(this.money){
+					await this.$http({
+						apiName:'getFee',
+						data:{
+							amount:this.money,
+							type:this.type
+						}
+					}).then(res=>{
+						this.fee=res.data
+						this.isshow=true
+					})
+				}
+				
 			},
 			async validateOk(pass) {
 				this.password = pass

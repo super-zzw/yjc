@@ -161,4 +161,5 @@ export default{
 	
 	getOrderLog:"/yjc/get/my/cardOrderLog", //我的账单
 	getOrderTotal:"/yjc/get/my/cardOrderTotal", //我的账单(累计收入支出)
+	getFee:"/yjc/get/withdraw/fee", //获取提现手续费
 }

@@ -9,7 +9,7 @@
 			
 			<text v-if="status==2" class="tit">钱款已转入对方账户</text>
 			<text v-if="status==3" class="tit">钱款已转入对方聚财卡</text>
-			<navigator url="./index" class="nav">返回首页</navigator>
+			<navigator :url="status==2?'./index?type=0':'./index?type=1'" class="nav">返回首页</navigator>
 		</view>
 		<!-- <view class="content" v-else>
 			<text class="iconfont icontijiaoshibai"></text>

@@ -2,11 +2,11 @@
 	<view>
 		<view class="top">
 			<view class="left">
-				<text class="number">-{{totalAmountOut}}</text>
+				<text class="number">+{{totalAmountIn}}</text>
 				<text class="ctxt">累计收入金额(元)</text>
 			</view>
 			<view class="right">
-				<text class="number">+{{totalAmountIn}}</text>
+				<text class="number">-{{totalAmountOut}}</text>
 				<text class="ctxt">累计支出金额(元)</text>
 			</view>
 		</view>
@@ -40,8 +40,8 @@
 						<text class="info">{{item.createTime}}</text>
 					</view>
 					<view class="right">
-						<text class="value" v-if="item.type == 0">+{{item.amount}}</text>
-						<text class="value" v-if="item.type == 1">-{{item.amount}}</text>
+						<text class="value" v-if="item.type == 0">+{{item.amountStr}}</text>
+						<text class="value" v-if="item.type == 1">-{{item.amountStr}}</text>
 						<text class="result" v-if="item.withdrawStatus == 0">待处理</text>
 						<text class="result" v-if="item.withdrawStatus == 1">通过</text>
 						<text class="result" v-if="item.withdrawStatus == -1">失败</text>
@@ -112,9 +112,14 @@
 						type:this.type
 					}
 				}).then(res => {
-					
+					if(this.dataList.length>=res.data.total){
+						return
+					}
 					this.noMore = !res.data.hasNextPage
+					
 					this.dataList = this.dataList.concat(res.data.list)
+					
+					
 				}).catch(err => {})
 			},
 			async bindPickerChange1(e){
