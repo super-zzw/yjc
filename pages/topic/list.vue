@@ -11,7 +11,7 @@
 							<text class="m-price">起</text>
 						</view>
 					</view>
-					<view class="pro-box">{{item.description}}</view>
+					<view class="pro-box" v-if="item.description">{{item.description}}</view>
 				</view>
 			</view>
 		</view>

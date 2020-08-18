@@ -254,6 +254,9 @@ import tabBar from "@/components/tab-bar.vue"
 			},800)
 		},
 		async onLoad(opt) {
+			uni.setNavigationBarTitle({
+			　　title:this.config.MALL_APP_NAME
+			})
 			
 			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){

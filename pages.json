@@ -9,7 +9,7 @@
 						"splitLine": {
 							"color": "#DBDBDB"
 						},
-						"titleText": "辰悠优品汇",
+						"titleText": "易聚财商城",
 						"titleSize": "16",
 						"buttons": [{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
@@ -65,15 +65,15 @@
 						"splitLine": {
 							"color": "#DBDBDB"
 						},
-						"type": "transparent",
-						"buttons": [{
-							"fontSrc": "/static/font/iconfont/iconfont.ttf",
-							"text": "\ue63c",
-							"fontSize": "16",
-							"color": "#303133",
-							"float": "right",
-							"background": "rgba(0,0,0,0.5)"
-						}]
+						"type": "transparent"
+						// "buttons": [{
+						// 	"fontSrc": "/static/font/iconfont/iconfont.ttf",
+						// 	"text": "\ue63c",
+						// 	"fontSize": "16",
+						// 	"color": "#303133",
+						// 	"float": "right",
+						// 	"background": "rgba(0,0,0,0.5)"
+						// }]
 					}
 				}
 			}
@@ -756,15 +756,15 @@
 						"splitLine": {
 							"color": "#DBDBDB"
 						},
-						"type": "transparent",
-						"buttons": [{
-							"fontSrc": "/static/font/iconfont/iconfont.ttf",
-							"text": "\ue63c",
-							"fontSize": "16",
-							"color": "#303133",
-							"float": "right",
-							"background": "rgba(0,0,0,0.5)"
-						}]
+						"type": "transparent"
+						// "buttons": [{
+						// 	"fontSrc": "/static/font/iconfont/iconfont.ttf",
+						// 	"text": "\ue63c",
+						// 	"fontSize": "16",
+						// 	"color": "#303133",
+						// 	"float": "right",
+						// 	"background": "rgba(0,0,0,0.5)"
+						// }]
 					}
 				}
 			}

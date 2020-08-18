@@ -122,8 +122,9 @@
 						<!-- 拼团订单 -->
 						<view class="action-box b-t" v-else>
 							<button class="action-btn" v-if="item.status == 0 && item.payType != 4" @click="cancelOrder(index,item.id)">取消订单</button>
-							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>
+							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>       <!-- #ifndef APP-PLUS -->
 							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button>
+							<!-- #endif -->
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
 							<button class="action-btn recom" v-if="item.status == 2" @tap="afterSale(item.id)">申请售后</button>
@@ -150,7 +151,7 @@
 			:shareList="shareList"
 			@invite="shareOthers"
 		></share>
-		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate"/>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/>
 	</view>
 </template> 
 
@@ -276,6 +277,11 @@
 			close(){
 				this.sModal=false
 			},
+			toPayPwd(nav){
+							uni.navigateTo({
+								url:nav
+							})
+						},
 			toDelivery(id){
 				uni.navigateTo({
 					url:`/pages/order/delivery?id=${id}`
@@ -331,7 +337,7 @@
 				await this.$http({
 					apiName:"getGood",
 					type:"POST",
-					data:{orderId:this.selID}
+					data:{orderId:this.selID,tradepwd:utils.md5(this.password)}
 				}).then(res => {
 					this.$set(this.navList[this.tabCurrentIndex].orderList[this.selIndex],"status",3)
 					uni.showToast({

@@ -21,7 +21,10 @@
 							</view>
 						</view>
 					</view>
-					<!-- <view class="signIn"  v-if="hasLogin && hasSigin" @tap="navTo(`/pages/integral/integral`)">每日签到</view> -->
+					<!-- #ifndef APP-PLUS -->
+					<view class="signIn"  v-if="hasLogin && hasSigin" @tap="navTo(`/pages/integral/integral`)">每日签到</view>
+					<!-- #endif -->
+					
 				</view>
 <!-- 				<view class="user-more" >
 					
