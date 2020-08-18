@@ -237,6 +237,7 @@ import tabBar from "@/components/tab-bar.vue"
 				fightList:[],
 				currentTime:"",
 				creset:false,
+				title:''
 			};
 		},
 		computed:{
@@ -254,9 +255,7 @@ import tabBar from "@/components/tab-bar.vue"
 			},800)
 		},
 		async onLoad(opt) {
-			uni.setNavigationBarTitle({
-			　　title:this.config.MALL_APP_NAME
-			})
+			
 			
 			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){
@@ -281,10 +280,20 @@ import tabBar from "@/components/tab-bar.vue"
 				this.$store.commit('setICode',opt.inviteCode)
 			}
 			// #endif
+			// uni.setNavigationBarTitle({
+			// 　　title:this.config.MALL_APP_NAME
+			// })
 		},
 		onHide() {
 			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){
 				this.getUserInfo()
+			}
+		},
+		watch:{
+			'this.config':()=>{
+				uni.setNavigationBarTitle({
+				　　title:this.config.MALL_APP_NAME
+				})
 			}
 		},
 		methods: {

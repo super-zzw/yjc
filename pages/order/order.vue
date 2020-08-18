@@ -123,7 +123,7 @@
 						<view class="action-box b-t" v-else>
 							<button class="action-btn" v-if="item.status == 0 && item.payType != 4" @click="cancelOrder(index,item.id)">取消订单</button>
 							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>       <!-- #ifndef APP-PLUS -->
-							<button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button>
+							<!-- <button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button> -->
 							<!-- #endif -->
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>

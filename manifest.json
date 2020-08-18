@@ -136,7 +136,7 @@
         }
     },
     "h5" : {
-        "title" : "辰悠优品汇",
+        "title" : "易聚财商城",
         "domain" : "wap.vyunmall.com",
         "router" : {
             "mode" : "history"

@@ -90,7 +90,7 @@
 			<view class="swb2-foot" v-else>
 				<view class="swb2f-btn1" v-if="order.status == 0 && order.payType != 4" @click="cancelOrder">取消订单</view>
 				<view class="swb2f-btn1 recom" v-if="order.status == 0 && order.payType != 4" @tap="toPay(1)">立即支付</view>
-				<view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)" @tap="share">邀请好友</view>
+				<!-- <view class="swb2f-btn1" v-if="order.status == 1 && !(currentTime >= order.endGroupTime && order.groupMember < order.minMember)" @tap="share">邀请好友</view> -->
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="toDelivery">查看物流</view>
 				<view class="swb2f-btn1" v-if="order.status == 2" @click="getGood">确认收货</view>
 				<view class="swb2f-btn1 recom" v-if="order.status == 2" @tap="afterSale">申请售后</view>
