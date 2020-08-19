@@ -84,12 +84,15 @@
 				timer:"",
 				codeText:"获取验证码",
 				timeLeft:120,
+				flag:''
 				
 			}
 		},
 		onLoad(opt){
 			//返回跳转过来的
-			
+			if(opt.flag){
+				this.flag=opt.flag
+			}
 		},
 		methods: {
 			// ...mapMutations(['login']),
@@ -189,16 +192,53 @@
 							// wuserName:uni.getStorageSync('appInfo').nickName
 						}
 					}).then(res=>{
+						
 						uni.showToast({
 							title:'绑定手机号成功',
 							duration:1500
 						})
+						if(!this.flag){
+							uni.login({
+								provider: 'weixin',
+								success: (res) => {
+									uni.getUserInfo({
+										provider: 'weixin',
+										success: (info) => {
+											this.$http({
+												apiName: 'appWxLogin',
+												type: 'POST',
+												data: {
+													appOpenId: info.userInfo.openId,
+													headUrl: info.userInfo.avatarUrl
+												}
+											}).then(res => {
+												// if(this.flag)
+												uni.showToast({
+													title: '登录成功',
+													mask: false,
+													duration: 1500
+												});
+												utils.setSesion(res.data)
+												utils.getUserInfo()
+												
+											}).catch(err => {
+												
+												if (err.code === 500083) {
+													uni.redirectTo({
+														url: '/pages/set/payPwd'
+													})
+												}
+											})
+										}
+									})
+								}
+							})
+						}
+						utils.afterLoginJump()
+						// utils.setSesion(res.data)
+						// utils.getUserInfo()
 						
-						utils.setSesion(res.data)
-						utils.getUserInfo()
-						uni.redirectTo({
-							url:'../set/payPwd'
-						})
+						
 						// utils.afterLoginJump()
 					}).catch(err=>{
 					

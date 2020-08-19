@@ -251,11 +251,10 @@ import tabBar from "@/components/tab-bar.vue"
 					that.getCartNms();  //获取购物车数量
 				}
 				
-				that.$getMsgNms()
+				
 			},800)
 		},
 		async onLoad(opt) {
-			
 			
 			// #ifdef APP-PLUS || H5
 			if(uni.getStorageSync("agree_key")){
@@ -266,6 +265,7 @@ import tabBar from "@/components/tab-bar.vue"
 				if(opt.inviteCode){
 					this.$store.commit('setICode',opt.inviteCode)
 				}
+				
 			}else{
 				uni.reLaunch({
 					url:"/pages/index/agree"

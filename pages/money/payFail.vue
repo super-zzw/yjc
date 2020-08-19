@@ -23,7 +23,7 @@
 		},
 		onBackPress(e){
 			uni.reLaunch({
-				url:"/pages/order/order"
+				url:"/pages/order/order?state=0"
 			})
 			return true
 		}

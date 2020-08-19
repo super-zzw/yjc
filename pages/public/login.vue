@@ -209,7 +209,7 @@
 								}).then(res => {
 									console.log(res)
 									uni.showToast({
-										title: '登陆成功',
+										title: '登录成功',
 										mask: false,
 										duration: 1500
 									});
@@ -220,11 +220,12 @@
 									console.log(err)
 									if (err.code === 500082) {
 										uni.redirectTo({
-											url: './bindMobile'
+											url: '/pages/public/bindMobile'
 										})
-									} else {
+									}
+									 else {
 										uni.redirectTo({
-											url: '../set/payPwd'
+											url: '/pages/set/payPwd'
 										})
 									}
 								})

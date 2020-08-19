@@ -171,6 +171,7 @@
 							url:'successTip?status='+this.type
 						})
 					}).catch(err => {
+						this.disable=false
 						uni.hideLoading()
 					})
 				}

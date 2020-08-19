@@ -40,8 +40,8 @@
 						<text class="info">{{item.createTime}}</text>
 					</view>
 					<view class="right">
-						<text class="value" v-if="item.type == 0">+{{item.amountStr}}</text>
-						<text class="value" v-if="item.type == 1">-{{item.amountStr}}</text>
+						<text class="value" v-if="item.type == 0">-{{item.amountStr}}</text>
+						<text class="value" v-if="item.type == 1">+{{item.amountStr}}</text>
 						<text class="result" v-if="item.withdrawStatus == 0">待处理</text>
 						<text class="result" v-if="item.withdrawStatus == 1">通过</text>
 						<text class="result" v-if="item.withdrawStatus == -1">失败</text>
@@ -55,7 +55,7 @@
 			<text class="no_more_side"></text>
 		</view>
 		<empty v-if="dataList.length == 0 && noMore" :height="'75vh'"></empty>
-		<datePicker :dateSel="dateSel" @close="colseTime"/>
+		<datePicker :dateSel="dateSel" @close="colseTime" ref="datapicker"/>
 	</view>
 </template>
 
@@ -76,18 +76,19 @@
 				endTime:'',
 				dataList:[],
 				page:1,
-				size:8,
+				size:20,
 				noMore:false,
 				type:"",
 				totalAmountOut:"",
-				totalAmountIn:""
+				totalAmountIn:"",
 			};
 		},
+		
 		async onLoad() {
 			uni.showLoading({
 				title:"加载中..."
 			})
-			await this.getList();
+			await this.getList(1);
 			await this.getInfo()
 			uni.hideLoading()
 		},
@@ -100,8 +101,13 @@
 					this.totalAmountOut=res.data.zhiChuStr
 				})
 			},
-			async getList(){
-				this.dataList = [];
+			async getList(type){
+				if(type==1){  //筛选或下拉刷新
+					this.dataList = [];
+					this.page = 1;
+					this.noMore = false;
+				}
+				
 				await this.$http({
 					apiName:"getOrderLog",
 					data:{
@@ -112,9 +118,9 @@
 						type:this.type
 					}
 				}).then(res => {
-					if(this.dataList.length>=res.data.total){
-						return
-					}
+					// if(this.dataList.length>=res.data.total){
+					// 	return
+					// }
 					this.noMore = !res.data.hasNextPage
 					
 					this.dataList = this.dataList.concat(res.data.list)
@@ -124,7 +130,11 @@
 			},
 			async bindPickerChange1(e){
 				this.index=e.detail.value;
-				this.dataList=[]
+				this.endTime=''
+				this.startTime=''
+				this.$refs.datapicker.startTime=''
+				
+				this.$refs.datapicker.endTime=''
 				if(this.index == 0){
 					
 					this.type = 1;
@@ -134,16 +144,17 @@
 					this.type = ""
 				}
 				
-				await this.getList()
+				await this.getList(1)
 			},
 			selDate(){
 				this.dateSel=true
 			},
 			async colseTime(e){
 				this.dateSel = false;
+				this.type='';
 				this.startTime = e.startTime;
 				this.endTime = e.endTime;
-				await this.getList()
+				await this.getList(1)
 			},
 		},
 		onReachBottom(){
@@ -154,10 +165,9 @@
 			this.getList()
 		},
 		async onPullDownRefresh() {
-			this.page = 1;
-			this.noMore = false;
+			
 			await this.getInfo();
-			await this.getList();
+			await this.getList(1);
 			uni.stopPullDownRefresh()
 		}
 	}
@@ -221,6 +231,7 @@
 		
 	}
 	.fList{
+		
 		.fItem{
 			display: flex;
 			margin: 0 32rpx;

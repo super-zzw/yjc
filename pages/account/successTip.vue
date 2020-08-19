@@ -2,14 +2,14 @@
 	<view class="container" v-if="config">
 		<view class="content" >
 			<text class="iconfont iconchenggong"></text>
-			<view v-if="status==1" class="txtBox">
+			<view v-if="status==0||status==1" class="txtBox">
 				<text class="tit">提交成功</text>
 				<text class="tit1">钱款将在{{config.DISTRIBUTE_WITHDRAW_SH}}个工作日内退回所填账户</text>
 			</view>
 			
 			<text v-if="status==2" class="tit">钱款已转入对方账户</text>
 			<text v-if="status==3" class="tit">钱款已转入对方聚财卡</text>
-			<navigator :url="status==2?'./index?type=0':'./index?type=1'" class="nav">返回首页</navigator>
+			<view @tap="toIndex"  class="nav">返回首页</view>
 		</view>
 		<!-- <view class="content" v-else>
 			<text class="iconfont icontijiaoshibai"></text>
@@ -35,6 +35,20 @@
 		},
 		computed:{
 			...mapState(['config'])
+		},
+		methods:{
+			toIndex(){
+				let url
+				if(this.status==0||this.status==2){
+				  url='./index?type=0'
+				}else{
+					 url='./index?type=1'
+				}
+			
+				uni.redirectTo({
+					url
+				})
+			}
 		}
 	}
 </script>

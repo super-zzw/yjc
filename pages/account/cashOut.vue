@@ -138,10 +138,18 @@
 						type:this.type
 					}
 				}).then(res => {
+					utils.getUserInfo()
 					uni.hideLoading();
-					uni.navigateTo({
-						url: './successTip?status=' + 1
-					})
+					if(this.type==1){
+						uni.navigateTo({
+							url: './successTip?status=0' 
+						})
+					}else{
+						uni.navigateTo({
+							url: './successTip?status=1'
+						})
+					}
+					
 				}).catch(err => {
 					uni.hideLoading()
 					uni.showToast({
@@ -170,29 +178,22 @@
 						title: "请输入可提现金额"
 					})
 				} else {
-					// 	uni.showLoading({
-					// 		title:"提交中..."
-					// 	})
-					// 	await this.$http({
-					// 		apiName:"fxWithdraw",
-					// 		type:"POST",
-					// 		data:{
-					// 			amount:this.money,
-					// 			withdrawAccountId:this.accountList[0].id
-					// 		}
-					// 	}).then(res => {
-					// 		uni.hideLoading();
-					// 		uni.navigateTo({
-					// 			url:'./txTip?status='+1
-					// 		})
-					// 	}).catch(err => {
-					// 		uni.hideLoading()
-					// 		uni.showToast({
-					// 			icon:"none",
-					// 			title:err.message
-					// 		})
-					// 	})
-					this.sModal = true
+					if(!this.userInfo.payPwdFlag){
+						uni.showModal({
+							title:'提示',
+							content:'您还未设置支付密码，前往设置?',
+							success(err) {
+								if(err.confirm){
+									uni.navigateTo({
+										url:'../set/payPwd'
+									})
+								}
+							}
+						})
+					}else{
+						this.sModal = true
+					}
+					
 				}
 
 

@@ -53,6 +53,7 @@
 				});
 			}
 		},
+	  
 		methods:{
 			navTo(url){
 				if(this.type==0){

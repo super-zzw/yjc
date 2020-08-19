@@ -19,7 +19,7 @@
 			<view class="accountEmpty" v-else>
 				暂无可用账户，请点击新增账户
 			</view>
-			
+		
 		<view v-if="!editing" class="btns">
 			<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
 			  <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增账户</button>
@@ -27,9 +27,14 @@
 			
 			<button v-if="dataList.length > 0" type="default" hover-class="none" class="editAccount btn" @tap="editAccount">管理账户</button>
 		</view>
-		<view v-if="editing" class="btns">
-			<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
-			<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
+		<view v-if="editing" >
+			
+			<button type="default" hover-class="none" class="addAccount btn mt50" @tap="addAccount" v-if="dataList.length==0">新增账户</button>
+			<view v-if="dataList.length>0" class="btns">
+				<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
+				<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
+			</view>
+			
 		</view>
 			
 			<!-- 	<view  class="btns"> -->
@@ -145,7 +150,7 @@
 <style lang="scss" scoped>
     .container{
 		height: calc(100vh - 88rpx);
-		background: #F9FAFB;
+		
 		.accountList{
 			padding:0 35rpx;
 			padding-bottom: 58rpx;
@@ -202,17 +207,8 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: space-around;
-				.btn{
-					width: 308rpx;
-					border-radius:40rpx;
-					font-size:30rpx;
-					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:500;
-				}
-				.addAccount{
-					background: #F23D3D;
-					color: #fff;
-				}
+				
+				
 				.editAccount{
 					background: #fff;
 					color: #F23D3D;
@@ -228,6 +224,20 @@
 					font-weight:500;
 					width: 50%;
 				}
+			}
+			.addAccount{
+				background: #F23D3D;
+				color: #fff;
+			}
+			.btn{
+				width: 308rpx;
+				border-radius:40rpx;
+				font-size:30rpx;
+				font-family:PingFangSC-Regular,PingFang SC;
+				font-weight:500;
+			}
+			.mt50{
+				margin-top: 50rpx;
 			}
 			.accountEmpty{
 				text-align: center;

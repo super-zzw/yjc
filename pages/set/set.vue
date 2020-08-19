@@ -163,16 +163,17 @@
 											})
 											
 										}).catch(err => {
-											
-											if(err.code==500070){
+											if (err.code === 500082) {
 												uni.redirectTo({
-												       url:'../public/bindMobile'
-											   })
-											}else{
-												uni.redirectTo({
-										              url:'../set/loginPwd'
+													url: '/pages/public/bindMobile?flag=1'
 												})
 											}
+											 else {
+												uni.redirectTo({
+													url: '/pages/set/payPwd'
+												})
+											}
+											
 											
 										})
 									}

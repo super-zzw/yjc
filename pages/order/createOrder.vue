@@ -236,7 +236,7 @@
 				this.total = Number(this.order.price * this.order.number).toFixed(2)
 
 				await this.getCoupons()
-				// await this.getYf()
+				await this.getYf()
 				this.total2 = Number(Number(this.total) + Number(this.fee)).toFixed(2)
 				if (opt.score == 'true') {
 					this.isScore = true

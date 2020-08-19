@@ -11,7 +11,7 @@
 			</view>
 		</view>
 
-		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab">
+		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab"  >
 			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
 				<scroll-view 
 					class="list-scroll-content" 
@@ -32,12 +32,15 @@
 								<!-- -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部 -->
 								<!-- 发货之后不可取消订单，只有联系售后 -->
 								<text v-if="item.orderType == 2">
-									<text v-if="currentTime < item.endGroupTime && item.groupMember < item.minMember">待成团</text>
+									<text v-if="currentTime < item.endGroupTime && item.groupMember < item.minMember&&item.status!=-1
+									&&item.status!=5&&item.status!=7">待成团</text>
 									<text v-else-if="item.groupMember >= item.minMember">
 										<text v-if="item.status == 1">已成团，待发货</text>
 										<text v-if="item.status == 2">待收货</text>
+										
 									</text>
-									<text v-else>未成团</text>
+									<text v-if="item.status == -1">已取消</text>
+									<!-- <text v-else>未成团</text> -->
 								</text>
 								<text v-else>
 									<text v-if="item.status == -2">售后关闭</text>
@@ -47,10 +50,10 @@
 									<text v-if="item.status == 2">待收货</text>
 									<text v-if="item.status == 3">已完成</text>
 									<text v-if="item.status == 4">已评价</text>
-									<text v-if="item.status == 5">售后处理中</text>
 									<text v-if="item.status == 6">退款中</text>
-									<text v-if="item.status == 7">退款完成</text>
 								</text>
+								<text v-if="item.status == 5">售后处理中</text>
+								<text v-if="item.status == 7">退款完成</text>
 							</text>
 							<text 
 								v-if="item.status == 3 || item.status == 4" 
@@ -58,7 +61,7 @@
 								@click="deleteOrder(index,item.id)"
 							></text>
 						</view>
-						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember && item.status != 5">
+						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember &&item.status != 5">
 							<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" mode="widthFix" class="igImg"></image>
 							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
@@ -127,7 +130,7 @@
 							<!-- #endif -->
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn" v-if="item.status == 2" @click="getGood(index,item.id)">确认收货</button>
-							<button class="action-btn recom" v-if="item.status == 2" @tap="afterSale(item.id)">申请售后</button>
+							<button class="action-btn recom" v-if="item.status == 2||item.status == 1" @tap="afterSale(item.id)">申请售后</button>
 							<button class="action-btn" v-if="item.status == 3" @click="toDelivery(item.id)">查看物流</button>
 							<button class="action-btn recom" v-if="item.status == 3" @tap="toAssess(item.id)">去评价</button>
 							<button class="action-btn" v-if="item.status == 4" @click="toDelivery(item.id)">查看物流</button>
@@ -325,9 +328,24 @@
 			},
 			//确定确认收货
 			 getGood(index,orderId){
-				this.sModal=true
-				this.selID=orderId
-				this.selIndex=index
+				 if(!this.userInfo.payPwdFlag){
+				 	uni.showModal({
+				 		title:'提示',
+				 		content:'您还未设置支付密码，前往设置?',
+				 		success(err) {
+				 			if(err.confirm){
+				 				uni.navigateTo({
+				 					url:'/pages/set/payPwd'
+				 				})
+				 			}
+				 		}
+				 	})
+				 }else{
+				 	this.sModal=true
+				 	this.selID=orderId
+				 	this.selIndex=index
+				 }
+			
 				
 			},
 			async getGoodOk(){

@@ -2,13 +2,13 @@
 	<view class="sWrap">
 		<view class="aBox">
 			<view class="sBox">
-				<view class="sItem" v-if="userInfo.payPwdFlag">
+				<view class="sItem" v-if="hasLogin">
 					<view class="slabel">手机号码</view>
 					<view class="sinputbox">
 						<text class="phone">{{phone}}</text>
 					</view>
 				</view>
-				<view class="sItem" v-if="userInfo.payPwdFlag">
+				<view class="sItem" v-if="hasLogin">
 					<view class="slabel">短信验证码</view>
 					<view class="sinputbox">
 						<input placeholder-class="placeholderClass" class="sinput" type="password" v-model="code" placeholder="请输入短信验证码"/>
@@ -55,7 +55,7 @@
 		},
 	
 		computed: {
-			...mapState(['userInfo']),
+			...mapState(['userInfo','hasLogin']),
 			phone() {
 				return this.userInfo.phone.split('').map((item, index) => {
 					if (index > 2 && index < 7) {
@@ -70,12 +70,17 @@
 		},
 		methods: {
 			async register() {
-				let _apiName='bindPayPwd'
-				let _params={
-					tradepwd: utils.md5(this.password),
-					appOpenId: uni.getStorageSync('appInfo').openId,
+				let _apiName
+				if(this.hasLogin){
+					_apiName='changePayPwd'
+				}else{
+					_apiName='bindPayPwd'
 				}
 				let _data = [
+					{
+						data: this.code,
+						info: '请输入验证码'
+					},
 					{
 						data: this.password,
 						info: '请输入支付密码'
@@ -89,60 +94,99 @@
 						info: '两次输入的支付密码不一致'
 					}
 				]
-				if(this.userInfo.payPwdFlag){
-					_apiName='changePayPwd'
-					_data.push({
-						data:this.code,
-						info:'验证码不能为空'
-					})
-					_params={
-						tradepwd: utils.md5(this.password),
-						authCode:this.code
-					}
-				}
+				// if(this.userInfo.payPwdFlag){
+				// 	_apiName='changePayPwd'
+				// 	_data.push({
+				// 		data:this.code,
+				// 		info:'验证码不能为空'
+				// 	})
+					// _params={
+					// 	tradepwd: utils.md5(this.password),
+					// 	authCode:this.code
+					// }
+				// }
 				
 				let jres = await utils.judgeData(_data)
 				if (jres) {
 					this.confirmBtnDisable = true;
-					await this.$http({
-						apiName: _apiName,
-						type: "POST",
-						// data: {
-						// 	// oldPassword:utils.md5(this.pwd),
-						// 	// newPassword:utils.md5(this.newPwd),
-						// 	tradepwd: utils.md5(this.password),
-						// 	appOpenId: uni.getStorageSync('appInfo').openId,
-						// 	// // #ifdef APP-PLUS
-						// 	// sourceType: 1, //0pc,1app,2公众号，3小程序
-						// 	// // #endif
-						// 	// // #ifdef H5
-						// 	// sourceType: 2, //0pc,1app,2公众号，3小程序
-						// 	// // #endif
-						// 	// // #ifdef MP-WEIXIN
-						// 	// sourceType: 3, //0pc,1app,2公众号，3小程序
-						// 	// // #endif
-						// }
-						data:_params
-					}).then(res => {
-					
-						uni.showToast({
-							title: "设置成功"
+					if(this.hasLogin){
+						await this.$http({
+							apiName: 'changePayPwd',
+							type: "POST",
+							data:{
+								tradepwd: utils.md5(this.password),
+								authCode:this.code
+							}
+							
+						}).then(res => {
+						
+							uni.showToast({
+								title: "设置成功"
+							})
+							
+							this.confirmBtnDisable = false;
+							utils.getUserInfo()
+							// utils.rmData()
+							setTimeout(()=>{
+								uni.navigateBack()
+							},1000)
+							
+							
+						
+						
+						}).catch(err => {
+							console.log(err)
+							this.confirmBtnDisable = false;
 						})
-						
-						this.confirmBtnDisable = false;
-						utils.getUserInfo()
-						// utils.rmData()
-						setTimeout(()=>{
-							uni.navigateBack()
-						},1000)
-						
-						
-
-
-					}).catch(err => {
-						console.log(err)
-						this.confirmBtnDisable = false;
-					})
+					}else{
+						await this.$http({
+							apiName: 'bindPayPwd',
+							type: "POST",
+							data:{
+								tradepwd: utils.md5(this.password),
+								appOpenId:uni.getStorageSync('appInfo').openId
+							}
+							
+						}).then(res => {
+							uni.showToast({
+								title: "设置成功"
+							})
+							uni.login({
+								provider: 'weixin',
+								success: (res) => {
+									uni.getUserInfo({
+										provider: 'weixin',
+										success: (info) => {
+											this.$http({
+												apiName: 'appWxLogin',
+												type: 'POST',
+												data: {
+													appOpenId: info.userInfo.openId,
+													headUrl: info.userInfo.avatarUrl
+												}
+											}).then(res => {
+												uni.showToast({
+													title: '登录成功',
+													mask: false,
+													duration: 1500
+												});
+												utils.setSesion(res.data)
+												utils.getUserInfo()
+												utils.afterLoginJump()
+											}).catch(err => {
+												
+												
+											})
+										}
+									})
+								}
+							})
+						}).catch(err=>{})
+					
+					}
+					
+				
+				
 				}
 
 			},

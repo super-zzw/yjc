@@ -292,18 +292,20 @@
 						timestamp: res.data.timeStamp, //时间戳
 						sign: res.data.sign, //签名C380BEC2BFD727A4B6845133519F3AD6
 					}
+					console.log(obj1)
 					// let orderInfo = JSON.stringify(obj1)
 					uni.requestPayment({
 						provider: 'wxpay',
 						orderInfo: obj1, //微信、支付宝订单数据
 						success: function(res) {
+							// console.log()
 							that.setSelectAddr(null); //支付成功后清除选中的地址（测试要求的）
 							uni.redirectTo({
 								url: "/pages/money/paySuccess"
 							})
 						},
 						fail: function(err) {
-							// console.log(err)
+							console.log(err)
 							// this.err = JSON.stringify(err)
 							uni.redirectTo({
 								url: "/pages/money/payFail"

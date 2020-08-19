@@ -136,6 +136,7 @@ export default{
 			}else{
 				let pages = getCurrentPages();
 				let page = pages[pages.length - 1];
+			
 				// #ifdef APP-PLUS
 				let currentWebview = page.$getAppWebview();
 				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:Nm})
