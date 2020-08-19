@@ -57,7 +57,7 @@ export default{
 		uni.setStorageSync('yzhexpireTime',data.expireTime)
 		uni.setStorageSync('yzhloginSession',data.loginSession)
 		uni.setStorageSync('yzhrefreshSession',data.refreshSession)
-		getMsgNms()
+		// getMsgNms()
 	},
 	//退出登录清除session
 	rmData(){
@@ -65,7 +65,7 @@ export default{
 		store.commit('setUserInfo',{})
 		store.commit('setOrder',[])
 		store.commit('setCartNms',0)
-	
+	   
 		uni.removeStorageSync('yzhexpireTime');
 		uni.removeStorageSync('yzhloginSession');
 		uni.removeStorageSync('yzhrefreshSession');
@@ -135,10 +135,13 @@ export default{
 				return
 			}else{
 				let pages = getCurrentPages();
+
 				let page = pages[pages.length - 1];
 			
 				// #ifdef APP-PLUS
+				
 				let currentWebview = page.$getAppWebview();
+				console.log(currentWebview)
 				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:Nm})
 				// #endif
 			}

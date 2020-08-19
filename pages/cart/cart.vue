@@ -133,7 +133,8 @@
 			};
 		},
 		onLoad() {
-			utils.setBadgeText(0,this.msgNms)
+			// utils.setBadgeText(0,this.msgNms)
+			this.$getMsgNms()
 		},
 		onHide(){
 			this.isShow = false;

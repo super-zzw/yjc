@@ -169,9 +169,9 @@
 			if(this.hasLogin){
 				await this.getUserInfo()
 				this.getCartNms();  //获取购物车数量
-	
+	            this.$getMsgNms()
 			}
-			utils.setBadgeText(0,this.msgNms)
+			// utils.setBadgeText(0,this.msgNms)
 			
 		},
         computed: {
@@ -214,6 +214,7 @@
 					this.setCartNms(0)
 					utils.setBadgeText(0,0)
 					// this.setMsgNms(0)
+					// this.$getMsgNms()
 					uni.removeTabBarBadge({
 						index: 2,
 					})

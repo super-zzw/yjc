@@ -133,7 +133,7 @@ import tabBar from "@/components/tab-bar.vue"
 				}).catch(_ => {})
 			};
 			await this.initData()
-			utils.setBadgeText(0,this.msgNms)
+			// utils.setBadgeText(0,this.msgNms)
 			let that = this
 			setTimeout(() => {
 				if(that.hasLogin){

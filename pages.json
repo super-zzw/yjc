@@ -18,7 +18,8 @@
 								"color": "#303133",
 								"float": "left",
 								"background": "rgba(0,0,0,0)",
-								"autoBackButton":"false"
+								"autoBackButton":"false",
+								"redDot":"false"
 							},
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",

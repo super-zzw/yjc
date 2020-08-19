@@ -244,6 +244,13 @@ import tabBar from "@/components/tab-bar.vue"
 			...mapState(['hasLogin','userInfo','paddingTop','config'])
 		},
 		async onShow(){
+			
+          // #ifdef APP-PLUS
+          var webView = this.$mp.page.$getAppWebview();
+          webView.removeTitleNViewButtonBadge({  
+              index: 0, 
+          });  
+          // #endif
 			let that = this
 			that.getDynamicNav()
 			setTimeout(() => {
@@ -257,8 +264,13 @@ import tabBar from "@/components/tab-bar.vue"
 		async onLoad(opt) {
 			
 			// #ifdef APP-PLUS || H5
+			
 			if(uni.getStorageSync("agree_key")){
 				// #ifdef APP-PLUS
+				var webView = this.$mp.page.$getAppWebview();
+				webView.removeTitleNViewButtonBadge({  
+				    index: 0,  
+				});  
 				this.$checkUpdate();
 				// #endif
 				await this.initData();
