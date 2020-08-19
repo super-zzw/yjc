@@ -212,8 +212,8 @@
 				}).then(res => {
 					utils.rmData()
 					this.setCartNms(0)
-					utils.setBadgeText(0,0)
-					// this.setMsgNms(0)
+					utils.setBadgeText(0,'')
+					this.setMsgNms(0)
 					// this.$getMsgNms()
 					uni.removeTabBarBadge({
 						index: 2,

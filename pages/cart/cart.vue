@@ -134,8 +134,25 @@
 		},
 		onLoad() {
 			// utils.setBadgeText(0,this.msgNms)
-			this.$getMsgNms()
+			
 		},
+		onShow() {
+			if(this.hasLogin){
+				utils.setBadgeText(0,'')
+			}else{
+				utils.setBadgeText(0,this.msgNms)
+			}
+			
+		},
+		// watch:{
+		// 	'this.msgNms':()=>{
+		// 		if(this.msgNms==0){
+		// 			utils.setBadgeText(0,'')
+		// 		}else{
+		// 			utils.setBadgeText(0,this.msgNms)
+		// 		}
+		// 	}
+		// },
 		onHide(){
 			this.isShow = false;
 		},

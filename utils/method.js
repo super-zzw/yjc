@@ -128,12 +128,12 @@ export default{
 	},
 	//设置消息小红点
 	setBadgeText(btnIndex,Nm){
-		if(!uni.getStorageSync("yzhrefreshSession")){
-			return
-		}else{
-			if(Nm <= 0){
-				return
-			}else{
+		// if(!uni.getStorageSync("yzhrefreshSession")){
+		// 	return
+		// }else{
+		// 	if(Nm <= 0){
+		// 		return
+		// 	}else{
 				let pages = getCurrentPages();
 
 				let page = pages[pages.length - 1];
@@ -144,8 +144,8 @@ export default{
 				console.log(currentWebview)
 				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:Nm})
 				// #endif
-			}
-		}
+		// 	}
+		// }
 	},
 	//咨询客服前的必要参数处理
 	//用户uid，游客则设置为"游客"
