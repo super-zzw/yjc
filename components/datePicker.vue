@@ -81,7 +81,10 @@
 		height: 0;
 		position: fixed;
 		left: 0;
+		top:0;
+		/* #ifdef H5 */
 		top: 88rpx;
+		/* #endif */
 		width: 100%;
 		display: flex;
 		align-items: center;
