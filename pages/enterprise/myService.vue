@@ -106,7 +106,7 @@
 		  justify-content: space-between;
 		  height: 80rpx;
 		  align-items: center;
-		  border-bottom: 2rpx solid #DBDBDB;
+		  // border-bottom: 2rpx solid #DBDBDB;
 		  .orderNum{
 			  font-size:26rpx;
 			  font-weight:500;
@@ -159,6 +159,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-end;
+		padding-bottom: 30rpx;
+		border-bottom: 2rpx solid #DBDBDB;
 		.left{
 			display: flex;
 			flex-direction: column;

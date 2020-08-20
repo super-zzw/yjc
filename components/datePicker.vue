@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="masks" v-if="dateSel" @tap.stop="close"></view>
+		<view class="masks" v-if="dateSel" @tap.stop="closePicker"></view>
 		<view class="datePicker" :class="dateSel?'active':''" >
 			<view class="dateIpt">
 				<view class="startTime Time">
@@ -53,6 +53,9 @@
 						endTime:this.endTime
 					})
 				}
+			},
+			closePicker(){
+				this.$emit('close')
 			},
 			bindDateChange2(e){
 				this.startTime=e.detail.value

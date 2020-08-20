@@ -24,14 +24,14 @@
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
 								"text": "\ue69c",
-								"fontSize": "28",
+								"fontSize": "32",
 								"color": "#303133",
 								"background": "rgba(0,0,0,0)"
 							},
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
 								"text": "\ue699",
-								"fontSize": "28",
+								"fontSize": "32",
 								"color": "#303133",
 								"background": "rgba(0,0,0,0)"
 							}

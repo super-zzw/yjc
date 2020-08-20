@@ -151,10 +151,12 @@
 			},
 			async colseTime(e){
 				this.dateSel = false;
-				this.type='';
-				this.startTime = e.startTime;
-				this.endTime = e.endTime;
-				await this.getList(1)
+				if(e && e.startTime && e.endTime){
+					this.type='';
+					this.startTime = e.startTime;
+					this.endTime = e.endTime;
+					await this.getList(1)
+				}
 			},
 		},
 		onReachBottom(){

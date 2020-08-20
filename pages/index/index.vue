@@ -572,9 +572,10 @@ import tabBar from "@/components/tab-bar.vue"
 			this.resetData()
 			await this.initData()
 			uni.stopPullDownRefresh();
-			uni.showToast({
-				title: '刷新成功'
-			})
+			// uni.showToast({
+			// 	title: '刷新成功',
+			// 	icon:"none"
+			// })
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {

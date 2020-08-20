@@ -21,6 +21,9 @@
 		},
 		methods:{
 			async updateServiceNum(type){
+				uni.showLoading({
+					mask:true
+				})
 				if(type==-1){
 					this.num--
 					if(this.num==0){
@@ -28,10 +31,10 @@
 					
 						// return
 					}
-					this.$emit('changeValue',Number(-this.price) )
+					this.$emit('changeValue',Number(-this.price) );
 				}else{
 					this.num++		
-					this.$emit('changeValue',Number(this.price))
+					this.$emit('changeValue',Number(this.price));
 				}
 				await this.$http({
 					apiName:"updateServiceNum",
@@ -40,6 +43,10 @@
 						cartId:this.cartId,
 						num:this.num
 					}
+				}).then(_ => {
+					uni.hideLoading()
+				}).catch(_ => {
+					uni.hideLoading()
 				})
 			},
 			subtract(){
@@ -61,7 +68,8 @@
 				}
 				this.$emit('changeValue',Number(this.price))
 				uni.showLoading({
-					title:'正在添加...'
+					// title:'正在添加...'
+					mask:true
 				})
 				await this.$http({
 					apiName:'addServiceCart',
@@ -71,9 +79,9 @@
 						enterpriseServicesId:this.id
 					}
 				}).then(res=>{
-					uni.showToast({
-						title:'添加服务成功'
-					})
+					// uni.showToast({
+					// 	title:'添加服务成功'
+					// })
 					this.cartId=res.data
 					uni.hideLoading()
 				}).catch(err=>{uni.hideLoading()})
