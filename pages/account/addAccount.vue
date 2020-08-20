@@ -2,6 +2,12 @@
 	<view class="sWrap">
 		<view class="sBox">
 			<view class="sItem">
+				<view class="slabel">姓名</view>
+				<view class="sinputbox">
+					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="userInfo.wusername" disabled/>
+				</view>
+			</view>
+			<view class="sItem">
 				<view class="slabel">卡号</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="account" 
@@ -9,10 +15,10 @@
 				</view>
 			</view>
 			<view class="sItem">
-				<view class="slabel">姓名</view>
+				<view class="slabel">手机号</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="name" 
-					placeholder="请输入银行卡账户姓名"/>
+					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="phone" 
+					placeholder="请输入账户手机号"/>
 				</view>
 			</view>
 			<view class="sItem">
@@ -38,11 +44,12 @@
 
 <script>
 	import utils from 'utils/method.js'
+	import {mapState} from 'vuex'
 	export default{
 		data(){
 			return {
 				account:"",
-				name:"",
+				// name:"",
 				code:"",
 				remark:"",
 				timer:"",
@@ -50,7 +57,8 @@
 				timeLeft:120,
 				codeText:"获取验证码",
 				type:0,
-				id:""
+				id:"",
+				phone:""
 			}
 		},
 		onLoad(opt) {
@@ -59,6 +67,9 @@
 				this.getDetail()
 			}
 			
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		methods:{
 			getDetail(){
@@ -75,8 +86,8 @@
 				}).then(res => {
 					this.id = res.data.id;
 					this.account = res.data.cardno;
-					this.name = res.data.customername;
 					this.remark = res.data.bankname;
+					this.phone = res.data.phoneno;
 					uni.hideLoading();
 				}).catch(err => {uni.hideLoading()})
 			},
@@ -87,8 +98,12 @@
 						info:'银行卡号不能为空'
 					},
 					{
-						data:this.name.trim(),
-						info:'姓名不能为空'
+						data:this.phone.trim(),
+						info:'手机号不能为空'
+					},
+					{
+						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone.trim()) ? "1" : "",
+						info:'手机号格式不正确'
 					},
 					{
 						data:this.code,
@@ -106,8 +121,9 @@
 						type:"POST",
 						data:{
 							account:this.account.trim(),
+							phone:this.phone,
 							authCode:this.code,
-							name:this.name.trim(),
+							// name:this.name.trim(),
 							title:this.remark,
 							id:this.id,
 							
@@ -133,21 +149,38 @@
 				if(this.coding){
 					return
 				}
-				uni.showLoading({
-					title:"获取验证码...",
-					mask:true
-				})
-				this.coding = true;
-				this.countDown();
-				await this.$http({
-					apiName:"getCurrentPhoneCode",
-					type:"POST",
-				}).then(res => {
-					uni.hideLoading();
-				}).catch(_ => {
-					this.clearCountDown();
-					uni.hideLoading();
-				})
+				let _data = [
+					{
+						data:this.phone.trim(),
+						info:'手机号不能为空'
+					},
+					{
+						data:/^[1][1,2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.phone.trim()) ? "1" : "",
+						info:'手机号格式不正确'
+					}
+				]
+				let jres = await utils.judgeData(_data)
+				if(jres){
+					uni.showLoading({
+						title:"获取验证码...",
+						mask:true
+					})
+					this.coding = true;
+					this.countDown();
+					await this.$http({
+						apiName:"getCode",
+						type:"POST",
+						data:{
+							phoneNumber:this.phone,
+						}
+					}).then(res => {
+						uni.hideLoading();
+					}).catch(_ => {
+						this.clearCountDown();
+						uni.hideLoading();
+					})
+				}
+				
 			},
 			countDown(){
 				this.timer = setInterval(() => {

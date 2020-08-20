@@ -65,6 +65,7 @@
 			<text v-if="payType == 3">确定</text>
 			<text v-else>确认支付</text>
 		</text>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/>
 	</view>
 </template>
 
@@ -84,7 +85,10 @@
 				orderInfo: {},
 				payTypes: [],
 				err: "",
-				group: ""
+				group: "",
+				
+				sModal: false,
+				password: '',
 			};
 		},
 		computed: {
@@ -122,6 +126,50 @@
 
 		methods: {
 			...mapMutations(['setSelectAddr']),
+			close() {
+				this.sModal = false
+			},
+			toPayPwd(nav){
+				uni.navigateTo({
+					url:nav
+				})
+			},
+			async validateOk(pass) {
+				this.password = pass
+				
+				uni.showLoading({
+					title: "提交中..."
+				})
+				await this.$http({
+					apiName: "checkPayPwd",
+					type: "POST",
+					data: {
+						tradepwd:utils.md5(this.password),
+					}
+				}).then(res => {
+					this.payYjcOrder()
+					// utils.getUserInfo()
+					// uni.hideLoading();
+					// if(this.type==1){
+					// 	uni.navigateTo({
+					// 		url: './successTip?status=0' 
+					// 	})
+					// }else{
+					// 	uni.navigateTo({
+					// 		url: './successTip?status=1'
+					// 	})
+					// }
+					
+				}).catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						icon: "none",
+						title: err.message
+					})
+				})
+			},
+			
+			
 			//获取支付方式
 			async getPayType() {
 				await this.$http({
@@ -156,7 +204,22 @@
 						}
 					});
 				}else if(this.payType==6){
-					await this.payYjcOrder()
+					// await this.payYjcOrder()
+					if(!this.userInfo.payPwdFlag){
+						uni.showModal({
+							title:'提示',
+							content:'您还未设置支付密码，前往设置?',
+							success(err) {
+								if(err.confirm){
+									uni.navigateTo({
+										url:'/pages/set/payPwd'
+									})
+								}
+							}
+						})
+					}else{
+						this.sModal = true
+					}
 				}
 			},
 			async payYjcOrder(){
@@ -171,6 +234,7 @@
 						url: "/pages/money/paySuccess"
 					})
 				}).catch(err=>{})
+				uni.hideLoading()
 			},
 			async afterSale() {
 				let that = this;

@@ -70,30 +70,45 @@
 		},
 		methods: {
 			async register() {
-				let _apiName
+				let _apiName;
+				let _data;
 				if(this.hasLogin){
-					_apiName='changePayPwd'
+					_apiName='changePayPwd';
+					_data = [
+						{
+							data: this.code,
+							info: '请输入验证码'
+						},
+						{
+							data: this.password,
+							info: '请输入支付密码'
+						},
+						{
+							data: this.checkPassword,
+							info: '请再次输入支付密码'
+						},
+						{
+							data: (this.password == this.checkPassword) ? "1" : "",
+							info: '两次输入的支付密码不一致'
+						}
+					]
 				}else{
-					_apiName='bindPayPwd'
+					_apiName='bindPayPwd';
+					_data = [
+						{
+							data: this.password,
+							info: '请输入支付密码'
+						},
+						{
+							data: this.checkPassword,
+							info: '请再次输入支付密码'
+						},
+						{
+							data: (this.password == this.checkPassword) ? "1" : "",
+							info: '两次输入的支付密码不一致'
+						}
+					]
 				}
-				let _data = [
-					{
-						data: this.code,
-						info: '请输入验证码'
-					},
-					{
-						data: this.password,
-						info: '请输入支付密码'
-					},
-					{
-						data: this.checkPassword,
-						info: '请再次输入支付密码'
-					},
-					{
-						data: (this.password == this.checkPassword) ? "1" : "",
-						info: '两次输入的支付密码不一致'
-					}
-				]
 				// if(this.userInfo.payPwdFlag){
 				// 	_apiName='changePayPwd'
 				// 	_data.push({
