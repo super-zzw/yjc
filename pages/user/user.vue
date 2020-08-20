@@ -11,10 +11,12 @@
 					<view class="user-info-box-left">
 						<view class="portrait-box">
 							<!-- <image class="portrait" :src="userInfo.portrait || 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/missing-face.png'"></image> -->
-							<image class="portrait" :src="userInfo.icon || 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/missing-face.png'"></image>
+							<image v-if="hasLogin" class="portrait" :src="userInfo.icon"></image>
+							<image v-else class="portrait" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/missing-face.png"></image>
 						</view>
 						<view class="info-box" @tap="toUserInfo('/pages/userinfo/userinfo')">
-							<view class="username">{{userInfo.wusername || '游客'}} <text class="iconfont iconright"></text></view>
+							<view v-if="hasLogin" class="username">{{userInfo.wusername}} <text class="iconfont iconright"></text></view>
+							<view v-else class="username">游客 <text class="iconfont iconright"></text></view>
 							
 							<view class="user-star" v-if="hasLogin">
 								<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/star.png" mode="widthFix" v-for="item in userInfo.level" :key="item"></image>
@@ -32,7 +34,7 @@
 			</view>
 		</view>
 		
-		<view class="cover-container" >
+		<view class="cover-container"  v-if="config">
 			<image class="arc" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/arc.png"></image>
 			
 			<view class="tj-sction" @tap="navTo('/pages/order/order?state=0')">

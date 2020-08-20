@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="userInfo">
 		<view class="sBox1">
 			<view class="main">
 				<text class="txt1">易聚财扫一扫，向我付钱</text>
@@ -12,7 +12,7 @@
 				     :onval="onval"
 				     :loadingText="loadingText"/>
 				    </view>
-				<text class="txt2">收款方：{{userInfo.wusername}}（手机尾号{{userInfo.phone.slice(7)}}）</text>
+				<text class="txt2" v-if="userInfo.phone">收款方：{{userInfo.wusername}}（手机尾号{{userInfo.phone.slice(7)}}）</text>
 			</view>
 		</view>
 		<view class="sBox2" @tap="toMyBill">
@@ -38,7 +38,13 @@
 			};
 		},
 		async onLoad() {
-			await utils.getUserInfo()
+			
+			// if(!this.userInfo){
+			// 	await utils.getUserInfo()
+			// }
+			// this.setCode()
+		},
+		onShow() {
 			this.setCode()
 		},
 		computed:{
@@ -56,7 +62,7 @@
 					url:'../myBill/index'
 				})
 			}
-		}
+		},
 	}
 </script>
 

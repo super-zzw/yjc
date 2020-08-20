@@ -41,7 +41,7 @@
 						<view class="soril-info">
 							<view class="soril-info1">{{item.productName}}</view>
 							<view class="soril-info2">
-								<text class="soril-info-text1 nm-font">￥{{item.payAmount}}</text>
+								<text class="soril-info-text1 nm-font">￥{{item.promotionPrice}}</text>
 								<text class="soril-info-text2">
 									<text :key="sindex" v-for="(sval,skey,sindex) of item.specificationsMap">{{skey}}:{{sval}};</text>
 								</text>

@@ -341,7 +341,7 @@ export default{
 		await http({
 			apiName:'getUserInfo',
 		}).then(res=>{
-			console.log(res)
+			// console.log(res)
 			store.commit('setUserInfo',res.data)
 		}).catch(err=>{
 			console.log(1,err)

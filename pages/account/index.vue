@@ -45,16 +45,26 @@
 			...mapState(['userInfo']),
 		},
 		onLoad(opt) {
-			console.log(opt)
 			this.type=opt.type
-			if(opt.type==1){
+		},
+		async onShow() {
+			if(this.type==1){
 				uni.setNavigationBarTitle({
 					title:'我的聚财卡'
 				});
 			}
+			await this.getUserInfo()
 		},
 	  
 		methods:{
+			...mapMutations(['setUserInfo']),
+			async getUserInfo(){
+				await this.$http({
+					apiName:"getUserInfo"
+				}).then(res => {
+					this.setUserInfo(res.data)
+				}).catch(_ => {})
+			},
 			navTo(url){
 				if(this.type==0){
 					uni.navigateTo({

@@ -193,7 +193,9 @@ export function getMsgNms(){
 		type:"POST"
 	}).then(res => {
 		store.commit('setMsgNms',res.data)
-		utils.setBadgeText(0,res.data)
+		if(store.state.isHome != 1){
+			utils.setBadgeText(0,res.data)
+		}
 	}).catch(_ => {})
 }
 

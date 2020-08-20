@@ -56,8 +56,8 @@
 		},
 		data() {
 			return {
-				type:"男",
-				typeList:["男","女","保密"],
+				type:"",
+				typeList:["保密","男","女"],
 				typeMap:{
 					"男":1,
 					"女":2,
@@ -144,7 +144,8 @@
 			this.fromPage = opt.from || ''
 			await this.getUserInfo()
 			this.userData = JSON.parse(JSON.stringify(this.userInfo))
-			this.birth = utils.unixToDatetime(this.userData.birthday,3) || "点击选择"
+			this.birth = utils.unixToDatetime(this.userData.birthday,3) || "点击选择";
+			this.type = this.typeList[this.userData.gender];
 		},
 		//点击导航栏 buttons 时触发
 		onNavigationBarButtonTap(e) {

@@ -244,7 +244,7 @@ import tabBar from "@/components/tab-bar.vue"
 			...mapState(['hasLogin','userInfo','paddingTop','config'])
 		},
 		async onShow(){
-			
+		  this.isHomeSet(1)
           // #ifdef APP-PLUS
           var webView = this.$mp.page.$getAppWebview();
           webView.removeTitleNViewButtonBadge({  
@@ -297,9 +297,8 @@ import tabBar from "@/components/tab-bar.vue"
 			// })
 		},
 		onHide() {
-			if(this.hasLogin && JSON.stringify(this.userInfo) == '{}'){
-				this.getUserInfo()
-			}
+			this.isHomeSet(0)
+			
 		},
 		watch:{
 			'this.config':()=>{
@@ -309,7 +308,7 @@ import tabBar from "@/components/tab-bar.vue"
 			}
 		},
 		methods: {
-			...mapMutations(['setUserInfo','setAfterLoginUrl','setHasScore','setHasSigin','setCartNms']),
+			...mapMutations(['setUserInfo','setAfterLoginUrl','setHasScore','setHasSigin','setCartNms','isHomeSet']),
 			timeUp(){
 				console.log("计时结束");
 				this.creset = false;
@@ -380,6 +379,9 @@ import tabBar from "@/components/tab-bar.vue"
 				this.getTopic123()
 				this.getFight()
 				uni.hideLoading()
+				if(this.hasLogin && this.userInfo == null){
+					this.getUserInfo()
+				}
 			},
 			//轮播图
 			async getBanner(){

@@ -83,6 +83,7 @@ export default {
 	},
 	methods: {
 		_makeCode() {
+			
 			let that = this
 			if (!this._empty(this.val)) {
 				qrcode = new QRCode({

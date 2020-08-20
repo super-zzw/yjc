@@ -9,7 +9,7 @@ const store = new Vuex.Store({
 		server:1,  //1第三方客服，2，小程序自带客服，仅限小程序
 		aboutShare:1,  //1有app对应的小程序，分享到小程序，2没有对应的小程序，分享到app下载页
 		hasLogin: !!_session,
-		userInfo:{},
+		userInfo:null,
 		afterLoginUrl:"",  //用于存储登录之后跳转的页面
 		afterLoginIsTab:false,  //登录之后跳转的页面是否是tab
 		order:[],  //直接购买临时存储的商品
@@ -22,9 +22,13 @@ const store = new Vuex.Store({
 		hasScore:-1,  //积++分模块
 		hasSigin:-1,  //签到模块
 		cartNms:0,  //购物车数量
-		selectFxAccount:0
+		selectFxAccount:0,
+		isHome:0,//是否是首页1是0不是
 	},
 	mutations: {
+		isHomeSet(state,data){
+			state.isHome = data;
+		},
 		selectFxAccountSet(state,data){
 			state.selectFxAccount = data;
 		},

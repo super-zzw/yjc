@@ -17,9 +17,7 @@
 								"fontSize": "28",
 								"color": "#303133",
 								"float": "left",
-								"background": "rgba(0,0,0,0)",
-								"autoBackButton":"false",
-								"redDot":"false"
+								"background": "rgba(0,0,0,0)"
 							},
 							{
 								"fontSrc": "/static/font/iconfont/iconfont.ttf",
