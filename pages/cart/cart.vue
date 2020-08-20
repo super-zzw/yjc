@@ -136,14 +136,6 @@
 			// utils.setBadgeText(0,this.msgNms)
 			
 		},
-		onShow() {
-			if(this.hasLogin){
-				utils.setBadgeText(0,'')
-			}else{
-				utils.setBadgeText(0,this.msgNms)
-			}
-			
-		},
 		// watch:{
 		// 	'this.msgNms':()=>{
 		// 		if(this.msgNms==0){
@@ -162,9 +154,11 @@
 			this.cartList = []
 			this.topicsList = []
 			if(this.hasLogin){
+				this.$getMsgNms()
 				await this.getCart()
 				this.getCartNms()
 			}else{
+				utils.setBadgeText(0,'')
 				await this.getTj()
 			}
 		},

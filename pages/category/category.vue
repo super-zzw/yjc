@@ -142,6 +142,13 @@ import tabBar from "@/components/tab-bar.vue"
 				that.$getMsgNms()
 			},800)
 		},
+		onShow() {
+			if(this.hasLogin){
+				this.$getMsgNms()
+			}else{
+				utils.setBadgeText(0,'')
+			}
+		},
 		// async onShow(){
 		// 	await this.initData()
 		// 	utils.setBadgeText(0,this.msgNms)
