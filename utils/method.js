@@ -344,7 +344,7 @@ export default{
 			console.log(res)
 			store.commit('setUserInfo',res.data)
 		}).catch(err=>{
-			
+			console.log(1,err)
 		})
 	}
 }

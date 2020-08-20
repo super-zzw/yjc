@@ -594,7 +594,7 @@ import tabBar from "@/components/tab-bar.vue"
 				
 				let url=""
 				if(index==1){
-					this.setAfterLoginUrl('/pages/receipt/index')
+					// this.setAfterLoginUrl('/pages/receipt/index')
 				}
 				if(!this.hasLogin){
 					// #ifdef MP-WEIXIN
