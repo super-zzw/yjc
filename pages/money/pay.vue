@@ -81,12 +81,11 @@
 			return {
 				money: 0,
 				orderId: "",
-				payType: 1,
+				payType: 6,
 				orderInfo: {},
 				payTypes: [],
 				err: "",
 				group: "",
-				
 				sModal: false,
 				password: '',
 			};
@@ -583,5 +582,8 @@
 	}
 	.iconzhanghuyuezhifu{
 		color: #f23d3d;
+	}
+	.b-b:after {
+		z-index: 0;
 	}
 </style>

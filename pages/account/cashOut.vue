@@ -18,10 +18,10 @@
 		</view>
 		<view class="moneyBox">
 			<text class="txt1">提现金额</text>
-			<view class="iptBox">￥<input type="number" value="" v-model="money" @blur="getFee"/></view>
+			<view class="iptBox">￥<input type="number"   @blur="getFee" v-model="money" @input="changeval" /></view>
 			<text class="divider"></text>
 			<view class="txts">
-				<text class="txt2" v-if="type==1">可提现金额¥{{userInfo.yjcBalance-userInfo.yjcFreezeBalance.toFixed(2)}}</text>
+				<text class="txt2" v-if="type==1">可提现金额¥{{(userInfo.yjcBalance-userInfo.yjcFreezeBalance).toFixed(2)}}</text>
 				<text class="txt2" v-if="type==2">可提现金额¥{{userInfo.yjcCardBalance.toFixed(2)}}</text>
 				<text class="txt2" v-if="isshow">手续费：¥{{fee}}</text>
 				<!-- 	<view v-if="config.DISTRIBUTE_WITHDRAW.withdrawType == 1" class="txt2">
@@ -63,6 +63,12 @@
 				this.type=2
 			}
 		},
+		watch:{
+			// money(val){
+			// 	console.log(val)
+					
+			// }
+		},
 		async onShow() {
 			uni.showLoading({
 				title: "加载中..."
@@ -74,9 +80,31 @@
 
 		computed: {
 			...mapState(['selectFxAccount', 'config', 'userInfo']),
-			
+			// money(val){
+				
+			// 	if(val.contain('.')){
+			// 		if(val.split('.')[1].length>2){
+			// 			console.log(new Number(val).toFixed(2))
+			// 			return new Number(val).toFixed(2);
+						
+			// 		}
+			// 	}
+			// }
 		},
 		methods: {
+			changeval(e){
+				console.log(e)
+				let val=e.target.value
+				if(String(val).includes('.')&&String(val).split('.')[1].length>2){
+					
+					console.log(2321,this.money)
+					this.$nextTick(function(){
+						this.money=String(val).split('.')[0]+'.'+String(val).split('.')[1].slice(0,2);
+					})
+				}else{
+					console.log(32,this.money)
+				}
+			},
 			//获取账户详情
 			getInfo() {
 				this.$http({

@@ -18,10 +18,8 @@
 						<image src="../../static/code.png" mode="" class="icon"></image>
 						<input type="password" placeholder="请输入验证码" placeholder-class="input-empty" maxlength="6" v-model="code" />
 					</view>
-
 					<text class="stext" @tap="getCode">{{codeText}}</text>
 				</view>
-
 				<!-- <image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode="" @tap="oAuth" class="oAuthIcon"
 				data-logintype="weixin"></image>
 				<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png" mode="" @tap="oAuth" class="oAuthIcon"
@@ -57,7 +55,6 @@
 		</view>
 	</view>
 </template>
-
 <script>
 	// import {  
 	//        mapState 
@@ -75,12 +72,10 @@
 				timer: "",
 				codeText: "获取验证码",
 				timeLeft: 120,
-
 			}
 		},
 		onLoad(opt) {
 			//返回跳转过来的
-
 		},
 		methods: {
 			// ...mapMutations(['login']),
@@ -174,7 +169,6 @@
 					authCode: this.code,
 					phoneNumber: this.mobile,
 				}
-
 				let jres = await utils.judgeData(_data)
 				if (jres) {
 					await this.$http({
@@ -184,6 +178,7 @@
 					}).then(res => {
 						console.log(res)
 						utils.setSesion(res.data)
+						utils.getUserInfo()
 						utils.afterLoginJump()
 					}).catch(_ => {})
 				}
@@ -235,20 +230,16 @@
 				})
 			}
 		},
-
 	}
 </script>
-
 <style lang='scss' scoped>
 	page {
 		background: #fff;
 	}
-
 	.container {
 		/* padding-top: 115px; */
 		position: relative;
 		width: 100vw;
-
 		/*#ifdef APP-PLUS*/
 		/* 	height: 100vh; */
 		/* #endif */
@@ -266,7 +257,6 @@
 		/*  #endif */
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-
 		.suibian {
 			font-size: 12px;
 			color: #4399fc;
@@ -274,18 +264,15 @@
 			text-align: center;
 		}
 	}
-
 	.top {
 		margin-top: 90rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
 		image {
 			width: 96rpx;
 			height: 96rpx;
 		}
-
 		.txt {
 			font-size: 32rpx;
 			font-weight: 500;
@@ -293,39 +280,32 @@
 			margin-top: 20rpx;
 		}
 	}
-
 	.wrapper {
 		position: relative;
 		z-index: 90;
 		/* padding-bottom: 40rpx; */
 		margin-top: 80rpx;
-
 		.tabbar {
 			padding-top: 22rpx;
 			display: flex;
 			border-bottom: 2rpx solid #DBDBDB;
-
 			.tab {
 				flex: 1;
 				display: flex;
 				justify-content: center;
-
 				text {
 					font-size: 32rpx;
 					color: rgba(144, 147, 153, 1);
 					font-weight: 400;
 					line-height: 88rpx;
 				}
-
 				text.active {
 					color: rgba(48, 49, 51, 1);
 					border-bottom: 4rpx solid #F23D3D;
 				}
 			}
-
 		}
 	}
-
 	.back-btn {
 		position: absolute;
 		left: 40rpx;
@@ -335,7 +315,6 @@
 		font-size: 40rpx;
 		color: $font-color-dark;
 	}
-
 	.left-top-sign {
 		font-size: 80rpx;
 		font-weight: bold;
@@ -343,13 +322,11 @@
 		position: relative;
 		left: 60rpx;
 	}
-
 	.right-top-sign {
 		position: absolute;
 		top: 80rpx;
 		right: -30rpx;
 		z-index: 95;
-
 		&:before,
 		&:after {
 			display: block;
@@ -358,12 +335,10 @@
 			height: 80rpx;
 			background: #b4f3e2;
 		}
-
 		&:before {
 			transform: rotate(50deg);
 			border-radius: 0 50px 0 0;
 		}
-
 		&:after {
 			position: absolute;
 			right: -198rpx;
@@ -373,7 +348,6 @@
 			/* background: pink; */
 		}
 	}
-
 	.left-bottom-sign {
 		position: absolute;
 		left: -270rpx;
@@ -382,7 +356,6 @@
 		border-radius: 50%;
 		padding: 180rpx;
 	}
-
 	.welcome {
 		position: relative;
 		left: 50rpx;
@@ -391,17 +364,14 @@
 		color: #555;
 		text-shadow: 1px 0px 1px rgba(0, 0, 0, .3);
 	}
-
 	.input-content {
 		/* margin-top: 80rpx; */
 		padding: 0 48rpx 0;
-
 		.oAuthIcon {
 			width: 80rpx;
 			height: 80rpx;
 		}
 	}
-
 	.input-item {
 		display: flex;
 		align-items: center;
@@ -414,7 +384,6 @@
 		border-radius: 4px;
 		margin-bottom: 50rpx;
 		border-bottom: 4rpx solid #DBDBDB;
-
 		.stext {
 			color: #F23D3D;
 			border: 2rpx solid #F23D3D;
@@ -425,11 +394,9 @@
 			text-align: center;
 			padding: 10rpx 16rpx;
 		}
-
 		&:last-child {
 			margin-bottom: 0;
 		}
-
 		.icon {
 			/* height: 50rpx; */
 			/* line-height: 56rpx; */
@@ -439,7 +406,6 @@
 			/* font-size: $font-sm+2rpx;
 			color: $font-color-base; */
 		}
-
 		input {
 			height: 60rpx;
 			font-size: $font-base + 2rpx;
@@ -447,21 +413,17 @@
 			width: 100%;
 		}
 	}
-
 	.input-item.input-item1 {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
 		align-items: center;
-
 		.left {
 			display: flex;
 			align-items: center;
 			/* flex-direction: column; */
 		}
-
 	}
-
 	.confirm-btn {
 		width: 630rpx;
 		height: 76rpx;
@@ -471,35 +433,29 @@
 		background: #F23D3D;
 		color: #fff;
 		font-size: $font-lg;
-
 		&:after {
 			border-radius: 100px;
 		}
 	}
-
 	.forget-section {
 		font-size: $font-sm+2rpx;
 		color: #C0C4CC;
 		text-align: center;
 		margin-top: 40rpx;
 	}
-
 	.forget-section2 {
 		display: flex;
 		justify-content: space-between;
 		margin-top: -20rpx;
-
 		.register {
 			color: #F23D3D;
 			margin-left: 10rpx;
 		}
-
 		.forget {
 			text-align: right;
 			color: #F23D3D
 		}
 	}
-
 	.register-section {
 		position: absolute;
 		left: 0;
@@ -508,18 +464,15 @@
 		font-size: $font-sm+2rpx;
 		color: $font-color-base;
 		text-align: center;
-
 		text {
 			color: $font-color-spec;
 			margin-left: 10rpx;
 		}
-
 		.rscen {
 			margin-left: 20rpx;
 			margin-right: 20rpx;
 		}
 	}
-
 	.tipBox {
 		background: #fff;
 		position: fixed;
@@ -531,7 +484,6 @@
 		flex-direction: column;
 		padding: 0 75rpx;
 		z-index: 101;
-
 		.txt {
 			margin: 116rpx 0 50rpx;
 			font-size: 32rpx;
@@ -539,7 +491,6 @@
 			font-weight: 600;
 			color: rgba(48, 49, 51, 1);
 		}
-
 		.back {
 			height: 80rpx;
 			border-radius: 40px;
@@ -554,20 +505,16 @@
 			align-items: center;
 			justify-content: center;
 		}
-
 	}
-
 	.wxLogin {
 		margin-top: 180rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
 		.wxIcon {
 			width: 60rpx;
 			height: 60rpx;
 		}
-
 		text {
 			font-size: 28rpx;
 			font-family: PingFangSC-Regular, PingFang SC;

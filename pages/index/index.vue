@@ -896,8 +896,13 @@ import tabBar from "@/components/tab-bar.vue"
 				padding-top: 32rpx;
 				padding-bottom: 28rpx;
 				background-color: #fff;
-				padding-left: 32rpx;
-				padding-right: 32rpx;
+				padding-left: 30rpx;
+				padding-right: 30rpx;
+				border: 1px solid rgba(0, 0, 0, 0.13);
+				    margin: 0px auto 10px;
+				    width: 95%;
+				    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.13);
+				    border-radius: 10px;
 				.item-img{
 					width: 100%;
 					height: 343rpx;
