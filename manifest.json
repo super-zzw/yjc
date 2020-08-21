@@ -2,8 +2,8 @@
     "name" : "易聚财商城",
     "appid" : "__UNI__5D0627C",
     "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : 100,
+    "versionName" : "1.2.7",
+    "versionCode" : 127,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -16,10 +16,8 @@
         },
         "modules" : {
             "Payment" : {},
-            "Share" : {},
-            "LivePusher" : {},
-            "Messaging" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "Share" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -27,8 +25,6 @@
             "android" : {
                 /* android打包配置 */
                 "permissions" : [
-                    "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
                     "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
@@ -42,25 +38,22 @@
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_SMS\"/>",
                     "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
-                    "<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_SMS\"/>"
+                    "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>"
                 ],
-                "schemes" : [ "youmall" ],
+                "schemes" : [ "youzhipin" ],
                 "abiFilters" : [ "armeabi-v7a", "x86" ]
             },
             "ios" : {
                 "urltypes" : [
                     {
-                        "urlidentifier" : "com.gzcyou.yphmall",
-                        "urlschemes" : [ "youmall" ]
+                        "urlidentifier" : "com.youzhipin.immall",
+                        "urlschemes" : [ "youzhipin" ]
                     }
                 ],
-                "urlschemewhitelist" : [ "youmall" ],
+                "urlschemewhitelist" : [ "youzhipin" ],
                 "idfa" : false
             },
             /* ios打包配置 */
@@ -68,7 +61,7 @@
                 "payment" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
-                        "UniversalLinks" : "https://www.vyunmall.com/ulinks"
+                        "UniversalLinks" : "https://api.youmall.vip/"
                     },
                     "alipay" : {}
                 },
@@ -76,17 +69,17 @@
                 "share" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
-                        "UniversalLinks" : "https://www.vyunmall.com/ulinks"
+                        "UniversalLinks" : "https://api.youmall.vip/"
                     }
                 },
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
                         "appsecret" : "76419ba1a9ae16d623a395965d7ef3fd",
-                        "UniversalLinks" : "https://www.vyunmall.com/ulinks"
-                    },
-                    "apple" : {}
-                }
+                        "UniversalLinks" : "https://api.youmall.vip/"
+                    }
+                },
+                "push" : {}
             },
             "icons" : {
                 "android" : {
@@ -136,8 +129,8 @@
         }
     },
     "h5" : {
-        "title" : "易聚财商城",
-        "domain" : "wap.vyunmall.com",
+        "title" : "幸运星辰",
+        "domain" : "h5.zcymco.cn",
         "router" : {
             "mode" : "history"
         },
@@ -148,7 +141,8 @@
             "proxy" : {
                 "/api" : {
                     // "target" : "http://192.168.1.25:9502/api",
-                    "target" : "http://cymall-api.dev.gzcyou.com/api",
+                    // "target" : "http://cymall-api.dev.gzcyou.com/api",
+                    "target" : "http://api.zcymco.cn",
                     "changeOrigin" : true
                 }
             }
