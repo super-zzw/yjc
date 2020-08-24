@@ -49,11 +49,11 @@
 		<view class="share-section share-section2" v-if="sevenReturnApply == 1">正品保证·支持7天无理由退换货</view>
 		<view class="share-section share-section2" v-if="sevenReturnApply == 2">正品保证·不支持7天无理由退换货</view>
 		<!--  分享 -->
-		<view class="share-section">
+		<!-- <view class="share-section">
 			<text class="iconfont iconjifen"></text>
 			<text class="tit">该商品购买成功可得{{stockInfo.giftPoint || '0'}}{{config.MALL_POINT_TITLE}}</text>
 			
-		</view>
+		</view> -->
 		
 		<view class="c-list">
 			<view class="c-row b-b" @click="toggleSpec">
