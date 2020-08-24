@@ -15,7 +15,7 @@
 				<view class="slabel">转账金额</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="money" 
-					placeholder="请输入转账金额"/>
+					placeholder="请输入转账金额" @input="changeval"/>
 				</view>
 			</view>
 			<!-- <view class="sItem">
@@ -76,6 +76,17 @@
 			}
 		},
 		methods:{
+			changeval(e){
+				console.log(e)
+				let val=e.target.value
+				if(String(val).includes('.')&&String(val).split('.')[1].length>2){
+					this.$nextTick(function(){
+						this.money=String(val).split('.')[0]+'.'+String(val).split('.')[1].slice(0,2);
+					})
+				}else{
+					
+				}
+			},
 			getDetail(){
 				uni.showLoading({
 					title:"加载中...",

@@ -79,30 +79,18 @@
 		},
 
 		computed: {
-			...mapState(['selectFxAccount', 'config', 'userInfo']),
-			// money(val){
-				
-			// 	if(val.contain('.')){
-			// 		if(val.split('.')[1].length>2){
-			// 			console.log(new Number(val).toFixed(2))
-			// 			return new Number(val).toFixed(2);
-						
-			// 		}
-			// 	}
-			// }
+			...mapState(['selectFxAccount', 'config', 'userInfo'])
 		},
 		methods: {
 			changeval(e){
 				console.log(e)
 				let val=e.target.value
 				if(String(val).includes('.')&&String(val).split('.')[1].length>2){
-					
-					console.log(2321,this.money)
 					this.$nextTick(function(){
 						this.money=String(val).split('.')[0]+'.'+String(val).split('.')[1].slice(0,2);
 					})
 				}else{
-					console.log(32,this.money)
+					
 				}
 			},
 			//获取账户详情
