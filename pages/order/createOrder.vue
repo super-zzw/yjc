@@ -507,7 +507,7 @@
 					}
 				}).then(res => {
 					if (res.data) {
-						this.fee = res.data.fee
+						this.fee = res.data.fee*this.order.number
 					} else {
 						this.fee = 0
 					}
