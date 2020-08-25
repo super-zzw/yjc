@@ -6,7 +6,7 @@
 				<text class="ctxt">累计收入金额(元)</text>
 			</view>
 			<view class="right">
-				<text class="number">-{{totalAmountOut}}</text>
+				<text class="number numberx">-{{totalAmountOut}}</text>
 				<text class="ctxt">累计支出金额(元)</text>
 			</view>
 		</view>
@@ -81,6 +81,7 @@
 				type:"",
 				totalAmountOut:"",
 				totalAmountIn:"",
+				tradeType:[]
 			};
 		},
 		
@@ -115,7 +116,8 @@
 						size:this.size,
 						timeE:this.endTime,
 						timeS:this.startTime,
-						type:this.type
+						type:this.type,
+						typeList:this.tradeType
 					}
 				}).then(res => {
 					// if(this.dataList.length>=res.data.total){
@@ -151,12 +153,14 @@
 			},
 			async colseTime(e){
 				this.dateSel = false;
-				if(e && e.startTime && e.endTime){
+				// if(e && e.startTime && e.endTime){
 					this.type='';
 					this.startTime = e.startTime;
 					this.endTime = e.endTime;
+					this.tradeType=e.tradeType
+					console.log(this.tradeType)
 					await this.getList(1)
-				}
+				// }
 			},
 		},
 		onReachBottom(){
@@ -194,6 +198,9 @@
 			color:rgba(242,61,61,1);
 			line-height:60rpx;
 			margin-bottom: 8rpx;
+		}
+		.number.numberx{
+			color:#303133;
 		}
 		.ctxt{
 			font-size:30rpx;
