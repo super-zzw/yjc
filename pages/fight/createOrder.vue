@@ -500,15 +500,8 @@
 						}
 					}).then(res => {
 						
-						this.fee = res.data.fee
-					 //    if(this.checked){
-						// 	console.log(1)
-						// if(this.userInfo.cardAmount>=Number(this.total)+Number(this.fee)-Number(this.yhq)){
-						// 	this.storeValue=Number(this.total)+Number(this.fee)-Number(this.yhq)
-						// }else{
-						// 	this.storeValue=this.userInfo.cardAmount
-						// }
-						// }
+						this.fee = res.data.fee*this.order.number
+					 
 						if(Number(this.total)+Number(this.fee)<=Number(this.yhq)){
 							this.total2=0
 						}else{
