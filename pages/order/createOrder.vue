@@ -578,16 +578,7 @@
 						// this.$refs.pwdValidate.clear()
 
 					} else {
-						// if (this.checked) {
-						// 	if ((Number(this.total) + Number(this.fee) - Number(item.amount)).toFixed(2) > this.userInfo.cardAmount) {
-						// 		this.storeValue = this.userInfo.cardAmount
-						// 	} else {
-						// 		this.storeValue = (Number(this.total)  + Number(this.fee) - Number(item.amount)).toFixed(2)
-						// 	}
-
-						// this.total2=(Number(this.total)+Number(this.fee)-Number(item.amount)-Number(this.storeValue)).toFixed(2)
-						// }
-						// this.total2=Number(Number(this.total)+Number(this.fee) -Number(this.storeValue)-Number(this.yhq)).toFixed(2)
+						
 						this.total2 = Number(Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
 					}
 
@@ -607,17 +598,7 @@
 				})
 				return true
 			}
-			// else if(this.isScore){
-			// 	uni.redirectTo({
-			// 		url:"/pages/product/product?id=" + this.order.productId + "&score=true"
-			// 	})
-			// 	return true
-			// }else{
-			// 	uni.redirectTo({
-			// 		url:"/pages/product/product?id=" + this.order.productId
-			// 	})
-			// 	return true
-			// }
+			
 		}
 	}
 </script>

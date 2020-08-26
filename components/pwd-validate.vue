@@ -7,9 +7,6 @@
 			<text class="txt1">支付密码验证</text>
 			<view class="input_area">
 				<passwordInput :numLng='password' @open="openKeyboard" />
-				<!-- <input class="box" disabled v-for="(item,index) in 6" :key="index" ></input> -->
-				<!-- <input type="password" value="" class="box" maxlength="1" v-for="(item,index) in 6" :key="index" @input="input(index)" :focus="currentIpt==index?true:false"
-				:disabled="currentIpt>=index?false:true"/> -->
 			</view>
 			<text class="txt2">请输入6位数字支付密码</text>
 			<numberKeyboard psdLength='6' ref='KeyboarHid' @input='clickInput' />
@@ -39,7 +36,6 @@
 		},
 		watch:{
 			password(data) {
-				// let all = (Number(this.total) + Number(this.fee) - Number(this.yhq)).toFixed(2)
 				if (data.length >= 6) {
 					this.$http({
 						apiName: 'checkPayPwd',
@@ -51,9 +47,7 @@
 						this.closePass()
 						this.$emit('validateOk',this.password)
 						this.clear()
-						// this.$refs.KeyboarHid.iptNum = []
 						
-			
 					}).catch(err => {
 						this.clear()
 						if(err.code==500085){

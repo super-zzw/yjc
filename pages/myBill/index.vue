@@ -41,7 +41,7 @@
 					</view>
 					<view class="right">
 						<text class="value" v-if="item.type == 0">-{{item.amountStr}}</text>
-						<text class="value" v-if="item.type == 1">+{{item.amountStr}}</text>
+						<text class="value value1" v-if="item.type == 1">+{{item.amountStr}}</text>
 						<text class="result" v-if="item.withdrawStatus == 0">待处理</text>
 						<text class="result" v-if="item.withdrawStatus == 1">通过</text>
 						<text class="result" v-if="item.withdrawStatus == -1">失败</text>
@@ -273,9 +273,12 @@
 				.value{
 					font-size:32rpx;
 					font-family:PingFangSC-Regular,PingFang SC;
-					font-weight:500;
+					font-weight:600;
 					color:rgba(48,49,51,1);
 					line-height:44rpx;
+				}
+				.value1{
+					color:rgba(242,61,61,1);
 				}
 				.result{
 					font-size:24rpx;
