@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="masks" v-if="dateSel" ></view>
+		<view class="masks" v-if="dateSel" @click.stop="closePicker"></view>
 		<view class="datePicker" :class="dateSel?'active':''">
 			<text class="tip">交易时间</text>
 			<view class="dateIpt">

@@ -34,9 +34,10 @@
 				</view>
 			</view>
 			<view class="fList" v-if="dataList.length > 0">
-				<view class="fItem" v-for="(item,index) in dataList" :key="index">
+				<view class="fItem" v-for="(item,index) in dataList" :key="index" @tap="toDetail(item.id)">
 					<view class="left">
-						<text class="title">{{item.title}}</text>
+						<text class="tt">{{item.title}}</text>
+						<text class="tt">{{item.cardno}}</text>
 						<text class="info">{{item.createTime}}</text>
 					</view>
 					<view class="right">
@@ -162,7 +163,13 @@
 					await this.getList(1)
 				// }
 			},
+			toDetail(id){
+				uni.navigateTo({
+					url:'/pages/myBill/billDetail?id='+id
+				})
+			},
 		},
+		
 		onReachBottom(){
 			if(this.noMore){
 				return
@@ -250,13 +257,14 @@
 			.left{
 				display: flex;
 				flex-direction: column;
-				.title{
+				.tt{
 					font-size:32rpx;
 					font-family:PingFangSC-Regular,PingFang SC;
 					font-weight:400;
 					color:rgba(48,49,51,1);
 					line-height:44rpx;
 				}
+				
 				.info{
 					font-size:24rpx;
 					font-family:PingFangSC-Regular,PingFang SC;
