@@ -64,7 +64,7 @@
 						value: 'transfer_out'
 					},
 					{
-						title: '转入',
+						title: '转账转入',
 						value: 'transfer_in'
 					},
 					{
