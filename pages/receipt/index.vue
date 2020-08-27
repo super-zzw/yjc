@@ -30,7 +30,6 @@
 		components:{tkiQrcode},
 		data() {
 			return {
-				 qrCode:'../../static/yijucai.png',
 				 size:340,
 				 onval:true,  //动态生成二维码,
 				 coinAddr:'',

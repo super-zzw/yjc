@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
        <view class="top">
-		   <image src="../../static/yijucai.png" mode=""></image>
+		   <image :src="config.MALL_LOGO_URL" mode=""></image>
 		   <text class="txt">欢迎来到易聚财</text>
 	   </view>
 		<view class="wrapper">
@@ -68,9 +68,9 @@
 </template>
 
 <script>
-	// import {  
- //        mapState 
- //    } from 'vuex';
+	import {  
+        mapState 
+    } from 'vuex';
 	import utils from 'utils/method.js'
 	export default{
 		data(){
@@ -93,6 +93,9 @@
 			if(opt.flag){
 				this.flag=opt.flag
 			}
+		},
+		computed:{
+			...mapState(['config'])
 		},
 		methods: {
 			// ...mapMutations(['login']),
