@@ -343,9 +343,9 @@
 		}
 		.bg{
 			position:absolute;
-			left: 0;
+			left: -2rpx;
 			top: 0;
-			width: 100%;
+			width: 101%;
 			height: 100%;
 		}
 	}
