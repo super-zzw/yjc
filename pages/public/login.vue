@@ -42,7 +42,7 @@
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
 		<!-- #ifdef APP-PLUS -->
-		<view class="wxLogin" @click="oAuth" data-logintype="weixin">
+		<view class="wxLogin" @click="oAuth" data-logintype="weixin" v-if="showWx">
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
@@ -72,13 +72,19 @@
 				timer: "",
 				codeText: "获取验证码",
 				timeLeft: 120,
+				showWx:true
 			}
 		},
 		onLoad(opt) {
 			//返回跳转过来的
+			this.showWx=uni.getStorageSync('showWx')==1?true:false 
+			// console.log(uni.getStorageSync('showWx'))
 		},
 		computed:{
 			...mapState(['config'])
+			// showWx(){
+			// 	return uni.getStorageSync('showWx')
+			// }
 		},
 		methods: {
 			// ...mapMutations(['login']),
@@ -384,7 +390,7 @@
 		/* padding: 25rpx; */
 		/* background:$page-color-light; */
 		height: 120rpx;
-		border-radius: 4px;
+		
 		margin-bottom: 50rpx;
 		border-bottom: 4rpx solid #DBDBDB;
 		.stext {
@@ -419,7 +425,7 @@
 	.input-item.input-item1 {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: space-between;
 		align-items: center;
 		.left {
 			display: flex;

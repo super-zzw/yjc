@@ -891,7 +891,7 @@
 							"color": "#DBDBDB"
 						},
 						"buttons":[{
-							"text":"我的企业服务",
+							"text":"我的",
 							"float":"right",
 							"color":"#303133",
 							"fontSrc": "/static/font/iconfont/iconfont.ttf",

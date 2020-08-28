@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<view class="countBox box1" v-if="!counting" @tap="addCart">+</view>
+		<!-- <view class="countBox box1" v-if="!counting" @tap="addCart">+</view> -->
+		<view class="iconfont iconjiaruwodeqiyefuwu" v-if="!counting" @tap="addCart"></view>
 		<view v-if="counting" class="counting">
 			<view class="countBox box2" @tap="updateServiceNum(-1)">-</view>
 			<view class="content">{{num}}</view>
@@ -118,11 +119,14 @@
    			border-right: 2rpx solid #C0C4CC;
    		}
    	}
-   	
-   	.box1{
-   			background:rgba(242,61,61,1);
-   			color: #fff;
-   	}
+   	.iconjiaruwodeqiyefuwu{
+		color: #F23D3D;
+		font-size: 54rpx;
+	}
+   	// .box1{
+   	// 		background:rgba(242,61,61,1);
+   	// 		color: #fff;
+   	// }
    	.box2{
    		background: #fff;
    		color: #C0C4CC;

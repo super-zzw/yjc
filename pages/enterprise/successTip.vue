@@ -4,7 +4,7 @@
 			<text class="iconfont iconchenggong"></text>
 			<view  class="txtBox">
 				<text class="tit">提交成功</text>
-				<text class="tit1">您可以在企业服务页面「我的企业服务」中</text>
+				<text class="tit1">您可以在企业服务页面「我的」中</text>
 				<text class="tit1">查看已购买的企业服务</text>
 			</view>
 			

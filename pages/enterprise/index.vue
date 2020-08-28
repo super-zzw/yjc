@@ -205,7 +205,7 @@
 	   }
 	   .right{
 		   width: 300rpx;
-		   background: #fa4269;
+		   background: #F23D3D;
 		   display: flex;
 		   justify-content: center;
 		   align-items: center;
@@ -248,9 +248,9 @@
 	   justify-content: space-around;
 	   width: 100%;
 	   .btn{
-		   width:264rpx;
-		   height:56rpx;
-		   border-radius:28rpx;
+		   width:240rpx;
+		   height:72rpx;
+		   border-radius:36rpx;
 		   font-size:26rpx;
 		   font-weight:500;
 		   display: flex;

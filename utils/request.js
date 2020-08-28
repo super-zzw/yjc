@@ -45,6 +45,7 @@ export function http(opt){
 					//300003,300000
 					
 					if(res.data.code == 200000){
+						
 						resolve(res.data)
 					}else if(res.data.code == 300003 || res.data.code == 300000){
 						// uni.hideLoading()
@@ -55,13 +56,17 @@ export function http(opt){
 						utils.rmData()
 						reject(res.data.message)
 					}else{
-						console.log(res.data.message)
 						uni.hideLoading()
-						uni.showToast({
-							icon: 'none',
-							title: res.data.message,
-							duration: 1500
-						});
+						if(res.data.code==500087){
+							uni.setStorageSync('showWx',res.data.data)
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: res.data.message,
+								duration: 1500
+							});
+						}
+						
 						reject(res.data)
 					}
 				}else{
@@ -214,7 +219,8 @@ export function checkUpdate(isAlert){
 		type:"POST",
 		data:{versionCode: _version}
 	}).then(res => {
-		if (!!res.data && res.data.versionCode > _version) {
+		if (!!res.data &&res.data.versionCode > _version) {
+			console.log(1)
 			uni.showModal({
 				title: '版本更新' + res.data.versionCode,
 				content: res.data.description,
@@ -297,14 +303,14 @@ export function checkUpdate(isAlert){
 				}
 			});
 		} else {
-			if(isAlert){
-				uni.showModal({
-					title: '提示',
-					content: '已是最新版本',
-					showCancel: false
-				});
-			}
-			
 		}
-	}).catch(_ => {})
+	}).catch(_ => {
+		if(_.code==500087&&isAlert){
+			uni.showModal({
+				title: '提示',
+				content: '已是最新版本',
+				showCancel: false
+			});
+		}
+	})
 }

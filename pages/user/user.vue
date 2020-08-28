@@ -124,7 +124,7 @@
 					
 				</view> -->
 				<view class="hsitem" @tap="navTo('/pages/account/accountSel')">
-			        <image src="../../static/user/youhuijuan.png" class="icon"></image>
+			        <image src="../../static/user/bank.png" class="icon"></image>
 						<text class="itemBoxText">银行卡</text>
 					
 				</view>
