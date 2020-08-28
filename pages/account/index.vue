@@ -114,9 +114,11 @@
    }
    .top0{
 	   background: url(../../static/myaccount.png);
+	   background-size: contain;
    }
    .top1{
 	   background: url(../../static/jucaika.png);
+	    background-size: contain
    }
    .s-item{
 	   background: #fff;

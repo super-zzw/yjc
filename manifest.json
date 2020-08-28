@@ -61,7 +61,7 @@
                 "payment" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
-                        "UniversalLinks" : "https://api.youmall.vip/"
+                        "UniversalLinks" : "https://yjcapi.gz01.net/ulinks/"
                     },
                     "alipay" : {}
                 },
@@ -69,14 +69,14 @@
                 "share" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
-                        "UniversalLinks" : "https://api.youmall.vip/"
+                        "UniversalLinks" : "https://yjcapi.gz01.net/ulinks/"
                     }
                 },
                 "oauth" : {
                     "weixin" : {
                         "appid" : "wx4a2b78a895dd6323",
                         "appsecret" : "76419ba1a9ae16d623a395965d7ef3fd",
-                        "UniversalLinks" : "https://api.youmall.vip/"
+                        "UniversalLinks" : "https://yjcapi.gz01.net/ulinks/"
                     }
                 },
                 "push" : {}
