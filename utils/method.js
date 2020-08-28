@@ -141,8 +141,7 @@ export default{
 				// #ifdef APP-PLUS
 				
 				let currentWebview = page.$getAppWebview();
-				console.log(currentWebview)
-				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:Nm})
+				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:String(Nm)})
 				// #endif
 		// 	}
 		// }

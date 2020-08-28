@@ -395,7 +395,6 @@
 			}
 		}
 	}
-
 	.vip-card-box{
 		display:flex;
 		flex-direction: column;
