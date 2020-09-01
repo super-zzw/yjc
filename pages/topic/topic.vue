@@ -2,7 +2,7 @@
 	<view class="sWrap">
 		<swiper class="carousel" circular  indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="carouselList.length > 1" :autoplay="true">
 			<swiper-item v-for="item in carouselList" :key="item" class="carousel-item">
-				<image :src="item" class="carousel-itemimg" mode="widthFix"/>
+				<image :src="item" class="carousel-itemimg" />
 			</swiper-item>
 		</swiper>
 		<view class="sbox">
@@ -98,7 +98,7 @@
 	.carousel {
 		background-color: #fff;
 		width: 100%;
-		height: 270rpx;
+		height: 343rpx;
 		.carousel-item {
 			width: 100%;
 			height: 100%;
@@ -106,7 +106,7 @@
 			overflow: hidden;
 			.carousel-itemimg{
 				width: 100%;
-				height: auto;
+				height: 100%;
 			}
 		}
 	

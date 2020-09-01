@@ -1,7 +1,7 @@
 import Api from './api.js'
 import store from '../store'
 import utils from "./method.js"
-var test =true ;
+var test =false ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
@@ -10,7 +10,7 @@ if (test) {
 	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
 	_baseUrl = 'http://yjc-api.dev.gzcyou.com/api';  //易聚财内网
 } else {
-	_baseUrl = 'http://api.gz01.net/api';  //易聚财正式地址
+	_baseUrl = 'https://api.gz01.net/api';  //易聚财正式地址
 	// _baseUrl = 'http://api.youmall.vip/api';  //i&m商，只对app，微信支付：wx4c4af1149bf6832e
 	// _baseUrl = 'https://api.vyunmall.com/api';  //辰悠++优品汇，只对app和小程序，微信支付：wx3e2043f6604d1b94，小程序appid wx869ea006d7b72f96
 	// _baseUrl = 'https://www.zmhstem.com.cn/api'  //迈智汇小程序appid	wxa75ea180e9fc8015

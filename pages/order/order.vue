@@ -1,31 +1,20 @@
 <template>
 	<view class="content">
 		<view class="navbar">
-			<view 
-				v-for="(item, index) in navList" :key="index" 
-				class="nav-item" 
-				:class="{current: tabCurrentIndex === index}"
-				@click="tabClick(index)"
-			>
+			<view v-for="(item, index) in navList" :key="index" class="nav-item" :class="{current: tabCurrentIndex === index}"
+			 @click="tabClick(index)">
 				{{item.text}}
 			</view>
 		</view>
 
-		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab"  >
+		<swiper :current="tabCurrentIndex" class="swiper-box" duration="300" @change="changeTab">
 			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
-				<scroll-view 
-					class="list-scroll-content" 
-					scroll-y
-					@scrolltolower="getMore"
-				>
+				<scroll-view class="list-scroll-content" scroll-y @scrolltolower="getMore">
 					<!-- 空白页 -->
 					<empty :desc="'暂无相关订单'" v-if="tabItem.loaded === true && tabItem.orderList.length === 0 && isShow"></empty>
-					
+
 					<!-- 订单列表 -->
-					<view 
-						v-for="(item,index) in tabItem.orderList" :key="index"
-						class="order-item"
-					>
+					<view v-for="(item,index) in tabItem.orderList" :key="index" class="order-item">
 						<view class="i-top b-b">
 							<text class="time">{{item.createTime | dealTime}}</text>
 							<text class="state">
@@ -37,7 +26,7 @@
 									<text v-else-if="item.groupMember >= item.minMember">
 										<text v-if="item.status == 1">已成团，待发货</text>
 										<text v-if="item.status == 2">待收货</text>
-										
+
 									</text>
 									<text v-if="item.status == -1">已取消</text>
 									<!-- <text v-else>未成团</text> -->
@@ -55,30 +44,27 @@
 								<text v-if="item.status == 5">售后处理中</text>
 								<text v-if="item.status == 7">退款完成</text>
 							</text>
-							<text 
-								v-if="item.status == 3 || item.status == 4" 
-								class="del-btn iconfont iconshanchu"
-								@click="deleteOrder(index,item.id)"
-							></text>
+							<text v-if="item.status == 3 || item.status == 4" class="del-btn iconfont iconshanchu" @click="deleteOrder(index,item.id)"></text>
 						</view>
 						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember &&item.status != 5">
 							<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" mode="widthFix" class="igImg"></image>
 							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
-						<scroll-view v-if="item.itemList.length > 1" class="goods-box" scroll-x @tap="toDetail(item.id)">
-							<view
-								v-for="(goodsItem, goodsIndex) in item.itemList" :key="goodsIndex"
-								class="goods-item"
-							>
+						<view v-if="item.itemList.length > 1" class="goods-box" @tap="toDetail(item.id)">
+							<view v-for="(goodsItem, goodsIndex) in item.itemList" :key="goodsIndex" class="goods-item">
 								<image class="goods-img" :src="goodsItem.picUrl" mode="aspectFill"></image>
+								<view class="right">
+									<text class="title clamp">{{goodsItem.productName}}</text>
+									<text class="attr-box">
+										<text v-for="(aitem,akey,aindex) of goodsItem.specificationsMap" :key="aindex">{{akey}}：{{aitem}};</text>
+										<text>数量：{{goodsItem.productQuantity}}</text>
+									</text>
+									<text class="price" v-if="item.payType != 3">{{goodsItem.promotionPrice}}</text>
+								</view>
 							</view>
-						</scroll-view>
-						<view 
-						  @tap="toDetail(item.id)"
-							v-if="item.itemList.length === 1" 
-							class="goods-box-single"
-							v-for="(goodsItem, goodsIndex) in item.itemList" :key="goodsIndex"
-						>
+						</view>
+						<view @tap="toDetail(item.id)" v-if="item.itemList.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.itemList"
+						 :key="goodsIndex">
 							<image class="goods-img" :src="goodsItem.picUrl" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{goodsItem.productName}}</text>
@@ -96,7 +82,7 @@
 						<view class="price-box">
 							共
 							<text class="num">{{item.itemList.length}}</text>
-							件商品 
+							件商品
 							<text class="price1" v-if="item.payType == 3">消耗{{item.payAmount}}{{config.MALL_POINT_TITLE}}</text>
 							<text class="price1" v-else>￥{{item.payAmount}}</text>
 						</view>
@@ -125,7 +111,8 @@
 						<!-- 拼团订单 -->
 						<view class="action-box b-t" v-else>
 							<button class="action-btn" v-if="item.status == 0 && item.payType != 4" @click="cancelOrder(index,item.id)">取消订单</button>
-							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>       <!-- #ifndef APP-PLUS -->
+							<button class="action-btn recom" v-if="item.status == 0 && item.payType != 4" @tap="toPay(item.payAmount,item.id,1)">立即支付</button>
+							<!-- #ifndef APP-PLUS -->
 							<!-- <button class="action-btn" v-if="item.status == 1 && !(currentTime >= item.endGroupTime && item.groupMember < item.minMember)" @tap="share(item.ruleId)">邀请好友</button> -->
 							<!-- #endif -->
 							<button class="action-btn" v-if="item.status == 2" @click="toDelivery(item.id)">查看物流</button>
@@ -140,27 +127,22 @@
 							<button v-if="server == 2" open-type="contact" class="kefuBtn action-btn recom">联系客服</button>
 						</view>
 					</view>
-					 <view v-if="tabItem.orderList.length > 0 && tabItem.noMore" class="no_more">
-					 	<text class="no_more_side"></text>
-					 	<text class="no_more_text">没有更多数据了</text>
-					 	<text class="no_more_side"></text>
-					 </view>
+					<view v-if="tabItem.orderList.length > 0 && tabItem.noMore" class="no_more">
+						<text class="no_more_side"></text>
+						<text class="no_more_text">没有更多数据了</text>
+						<text class="no_more_side"></text>
+					</view>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
-		<share
-			ref="share" 
-			:contentHeight="400"
-			:shareList="shareList"
-			@invite="shareOthers"
-		></share>
-		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/>
+		<share ref="share" :contentHeight="400" :shareList="shareList" @invite="shareOthers"></share>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd" />
 	</view>
-</template> 
+</template>
 
 <script>
 	import {
-	   mapState
+		mapState
 	} from 'vuex';
 	import empty from "@/components/empty";
 	import utils from "@/utils/method.js"
@@ -170,8 +152,8 @@
 			empty,
 			Share
 		},
-		computed:{
-			...mapState(['userInfo','server','config'])
+		computed: {
+			...mapState(['userInfo', 'server', 'config'])
 		},
 		onShareAppMessage(res) {
 			return utils.homeShare({
@@ -182,7 +164,7 @@
 			return {
 				// payType,只有4是到付
 				isShow: false,
-				currentTime:"",  //服务器当前时间戳
+				currentTime: "", //服务器当前时间戳
 				id: "",
 				tabCurrentIndex: 0,
 				// -1=已取消 0=待付款；1=待发货；2=待收货；3=已完成 4=已评价；5=退换货(售后) ;-99全部
@@ -190,52 +172,51 @@
 						state: -99,
 						text: '全部',
 						orderList: [],
-						page:1,
-						size:8,
-						dataLoading:false,  //是否是在加载数据
-						noMore:false,
+						page: 1,
+						size: 8,
+						dataLoading: false, //是否是在加载数据
+						noMore: false,
 					},
 					{
 						state: 0,
 						text: '待付款',
 						orderList: [],
-						page:1,
-						size:8,
-						dataLoading:false,  //是否是在加载数据
-						noMore:false,
+						page: 1,
+						size: 8,
+						dataLoading: false, //是否是在加载数据
+						noMore: false,
 					},
 					{
 						state: 1,
 						text: '待发货',
 						orderList: [],
-						page:1,
-						size:8,
-						dataLoading:false,  //是否是在加载数据
-						noMore:false,
+						page: 1,
+						size: 8,
+						dataLoading: false, //是否是在加载数据
+						noMore: false,
 					},
 					{
 						state: 2,
 						text: '待收货',
 						loadingType: 'more',
 						orderList: [],
-						page:1,
-						size:8,
-						dataLoading:false,  //是否是在加载数据
-						noMore:false,
+						page: 1,
+						size: 8,
+						dataLoading: false, //是否是在加载数据
+						noMore: false,
 					},
 					{
 						state: 5,
 						text: '售后',
 						loadingType: 'more',
 						orderList: [],
-						page:1,
-						size:8,
-						dataLoading:false,  //是否是在加载数据
-						noMore:false,
+						page: 1,
+						size: 8,
+						dataLoading: false, //是否是在加载数据
+						noMore: false,
 					}
 				],
-				shareList:[
-					{
+				shareList: [{
 						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
@@ -248,253 +229,260 @@
 						text: "复制链接"
 					},
 				],
-				sModal:false,
-				password:'',
-				selID:'',
-				selIndex:''
+				sModal: false,
+				password: '',
+				selID: '',
+				selIndex: ''
 			};
 		},
-		filters:{
-			dealTime(val){
+		filters: {
+			dealTime(val) {
 				return utils.unixToDatetime(val) || ""
 			},
-			dealTimep(val,currentTime){
+			dealTimep(val, currentTime) {
 				let _str = utils.transToDate(val - currentTime);
 				return _str.d + "天" + _str.h + "小时" + _str.m + "分钟"
 			}
 		},
-		onLoad(options){
+		onLoad(options) {
 			this.tabCurrentIndex = +options.state;
 			this.loadData()
 		},
-		 
+
 		methods: {
-			validateOk(pass){
-				this.password=pass
+			validateOk(pass) {
+				this.password = pass
 				uni.showLoading({
 					title: '加载中...'
 				})
 				this.getGoodOk()
 				uni.hideLoading();
 			},
-			close(){
-				this.sModal=false
+			close() {
+				this.sModal = false
 			},
-			toPayPwd(nav){
-							uni.navigateTo({
-								url:nav
-							})
-						},
-			toDelivery(id){
+			toPayPwd(nav) {
 				uni.navigateTo({
-					url:`/pages/order/delivery?id=${id}`
+					url: nav
 				})
 			},
-			callService(){
+			toDelivery(id) {
+				uni.navigateTo({
+					url: `/pages/order/delivery?id=${id}`
+				})
+			},
+			callService() {
 				// uni.showToast({
 				// 	icon:"none",
 				// 	title:"客服系统努力开发中..."
 				// })
 				uni.navigateTo({
-					url:"/pages/service/service"
+					url: "/pages/service/service"
 				})
 			},
 			//售后进度type：0=仅退款 1=退货退款 
-			toAfterSale(type,prgsId,orderId){
-				if(type == 0){
+			toAfterSale(type, prgsId, orderId) {
+				if (type == 0) {
 					//仅退款
 					uni.navigateTo({
 						url: `/pagesA/afterSale/onlyRefundPrgs?prgsId=${prgsId}&orderId=${orderId}`
 					})
-				}else{
+				} else {
 					//退货退款
 					uni.navigateTo({
 						url: `/pagesA/afterSale/reGoodfundPrgs?prgsId=${prgsId}&orderId=${orderId}`
 					})
 				}
-				
+
 			},
 			//立即支付
-			toPay(total,orderid,group){
+			toPay(total, orderid, group) {
 				uni.navigateTo({
 					url: `/pages/money/pay?money=${total}&orderid=${orderid}&group=${group}`
 				})
 			},
 			//售后
-			afterSale(id){
+			afterSale(id) {
 				uni.navigateTo({
-					url:`/pagesA/afterSale/afterSale?id=${id}`
+					url: `/pagesA/afterSale/afterSale?id=${id}`
 				})
 			},
 			//确定确认收货
-			 getGood(index,orderId){
-				 if(!this.userInfo.payPwdFlag){
-				 	uni.showModal({
-				 		title:'提示',
-				 		content:'您还未设置支付密码，前往设置?',
-				 		success(err) {
-				 			if(err.confirm){
-				 				uni.navigateTo({
-				 					url:'/pages/set/payPwd'
-				 				})
-				 			}
-				 		}
-				 	})
-				 }else{
-				 	this.sModal=true
-				 	this.selID=orderId
-				 	this.selIndex=index
-				 }
-			
-				
+			getGood(index, orderId) {
+				if (!this.userInfo.payPwdFlag) {
+					uni.showModal({
+						title: '提示',
+						content: '您还未设置支付密码，前往设置?',
+						success(err) {
+							if (err.confirm) {
+								uni.navigateTo({
+									url: '/pages/set/payPwd'
+								})
+							}
+						}
+					})
+				} else {
+					this.sModal = true
+					this.selID = orderId
+					this.selIndex = index
+				}
+
+
 			},
-			async getGoodOk(){
+			async getGoodOk() {
 				uni.showLoading({
 					title: '加载中...'
 				})
 				await this.$http({
-					apiName:"getGood",
-					type:"POST",
-					data:{orderId:this.selID,tradepwd:utils.md5(this.password)}
+					apiName: "getGood",
+					type: "POST",
+					data: {
+						orderId: this.selID,
+						tradepwd: utils.md5(this.password)
+					}
 				}).then(res => {
-					this.$set(this.navList[this.tabCurrentIndex].orderList[this.selIndex],"status",3)
+					this.$set(this.navList[this.tabCurrentIndex].orderList[this.selIndex], "status", 3)
 					uni.showToast({
-						title:"已收货"
+						title: "已收货"
 					})
 				}).catch(_ => {})
 				uni.hideLoading();
 			},
 			//评价
-			toAssess(id){
+			toAssess(id) {
 				uni.navigateTo({
-					url:`/pages/order/assess?id=${id}`
+					url: `/pages/order/assess?id=${id}`
 				})
 			},
 			//查看订单详情
-			toDetail(id){
+			toDetail(id) {
 				uni.navigateTo({
-					url:"/pages/order/orderDetail?id=" + id
+					url: "/pages/order/orderDetail?id=" + id
 				})
 			},
 			//获取订单
-			async getOrder(){
+			async getOrder() {
 				uni.showLoading({
-					title:"加载中..."
+					title: "加载中..."
 				})
 				let index = this.tabCurrentIndex
-				if(this.navList[index].dataLoading){
+				if (this.navList[index].dataLoading) {
 					return
 				}
-				this.$set(this.navList[index],"dataLoading",true)
+				this.$set(this.navList[index], "dataLoading", true)
 				await this.$http({
-					"apiName":"getOrderList",
-					"data":{
-						page:this.navList[index].page,
-						size:this.navList[index].size,
-						status:this.navList[index].state,
+					"apiName": "getOrderList",
+					"data": {
+						page: this.navList[index].page,
+						size: this.navList[index].size,
+						status: this.navList[index].state,
 					}
 				}).then(res => {
-					this.$set(this.navList[index],"noMore",!res.data.hasNextPage);
-					this.$set(this.navList[index],"orderList",this.navList[index].orderList.concat(res.data.list));
+					this.$set(this.navList[index], "noMore", !res.data.hasNextPage);
+					this.$set(this.navList[index], "orderList", this.navList[index].orderList.concat(res.data.list));
 					this.isShow = true;
 					this.currentTime = res.timestamp;
 				}).catch(_ => {})
-				this.$set(this.navList[index],"dataLoading",false)
+				this.$set(this.navList[index], "dataLoading", false)
 				uni.hideLoading()
 			},
 			//获取订单列表
-			 async loadData(source){
+			async loadData(source) {
 				let navItem = this.navList[this.tabCurrentIndex];
-				if(source === 'tabChange' && navItem.loaded === true){
+				if (source === 'tabChange' && navItem.loaded === true) {
 					return;
 				}
 				await this.getOrder()
-				this.$set(this.navList[this.tabCurrentIndex],"loaded",true)
+				this.$set(this.navList[this.tabCurrentIndex], "loaded", true)
 				// setTimeout(()=>{
-					
+
 				// }, 600);	
-			}, 
+			},
 
 			//swiper 切换数据
-			changeTab(e){
+			changeTab(e) {
 				this.tabCurrentIndex = e.target.current;
 				this.loadData('tabChange');
 			},
 			//顶部tab点击
-			tabClick(index){
+			tabClick(index) {
 				this.tabCurrentIndex = index;
 			},
 			//删除订单
-			async deleteOrder(index,orderId){
+			async deleteOrder(index, orderId) {
 				let that = this
 				uni.showModal({
 					title: '提示',
 					content: '确定删除该订单？',
-					success: function (res) {
+					success: function(res) {
 						if (res.confirm) {
-							that.deleteOrderOk(index,orderId)
+							that.deleteOrderOk(index, orderId)
 						}
 					}
 				})
 			},
 			//确定删除
-			async deleteOrderOk(index,orderId){
+			async deleteOrderOk(index, orderId) {
 				uni.showLoading({
 					title: '删除中...'
 				})
 				await this.$http({
-					apiName:"deleteOrder",
-					type:"POST",
-					data:{id:orderId}
+					apiName: "deleteOrder",
+					type: "POST",
+					data: {
+						id: orderId
+					}
 				}).then(res => {
 					this.navList[this.tabCurrentIndex].orderList.splice(index, 1);
 					uni.showToast({
-						title:"删除成功"
+						title: "删除成功"
 					})
 				}).catch(_ => {})
 				uni.hideLoading();
 			},
 			//取消订单
-			cancelOrder(index,id){
+			cancelOrder(index, id) {
 				let that = this
 				uni.showModal({
 					title: '提示',
 					content: '确定取消该订单？',
-					success: function (res) {
+					success: function(res) {
 						if (res.confirm) {
-							that.cancelOrderOk(index,id)
+							that.cancelOrderOk(index, id)
 						} else if (res.cancel) {
-							
+
 						}
 					}
 				})
 			},
 			//确定取消订单
-			async cancelOrderOk(index,id){
+			async cancelOrderOk(index, id) {
 				uni.showLoading({
-					title:"取消中..."
+					title: "取消中..."
 				})
 				await this.$http({
-					apiName:"cancelOrder",
-					type:"POST",
-					data:{orderId:id}
+					apiName: "cancelOrder",
+					type: "POST",
+					data: {
+						orderId: id
+					}
 				}).then(res => {
-					this.$set(this.navList[this.tabCurrentIndex].orderList[index],"status",-1)
+					this.$set(this.navList[this.tabCurrentIndex].orderList[index], "status", -1)
 					uni.showToast({
-						title:"订单已取消"
+						title: "订单已取消"
 					})
 				}).catch(_ => {})
 				uni.hideLoading()
 			},
 			//触底加载更多
-			getMore(){
+			getMore() {
 				let _index = this.tabCurrentIndex
-				if(this.navList[_index].noMore){
+				if (this.navList[_index].noMore) {
 					return
 				}
-				
+
 				let _nextPage = this.navList[_index].page + 1
-				this.$set(this.navList[_index],"page",_nextPage)
+				this.$set(this.navList[_index], "page", _nextPage)
 				this.getOrder()
 			},
 			//复制订单号
@@ -504,21 +492,21 @@
 					data: order,
 					success() {
 						uni.showToast({
-							title:"复制成功",
+							title: "复制成功",
 							icon: 'none'
 						})
 					}
 				});
 			},
 			//分享
-			share(id){
-				this.$refs.share.toggleMask();	
+			share(id) {
+				this.$refs.share.toggleMask();
 				this.id = id;
 			},
 
-			shareOthers(e){
+			shareOthers(e) {
 				let name = "";
-				if(e == "微信好友" ){
+				if (e == "微信好友") {
 					name = "WXSceneSession";
 					// #ifdef APP-PLUS
 					utils.wxShare({
@@ -527,8 +515,8 @@
 						gid: this.id
 					})
 					// #endif
-					
-				}else if(e == "朋友圈"){
+
+				} else if (e == "朋友圈") {
 					name = "WXSenceTimeline";
 					// #ifdef APP-PLUS
 					utils.wxShare({
@@ -537,32 +525,32 @@
 						gid: this.id
 					})
 					// #endif
-				}else if(e == "复制链接"){
+				} else if (e == "复制链接") {
 					const code = this.userInfo.inviteCode;
 					utils.setClip({
 						code,
-						id:this.id
+						id: this.id
 					})
 				}
-				
+
 			}
 		},
 		//下拉刷新
-		async onPullDownRefresh(){
+		async onPullDownRefresh() {
 			let _index = this.tabCurrentIndex
 			this.isShow = false;
-			this.$set(this.navList[_index],"orderList",[])
-			this.$set(this.navList[_index],"page",1)
+			this.$set(this.navList[_index], "orderList", [])
+			this.$set(this.navList[_index], "page", 1)
 			await this.getOrder()
 			uni.stopPullDownRefresh();
 			uni.showToast({
 				title: '刷新成功'
 			})
 		},
-		onBackPress(e){
+		onBackPress(e) {
 			uni.switchTab({
-			// uni.reLaunch({
-				url:"/pages/user/user"
+				// uni.reLaunch({
+				url: "/pages/user/user"
 			})
 			return true
 		}
@@ -570,27 +558,30 @@
 </script>
 
 <style lang="scss">
-	page, .content{
+	page,
+	.content {
 		background: $page-color-base;
 		height: 100%;
 	}
-	
-	.swiper-box{
+
+	.swiper-box {
 		height: calc(100% - 40px);
 	}
-	.list-scroll-content{
+
+	.list-scroll-content {
 		height: 100%;
 	}
-	
-	.navbar{
+
+	.navbar {
 		display: flex;
 		height: 40px;
 		padding: 0 5px;
 		background: #fff;
-		box-shadow: 0 1px 5px rgba(0,0,0,.06);
+		box-shadow: 0 1px 5px rgba(0, 0, 0, .06);
 		position: relative;
 		z-index: 10;
-		.nav-item{
+
+		.nav-item {
 			flex: 1;
 			display: flex;
 			justify-content: center;
@@ -599,9 +590,11 @@
 			font-size: 15px;
 			color: $font-color-dark;
 			position: relative;
-			&.current{
+
+			&.current {
 				color: $base-color;
-				&:after{
+
+				&:after {
 					content: '';
 					position: absolute;
 					left: 50%;
@@ -615,35 +608,41 @@
 		}
 	}
 
-	.uni-swiper-item{
+	.uni-swiper-item {
 		height: auto;
 	}
-	.order-item{
+
+	.order-item {
 		display: flex;
 		flex-direction: column;
 		padding-left: 30rpx;
 		background: #fff;
 		margin-top: 16rpx;
-		.i-top{
+
+		.i-top {
 			display: flex;
 			align-items: center;
 			height: 80rpx;
-			padding-right:30rpx;
+			padding-right: 30rpx;
 			font-size: $font-base;
 			color: $font-color-dark;
 			position: relative;
-			.time{
+
+			.time {
 				flex: 1;
 			}
-			.state{
+
+			.state {
 				color: $base-color;
 			}
-			.del-btn{
+
+			.del-btn {
 				padding: 10rpx 0 10rpx 36rpx;
 				font-size: $font-lg;
 				color: $font-color-light;
 				position: relative;
-				&:after{
+
+				&:after {
 					content: '';
 					width: 0;
 					height: 30rpx;
@@ -655,124 +654,147 @@
 				}
 			}
 		}
-		.i-group{
+
+		.i-group {
 			margin-left: -30rpx;
 			background-color: #FFF2F2;
 			padding-left: 30rpx;
 			height: 70rpx;
 			display: flex;
 			align-items: center;
-			.igImg{
+
+			.igImg {
 				width: 74rpx;
 			}
-			.igText{
+
+			.igText {
 				margin-left: 20rpx;
 				color: #606266;
 				font-size: 28rpx;
 			}
 		}
+
 		/* 多条商品 */
-		.goods-box{
-			height: 160rpx;
+		.goods-box {
+			
 			padding: 20rpx 0;
-			white-space: nowrap;
-			.goods-item{
+			
+
+			.goods-item {
+				display: flex;
+				margin-bottom: 30rpx;
+			}
+            .goods-item:last-child{
+				margin-bottom: 0;
+			}
+			.goods-img {
+				display: block;
 				width: 120rpx;
 				height: 120rpx;
-				display: inline-block;
-				margin-right: 24rpx;
-			}
-			.goods-img{
-				display: block;
-				width: 100%;
-				height: 100%;
 			}
 		}
+
 		/* 单条商品 */
-		.goods-box-single{
+		.goods-box-single {
 			display: flex;
 			padding: 20rpx 0;
-			.goods-img{
+
+			.goods-img {
 				display: block;
 				width: 120rpx;
 				height: 120rpx;
 			}
-			.right{
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				padding: 0 30rpx 0 24rpx;
-				overflow: hidden;
-				.title{
-					font-size: $font-base + 2rpx;
-					color: $font-color-dark;
-					line-height: 1;
-				}
-				.attr-box{
-					font-size: $font-sm + 2rpx;
-					color: $font-color-light;
-					padding: 10rpx 12rpx;
-					padding-left: 0;
-				}
-				.price{
-					font-size: $font-base + 2rpx;
-					color: $font-color-dark;
-					&:before{
-						content: '￥';
-						font-size: $font-sm;
-						margin: 0 2rpx 0 8rpx;
-					}
-				}
-				
-			}
+
 		}
-		.good-box-sn{
+    
+    .right {
+    	flex: 1;
+    	display: flex;
+    	flex-direction: column;
+    	padding: 0 30rpx 0 24rpx;
+    	overflow: hidden;
+    
+    	.title {
+    		font-size: $font-base + 2rpx;
+    		color: $font-color-dark;
+    		line-height: 1;
+    	}
+    
+    	.attr-box {
+    		font-size: $font-sm + 2rpx;
+    		color: $font-color-light;
+    		padding: 10rpx 12rpx;
+    		padding-left: 0;
+    	}
+    
+    	.price {
+    		font-size: $font-base + 2rpx;
+    		color: $font-color-dark;
+    
+    		&:before {
+    			content: '￥';
+    			font-size: $font-sm;
+    			margin: 0 2rpx 0 8rpx;
+    		}
+    	}
+    
+    }
+		.good-box-sn {
 			font-size: 24rpx;
 			color: #999;
-			.gbsc{
+
+			.gbsc {
 				padding-left: 20rpx;
 				padding-right: 20rpx;
-				color:#477CE5;
+				color: #477CE5;
 				font-size: 30rpx;
 				font-weight: bold;
 			}
 		}
-		.price-box{
+
+		.price-box {
 			display: flex;
 			justify-content: flex-end;
 			align-items: baseline;
 			padding: 20rpx 30rpx;
 			font-size: $font-sm + 2rpx;
 			color: $font-color-light;
-			.num{
+
+			.num {
 				margin: 0 8rpx;
 				color: $font-color-dark;
 			}
-			.price{
+
+			.price {
 				font-size: $font-lg;
 				color: $font-color-dark;
-				&:before{
+
+				&:before {
 					content: '￥';
 					font-size: $font-sm;
 					margin: 0 2rpx 0 8rpx;
 				}
 			}
-			.price1{
+
+			.price1 {
 				margin-left: 20rpx;
 			}
 		}
-		.action-box{
+
+		.action-box {
 			display: flex;
 			justify-content: flex-end;
 			align-items: center;
 			height: 100rpx;
 			position: relative;
 			padding-right: 30rpx;
-			.b-t2{
+
+			.b-t2 {
 				font-size: 26rpx;
 			}
 		}
-		.action-btn{
+
+		.action-btn {
 			width: 160rpx;
 			height: 60rpx;
 			margin: 0;
@@ -784,89 +806,92 @@
 			color: $font-color-dark;
 			background: #fff;
 			border-radius: 100px;
-			&:after{
+
+			&:after {
 				border-radius: 100px;
 			}
-			&.recom{
+
+			&.recom {
 				background: #fff9f9;
 				color: $base-color;
-				&:after{
+
+				&:after {
 					border-color: #f7bcc8;
 				}
 			}
 		}
 	}
-	
 
-	
+
+
 	.load1,
 	.load2,
 	.load3 {
 		height: 24px;
 		width: 24px
 	}
-	
+
 	.load2 {
 		transform: rotate(30deg)
 	}
-	
+
 	.load3 {
 		transform: rotate(60deg)
 	}
-	
+
 	.load1 view:nth-child(1) {
 		animation-delay: 0s
 	}
-	
+
 	.load2 view:nth-child(1) {
 		animation-delay: .13s
 	}
-	
+
 	.load3 view:nth-child(1) {
 		animation-delay: .26s
 	}
-	
+
 	.load1 view:nth-child(2) {
 		animation-delay: .39s
 	}
-	
+
 	.load2 view:nth-child(2) {
 		animation-delay: .52s
 	}
-	
+
 	.load3 view:nth-child(2) {
 		animation-delay: .65s
 	}
-	
+
 	.load1 view:nth-child(3) {
 		animation-delay: .78s
 	}
-	
+
 	.load2 view:nth-child(3) {
 		animation-delay: .91s
 	}
-	
+
 	.load3 view:nth-child(3) {
 		animation-delay: 1.04s
 	}
-	
+
 	.load1 view:nth-child(4) {
 		animation-delay: 1.17s
 	}
-	
+
 	.load2 view:nth-child(4) {
 		animation-delay: 1.3s
 	}
-	
+
 	.load3 view:nth-child(4) {
 		animation-delay: 1.43s
 	}
-	
+
 	@-webkit-keyframes load {
 		0% {
 			opacity: 1
 		}
-	
+
 		100% {
 			opacity: .2
 		}

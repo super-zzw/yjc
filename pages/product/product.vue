@@ -70,10 +70,10 @@
 					<text class="name">{{comment.wuserName}}</text>
 					<text class="con">{{comment.content}}</text>
 					<view class="bot">
-						<text class="attr">
+						<!-- <text class="attr">
 							购买类型：
 							<text :key="index" class="attr-text" v-for="(item,index) in commentGoodType">{{item.value}}</text>
-						</text>
+						</text> -->
 						<text class="time">{{commentTime}}</text>
 					</view>
 				</view>
