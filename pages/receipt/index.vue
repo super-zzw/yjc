@@ -1,9 +1,10 @@
 <template>
-	<view v-if="userInfo">
+	<view v-if="userInfo" class="container">
 		<view class="sBox1">
 			<view class="main">
 				<text class="txt1">易聚财扫一扫，向我付钱</text>
 				<!-- <image :src="qrCode" mode="" class="qrCode"></image> -->
+			
 				<view class="recimg">
 				     <tki-qrcode
 				     ref="qrcode"
@@ -24,10 +25,11 @@
 
 <script>
 	import tkiQrcode from "@/components/tki-qrcode/tki-qrcode.vue"
+	import tkiBarcode from "@/components/tki-barcode/tki-barcode.vue"
 	import utils from '@/utils/method.js'
 	import {mapState} from 'vuex'
 	export default {
-		components:{tkiQrcode},
+		components:{tkiQrcode,tkiBarcode},
 		data() {
 			return {
 				 size:340,
@@ -66,6 +68,10 @@
 </script>
 
 <style lang="scss" scoped>
+	.container{
+		 background: #F23D3D;
+		 height: 100vh;
+	}
 	.recimg{
 	     display: flex;
 	     justify-content: center;
@@ -73,7 +79,7 @@
 	
 	    }
    .sBox1{
-	   background: #F23D3D;
+	  
 	   padding:0 32rpx 60rpx;
 	   .main{
 		   background: #fff;
@@ -87,7 +93,13 @@
 			   font-size:30rpx;
 			   font-weight:600;
 			   color:rgba(48,49,51,1);
+			   padding: 22rpx 0;
+			   border-bottom: 2rpx solid #dbdbdb;
+			   width: 90%;
+			  text-align: center;
+			   margin: 0 30rpx 40rpx;
 		   }
+		   
 		   .qrCode{
 			   width: 360rpx;
 			   height: 360rpx;
@@ -103,20 +115,24 @@
 	   }
    }
    .sBox2{
-	   background: #FF4C4C;
+	   background: #fff;
 	   height: 90rpx;
 	   display: flex;
 	   align-items: center;
 	   padding: 0 35rpx;
+	   margin: 0 32rpx;
+	   
+border-radius: 8rpx;
 	   justify-content: space-between;
 	   .record{
 		   font-size:32rpx;
+		   
 		   font-family:PingFangSC-Medium,PingFang SC;
 		   font-weight:500;
-		   color:rgba(255,255,255,1);
+		   color:#000;
 	   }
 	   .iconfont{
-		   color: #fff;
+		   color: #000;
 	   }
    }
 </style>

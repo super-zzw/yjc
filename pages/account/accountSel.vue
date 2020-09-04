@@ -22,7 +22,10 @@
 		
 		<view v-if="!editing" class="btns">
 			<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
-			  <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增账户</button>
+			<picker @change="bindPickerChange" :value="index" :range="bankList.title">
+			        <button type="default" hover-class="none" class="addAccount btn" >新增账户</button>
+			</picker>
+			  
 			<!-- </picker> -->
 			
 			<button v-if="dataList.length > 0" type="default" hover-class="none" class="editAccount btn" @tap="editAccount">管理账户</button>
@@ -37,17 +40,7 @@
 			
 		</view>
 			
-			<!-- 	<view  class="btns"> -->
-					<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
-					  <!-- <button type="default" hover-class="none" class="addAccount btn" @tap="addAccount">新增银行卡</button> -->
-					<!-- </picker> -->
-					
-					<!-- <button  type="default" hover-class="none" class="editAccount btn" @tap="editAccount">编辑银行卡</button> -->
-				<!-- </view> -->
-				<!-- <view v-if="editing" class="btns">
-					<button type="default" hover-class="none" class="addAccount btn" @tap="toEdit">编辑</button>
-					<button type="default" hover-class="none" class="delBtn" @tap="deleteAccount">删除</button>
-				</view> -->
+		
 		</view>
 		
 	</view>
@@ -60,7 +53,98 @@
 			return {
 				select:0,
 				editing:false,
-				dataList:[]
+				dataList:[],
+				index:0,
+				bankList:[
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/ABC.png',
+						title:'中国农业银行'
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOC.png',
+						title:'中国银行'
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOCOM.png',
+						title:"交通银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOG.png',
+						title:"广州银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CCB.png',
+						title:"中国建设银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CEB.png',
+						title:"中国光大银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CGB.png',
+						title:"广发银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CIB.png',
+						title:"兴业银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CITIC.png',
+						title:"中信银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CMB.png',
+						title:"招商银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CMBC.png',
+						title:"中国民生银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/DGB.png',
+						title:"东莞银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/EBCL.png',
+						title:"恒丰银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/GHB.png',
+						title:"广东华兴银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/HXB.png',
+						title:"华夏银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/ICBC.png',
+						title:"中国工商银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/PAB.png',
+						title:"平安银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/PSBC.png',
+						title:"中国邮政储蓄银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/SPDB.png',
+						title:"上海浦东发展银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOB.png',
+						title:"北京银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOSC.png',
+						title:"上海银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BCS.png',
+						title:"长沙银行股份有限公司"
+					},
+				]
 			};
 		},
 		onLoad() {
@@ -81,6 +165,9 @@
 					this.selectFxAccountSet(index);
 					uni.navigateBack()
 				}
+			},
+			bindPickerChange(e){
+				console.log(e)
 			},
 			toEdit(){
 				let _id = this.dataList[this.select].id;

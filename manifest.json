@@ -137,15 +137,15 @@
         //公众号代理访问
         "devServer" : {
             //前端或者后台IP反向代理开启
-            "disableHostCheck" : true,
-            "proxy" : {
-                "/api" : {
-                    // "target" : "http://192.168.1.25:9502/api",
-                    // "target" : "http://cymall-api.dev.gzcyou.com/api",
-                    // "target" : "http://api.zcymco.cn",
-                    "changeOrigin" : true
-                }
-            }
+            "disableHostCheck" : true
+            // "proxy" : {
+            //     "/api" : {
+            //         // "target" : "http://192.168.1.25:9502/api",
+            //         // "target" : "http://cymall-api.dev.gzcyou.com/api",
+            //         // "target" : "http://api.zcymco.cn",
+            //         "changeOrigin" : true
+            //     }
+            // }
         }
     }
 }

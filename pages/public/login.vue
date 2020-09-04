@@ -521,8 +521,8 @@
 		flex-direction: column;
 		align-items: center;
 		.wxIcon {
-			width: 60rpx;
-			height: 60rpx;
+			width: 90rpx;
+			height: 90rpx;
 		}
 		text {
 			font-size: 28rpx;

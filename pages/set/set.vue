@@ -113,24 +113,23 @@
 					})
 				}else{
 					if(this.userInfo.appBindExFlag){
-						uni.showModal({
-							title:'提示',
-							content:'确定解绑微信号?',
-							success:(res)=>{
-								if(res.confirm){
-									this.$http({
-										apiName:'removeWx',
-										type:'POST'
-									}).then(res=>{
-										uni.showToast({
-											title:'解绑成功'
-										})
-										utils.getUserInfo()
-									}).catch(err=>{})
-								}
-							}
+						this.$showModal({
+							title:'温馨提示',
+						                concent: '确定解绑微信号?',
+						                delCancel: false,
+						                // confirmVal: '知道了',
+						                align: 'center'
+						            }).then(res=>{
+										this.$http({
+											apiName:'removeWx',
+											type:'POST'
+										}).then(res=>{
+											uni.showToast({
+												title:'解绑成功'
+											})
+											utils.getUserInfo()
+									})
 						})
-						return
 					}else{
 					
 						uni.login({
@@ -185,15 +184,15 @@
 			},
 			loginOut(){
 				var that = this
-				uni.showModal({
-					title: '提示',
-					content: '确认退出登录？',
-					success: function (res) {
-						if (res.confirm) {
-							that.loginOutOk()
-						}
-					}
-				})
+				this.$showModal({
+				                concent: '确认退出登录吗?',
+				                delCancel: false,
+				                // confirmVal: '知道了',
+				                align: 'center'
+				            }).then(res=>{
+								that.loginOutOk()
+							})
+				
 			},
 			//确认退出登录
 			async loginOutOk(){
@@ -209,7 +208,7 @@
 						// uni.reLaunch({
 							url:"/pages/index/index"
 						})
-					},2000)
+					},1000)
 				}).catch(_ => {})
 			},
 			toArticle(id){

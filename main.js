@@ -2,7 +2,8 @@ import Vue from 'vue'
 import store from './store'
 import App from './App'
 import {http,upLoadImg,httpAll,getMsgNms,checkUpdate,getConfig} from './utils/request.js'
-
+import G_show_modal from '@/components/G_show_modal/g_show_modal.js'
+Vue.use(G_show_modal)
 
 const msg = (title, duration=1500, mask=false, icon='none')=>{
 	//统一提示方便全局修改

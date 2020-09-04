@@ -74,7 +74,7 @@
 				</view>
 			</view>
 			
-			<view class="my-section" @tap="navTo('/pages/account/index?type=1')" v-if="hasLogin">
+			<view class="my-section sec1" @tap="navTo('/pages/account/index?type=1')" v-if="hasLogin">
 				<text class="left">我的聚财卡</text>
 				<view class="right">
 					<text class="txt1">账户余额</text>
@@ -209,21 +209,30 @@
 			},
 			//退出登录
 			async loginOut(){
-				await this.$http({
-					apiName:"logOut"
-				}).then(res => {
-					utils.rmData()
-					this.setCartNms(0)
-					utils.setBadgeText(0,'')
-					this.setMsgNms(0)
-					// this.$getMsgNms()
-					uni.removeTabBarBadge({
-						index: 2,
-					})
-					uni.showToast({
-						title:"退出成功"
-					})
-				}).catch(_ => {})
+				this.$showModal({
+				                concent: '确认退出登录吗?',
+				                delCancel: false,
+				                // confirmVal: '知道了',
+				                align: 'center'
+				            }).then(res => {
+				                  this.$http({
+				                  				apiName:"logOut"
+				                  			}).then(res => {
+				                  				utils.rmData()
+				                  				this.setCartNms(0)
+				                  				utils.setBadgeText(0,'')
+				                  				this.setMsgNms(0)
+				                  				// this.$getMsgNms()
+				                  				uni.removeTabBarBadge({
+				                  					index: 2,
+				                  				})
+				                  				uni.showToast({
+				                  					title:"退出成功"
+				                  				})
+				                  			}).catch(_ => {})
+				            })
+				
+				
 			},
 			/**
 			 * 统一跳转接口,拦截未登录路由
@@ -517,7 +526,7 @@
 	.my-section{
 		margin-top: 30rpx;
 		background: #fff;
-		padding:22rpx 28rpx 22rpx 32rpx;
+		padding:35rpx 28rpx 25rpx 32rpx;
 		display: flex;
 		justify-content: space-between;
 		.left{
@@ -545,6 +554,9 @@
 				height: 22rpx;
 			}
 		}
+	}
+	.my-section.sec1{
+		margin-top: 0;
 	}
 	.history-section{
 		margin-top: 20rpx;
