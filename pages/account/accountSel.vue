@@ -4,8 +4,7 @@
 			<view class="" v-if="dataList.length > 0">
 				<view class="accountItem" v-for="(item,index) in dataList" @tap="selectAccount(index)">
 					<view class="left">
-						<image src="../../static/yhk.png" mode="" class="accountImg" ></image>
-					
+						<image :src="bankImg(item.bankname)" mode="" class="accountImg" ></image>
 						<view class="info">
 							<text class="name">{{item.bankname}}</text>
 							<text class="num">{{item.cardno}}</text>
@@ -22,7 +21,7 @@
 		
 		<view v-if="!editing" class="btns">
 			<!-- <picker mode="selector" :range="range" @change="addAccount"> -->
-			<picker @change="bindPickerChange" :value="index" :range="bankList.title">
+			<picker @change="bindPickerChange" :value="index" :range="bankList" range-key="title">
 			        <button type="default" hover-class="none" class="addAccount btn" >新增账户</button>
 			</picker>
 			  
@@ -55,6 +54,7 @@
 				editing:false,
 				dataList:[],
 				index:0,
+				bank:'',
 				bankList:[
 					{
 						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/ABC.png',
@@ -155,7 +155,30 @@
 			this.getData();
 		},
 		computed:{
-			...mapState(['selectFxAccount'])
+			...mapState(['selectFxAccount']),
+			bankImg(){
+				return function(name){
+					let imgSrc=''
+					let count=0
+					this.bankList.forEach((item,index)=>{
+						if(item.title==name){
+							
+							imgSrc=item.name
+							return
+						}else{
+							count++
+							if(count==this.bankList.length){
+								imgSrc='../../static/yhk.png'
+							}
+						}
+						
+					})
+					 console.log(imgSrc)
+					return imgSrc
+				}
+				
+				
+			}
 		},
 		methods:{
 			...mapMutations(['selectFxAccountSet']),
@@ -167,7 +190,10 @@
 				}
 			},
 			bindPickerChange(e){
-				console.log(e)
+				this.bank=this.bankList[e.detail.value].title
+				uni.navigateTo({
+					url:'./addAccount?bank='+this.bank
+				})
 			},
 			toEdit(){
 				let _id = this.dataList[this.select].id;

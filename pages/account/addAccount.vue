@@ -31,7 +31,7 @@
 			<view class="sItem">
 				<view class="slabel">备注</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="对该账户进行备注"/>
+					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="对该账户进行备注" disabled/>
 				</view>
 			</view>
 			
@@ -65,6 +65,9 @@
 			if(opt.id){
 				this.id=opt.id
 				this.getDetail()
+			}
+			if(opt.bank){
+				this.remark=opt.bank
 			}
 			
 		},

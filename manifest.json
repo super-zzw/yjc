@@ -3,7 +3,7 @@
     "appid" : "__UNI__5D0627C",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : 133,
+    "versionCode" : 134,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -138,17 +138,17 @@
         "devServer" : {
             //前端或者后台IP反向代理开启
             "disableHostCheck" : true
-            // "proxy" : {
-            //     "/api" : {
-            //         // "target" : "http://192.168.1.25:9502/api",
-            //         // "target" : "http://cymall-api.dev.gzcyou.com/api",
-            //         // "target" : "http://api.zcymco.cn",
-            //         "changeOrigin" : true
-            //     }
-            // }
         }
     }
 }
+// "proxy" : {
+//     "/api" : {
+//         // "target" : "http://192.168.1.25:9502/api",
+//         // "target" : "http://cymall-api.dev.gzcyou.com/api",
+//         // "target" : "http://api.zcymco.cn",
+//         "changeOrigin" : true
+//     }
+// }
 //接口跨域处理
 // ,
 // "proxy": {
