@@ -48,12 +48,17 @@
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view> -->
 		<!-- #ifdef APP-PLUS -->
-		<view class="list-cell" @tap="updateV">
+		<view class="list-cell b-b" @tap="updateV">
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip" v-if="version">当前版本 {{version}}</text>
 			<text class="cell-more iconfont iconchakanquanbu"></text>
 		</view>
+		<view class="list-cell" @tap="yinsi">
+			<text class="cell-tit">用户隐私政策</text>
+			<text class="cell-more iconfont iconchakanquanbu"></text>
+		</view>
 		<!-- #endif -->
+		
 		<view class="list-cell log-out-btn" @click="loginOut" v-if="hasLogin">
 			<text class="cell-tit">退出登录</text>
 		</view>
@@ -85,6 +90,11 @@
 		},
 		methods:{
 			...mapMutations(['setLogin','setAfterLoginUrl']),
+			yinsi(){
+				uni.navigateTo({
+					url:'./yinsi'
+				})
+			},
 			updateV(){
 				// #ifdef APP-PLUS
 				this.$checkUpdate(true);

@@ -1003,6 +1003,20 @@
             	}
             }
         }
+        ,{
+            "path" : "pages/set/yinsi",
+            "style" : {
+				"navigationBarTitleText": "用户隐私",
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": {
+						"splitLine": {
+							"color": "#DBDBDB"
+						}
+					}
+				}
+			}
+        }
     ],
 	"subPackages":[
 		{
