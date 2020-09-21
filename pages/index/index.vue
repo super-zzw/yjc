@@ -20,6 +20,7 @@
 				<text class="num nm-font">{{swiperLength}}</text>
 			</view>
 		</view>
+	
 		<!-- 分类 -->
 		<view class="cate-section" v-if="navs.length > 0 && config && config.MALL_HOMW_SWAITCH.navFlag == 1">
 			<swiper class="swiper-nav" indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="navs.length > 2" :autoplay="false" :interval="2000" :duration="500">

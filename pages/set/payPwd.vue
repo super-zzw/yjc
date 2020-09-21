@@ -43,7 +43,9 @@
 				timeLeft:120,
 				codeText:"获取验证码",
 				confirmBtnDisable: false,
-				ipting:false
+				ipting:false,
+				phone:'',
+				phoneNumber:''
 			}
 		},
 		computed:{
@@ -55,7 +57,13 @@
 			// 	this.password=val.replace(/\d/g,'*')
 			// }
 		},
-		onLoad() {
+		onLoad(opt) {
+			if(opt.phone){
+				this.phone=opt.phone
+			}
+			if(opt.phoneNumber){
+				this.phoneNumber=opt.phoneNumber
+			}
 			
 		},
 		methods:{
@@ -82,12 +90,14 @@
 				let jres = await utils.judgeData(_data)
 				if(jres){
 					this.confirmBtnDisable = true;
+				
 					await this.$http({
 						apiName:"bindPayPwd",
 						type:"POST",
 						data:{
-							// oldPassword:utils.md5(this.pwd),
-							// newPassword:utils.md5(this.newPwd),
+							
+							phoneNumber:this.phoneNumber,
+							appOpenId:uni.getStorageSync('appInfo').openId,
 							tradepwd:utils.md5(this.password),
 							authCode:this.code,
 							// #ifdef APP-PLUS
@@ -105,14 +115,52 @@
 							title:"设置成功"
 						})
 						this.confirmBtnDisable = false;
-						 utils.getUserInfo()
-						// utils.rmData()
-						setTimeout(_ => {
-							uni.navigateBack()
-							// uni.reLaunch({
-							//     url: '/pages/user/user'
-							// });
-						},1500)
+						if(this.phone){
+							uni.login({
+								provider: 'weixin',
+								success: (res) => {
+									uni.getUserInfo({
+										provider: 'weixin',
+										success: (info) => {
+											this.$http({
+												apiName: 'appWxLogin',
+												type: 'POST',
+												data: {
+													appOpenId: info.userInfo.openId,
+													headUrl: info.userInfo.avatarUrl
+												}
+											}).then(res => {
+												// if(this.flag)
+												uni.showToast({
+													title: '登录成功',
+													mask: false,
+													duration: 1500
+												});
+												utils.setSesion(res.data)
+												utils.getUserInfo()
+												
+											}).catch(err => {
+												
+												// if (err.code === 500083) {
+												// 	uni.redirectTo({
+												// 		url: '/pages/set/payPwd'
+												// 	})
+												// }
+											})
+										}
+									})
+								}
+							})
+						}
+						utils.afterLoginJump()
+						//  utils.getUserInfo()
+						// // utils.rmData()
+						// setTimeout(_ => {
+						// 	uni.navigateBack()
+						// 	// uni.reLaunch({
+						// 	//     url: '/pages/user/user'
+						// 	// });
+						// },1500)
 					}).catch(_ => {
 						this.confirmBtnDisable = false;
 					})
@@ -127,16 +175,27 @@
 					title:"获取验证码...",
 					mask:true
 				})
+				let phoneNumber
+				if(this.phone){
+					phoneNumber=this.phone
+				}else if(this.phoneNumber){
+					phoneNumber=this.phoneNumber
+				}else{
+					phoneNumber=this.userInfo.phone
+				}
+				
 				await this.$http({
 					apiName:'getCode',
 					type:'POST',
 					data:{
-						phoneNumber:this.userInfo.phone
+						phoneNumber:phoneNumber
 					}
 				}).then(res=>{
-					
+					this.coding = true;
+					this.countDown();
 				}).catch(err=>{
-					
+					this.clearCountDown();
+					uni.hideLoading();
 				})
 				uni.hideLoading()
 				// let _data = [

@@ -2,6 +2,8 @@ import store from '../store'
 import Md5 from './md5/index.js'
 import {getMsgNms} from './request.js'
 import {http} from './request.js'
+var launched=false;
+	var socket = null;
 // #ifdef H5
 let jweixin = require('jweixin-module')  
 // #endif
@@ -131,9 +133,9 @@ export default{
 		// if(!uni.getStorageSync("yzhrefreshSession")){
 		// 	return
 		// }else{
-		// 	if(Nm <= 0){
-		// 		return
-		// 	}else{
+			if(Nm <= 0){
+				return
+			}else{
 				let pages = getCurrentPages();
 
 				let page = pages[pages.length - 1];
@@ -143,7 +145,7 @@ export default{
 				let currentWebview = page.$getAppWebview();
 				currentWebview.setTitleNViewButtonBadge({index:btnIndex,text:String(Nm)})
 				// #endif
-		// 	}
+			}
 		// }
 	},
 	//咨询客服前的必要参数处理
@@ -341,9 +343,39 @@ export default{
 			apiName:'getUserInfo',
 		}).then(res=>{
 			// console.log(res)
+			console.log()
+			
 			store.commit('setUserInfo',res.data)
+			this.createWebSocket()
 		}).catch(err=>{
 			console.log(1,err)
 		})
-	}
+	},
+	createWebSocket() {
+	     if(!launched){
+	     	socket = uni.connectSocket({
+	     	    		url: 'ws://192.168.1.25:9521/imserver/'+store.state.userInfo.id, 
+	     	    		complete: ()=> {}
+	     			});
+						
+	     	socket.onOpen(()=>{console.log('conn')});
+	     							socket.onMessage(res=>{
+										
+	     								if(res.data!==20000){
+	     									// this.getUser()
+	     								}
+	     								console.log(res)});//获取服务器传来的数据，做相应处理
+	     							socket.onClose(()=>{console.log('close'),
+									
+									setTimeout(()=>{
+										launched=false
+										this.createWebSocket()
+									},5000)
+									this.createWebSocket()
+									
+									});
+	     							socket.onError((err)=>{console.log(err)})
+	     	launched=true
+	     }
+	   },
 }

@@ -34,8 +34,8 @@
 			
 		</view>
 		
-		<button class="btn" hover-class="none"  @tap="register" :disabled="disable">确定</button>
-		
+		<button class="btn" hover-class="none"  @tap="register" >确定</button>
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" />
 	</view>
 </template>
 
@@ -53,7 +53,8 @@
 				aacountName:'',
 				flag:false,
 				hasUser:false,
-				disable:false
+				
+				sModal:false
 			}
 		},
 		async onLoad(opt) {
@@ -140,6 +141,7 @@
 				}
 			},
 			async register(){
+			
 				let _data = [
 					{
 						data:this.account.trim(),
@@ -161,30 +163,9 @@
 				let jres = await utils.judgeData(_data)
 				console.log(jres)
 				if(jres){
-					this.disable=true
-					uni.showLoading({
-						title:"保存中...",
-						mask:true
-					})
-					await this.$http({
-						apiName:"yjcTransfer",
-						type:"POST",
-						data:{
-							amount:this.money,
-							cardCode:this.account,
-							remark:this.remark,
-							type:this._type
-						}
-					}).then(res => {
-						uni.hideLoading();
-						this.disable=false
-						uni.redirectTo({
-							url:'successTip?status='+this.type
-						})
-					}).catch(err => {
-						this.disable=false
-						uni.hideLoading()
-					})
+					this.sModal = true
+					
+					
 				}
 				
 			},
@@ -222,6 +203,40 @@
 				  this.coding = false
 				  this.timeLeft = 120
 				  this.codeText = "发送验证码"
+			},
+			async validateOk(pass) {
+				this.password = pass
+				await this.$http({
+					apiName:"yjcTransfer",
+					type:"POST",
+					data:{
+						amount:this.money,
+						cardCode:this.account,
+						remark:this.remark,
+						type:this._type
+					}
+				}).then(res => {
+					uni.hideLoading();
+				
+					uni.redirectTo({
+						url:'successTip?status='+this.type
+					})
+				}).catch(err => {
+					
+					uni.hideLoading()
+				})
+			
+					
+				.catch(err => {
+					uni.hideLoading()
+					uni.showToast({
+						icon: "none",
+						title: err.message
+					})
+				})
+			},
+			close() {
+				this.sModal = false
 			},
 		},
 		beforeDestroy() {

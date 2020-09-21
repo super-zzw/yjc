@@ -1,7 +1,7 @@
 import Api from './api.js'
 import store from '../store'
 import utils from "./method.js"
-var test =true ;
+var test =false ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
@@ -198,6 +198,7 @@ export function getMsgNms(){
 		apiName:"msgNum",
 		type:"POST"
 	}).then(res => {
+	
 		store.commit('setMsgNms',res.data)
 		if(store.state.isHome != 1){
 			utils.setBadgeText(0,res.data)

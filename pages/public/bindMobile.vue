@@ -89,6 +89,7 @@
 			}
 		},
 		onLoad(opt){
+			
 			//返回跳转过来的
 			if(opt.flag){
 				this.flag=opt.flag
@@ -98,7 +99,6 @@
 			...mapState(['config'])
 		},
 		methods: {
-			// ...mapMutations(['login']),
 			toIndex(){
 				uni.switchTab({
 				// uni.reLaunch({
@@ -228,7 +228,7 @@
 												
 												if (err.code === 500083) {
 													uni.redirectTo({
-														url: '/pages/set/payPwd'
+														url: '/pages/set/payPwd?phone='+this.mobile
 													})
 												}
 											})

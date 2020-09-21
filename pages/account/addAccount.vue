@@ -31,7 +31,10 @@
 			<view class="sItem">
 				<view class="slabel">备注</view>
 				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" v-model="remark" placeholder="对该账户进行备注" disabled/>
+					<picker @change="bindPickerChange" :value="index" :range="bankList" range-key="title">
+					       <input placeholder-class="placeholderClass" class="sinput" v-model="bank" placeholder="对该账户进行备注" disabled/>
+					</picker>
+					
 				</view>
 			</view>
 			
@@ -51,14 +54,105 @@
 				account:"",
 				// name:"",
 				code:"",
-				remark:"",
+				bank:"",
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
 				codeText:"获取验证码",
 				type:0,
 				id:"",
-				phone:""
+				phone:"",
+				index:0,
+				bankList:[
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/ABC.png',
+						title:'中国农业银行'
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOC.png',
+						title:'中国银行'
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOCOM.png',
+						title:"交通银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOG.png',
+						title:"广州银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CCB.png',
+						title:"中国建设银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CEB.png',
+						title:"中国光大银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CGB.png',
+						title:"广发银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CIB.png',
+						title:"兴业银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CITIC.png',
+						title:"中信银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CMB.png',
+						title:"招商银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/CMBC.png',
+						title:"中国民生银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/DGB.png',
+						title:"东莞银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/EBCL.png',
+						title:"恒丰银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/GHB.png',
+						title:"广东华兴银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/HXB.png',
+						title:"华夏银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/ICBC.png',
+						title:"中国工商银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/PAB.png',
+						title:"平安银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/PSBC.png',
+						title:"中国邮政储蓄银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/SPDB.png',
+						title:"上海浦东发展银行"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOB.png',
+						title:"北京银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BOSC.png',
+						title:"上海银行股份有限公司"
+					},
+					{
+						name:'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/yjc/banks/BCS.png',
+						title:"长沙银行股份有限公司"
+					},
+				]
 			}
 		},
 		onLoad(opt) {
@@ -67,7 +161,7 @@
 				this.getDetail()
 			}
 			if(opt.bank){
-				this.remark=opt.bank
+				this.bank=opt.bank
 			}
 			
 		},
@@ -75,6 +169,12 @@
 			...mapState(['userInfo'])
 		},
 		methods:{
+			bindPickerChange(e){
+				this.bank=this.bankList[e.detail.value].title
+				// uni.navigateTo({
+				// 	url:'./addAccount?bank='+this.bank
+				// })
+			},
 			getDetail(){
 				uni.showLoading({
 					title:"加载中...",
@@ -89,7 +189,7 @@
 				}).then(res => {
 					this.id = res.data.id;
 					this.account = res.data.cardno;
-					this.remark = res.data.bankname;
+					this.bank = res.data.bankname;
 					this.phone = res.data.phoneno;
 					uni.hideLoading();
 				}).catch(err => {uni.hideLoading()})
@@ -127,7 +227,7 @@
 							phone:this.phone,
 							authCode:this.code,
 							// name:this.name.trim(),
-							title:this.remark,
+							title:this.bank,
 							id:this.id,
 							
 						}

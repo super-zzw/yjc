@@ -42,7 +42,7 @@
 			<text @click="toPage('/pages/public/register')">马上注册</text>
 		</view> -->
 		<!-- #ifdef APP-PLUS -->
-		<view class="wxLogin" @click="oAuth" data-logintype="weixin" v-if="showWx">
+		<view class="wxLogin" @click="oAuth" data-logintype="weixin" >
 			<image src="../../static/wx.png" mode="" class="wxIcon"></image>
 			<text>微信登录</text>
 		</view>
@@ -106,6 +106,7 @@
 				if (this.coding) {
 					return
 				}
+			
 				uni.showLoading({
 					title: "获取验证码...",
 					mask: true
@@ -158,6 +159,7 @@
 				if (this.logining) {
 					return
 				}
+				
 				this.logining = true;
 				let _data, apiName, formdata
 				_data = [{
@@ -173,23 +175,40 @@
 						info: '验证码不能为空'
 					},
 				]
-				apiName = 'codeLogin'
+				
+				
 				formdata = {
 					authCode: this.code,
 					phoneNumber: this.mobile,
 				}
 				let jres = await utils.judgeData(_data)
 				if (jres) {
+					
 					await this.$http({
-						apiName: apiName,
+						apiName:'codeLogin',
 						type: "POST",
 						data: formdata
 					}).then(res => {
-						console.log(res)
+						
+						uni.showToast({
+							title: '登录成功',
+							mask: false,
+							duration: 1500
+						})
+						
+						
 						utils.setSesion(res.data)
 						utils.getUserInfo()
 						utils.afterLoginJump()
-					}).catch(_ => {})
+						
+					}).catch(_ => {
+				
+						if(_.code==500083){
+							uni.navigateTo({
+								url:'../set/payPwd?phoneNumber='+_.data
+							})
+						}else{}
+					})
 				}
 				this.logining = false;
 			},
@@ -211,15 +230,18 @@
 										headUrl: info.userInfo.avatarUrl
 									}
 								}).then(res => {
-									console.log(res)
-									uni.showToast({
-										title: '登录成功',
-										mask: false,
-										duration: 1500
-									});
-									utils.setSesion(res.data)
-									utils.getUserInfo()
-									utils.afterLoginJump()
+									
+										uni.showToast({
+											title: '登录成功',
+											mask: false,
+											duration: 1500
+										});
+										utils.setSesion(res.data)
+										
+										utils.getUserInfo()
+										utils.afterLoginJump()
+									
+									
 								}).catch(err => {
 									console.log(err)
 									if (err.code === 500082) {
@@ -229,7 +251,7 @@
 									}
 									 else {
 										uni.redirectTo({
-											url: '/pages/set/payPwd'
+											url: '/pages/set/payPwd?phone='+err.data
 										})
 									}
 								})
