@@ -31,7 +31,7 @@
 				<text class="iconfont iconright"></text>
 			</view>
 
-			<image class="a-bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png"></image>
+			<image class="a-bg" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/line.png"></image>
 		</view>
 		<view class="getSelf" v-else>
 			<view class="gsTitle">
@@ -40,7 +40,7 @@
 			<view class="gsText">
 				{{config.MALL_MENTION_ADDRESS}}
 			</view>
-			<image class="a-bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png"></image>
+			<image class="a-bg" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/line.png"></image>
 		</view>
 		<view class="goods-section" >
 			<!-- 商品列表 -->

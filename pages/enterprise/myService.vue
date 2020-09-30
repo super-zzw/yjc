@@ -47,12 +47,16 @@
 				loading:false
 			};
 		},
-		onLoad() {
-			this.getData()
+		async onLoad() {
+			uni.showLoading({
+				title:'加载中'
+			})
+			await this.getData()
+			uni.hideLoading()
 		},
 		methods:{
-			async getData(){
-				await this.$http({
+			 getData(){
+				 this.$http({
 					apiName:"myCpService",
 				}).then(res => {
 					this.loading=true

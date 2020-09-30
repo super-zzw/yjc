@@ -60,7 +60,7 @@
 			<view class="re-his" v-if="history.length > 0">
 				<view class="re-histop">
 					<view class="re-his-text">历史记录</view>
-					<image @tap="clearHis" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/laji.png" mode="widthFix" class="re-his-img"></image>
+					<image @tap="clearHis" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/laji.png" mode="widthFix" class="re-his-img"></image>
 				</view>
 				<view class="re-his-list">
 					<text class="rehl-item" v-for="item in history" :key="item" @tap="kewSearch(item)">{{item}}</text>
@@ -76,7 +76,7 @@
 			</view>
 		</view>
 		<view class="empty"  v-if="(searchVal || categoryId) && goodsList.length == 0 && isShow">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/empty.png" mode="widthFix" class="empty-img"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/empty.png" mode="widthFix" class="empty-img"></image>
 			<view class="empty-text">暂无此类商品，换个关键词试试</view>
 			<navigator class="empty-text empty-text2" url="/pages/service/service">联系客服></navigator>
 		</view>

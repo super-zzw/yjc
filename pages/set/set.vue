@@ -19,7 +19,7 @@
 		<!-- #endif -->
 		
 		
-		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd',true)" hover-class="cell-hover" :hover-stay-time="50" v-if="hasLogin">
+		<view class="list-cell b-b " @click="toPage('/pages/set/payPwd?flag=true&changePwd=true',true)" hover-class="cell-hover" :hover-stay-time="50" v-if="hasLogin">
 			<text class="cell-tit">支付密码</text>
 			<view class="cell-more">
 				<text>{{userInfo.payPwdFlag?'重置密码':'未设置'}}</text>

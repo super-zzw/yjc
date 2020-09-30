@@ -1,7 +1,7 @@
 <template>
 	<view class="sWrap">
 		<view class="sBox">
-			<view class="sItem">
+			<view class="sItem" v-if="flag">
 				<view class="slabel">短信验证码</view>
 				<view class="sinputbox">
 					<input placeholder-class="placeholderClass" class="sinput" type="number" v-model="code" placeholder="请输入短信验证码"/>
@@ -37,7 +37,7 @@
 				code:"",
 				password:"",
 				checkPassword:"",
-				
+				flag:false,
 				timer:"",
 				coding:false,  //是否处于发送验证码的状态
 				timeLeft:120,
@@ -45,7 +45,8 @@
 				confirmBtnDisable: false,
 				ipting:false,
 				phone:'',
-				phoneNumber:''
+				phoneNumber:'',
+				changePwd:false
 			}
 		},
 		computed:{
@@ -53,9 +54,7 @@
 			
 		},
 		watch:{
-			// password(val){
-			// 	this.password=val.replace(/\d/g,'*')
-			// }
+			
 		},
 		onLoad(opt) {
 			if(opt.phone){
@@ -64,14 +63,20 @@
 			if(opt.phoneNumber){
 				this.phoneNumber=opt.phoneNumber
 			}
+			if(opt.flag){
+				this.flag=opt.flag
+			}
+			if(opt.changePwd){
+			    this.changePwd=true
+				this.phoneNumber=this.userInfo.phone
+			}
 			
 		},
 		methods:{
 			async register(){
 				let _data = [
-					
 					{
-						data:this.code,
+						data:this.flag?this.code:'1',
 						info:'验证码不能为空'
 					},
 					{
@@ -88,34 +93,46 @@
 					}
 				]
 				let jres = await utils.judgeData(_data)
+			
 				if(jres){
+					uni.showLoading({
+						title:'加载中...'
+					})
+					let formdata={
+						// phoneNumber:this.phoneNumber,
+						// appOpenId:uni.getStorageSync('appInfo').openId||null,
+						tradepwd:utils.md5(this.password),
+						authCode:this.code,
+						// #ifdef APP-PLUS
+						sourceType:1,  //0pc,1app,2公众号，3小程序
+						// #endif
+						// #ifdef H5
+						sourceType:2,  //0pc,1app,2公众号，3小程序
+						// #endif
+						// #ifdef MP-WEIXIN
+						sourceType:3,  //0pc,1app,2公众号，3小程序
+						// #endif
+					}
+					if(this.phoneNumber||this.changePwd){
+						formdata['phoneNumber']=this.phoneNumber
+						
+					}else{
+						formdata['appOpenId']=uni.getStorageSync('appInfo').openId
+					}
 					this.confirmBtnDisable = true;
-				
+				 
 					await this.$http({
 						apiName:"bindPayPwd",
 						type:"POST",
-						data:{
-							
-							phoneNumber:this.phoneNumber,
-							appOpenId:uni.getStorageSync('appInfo').openId,
-							tradepwd:utils.md5(this.password),
-							authCode:this.code,
-							// #ifdef APP-PLUS
-							sourceType:1,  //0pc,1app,2公众号，3小程序
-							// #endif
-							// #ifdef H5
-							sourceType:2,  //0pc,1app,2公众号，3小程序
-							// #endif
-							// #ifdef MP-WEIXIN
-							sourceType:3,  //0pc,1app,2公众号，3小程序
-							// #endif
-						}
-					}).then(res => {
+						data:formdata
+					}).then(async res => {
+						// uni.hideLoading()
 						uni.showToast({
 							title:"设置成功"
 						})
 						this.confirmBtnDisable = false;
 						if(this.phone){
+							console.log(1)
 							uni.login({
 								provider: 'weixin',
 								success: (res) => {
@@ -136,32 +153,25 @@
 													mask: false,
 													duration: 1500
 												});
+												// utils.postClientId()
 												utils.setSesion(res.data)
 												utils.getUserInfo()
 												
 											}).catch(err => {
 												
-												// if (err.code === 500083) {
-												// 	uni.redirectTo({
-												// 		url: '/pages/set/payPwd'
-												// 	})
-												// }
+											
 											})
 										}
 									})
 								}
 							})
 						}
+						utils.postClientId()
 						utils.afterLoginJump()
-						//  utils.getUserInfo()
-						// // utils.rmData()
-						// setTimeout(_ => {
-						// 	uni.navigateBack()
-						// 	// uni.reLaunch({
-						// 	//     url: '/pages/user/user'
-						// 	// });
-						// },1500)
+						
 					}).catch(_ => {
+							uni.hideLoading()
+						console.log(_)
 						this.confirmBtnDisable = false;
 					})
 				}
@@ -178,7 +188,7 @@
 				let phoneNumber
 				if(this.phone){
 					phoneNumber=this.phone
-				}else if(this.phoneNumber){
+				}else if(this.phoneNumber||this.changePwd){
 					phoneNumber=this.phoneNumber
 				}else{
 					phoneNumber=this.userInfo.phone

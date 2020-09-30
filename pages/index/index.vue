@@ -26,7 +26,7 @@
 			<swiper class="swiper-nav" indicator-active-color="#F23D3D" indicator-color="#D8D8D8" :indicator-dots="navs.length > 2" :autoplay="false" :interval="2000" :duration="500">
 				<swiper-item class="swiper-nav-item" v-for="(item0,index0) in navs" :key="index0">
 					<view class="cate-item" v-for="(item1,index1) in item0" :key="index1"  @tap="pageJump(item1.jumpType,item1.jumpId)">
-						<image :src="item1.icon" class="cate-item-img"/>
+						<image :src="item1.icon" class="cate-item-img" />
 						<view class="cate-item-text">{{item1.name}}</view>
 					</view>
 				</swiper-item>
@@ -35,7 +35,7 @@
 		<!-- 滚动广告 -->
 		<view class="ad-1" v-if="notices.length > 0 && config && config.MALL_HOMW_SWAITCH.noticeFlag == 1">
 			<div class="ad-1-box">
-				<image class="ad-1-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ad.png" mode="widthFix"></image>
+				<image class="ad-1-img" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/ad.png" mode="widthFix"></image>
 				<swiper class="ad-1-swiper" :vertical="true" :indicator-dots="false" :autoplay="true" :interval="2000" :duration="500">
 					<swiper-item class="ad-1-swiper-item" v-for="(item,index) in notices" :key="index" @tap="toArtilce(item.noticeId)">
 						<view class="ad1-item-text">{{item.noticeTitle}}</view>
@@ -612,7 +612,6 @@ import tabBar from "@/components/tab-bar.vue"
 					})
 				}else{
 					if (index === 2) {
-						
 						uni.scanCode({
 							 success: function (res) {
 							        if(res){
@@ -694,7 +693,7 @@ import tabBar from "@/components/tab-bar.vue"
 		width: 72rpx;
 		height: 36rpx;
 		/*  #ifdef APP-PLUS || H5 */
-		background-image: url('https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/lunbodian.png');
+		background-image: url('https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/lunbodian.png');
 		/*  #endif */
 		/*  #ifdef MP-WEIXIN */
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAYAAADDhn8LAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTk4MzlBNjE0NjU1MTFFOUExNjRFQ0I3RTQ0NEExQjMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTk4MzlBNjA0NjU1MTFFOUExNjRFQ0I3RTQ0NEExQjMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Q0E3RUNERkE0NjExMTFFOTg5NzI4MTM2Rjg0OUQwOEUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Q0E3RUNERkI0NjExMTFFOTg5NzI4MTM2Rjg0OUQwOEUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4Gh5BPAAACTUlEQVR42uzcQW7jQAwFUdN306l1uWwNww5kqdsmm6/2MwtVCp8CosQtP9vg/2+/gY+DRAMBgqnjIp2PaCxCLLldpPARRIiFj1yBbMV+cHZh9PURRLQNhY8kgWyL/WDtwujjI8hoE8rKLqb5CDJaRMJHokC6yKgSCR9JAukmokIknCQJpLOIrJFwMsBJELFcKHwM9BFkLBMKFxNcBCHlQ+FhoocgpVwwnv0Xn30QBJGMC0QcaBVJiAMiec/dcwKuL4j1QMsVCXFAJE4s4NQA3K/8Y6DzO4g40P7UcmIBJxbEesCKWBDg8wWxHrAiFgT4fEGsB/CwIhYE+AeBAAdPLOcV8HRmWRDAiQVcO7GcV8CLM8uCAE4sQCDAlHcQ7x+ABQEEAggEEAggEEAggEAAgQACASAQQCCAQACBAAIBBAIIBBAIIBBAIABe4e9iAe/xd7EAJxYgEGDeO4j3EODp/cOCAE4sYMyJ5cwCHs4rCwI4sYBxJ5YzC84rCwKcXxArAuthQYDzC2JF0H49LAhwYUGsCFqvx5EF2T07dMaJBetx4cRyaqFtHJ8EIhK0i8OJBQxcECuCVutxJhCRoE0cZwMRyRcFefa/ffZBVPogePihhyCnbBhcfMFFEFM+DD4m+ghSlgmDkwlOgpAl4+BkkJMgZdk4+EgaSCcpVX7bmY9kgXQQU+1TgE0c+QJZUUz1b2T4SBbIKmJW+3iMj2SBVBWz+leVfCQLpIqYbp8b85EskIxyfIOfK5Sf+wiCRJEsllQ+oqEkQfBxmD8BBgA5hVjXyrBNUQAAAABJRU5ErkJggg==);

@@ -145,9 +145,9 @@
 				this.showType=true
 			},
 			checkboxChange(e) {
-				console.log(e.detail.value)
+				
               this.type_select=e.detail.value
-			  console.log(this.type_select)
+			 
 			},
 			cancel(){
 				this.showType=false

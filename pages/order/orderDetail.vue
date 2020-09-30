@@ -3,7 +3,7 @@
 		<view class="swrap-box1">
 			<view class="swb1-left">
 				<view class="swrap-box1c">
-					<image class="swb1-img" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/location.png" mode=""></image>
+					<image class="swb1-img" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/location.png" mode=""></image>
 				</view>
 			</view>
 			<view class="swb1-right" v-if="order.receiverWay != 1">
@@ -29,9 +29,9 @@
 		</view>
 		<view class="swrap-group" v-if="grouponRules">
 			<view class="sgp1">
-				<image class="img1" v-if="groupStatus == 1" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" mode="widthFix"></image>
-				<image class="img2" v-if="groupStatus == 2 || groupStatus == 4" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptcg.png"  mode="widthFix"></image>
-				<image class="img3" v-if="groupStatus == 3" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptwcg.png"  mode="widthFix"></image>
+				<image class="img1" v-if="groupStatus == 1" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/ptz.png" mode="widthFix"></image>
+				<image class="img2" v-if="groupStatus == 2 || groupStatus == 4" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/ptcg.png"  mode="widthFix"></image>
+				<image class="img3" v-if="groupStatus == 3" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/ptwcg.png"  mode="widthFix"></image>
 				<text class="text" v-if="groupStatus == 1">
 					还差{{grouponRules.minMember - groupList.length - 1}}人拼成，剩{{grouponRules | dealTimep(currentTime)}}结束
 				</text>
@@ -162,15 +162,15 @@ export default{
 			groupStatus:"",  //1待成团，时间没到，人数没满；2拼团成功，人够了，时间没到；3拼团失败，人没够，时间到了;4时间到了，人满了，正常订单
 			shareList:[
 				{
-					icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
+					icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/wxhy.png",
 					text: "微信好友"
 				},
 				{
-					icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
+					icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/pyq.png",
 					text: "朋友圈"
 				},
 				{
-					icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
+					icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/fzlj.png",
 					text: "复制链接"
 				},
 			],

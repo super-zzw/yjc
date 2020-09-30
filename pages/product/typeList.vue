@@ -26,7 +26,7 @@
 			</view>
 		</view>
 		<view class="empty" v-if="goodsList.length == 0 && noMore">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/empty.png" mode="widthFix" class="empty-img"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/empty.png" mode="widthFix" class="empty-img"></image>
 			<view class="empty-text">暂无此类商品，换个关键词试试</view>
 		</view>
 	</view>

@@ -26,7 +26,7 @@
 					<text class="iconfont iconright"></text>
 				</view>
 
-				<image class="a-bg" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/orderLine.png"></image>
+				<image class="a-bg" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/orderLine.png"></image>
 			</view>
 
 			<view class="goods-section" v-if="cart == 1">

@@ -18,6 +18,7 @@
 	import passwordInput from './password-input/password-input.vue'
 	import numberKeyboard from './number-keyboard/number-keyboard.vue'
 	import utils from '../utils/method.js'
+	import {mapState} from 'vuex'
 	export default {
 		props:{
 				sModal:{
@@ -29,6 +30,9 @@
 			passwordInput,
 			numberKeyboard
 		},
+		computed:{
+			...mapState['userInfo']
+		},
 		data() {
 			return {
 				password:''
@@ -37,6 +41,9 @@
 		watch:{
 			password(data) {
 				if (data.length >= 6) {
+					uni.showLoading({
+						title:'加载中...'
+					})
 					this.$http({
 						apiName: 'checkPayPwd',
 						type: 'POST',
@@ -44,19 +51,24 @@
 							tradepwd: utils.md5(this.password)
 						}
 					}).then(res => {
+						uni.hideLoading()
 						this.closePass()
 						this.$emit('validateOk',this.password)
 						this.clear()
 						
 					}).catch(err => {
+						uni.hideLoading()
 						this.clear()
+						
 						if(err.code==500085){
+							// let phone=this.userInfo.phone
+							// console.log(phone)
 							uni.showModal({
 								title: '提示',
 								content:err.message+',前往修改支付密码?',
 								success:(res)=> {
 									if(res.confirm){
-										this.$emit('navTo','/pages/set/payPwd')
+										this.$emit('navTo','/pages/set/payPwd?flag=true&changePwd=true')
 										
 									}
 								}

@@ -14,7 +14,7 @@
 			<text class="iconfont iconbianji" @click.stop="toEdit(item.id)"></text>
 		</view>
 		<view class="dsaw1weq" v-if="dataList.length == 0 && noMore">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/nomsg.png" class="emsdds" mode=""></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/nomsg.png" class="emsdds" mode=""></image>
 			<view class="dsadwqtext">暂无收货地址，请点击新增地址</view>
 		</view>
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
@@ -49,6 +49,9 @@
 		methods: {
 			...mapMutations(['setSelectAddr']),
 			async getAddr(){
+				uni.showLoading({
+					title:'加载中...'
+				})
 				await this.$http({
 					apiName:"addrList",
 					data:{
@@ -56,6 +59,7 @@
 						size:this.size
 					}
 				}).then(res => {
+					uni.hideLoading()
 					this.noMore = !res.data.hasNextPage
 					this.dataList = this.dataList.concat(res.data.list)
 					if(this.dataList == 0){

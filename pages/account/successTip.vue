@@ -6,17 +6,16 @@
 				<text class="tit">提交成功</text>
 				<text class="tit1">钱款将在{{config.DISTRIBUTE_WITHDRAW_SH}}个工作日内退回所填账户</text>
 			</view>
+			<view>
+				<text v-if="status==2" class="tit">钱款已转入对方账户</text>
+				<text v-if="status==3" class="tit">钱款已转入对方聚财卡</text>
+				
+			</view>
 			
-			<text v-if="status==2" class="tit">钱款已转入对方账户</text>
-			<text v-if="status==3" class="tit">钱款已转入对方聚财卡</text>
 			<view @tap="toIndex"  class="nav">返回</view>
+			
+			<view @tap="toDetail"  class="nav1" v-if="status==2||status==3">查看详情</view>
 		</view>
-		<!-- <view class="content" v-else>
-			<text class="iconfont icontijiaoshibai"></text>
-			<text class="tit">提交失败</text> -->
-			<!-- <navigator url="./cashOut" class="nav" hover-class="none">重新提交</navigator> -->
-			<!-- <navigator url="./index" class="nav1" hover-class="none">返回首页</navigator>
-		</view> -->
 		
 	</view>
 </template>
@@ -26,12 +25,19 @@
 	export default {
 		data() {
 			return {
-				status:1  //1:提现成功  2:账户转账成功  3:易聚财转账成功  
+				status:-1  ,//1:提现成功  2:账户转账成功  3:易聚财转账成功  
+				id:''
 			};
 		},
 		onLoad(opt) {
-			this.status=opt.status
-			console.log(opt)
+			if(opt.status){
+				this.status=opt.status
+			}
+			if(opt.id){
+				this.id=opt.id
+			}
+			
+			// console.log(opt)
 		},
 		computed:{
 			...mapState(['config'])
@@ -47,6 +53,11 @@
 			
 				uni.redirectTo({
 					url
+				})
+			},
+			toDetail(){
+				uni.navigateTo({
+					url:'../myBill/billDetail?id='+this.id
 				})
 			}
 		}
@@ -116,6 +127,7 @@
 			flex-direction: column;
 			align-items: center;
 		}
+		
 	}
   
 </style>

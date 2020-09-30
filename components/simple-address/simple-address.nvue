@@ -51,12 +51,12 @@
 
 	</view>
 </template>
-<!-- <script type="module" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/js/area.js"></script> -->
+<!-- <script type="module" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/js/area.js"></script> -->
 <script>
 	import provinceData from './city-data/province.js';
 	import cityData from './city-data/city.js';
 	import areaData from './city-data/area.js';
-	// import 'https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/js/area.js';
+	// import 'https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/js/area.js';
 	export default {
 		name: "simpleAddress",
 		props: {

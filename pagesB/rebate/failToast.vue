@@ -1,6 +1,6 @@
 <template>
 	<view class="content flex  flex-column align-items">
-		<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fail.png" mode=""></image>
+		<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/fail.png" mode=""></image>
 		<view class="title">提交失败</view>
 		
 		<button class="backBtn" @tap="back" >重新提交</button>

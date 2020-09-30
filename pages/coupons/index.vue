@@ -5,7 +5,7 @@
 			<view class="navItem"><text :class="status==1?'active':''" @tap="getMyCoupon(1)">已使用</text></view>
 			<view class="navItem" ><text :class="status==-1?'active':''" @tap="getMyCoupon(-1)">已过期/失效</text></view>
 		</view>
-		<view class="list">
+		<view class="list" v-if="flag">
 			<view class="card-item" v-if="datalist.length" v-for="(item,index) in datalist" :key="index">
 				<view class="fengmian" :class="status==-1?'':'active'">
 					<view class="content" >
@@ -28,8 +28,9 @@
 				<image src="../../static/null.png" mode="widthFix"></image>
 				<text>暂无记录</text>
 			</view>
+			<navigator url="./getCoupons" class="getCoupons" hover-class="none">去领券</navigator>
 		</view>
-		<navigator url="./getCoupons" class="getCoupons" hover-class="none">去领券</navigator>
+		
 	</view> 
 </template>
 
@@ -39,11 +40,14 @@
 		data() {
 			return {
 				status:0,
-				datalist:[]
+				datalist:[],
+				flag:false
 			};
 		},
-		onLoad() {
-			this.getMyCoupon(this.status)
+		async onLoad() {
+			// this.getMyCoupon(this.status)
+		
+			
 		},
 		onShow() {
 			this.getMyCoupon(this.status)
@@ -61,20 +65,24 @@
 			}
 		},
 		methods:{
-			async getMyCoupon(status){
+			 async getMyCoupon(status){
 				this.status=status
 				uni.showLoading({
 					title:'加载中...'
 				})
-			await this.$http({
+			 await this.$http({
 					apiName:'myCoupon',
 					data:{
 						status:status
 					}
 				}).then(res=>{
-				this.datalist=res.data.list
+					
+					// uni.hideLoading()
+				this.datalist= res.data.list
+				this.flag=true
+				uni.hideLoading()
 			}).catch(err=>{})
-			uni.hideLoading()
+			
 			}
 		}
 	}

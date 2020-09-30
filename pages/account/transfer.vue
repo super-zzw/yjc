@@ -35,7 +35,7 @@
 		</view>
 		
 		<button class="btn" hover-class="none"  @tap="register" >确定</button>
-		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" />
+		<pwdValidate :sModal="sModal" @validateOk="validateOk" @close="close" ref="pwdValidate" @navTo="toPayPwd"/>
 	</view>
 </template>
 
@@ -77,6 +77,11 @@
 			}
 		},
 		methods:{
+			toPayPwd(nav){
+				uni.navigateTo({
+					url:nav
+				})
+			},
 			changeval(e){
 				console.log(e)
 				let val=e.target.value
@@ -120,6 +125,9 @@
 					})
 				}
 				else{
+					uni.showLoading({
+						title:'正在获取...'
+					})
 					this.flag=false
 					
 					await this.$http({
@@ -130,18 +138,17 @@
 						}
 					}).then(res=>{
 					
-						 
-					  //   if(res.data){
-							// this.hasUser=true
-						// }
+						 uni.hideLoading()
 							this.aacountName=res.data
 							this.hasUser=true
 					       this.flag=true
-					}).catch(err=>{})
+					}).catch(err=>{
+						
+					})
 				}
 			},
 			async register(){
-			
+			    
 				let _data = [
 					{
 						data:this.account.trim(),
@@ -206,6 +213,9 @@
 			},
 			async validateOk(pass) {
 				this.password = pass
+				uni.showLoading({
+					title:'转账中...'
+				})
 				await this.$http({
 					apiName:"yjcTransfer",
 					type:"POST",
@@ -219,7 +229,7 @@
 					uni.hideLoading();
 				
 					uni.redirectTo({
-						url:'successTip?status='+this.type
+						url:'successTip?status='+this.type+'&id='+res.data.id
 					})
 				}).catch(err => {
 					
@@ -227,13 +237,13 @@
 				})
 			
 					
-				.catch(err => {
-					uni.hideLoading()
-					uni.showToast({
-						icon: "none",
-						title: err.message
-					})
-				})
+				// .catch(err => {
+				// 	uni.hideLoading()
+				// 	uni.showToast({
+				// 		icon: "none",
+				// 		title: err.message
+				// 	})
+				// })
 			},
 			close() {
 				this.sModal = false

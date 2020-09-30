@@ -13,7 +13,7 @@
 				</Avatar>
 				<!-- <view class="s-userpic" @tap="setImage">
 					<image :src="userData.icon" mode="" v-if="userData.icon"></image>
-					<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/defaultface.png" mode="" v-else></image>
+					<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/defaultface.png" mode="" v-else></image>
 				</view> -->
 			</view>
 			<view class="s-item">
@@ -86,7 +86,7 @@
 					if(res.data.icon){
 						this.url = res.data.icon;
 					}else{
-						this.url = "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/defaultface.png"
+						this.url = "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/defaultface.png"
 					}
 				}).catch(_ => {})
 			},

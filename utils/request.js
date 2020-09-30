@@ -5,10 +5,10 @@ var test =false ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
-	// _baseUrl = 'http://192.168.1.25:9522/api';  //测试地址日强0
+	_baseUrl = 'http://192.168.1.25:9522/api';  //测试地址日强0
 	// _baseUrl = 'http://192.168.1.17:9502/api';  //测试地址亮
 	// _baseUrl = 'http://cymall-api.dev.gzcyou.com/api';  //内网测试地址
-	_baseUrl = 'http://yjc-api.dev.gzcyou.com/api';  //易聚财内网
+	// _baseUrl = 'http://yjc-api.dev.gzcyou.com/api';  //易聚财内网
 } else {
 	_baseUrl = 'https://api.gz01.net/api';  //易聚财正式地址
 	// _baseUrl = 'http://api.youmall.vip/api';  //i&m商，只对app，微信支付：wx4c4af1149bf6832e
@@ -93,15 +93,15 @@ export function http(opt){
 				}
 			},
 			fail:err => {
-				console.log(err)
-				utils.rmData()
+				console.log(1111,err)
+				// utils.rmData()
 				uni.hideLoading()
-				// uni.showToast({
-				// 	icon: 'none',
-				// 	title: '请求失败,请稍后重试02',
-				// 	duration: 2000
-				// });
-				reject('请求失败,请稍后重试02');
+				uni.showToast({
+					icon: 'none',
+					title: '请求失败,请稍后重试',
+					duration: 2000
+				});
+				// reject('');
 			}
 		})
 	})

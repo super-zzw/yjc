@@ -63,18 +63,23 @@
 		},
 		async onLoad(opt) {
 			if(opt.id){
+				
 				await this.getInfo(opt.id)
 			}
 			
 		},
 		methods:{
 			getInfo(id){
+				uni.showLoading({
+					title:"加载中..."
+				})
 				this.$http({
 					apiName:"getBillInfo",
 				    data:{
 						cardOrderLogId:id
 					}
 				}).then(res=>{
+					uni.hideLoading()
 					this.flag=true
 					this.desc=res.data
 				})

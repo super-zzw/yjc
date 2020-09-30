@@ -163,4 +163,6 @@ export default{
 	getOrderTotal:"/yjc/get/my/cardOrderTotal", //我的账单(累计收入支出)
 	getFee:"/yjc/get/withdraw/fee", //获取提现手续费
 	getBillInfo:"/yjc/get/cardOrderLog/Info", //查看账单详情
+	
+	bindClientId:"/ums/bind/clientId", //绑定手机clientId
 }

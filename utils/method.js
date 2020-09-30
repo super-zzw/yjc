@@ -2,6 +2,7 @@ import store from '../store'
 import Md5 from './md5/index.js'
 import {getMsgNms} from './request.js'
 import {http} from './request.js'
+import Voice from '../components/QS-baiduyy/QS-baiduyy.js';
 var launched=false;
 	var socket = null;
 // #ifdef H5
@@ -254,6 +255,11 @@ export default{
 				url: encodeURIComponent(window.location.href),  //后台通过域名进行授权
 			}
 		})
+		resConfig.then(res=>{
+			console.log(1,res)
+		}).catch(err=>{
+			console.log(2,err)
+		})
 		if (resConfig) {
 			let apiList = [ // 可能需要用到的能力
 				'onMenuShareAppMessage',
@@ -343,38 +349,70 @@ export default{
 			apiName:'getUserInfo',
 		}).then(res=>{
 			// console.log(res)
-			console.log()
-			
+			// console.log()
 			store.commit('setUserInfo',res.data)
 			this.createWebSocket()
 		}).catch(err=>{
 			console.log(1,err)
 		})
 	},
+	postClientId(){
+		http({
+			apiName:'bindClientId',
+			type:'POST',
+			data:{
+				clientId:uni.getStorageSync('clientId')
+			}
+		}).then().catch()
+	},
 	createWebSocket() {
 	     if(!launched){
 	     	socket = uni.connectSocket({
-	     	    		url: 'ws://192.168.1.25:9521/imserver/'+store.state.userInfo.id, 
+	     	    		url: 'wss://api.gz01.net/imserver/'+store.state.userInfo.id, 
 	     	    		complete: ()=> {}
 	     			});
 						
-	     	socket.onOpen(()=>{console.log('conn')});
-	     							socket.onMessage(res=>{
+	     	socket.onOpen(()=>{});
+	     							socket.onMessage(async res=>{
 										
-	     								if(res.data!==20000){
-	     									// this.getUser()
-	     								}
-	     								console.log(res)});//获取服务器传来的数据，做相应处理
-	     							socket.onClose(()=>{console.log('close'),
+	     								console.log(res)
+										if(!isNaN(res.data) ){
+											Voice('易聚财到账'+res.data+'元');
+											// };
+											 // getAudioObject() {
+												// console.log('准备获取音频对象')
+												const audio = await Voice({
+													// voiceSet: {
+													// 	tex: '返回了音频对象'
+													// },
+													returnAudio: true
+												})
+												
+												audio.onPlay(()=>{
+													
+												})
+												audio.play();
+										}
+										
 									
+								});//获取服务器传来的数据，做相应处理
+	     							socket.onClose(()=>{console.log('close'),
 									setTimeout(()=>{
+										console.log('断开中')
 										launched=false
 										this.createWebSocket()
 									},5000)
-									this.createWebSocket()
+									
+									// this.createWebSocket()
 									
 									});
-	     							socket.onError((err)=>{console.log(err)})
+	     							socket.onError((err)=>{console.log(err)
+									setTimeout(()=>{
+										console.log('断开中')
+										launched=false
+										this.createWebSocket()
+									},5000)
+									})
 	     	launched=true
 	     }
 	   },

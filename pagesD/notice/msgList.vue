@@ -14,7 +14,7 @@
 			</view>
 		</view>
 		<view class="sg-empty" v-if="dataList.length == 0">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/nomsg.png" mode="widthFix"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/nomsg.png" mode="widthFix"></image>
 			<view class="sg-empty-text">暂无消息</view>
 		</view>
 	<!-- 	<view v-if="dataList.length > 0 && noMore" class="no_more">

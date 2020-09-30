@@ -47,7 +47,7 @@
 							<text v-if="item.status == 3 || item.status == 4" class="del-btn iconfont iconshanchu" @click="deleteOrder(index,item.id)"></text>
 						</view>
 						<view class="i-group" v-if="item.orderType == 2 && currentTime < item.endGroupTime && item.groupMember < item.minMember &&item.status != 5">
-							<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/ptz.png" mode="widthFix" class="igImg"></image>
+							<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/ptz.png" mode="widthFix" class="igImg"></image>
 							<text class="igText">还差{{item.minMember - item.groupMember}}人拼成，剩{{item.endGroupTime | dealTimep(currentTime)}}结束</text>
 						</view>
 						<view v-if="item.itemList.length > 1" class="goods-box" @tap="toDetail(item.id)">
@@ -217,15 +217,15 @@
 					}
 				],
 				shareList: [{
-						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png",
+						icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/wxhy.png",
 						text: "微信好友"
 					},
 					{
-						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/pyq.png",
+						icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/pyq.png",
 						text: "朋友圈"
 					},
 					{
-						icon: "https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/fzlj.png",
+						icon: "https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/fzlj.png",
 						text: "复制链接"
 					},
 				],
@@ -245,8 +245,15 @@
 			}
 		},
 		onLoad(options) {
-			this.tabCurrentIndex = +options.state;
-			this.loadData()
+			if(options.state){
+				this.$nextTick(()=>{
+					this.tabCurrentIndex = options.state
+					console.log(this.tabCurrentIndex)
+				})
+				
+			}
+			
+			// this.loadData()
 		},
 
 		methods: {

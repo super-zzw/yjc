@@ -37,7 +37,7 @@
 									</view>
 								</view>
 								<view class="rgp1l-cont-itemboxtype2">
-									<image class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
+									<image class="rgp1l-cont-line" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/line.png" mode=""></image>
 									<view class="rgp1lcit-text2">{{item2.context}}</view>
 								</view>
 							</view>

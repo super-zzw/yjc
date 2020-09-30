@@ -11,7 +11,7 @@
 				<view class="text2"></view>
 			</view>
 			<image
-				src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/aboutbgk.png" 
+				src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/aboutbgk.png" 
 				class="sWrap-bgk" 
 				mode="widthFix"
 			></image>

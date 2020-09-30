@@ -1,7 +1,7 @@
 <template>
 	<view class="content flex  flex-column align-items">
 		<view class="imgs flex align-items justify-center">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/success.png" mode="widthFix"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/success.png" mode="widthFix"></image>
 		</view>
 		<view class="title">提交成功</view>
 		<text class="tips">你的提现申请将在客服审核通过后打款，请耐心等待</text>

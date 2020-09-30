@@ -1,7 +1,7 @@
 <template>
 	<view class="sWrap">
 		<view class="s-empty" v-if="dataList == 0 && noMore">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/empty.png" mode="widthFix"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/empty.png" mode="widthFix"></image>
 			<view class="s-empty-text">暂无收藏商品</view>
 		</view>
 		<view class="s-box" v-if="dataList.length">

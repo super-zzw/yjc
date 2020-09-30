@@ -2,16 +2,66 @@
 	// 这是一句才
 	import utils from 'utils/method.js'
 	import store from 'store/index.js'
+	// import Voice from 'components/QS-baiduyy/QS-baiduyy.js';
 	export default {
 		methods: {
 		},
 		async onLaunch() {
 			await this.$getConfig()
+			if(store.state.hasLogin){
+				utils.getUserInfo()
+			}
 			// this.$getMsgNms()
 			// #ifdef MP-WEIXIN
 			let menuButton = uni.getMenuButtonBoundingClientRect();
 			this.$store.commit('setPaddingTop',menuButton.top + 'px');
 			// #endif
+			            //#ifdef APP-PLUS    
+						var t1=setInterval(()=>{
+							var clientid = plus.push.getClientInfo().clientid;
+							  if(clientid&&clientid!=='null'){
+								   uni.setStorageSync('clientId',clientid)
+								    console.log(  clientid ); 
+									clearInterval(t1)
+							  }
+						},1000)
+			            
+						
+			           
+						
+			             /* 5+  push 消息推送 ps:使用:H5+的方式监听，实现推送*/    
+			            // plus.push.addEventListener("click", function(msg) {    
+			            //     console.log("click:"+JSON.stringify(msg));    
+			            //     console.log(msg.payload);    
+			            //     console.log(JSON.stringify(msg));    
+			            //     //这里可以写跳转业务代码  
+			            //     // setTimeout(function(){  
+			            //     //     uni.navigateTo({  
+			            //     //         url:'/pages/public/login'  
+			            //     //     })  
+			            //     // },1000)  
+			            // }, false);    
+			            //监听在线消息事件  
+			            plus.push.addEventListener("receive", async function(msg) { 
+						
+								 setTimeout(function(){
+									  if(store.state.hasLogin){
+								     uni.navigateTo({  
+								        url:'/pages/myBill/billDetail?id='+JSON.parse(msg.content).orderId
+								     })  
+									 }else{
+									 	uni.navigateTo({
+									 	   url:'/pages/public/login'
+									 	})  
+							          store.commit('setAfterLoginUrl','/pages/myBill/billDetail?id='+JSON.parse(msg.content).orderId);
+									 }
+								 },1000)
+							
+			                
+							 
+			            }, false);    
+			
+			            //#endif   
 		},
 		onShow() {
 			// console.log('App Show')
@@ -128,7 +178,7 @@
 		font-family: rmttf;
 		font-weight: normal;
 		font-style: normal;
-		src: url('https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/font/Roboto-Medium.ttf') format('truetype');
+		src: url('https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/font/Roboto-Medium.ttf') format('truetype');
 	}
 	.nm-font{
 		font-family: "rmttf" !important;

@@ -23,7 +23,8 @@ const store = new Vuex.Store({
 		hasSigin:-1,  //签到模块
 		cartNms:0,  //购物车数量
 		selectFxAccount:0,
-		isHome:0,//是否是首页1是0不是
+		isHome:0,//是否是首页1是0不是,
+		
 	},
 	mutations: {
 		isHomeSet(state,data){
@@ -74,6 +75,7 @@ const store = new Vuex.Store({
 		setSelectAddr(state,data){
 			state.selectAddr = data
 		}
+		
 	},
 	actions: {
 	

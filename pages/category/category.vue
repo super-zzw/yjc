@@ -115,12 +115,14 @@ import tabBar from "@/components/tab-bar.vue"
 				t2Data:[],
 				t2CurrentId:"",
 				t2page:1,
-				t2HasMore:true
+				t2HasMore:true,
+				flag:false
 			}
 		},
 		async onLoad() {
 			//此处刷新session影响最小
 			let _rsisson = uni.getStorageSync("yzhrefreshSession")
+			let that = this
 			if(_rsisson){
 				await this.$http({
 					apiName:"refreshSession",
@@ -130,23 +132,28 @@ import tabBar from "@/components/tab-bar.vue"
 					}
 				}).then(res => {
 					utils.setSesion(res.data)
+				
+					this.flag=true
+					// if(that.hasLogin){
+							that.getCartNms();  //获取购物车数量
+						// }
+						 that.$getMsgNms()
 				}).catch(_ => {})
 			};
 			await this.initData()
 			// utils.setBadgeText(0,this.msgNms)
-			let that = this
-			setTimeout(() => {
-				if(that.hasLogin){
-					that.getCartNms();  //获取购物车数量
-				}
-				that.$getMsgNms()
-			},800)
+			
+			// setTimeout(() => {
+			// 
+			// },800)
 		},
 		onShow() {
-			if(this.hasLogin){
+		
+			if(this.hasLogin&&this.flag){
+				// console.log(2)
 				this.$getMsgNms()
 			}else{
-				utils.setBadgeText(0,'')
+				utils.setBadgeText(0,0)
 			}
 		},
 		// async onShow(){
@@ -298,6 +305,7 @@ import tabBar from "@/components/tab-bar.vue"
 				uni.showLoading({ title: '加载中' });
 				await this.getData()
 				await this.getBanner()
+				
 				setTimeout(()=>{
 					this.calcSize()
 				},2000)

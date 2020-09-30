@@ -14,7 +14,7 @@
 									<view class="rgp1lcit-text">{{item.cont}}</view>
 								</view>
 							</view>
-							<image v-if="index != prgs.length - 1" class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
+							<image v-if="index != prgs.length - 1" class="rgp1l-cont-line" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/line.png" mode=""></image>
 						</view>
 					</view>
 				</view>
@@ -28,7 +28,7 @@
 									<view class="rgp1lcit-text">{{item.cont}}</view>
 								</view>
 							</view>
-							<image v-if="index != prgs.length - 1" class="rgp1l-cont-line" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/line.png" mode=""></image>
+							<image v-if="index != prgs.length - 1" class="rgp1l-cont-line" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/line.png" mode=""></image>
 						</view>
 					</view>
 				</view>

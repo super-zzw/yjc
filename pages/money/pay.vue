@@ -136,16 +136,16 @@
 			async validateOk(pass) {
 				this.password = pass
 				
-				uni.showLoading({
-					title: "提交中..."
-				})
-				await this.$http({
-					apiName: "checkPayPwd",
-					type: "POST",
-					data: {
-						tradepwd:utils.md5(this.password),
-					}
-				}).then(res => {
+				// uni.showLoading({
+				// 	title: "提交中..."
+				// })
+				// await this.$http({
+				// 	apiName: "checkPayPwd",
+				// 	type: "POST",
+				// 	data: {
+				// 		tradepwd:utils.md5(this.password),
+				// 	}
+				// }).then(res => {
 					this.payYjcOrder()
 					// utils.getUserInfo()
 					// uni.hideLoading();
@@ -159,13 +159,13 @@
 					// 	})
 					// }
 					
-				}).catch(err => {
-					uni.hideLoading()
-					uni.showToast({
-						icon: "none",
-						title: err.message
-					})
-				})
+				// }).catch(err => {
+				// 	uni.hideLoading()
+				// 	uni.showToast({
+				// 		icon: "none",
+				// 		title: err.message
+				// 	})
+				// })
 			},
 			
 			
@@ -222,6 +222,9 @@
 				}
 			},
 			async payYjcOrder(){
+				uni.showLoading({
+					title:'加载中...'
+				})
 				await this.$http({
 					apiName:"payYjcOrder",
 					type:'POST',

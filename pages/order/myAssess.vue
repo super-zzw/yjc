@@ -29,13 +29,13 @@
 				</view>
 				<view class="item-time">{{item.createTime | dealTime}}</view>
 				<view class="item-replay" v-if="item.replayContent">
-					<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/sanjiao.png" class="item-sanjiao" mode=""></image>
+					<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/sanjiao.png" class="item-sanjiao" mode=""></image>
 					<view class="item-retex">{{item.replayName}}回复：{{item.replayContent}}</view>
 				</view>
 			</view>
 		</view>
 		<view class="s-empty" v-if="dataList.length == 0 && noMore">
-			<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/nomsg.png" class="no-img" mode="widthFix"></image>
+			<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/nomsg.png" class="no-img" mode="widthFix"></image>
 			<view class="empty-text">暂无评价</view>
 		</view>
 		<view v-if="dataList.length > 0 && noMore" class="no_more">

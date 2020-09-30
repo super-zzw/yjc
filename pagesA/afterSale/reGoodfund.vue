@@ -23,7 +23,7 @@
 					<view class="sor-cleft-text2">{{type}}</view>
 				</view>
 				<view class="right-cont">
-					<image src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/right.png" mode=""></image>
+					<image src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/right.png" mode=""></image>
 				</view>
 			</view>
 		</picker>

@@ -87,30 +87,37 @@
 		},
 		
 		async onLoad() {
-			uni.showLoading({
-				title:"加载中..."
-			})
+			// uni.showLoading({
+			// 	title:"加载中..."
+			// })
 			await this.getList(1);
-			await this.getInfo()
-			uni.hideLoading()
+			 this.getInfo()
+			
+			
+			
 		},
 		methods:{
 			async getInfo(){
+				
 				await this.$http({
 					apiName:'getOrderTotal'
 				}).then(res=>{
+				
 					this.totalAmountIn=res.data.shouRuStr
 					this.totalAmountOut=res.data.zhiChuStr
 				})
 			},
-			async getList(type){
+			 getList(type){
+				
+				uni.showLoading({
+					title:"加载中..."
+				})
 				if(type==1){  //筛选或下拉刷新
 					this.dataList = [];
 					this.page = 1;
 					this.noMore = false;
 				}
-				
-				await this.$http({
+				 this.$http({
 					apiName:"getOrderLog",
 					data:{
 						page:this.page,
@@ -124,6 +131,7 @@
 					// if(this.dataList.length>=res.data.total){
 					// 	return
 					// }
+					uni.hideLoading()
 					this.noMore = !res.data.hasNextPage
 					
 					this.dataList = this.dataList.concat(res.data.list)
@@ -159,7 +167,7 @@
 					this.startTime = e.startTime;
 					this.endTime = e.endTime;
 					this.tradeType=e.tradeType
-					console.log(this.tradeType)
+				
 					await this.getList(1)
 				// }
 			},

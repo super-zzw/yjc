@@ -23,10 +23,10 @@
 						>
 							<!-- <image :src="item.icon" mode=""></image> -->
 							<!-- uniapp的坑 -->
-							<image v-if="item.text == '微信好友'" src="https://ymall-1300255297.cos.ap-hongkong.myqcloud.com/cymall/img/wxhy.png" mode=""></image>
-							<image v-if="item.text == '朋友圈'" src="../pagesE/image/pyq.png" mode=""></image>
-							<image v-if="item.text == '生成海报'" src="../pagesE/image/hb.png" mode=""></image>
-							<image v-if="item.text == '复制链接'" src="../pagesE/image/fzlj.png" mode=""></image>
+							<image v-if="item.text == '微信好友'" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/wxhy.png" mode=""></image>
+							<image v-if="item.text == '朋友圈'" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/pyq.png" mode=""></image>
+							
+							<image v-if="item.text == '复制链接'" src="https://xmall-1300255297.cos.ap-guangzhou.myqcloud.com/cymall/img/fzlj.png" mode=""></image>
 							<text>{{item.text}}</text>
 						</view>
 					</view>
