@@ -264,6 +264,7 @@ import tabBar from "@/components/tab-bar.vue"
 		},
 		async onLoad(opt) {
 			
+			// console.log(returnCitySN["cip"])
 			// #ifdef APP-PLUS || H5
 			
 			if(uni.getStorageSync("agree_key")){
@@ -310,6 +311,7 @@ import tabBar from "@/components/tab-bar.vue"
 		},
 		methods: {
 			...mapMutations(['setUserInfo','setAfterLoginUrl','setHasScore','setHasSigin','setCartNms','isHomeSet']),
+			
 			timeUp(){
 				console.log("计时结束");
 				this.creset = false;

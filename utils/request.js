@@ -1,7 +1,7 @@
 import Api from './api.js'
 import store from '../store'
 import utils from "./method.js"
-var test =false ;
+var test =true ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用

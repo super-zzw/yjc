@@ -56,7 +56,8 @@
                     }
                 ],
                 "urlschemewhitelist" : [ "youzhipin" ],
-                "idfa" : false
+                "idfa" : true,
+                "UIBackgroundModes" : "audio"
             },
             /* ios打包配置 */
             "sdkConfigs" : {
