@@ -18,13 +18,7 @@
 					placeholder="请输入转账金额" @input="changeval"/>
 				</view>
 			</view>
-			<!-- <view class="sItem">
-				<view class="slabel">手机验证码</view>
-				<view class="sinputbox">
-					<input placeholder-class="placeholderClass" class="sinput" type="text" v-model="code" placeholder="请输入手机验证码"/>
-					<text  hover-class="none" class="stext" @tap="sendCode">{{codeText}}</text>
-				</view>
-			</view> -->
+			
 			<view class="sItem">
 				<view class="slabel">备注</view>
 				<view class="sinputbox">
@@ -45,6 +39,7 @@
 		data(){
 			return {
 				account:"",
+				account1:'',
 				money:"",
 				remark:"",
 				type:2,
@@ -73,6 +68,7 @@
 			});
 			if(opt.account){
 				this.account=opt.account
+				// console.log('1')
 			    await this.getAccountName()	
 			}
 		},
@@ -93,42 +89,39 @@
 					
 				}
 			},
-			getDetail(){
-				uni.showLoading({
-					title:"加载中...",
-					mask:true
-				})
-				this.$http({
-					apiName:"fxAccountDetail",
-					type:"POST",
-					data:{
-						id:this.id
-					}
-				}).then(res => {
-					this.id = res.data.id;
-					this.account = res.data.account;
-					this.name = res.data.name;
-					this.remark = res.data.title;
-					uni.hideLoading();
-				}).catch(err => {uni.hideLoading()})
-			},
+			// getDetail(){
+			// 	uni.showLoading({
+			// 		title:"加载中...",
+			// 		mask:true
+			// 	})
+			// 	this.$http({
+			// 		apiName:"fxAccountDetail",
+			// 		type:"POST",
+			// 		data:{
+			// 			id:this.id
+			// 		}
+			// 	}).then(res => {
+			// 		this.id = res.data.id;
+			// 		this.account = res.data.account;
+			// 		this.name = res.data.name;
+			// 		this.remark = res.data.title;
+			// 		uni.hideLoading();
+			// 	}).catch(err => {uni.hideLoading()})
+			// },
 			async getAccountName(){
 				if(!this.account){
-					this.flag=false
+				  console.log(1)
 					return
 					
-				}else if(this.account.length<8){
-					this.flag=false
-					uni.showToast({
-						icon:'none',
-						title:'请输入8-10位银行卡号'
-					})
 				}
 				else{
+					// this.aacountName=''
+					// this.account=''
 					uni.showLoading({
-						title:'正在获取...'
+						title:'正在获取...',
+						mask:true
 					})
-					this.flag=false
+				
 					
 					await this.$http({
 						apiName:'getAccountName',
@@ -137,13 +130,25 @@
 							type:this._type
 						}
 					}).then(res=>{
-					
+					  
 						 uni.hideLoading()
-							this.aacountName=res.data
-							this.hasUser=true
+						 if(res.data){
+							 this.aacountName=res.data
+							 
+							 this.hasUser=true
+						 }else{
+							 this.aacountName=''
+							 
+							 this.hasUser=false
+						 }
+							
 					       this.flag=true
 					}).catch(err=>{
-						
+						 // this.flag=false
+						this.account=''
+						 // uni.reLaunch({
+						 // 	url:'../index/index'
+						 // })
 					})
 				}
 			},
@@ -153,6 +158,11 @@
 					{
 						data:this.account.trim(),
 						info:'账号不能为空'
+					},
+					{
+						data:this.hasUser,
+						info:'此用户不存在'
+						
 					},
 					{
 						data:this.account.length>=8,
@@ -171,8 +181,6 @@
 				console.log(jres)
 				if(jres){
 					this.sModal = true
-					
-					
 				}
 				
 			},

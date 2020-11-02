@@ -395,7 +395,9 @@ import tabBar from "@/components/tab-bar.vue"
 					if(res.data.length > 0){
 						this.loadData(res.data)
 					}
-				}).catch(_ => {})
+				}).catch(_ => {
+					
+				})
 			},
 			//动态菜单
 			async getDynamicNav(){

@@ -1,7 +1,7 @@
 import Api from './api.js'
 import store from '../store'
 import utils from "./method.js"
-var test =true ;
+var test =false ;
 var _baseUrl = '';
 if (test) {
 	// _baseUrl = "/api"; // 代理时使用
@@ -95,13 +95,15 @@ export function http(opt){
 			fail:err => {
 				console.log(1111,err)
 				// utils.rmData()
+				
 				uni.hideLoading()
 				uni.showToast({
 					icon: 'none',
-					title: '请求失败,请稍后重试',
-					duration: 2000
+					title: '网络信号差，请重试',
+					duration: 2000,
 				});
-				// reject('');
+				reject('网络信号差，请重试');
+				
 			}
 		})
 	})

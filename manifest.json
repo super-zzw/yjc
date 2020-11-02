@@ -2,7 +2,7 @@
     "name" : "易聚财",
     "appid" : "__UNI__5D0627C",
     "description" : "",
-    "versionName" : "1.0.1",
+    "versionName" : "1.0.2",
     "versionCode" : 137,
     "transformPx" : false,
     "app-plus" : {
@@ -56,7 +56,7 @@
                     }
                 ],
                 "urlschemewhitelist" : [ "youzhipin" ],
-                "idfa" : true,
+                "idfa" : false,
                 "UIBackgroundModes" : "audio"
             },
             /* ios打包配置 */

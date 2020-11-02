@@ -369,8 +369,8 @@ export default{
 	createWebSocket() {
 	     if(!launched){
 	     	socket = uni.connectSocket({
-	     	    		// url: 'wss://api.gz01.net/imserver/'+store.state.userInfo.id, 
-	     	    		url: 'ws://192.168.1.25:9522/imserver/'+store.state.userInfo.id, 
+	     	    		url: 'wss://api.gz01.net/imserver/'+store.state.userInfo.id, 
+	     	    		// url: 'ws://192.168.1.25:9522/imserver/'+store.state.userInfo.id, 
 	     	    		complete: ()=> {}
 	     			});
 						
